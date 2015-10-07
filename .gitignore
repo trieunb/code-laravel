@@ -1,0 +1,8 @@
+/vendor
+/node_modules
+Homestead.yaml
+Homestead.json
+.env
+composer.lock
+_ide_helper.php
+storage/debugbar
