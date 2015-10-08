@@ -34,5 +34,9 @@ return [
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
-
+    'linkedin' => [
+        'client_id' => env('CLIENT_ID'),
+        'client_secret' => env('CLIENT_SECRET'),
+        'redirect' => env('LINKEDIN_REDIRECT')
+    ],
 ];
