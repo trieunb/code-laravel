@@ -26,9 +26,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Frontend'], function() {
 });
 
 Route::group(['prefix' => 'api'], function() {
-    Route::resource('authenticate', 'API\AuthenticateController', ['only' => ['index']]);
-    Route::post('authenticate',[
-        'as' => 'auth.login',
-        'uses' => 'API\AuthenticateController@authenticate'
+    Route::controller('auth', 'API\AuthenticateController', [
+      'getLogin' => 'auth.login',
+      'getRegister' => 'auth.register',
+      'postLogin' => 'auth.login'
     ]);
 });
