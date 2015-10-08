@@ -39,6 +39,9 @@
                                     <div class="form-group">
                                         <input type="submit" class="btn btn-lg btn-primary btn-block" value="Sign in">
                                     </div>
+                                    <div class="form-group">
+                                        <a href="{{route('auth.linkedin')}}" class="btn btn-lg btn-primary btn-block">Sign in with LinkedIn</a>
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
