@@ -24,3 +24,12 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function() {
 Route::group(['namespace' => 'App\Http\Controllers\Frontend'], function() {
 
 });
+
+Route::group(['prefix' => 'api'], function() {
+    Route::controller('auth', 'API\AuthenticateController', [
+      'getLogin' => 'auth.login',
+      'getRegister' => 'auth.register',
+      'postLogin' => 'auth.login',
+      'getLoginWithLinkedin' => 'auth.linkedin'
+    ]);
+});
