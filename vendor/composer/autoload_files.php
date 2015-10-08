@@ -20,4 +20,5 @@ return array(
     $vendorDir . '/laravel/framework/src/Illuminate/Support/helpers.php',
     $vendorDir . '/laravelcollective/html/src/helpers.php',
     $vendorDir . '/barryvdh/laravel-debugbar/src/helpers.php',
+    $baseDir . '/app/Helper/helper.php',
 );
