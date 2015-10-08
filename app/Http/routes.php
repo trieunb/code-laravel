@@ -24,3 +24,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function() {
 Route::group(['namespace' => 'App\Http\Controllers\Frontend'], function() {
 
 });
+
+Route::group(['prefix' => 'api'], function() {
+    Route::resource('authenticate', 'API\AuthenticateController', ['only' => ['index']]);
+    Route::post('authenticate',[
+        'as' => 'auth.login',
+        'uses' => 'API\AuthenticateController@authenticate'
+    ]);
+});
