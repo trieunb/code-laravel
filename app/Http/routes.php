@@ -16,12 +16,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['namespace' => 'App\Http\Controllers\Admin'], function() {
 
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
+	get('/test', 'DashBoardsController@index');
 });
 
 
-Route::group(['namespace' => 'App\Http\Controllers\Frontend'], function() {
+Route::group(['namespace' => 'Frontend'], function() {
 
 });
 

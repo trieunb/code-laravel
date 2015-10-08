@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Repositories;
+
 abstract class AbstractRepository
 {
 	/**
@@ -61,5 +63,17 @@ abstract class AbstractRepository
 	public function lists($key, $value)
 	{
 		return $this->model->lists($key, $value);
+	}
+
+	/**
+	 * get data with clause 
+	 * @param  string $field    [column table]
+	 * @param  string $operator Ex: '=', '!='
+	 * @param  mixed $value    
+	 * @return mixed           
+	 */
+	public function getDataWhereClause($field, $operator, $value)
+	{
+		return $this->model->where($field, $operator, $value)->get();
 	}
 }

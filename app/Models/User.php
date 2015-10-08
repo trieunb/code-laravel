@@ -43,6 +43,14 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     /**
+     * path folder uploads
+     * @var string
+     */
+    public static $path = 'uploads/';
+
+    public static $img_width = 200;
+    public static $img_height = 200;
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function categories()
@@ -80,5 +88,17 @@ class User extends Model implements AuthenticatableContract,
     public function user_work_histories()
     {
         return $this->hasMany(UserWorkHistory::class);
+    }
+
+    /**
+     * Rename Image after upload 
+     * @param  mixed $request 
+     * @return string          
+     */
+    public static function renameImage($request)
+    {
+        $filename = explode('.', $request->getClientOriginalName());
+
+        return time().md5($filename[0]).'.'.end($filename);
     }
 }
