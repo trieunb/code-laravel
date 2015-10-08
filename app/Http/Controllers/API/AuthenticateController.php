@@ -82,7 +82,8 @@ class AuthenticateController extends Controller
         if ( ! is_null($code))
         {
             $token = $linkedinService->requestAccessToken($code);
-            $result = json_decode($linkedinService->request('/people/~?format=json'), true);
+            $result = json_decode($linkedinService
+                ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
             echo 'Your linkedin first name is ' . $result['firstName'] . ' and your last name is ' . $result['lastName'];
             dd($result);
 
