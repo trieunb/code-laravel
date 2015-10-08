@@ -157,7 +157,6 @@ return [
         Laravel\Cashier\CashierServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Artdarek\OAuth\OAuthServiceProvider::class,
-        //Laravel\Socialite\SocialiteServiceProvider::class,
     ],
 
     /*
@@ -211,8 +210,7 @@ return [
         'Image'     => Intervention\Image\Facades\Image::class,
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
-        'OAuth' => Artdarek\OAuth\Facade\OAuth::class,
-        //'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
     ],
 
 ];
