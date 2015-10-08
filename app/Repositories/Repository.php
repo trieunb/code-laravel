@@ -1,7 +1,16 @@
 <?php
+namespace App\Repositories;
 
 interface Repository
-{
+{	
+	/**
+	 * Create or Update data
+	 * @param  [array] $data 
+	 * @param  int $id   
+	 * @return bool      
+	 */
+	public function save($data, $id);
+
 	/**
 	 * Get all data
 	 * @return mixed
@@ -13,6 +22,7 @@ interface Repository
 	 * @param  [int] $id [primary key]
 	 * @throws Exception [not found id]
 	 * @return mixed
+	 * 
 	 */
 	public function getById($id);
 
@@ -44,4 +54,12 @@ interface Repository
 	 */
 	public function lists($key, $value);
 
+	/**
+	 * get data with clause 
+	 * @param  string $field    [column table]
+	 * @param  string $operator Ex: '=', '!='
+	 * @param  mixed $value    
+	 * @return mixed           
+	 */
+	public function getDataWhereClause($field, $operator, $value);
 }
