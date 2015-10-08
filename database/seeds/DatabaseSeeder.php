@@ -24,3 +24,4 @@ class DatabaseSeeder extends Seeder
         Model::reguard();
     }
 }
+

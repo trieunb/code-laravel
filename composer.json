@@ -15,7 +15,8 @@
         "laravel/cashier": "~5.0",
         "barryvdh/laravel-ide-helper": "2.0.6",
         "barryvdh/laravel-debugbar": "2.0.6",
-        "laravel/socialite": "^2.0"
+        "laravel/socialite": "^2.0",
+        "oriceon/oauth-5-laravel": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
