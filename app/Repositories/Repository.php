@@ -5,11 +5,11 @@ interface Repository
 {	
 	/**
 	 * Create or Update data
-	 * @param  [array] $data 
+	 * @param  mixed $data 
 	 * @param  int $id   
 	 * @return bool      
 	 */
-	public function save($data, $id);
+	public function save($data, $id = null);
 
 	/**
 	 * Get all data

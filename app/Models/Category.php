@@ -14,6 +14,13 @@ class Category extends Model
     protected $table = 'categories';
 
     /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = ['meta' => 'json'];
+
+    /**
      * [user relationship]
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
