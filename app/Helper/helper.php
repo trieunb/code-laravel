@@ -25,3 +25,20 @@ if (!function_exists('toSlug')) {
         return $title;
     }
 }
+
+if ( !function_exists('show_selected_option')) {
+    function show_selected_option($categories, $selected_id = 0, $class = '', $dataAtrribute = null) {
+        $html = '';
+
+        if (count($categories)) return $html;
+        $html = $class != '' ? '<select class="'.$class.'">' : '<select>';
+        foreach ($categories as $category) {
+            $selected = $category->id == $selected_id ? 'selected' : '';
+            $html .= '<option value="'.$category->id.'" '.$selected.'>'.$category->name.'</option>';
+        }
+
+        $html .= '</select>';
+
+        return $html;
+    }
+}

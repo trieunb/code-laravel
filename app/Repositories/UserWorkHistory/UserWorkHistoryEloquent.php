@@ -18,7 +18,7 @@ class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHist
 	 * Create or Update data
 	 * @param  mixed $data 
 	 * @param  int $id   
-	 * @return bool      
+	 * @return mixed      
 	 */
 	public function save($request, $id = null)
 	{

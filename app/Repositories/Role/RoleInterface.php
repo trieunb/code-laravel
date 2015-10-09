@@ -6,5 +6,4 @@ use App\Repositories\Repository;
 
 interface RoleInterface extends Repository
 {
-	
 }

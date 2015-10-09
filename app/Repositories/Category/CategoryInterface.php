@@ -6,9 +6,8 @@ use App\Repositories\Repository;
 interface CategoryInterface extends Repository
 {
 	/**
-	 * [findPath description]
-	 * @param  [type] $parent_id [description]
-	 * @return [type]            [description]
+	 * Get first record
+	 * @return mixed 
 	 */
-	public function findPath($parent_id);
+	public function getFrist();
 }

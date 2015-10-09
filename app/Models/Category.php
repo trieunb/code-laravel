@@ -28,4 +28,14 @@ class Category extends Model
     {
     	return $this->belongsTo(User::class);
     }
+
+    /**
+     * get path parent id
+     * @param  int $cat_id 
+     * @return string         
+     */
+    public static function getPathParent($cat_id)
+    {
+        return $this->findOrFail($cat_id)->path;
+    }
 }

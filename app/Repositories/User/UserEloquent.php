@@ -19,7 +19,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 * Create or Update data
 	 * @param  mixed $request 
 	 * @param  int $id   
-	 * @return bool      
+	 * @return mixed      
 	 */
 	public function save($request, $id = null)
 	{

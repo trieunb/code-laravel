@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin|member'], function() {
-	get('/test', 'DashBoardsController@index');
+	get('/', 'DashBoardsController@index');
 });
 
 
@@ -31,7 +31,7 @@ Route::group(['namespace' => 'Frontend'], function() {
 Route::group(['prefix' => 'api'], function() {
     Route::controller('auth', 'API\AuthenticateController', [
       'getLogin' => 'auth.login',
-      'getRegister' => 'auth.register',
+      'getRegister' 	=> 'auth.register',
       'postLogin' => 'auth.login',
       'getLoginWithLinkedin' => 'auth.linkedin'
     ]);
