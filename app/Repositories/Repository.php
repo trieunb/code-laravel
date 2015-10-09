@@ -9,7 +9,7 @@ interface Repository
 	 * @param  int $id  if $id == null => create else update
 	 * @return mixed      
 	 */
-	public function save($data, $id = null);
+	// public function save($data, $id = null);
 
 	/**
 	 * Get all data

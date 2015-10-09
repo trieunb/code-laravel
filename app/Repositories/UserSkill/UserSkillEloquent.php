@@ -9,7 +9,7 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 {
 	protected $model;
 
-	public function __construct(App\Models\UserSkill $user_skill)
+	public function __construct(UserSkill $user_skill)
 	{
 		$this->model = $user_skill;
 	}
@@ -18,18 +18,19 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	 * Create or Update data
 	 * @param  mixed $data 
 	 * @param  int $id   
+	 * @param int $user_id
 	 * @return mixed      
 	 */
-	public function save($request, $id = null)
+	public function save($request, $id = null, $user_id)
 	{
 		$user_skill = $id ? $this->getById($id) : new UserSkill;
 
-		if ( !$id) $user_skill->user_id = \Auth::user()->id;
+		if ( $id == null) $user_skill->user_id = $user_id;
 
 		$user_skill->skill_name = $request->get('skill_name');
 		$user_skill->skill_test = $request->get('skill_test');
 		$user_skill->skill_test_point = $request->get('skill_test_point');
-		$user_skill->exprience = $request->get('exprience');
+		$user_skill->experience = $request->get('experience');
 
 		return $user_skill->save();
 	}

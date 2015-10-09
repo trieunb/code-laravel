@@ -6,6 +6,8 @@ use App\Http\Requests\Request;
 
 class EditProfileRequest extends Request
 {
+
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -38,7 +40,12 @@ class EditProfileRequest extends Request
             'start' => 'required',
             'end' => 'required',
             'degree' => 'required',
-            'result' => 'required'
+            'result' => 'required',
+            'company' => 'required',
+            'work_history_start' => 'required',
+            'work_history_end' => 'required',
+            'job_title' => 'required',
+            'job_description' => 'required'
         ];
 
     }

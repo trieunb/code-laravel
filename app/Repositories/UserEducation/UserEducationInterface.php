@@ -6,9 +6,11 @@ use App\Repositories\Repository;
 interface UserEducationInterface extends Repository
 {
 	/**
-	 * get data by user id
-	 * @param  int $user_id 
-	 * @return mixed          
+	 * Create or Update data
+	 * @param  mixed $data 
+	 * @param  int $id   
+	 * @param int $user_id
+	 * @return mixed      
 	 */
-	public function getByUserIdAfterAuthenticate($user_id);
+	public function save($data, $id = null, $user_id);
 }
