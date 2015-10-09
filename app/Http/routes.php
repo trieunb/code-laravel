@@ -13,11 +13,13 @@
 Route::pattern('id', '[0-9]+');
 
 Route::get('/', function () {
+	\Auth::loginUsingId(2);
+	// \Auth::logout();
     return view('welcome');
 });
 
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin|member'], function() {
 	get('/test', 'DashBoardsController@index');
 });
 

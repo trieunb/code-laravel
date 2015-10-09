@@ -14,12 +14,15 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Bican\Roles\Traits\HasRoleAndPermission;
+use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
-                                    CanResetPasswordContract
+                                    CanResetPasswordContract,
+                                    HasRoleAndPermissionContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword, HasRoleAndPermission;
 
     /**
      * The database table used by the model.
@@ -74,13 +77,7 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany(Category::class);
     }
 
-    /**
-     *  @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'roles_users', 'user_id', 'role_id');
-    }
+  
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -117,4 +114,5 @@ class User extends Model implements AuthenticatableContract,
 
         return time().md5($filename[0]).'.'.end($filename);
     }
+
 }

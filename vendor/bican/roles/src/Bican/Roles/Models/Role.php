@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Bican\Roles\Models;
 
 use Bican\Roles\Traits\Slugable;
 use Illuminate\Database\Eloquent\Model;
@@ -10,11 +10,13 @@ use Bican\Roles\Contracts\RoleHasRelations as RoleHasRelationsContract;
 class Role extends Model implements RoleHasRelationsContract
 {
     use Slugable, RoleHasRelations;
-	/**
-	 * Table name
-	 * @var string
-	 */
-    protected $table = 'roles';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'slug', 'description', 'level'];
 
     /**
      * Create a new model instance.
