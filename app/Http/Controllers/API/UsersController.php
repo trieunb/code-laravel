@@ -35,7 +35,7 @@ class UsersController extends Controller
 	{
 		$token = \JWTAuth::getToken();
 		$user = \JWTAuth::toUser($token);
-		
+
 		if ( !$this->user->save($request, $user->id))
 			return response(['status' => 'error', 'message' => 'Error when save infromation user'], 500);
 
@@ -43,8 +43,6 @@ class UsersController extends Controller
 			return response(['status' => 'error', 'message' => 'Error when save information education user'], 500);
 		}
 
-		 return response()->json([
-                'status' => true,
-            ], 200);
+		return response()->json(['status' => true], 200);
 	}
 }
