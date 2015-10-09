@@ -10,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/style.css')}}">
     </head>
     <body>
+        @include('messages.notifications')
         @yield('content')
         <!-- jQuery -->
         <script src="//code.jquery.com/jquery.js"></script>

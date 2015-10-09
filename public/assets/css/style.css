@@ -17,3 +17,6 @@
     -webkit-border-radius: 50%;
     border-radius: 50%;
 }
+.register input.form-control {
+  border-radius: 0px;
+}

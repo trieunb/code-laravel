@@ -67,7 +67,8 @@ class AuthenticateController extends Controller
                 ->withErrors($validate);
         } else {
             $user = new User();
-            $user->name = $request->input('name');
+            $user->firstname = $request->input('firstname');
+            $user->lastname = $request->input('lastname');
             $user->email = $request->input('email');
             $user->password = Hash::make($request->input('password'));
             $user->save();
