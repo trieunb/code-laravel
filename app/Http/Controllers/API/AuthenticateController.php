@@ -46,33 +46,43 @@ class AuthenticateController extends Controller
     public function postLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        $dt = Carbon::now()->addDays(5);
-        $exp = ['exp' => strtotime($dt)];
+        $exp_datetime = Carbon::now()->addDays(5);
+        $exp = ['exp' => strtotime($exp_datetime)];
         try {
             if (! $token = JWTAuth::attempt($credentials, $exp)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return response()->json([
+                    'status' => 0,
+                    'success' => false,
+                    'error_description' => 'invalid_credentials'
+                ], 401);
+            } else {
+                $user = User::where('email', $request->input('email'))->first();
+                $user->oauth_token = compact('token')['token'];
+                $user->exp_time_token = $exp_datetime;
+                $user->save();
+                return response()->json([
+                    'status' => 1,
+                    'success' => true,
+                    'token' => compact('token')['token']
+                ]);
             }
         } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return response()->json([
+                'status' => 0,
+                'success' => false,
+                'error_description' => 'could_not_create_token'
+            ], 500);
         }
-        return response()->json(compact('token'));
     }
 
     public function postRegister(UserRegisterRequest $request)
     {
-        $validate = Validator::make($request->all(), $request->rules());
-        if ($validate->fails()) {
-            return redirect('auth.register')
-                ->withInput()
-                ->withErrors($validate);
-        } else {
-            $user = new User();
-            $user->firstname = $request->input('firstname');
-            $user->lastname = $request->input('lastname');
-            $user->email = $request->input('email');
-            $user->password = Hash::make($request->input('password'));
-            $user->save();
-        } 
+        $user = new User();
+        $user->firstname = $request->input('firstname');
+        $user->lastname = $request->input('lastname');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
         return redirect()->route('auth.login');
     }
 
@@ -85,8 +95,7 @@ class AuthenticateController extends Controller
             $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-            // dd($result);die();
-            if ( @$result['id']) {
+            if ( $result['id']) {
                 $user_login = User::where('linkedin_id', $result['id'])->first();
                 if ( !$user_login) {
                     $user = User::create([
