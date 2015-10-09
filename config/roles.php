@@ -61,7 +61,7 @@ return [
 
         'options' => [
             'is' => true,
-            'canPermision' => true,
+            'can' => true,
             'allowed' => true,
         ],
 
