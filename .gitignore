@@ -6,4 +6,3 @@ composer.lock
 _ide_helper.php
 storage/debugbar
 vendor
-config/app.php
