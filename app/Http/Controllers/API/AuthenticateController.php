@@ -84,8 +84,25 @@ class AuthenticateController extends Controller
             $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-            echo 'Your linkedin first name is ' . $result['firstName'] . ' and your last name is ' . $result['lastName'];
-            dd($result);
+            if ( $result['id']) {
+                $user_login = User::where('linkedin_id', $result['id'])->first();
+                if ( !$user_login) {
+                    $user = new User();
+                    $user->linkedin_id = $result['id'];
+                    $user->firstname = $result['firstName'];
+                    $user->lastname = $result['lastName'];
+                    $user->email = $result['emailAddress'];
+                    $user->save();
+                    Auth::login($user, true);
+                    return redirect('/');
+                } else {
+                    $user = User::findOrFail($user->id);
+                    Auth::login($user, true);
+                    return redirect('/');
+                }
+            }
+            // echo 'Your linkedin first name is ' . $result['firstName'] . ' and your last name is ' . $result['lastName'];
+            // dd($result);
 
         }
         else
