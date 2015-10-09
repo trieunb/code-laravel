@@ -49,7 +49,8 @@ class AuthenticateController extends Controller
         $exp_datetime = Carbon::now()->addDays(5);
         $exp = ['exp' => strtotime($exp_datetime)];
         try {
-            if (! $token = JWTAuth::attempt($credentials, $exp)) {
+            $token = JWTAuth::attempt($credentials, $exp);
+            if (! $token) {
                 return response()->json([
                     'status' => 0,
                     'success' => false,
@@ -57,13 +58,13 @@ class AuthenticateController extends Controller
                 ], 401);
             } else {
                 $user = User::where('email', $request->input('email'))->first();
-                $user->oauth_token = compact('token')['token'];
+                $user->oauth_token = $token;
                 $user->exp_time_token = $exp_datetime;
                 $user->save();
                 return response()->json([
                     'status' => 1,
                     'success' => true,
-                    'token' => compact('token')['token']
+                    'token' => $token
                 ]);
             }
         } catch (JWTException $e) {
@@ -105,14 +106,26 @@ class AuthenticateController extends Controller
                         'email' => $result['emailAddress'],
                         'avatar' => $result['pictureUrl'],
                         'country' => $result['location']["name"],
+                        'oauth_token' => $token->getAccessToken(),
                     ]);
                     Auth::login($user, true);
-                    return redirect('/');
                 } else {
                     $user = User::findOrFail($user_login->id);
+                    $user->oauth_token = $token->getAccessToken();
+                    $user->save();
                     Auth::login($user, true);
-                    return redirect('/');
                 }
+                return response()->json([
+                    'status' => 1,
+                    'success' => true,
+                    'token' => $token->getAccessToken(),
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'success' => false,
+                    'error_description' => 'could_not_create_token'
+                ], 500);
             }
         }
         else
