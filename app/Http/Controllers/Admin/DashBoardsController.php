@@ -12,6 +12,7 @@ class DashBoardsController extends Controller
 
 	public function index(Request $request)
 	{
+		\Auth::loginUsingId(5);
 		return \Auth::user();
 	}
 } 

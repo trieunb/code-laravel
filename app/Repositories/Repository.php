@@ -6,8 +6,8 @@ interface Repository
 	/**
 	 * Create or Update data
 	 * @param  mixed $data 
-	 * @param  int $id   
-	 * @return bool      
+	 * @param  int $id  if $id == null => create else update
+	 * @return mixed      
 	 */
 	public function save($data, $id = null);
 
