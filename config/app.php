@@ -157,6 +157,8 @@ return [
         Laravel\Cashier\CashierServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Artdarek\OAuth\OAuthServiceProvider::class,
+        Bican\Roles\RolesServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -211,6 +213,7 @@ return [
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
+        'PDF'       => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
