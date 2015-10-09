@@ -30,6 +30,7 @@ class EditProfileRequest extends Request
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email,'.$user->id,
+            'avatar' => 'image',
             'dob' => 'required',
             'city' => 'required', 
             'state' => 'required', 
