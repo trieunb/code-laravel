@@ -197,7 +197,7 @@ trait HasRoleAndPermission
      * @param bool $all
      * @return bool
      */
-    public function canPermision($permission, $all = false)
+    public function can($permission, $all = false)
     {
         if ($this->isPretendEnabled()) {
             return $this->pretend('can');

@@ -111,7 +111,7 @@ interface HasRoleAndPermission
      * @param bool $all
      * @return bool
      */
-    public function canPermision($permission, $all = false);
+    public function can($permission, $all = false);
 
     /**
      * Check if the user has all permissions.
