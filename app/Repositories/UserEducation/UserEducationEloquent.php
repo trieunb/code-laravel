@@ -21,16 +21,16 @@ class UserEducationEloquent extends AbstractRepository implements UserEducationI
 	 * @param int $user_id
 	 * @return mixed      
 	 */
-	public function save($request, $id = null, $user_id)
+	public function save($data, $id = null, $user_id)
 	{
 		$user_education = $id ? $this->getById($id) : new UserEducation;
 		if ($id == null) $user_education->user_id = $user_id;
 
-		$user_education->school_name = $request->get('school_name');
-		$user_education->start = $request->get('start');
-		$user_education->end = $request->get('end');
-		$user_education->degree = $request->get('degree');
-		$user_education->result = $request->get('result');
+		$user_education->school_name = $data['school_name'];
+		$user_education->start = $data['start'];
+		$user_education->end = $data['end'];
+		$user_education->degree = $data['degree'];
+		$user_education->result = $data['result'];
 
 		return $user_education->save();
 	}

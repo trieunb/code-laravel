@@ -21,17 +21,17 @@ class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHist
 	 * @param int $user_id
 	 * @return mixed      
 	 */
-	public function save($request, $id = null, $user_id)
+	public function save($data, $id = null, $user_id)
 	{
 		$user_work_history = $id ? $this->getById($id) : new UserWorkHistory;
 
 		if ($id == null) $user_work_history->user_id = $user_id;
 
-		$user_work_history->company = $request->get('company');
-		$user_work_history->start = $request->get('start');
-		$user_work_history->end = $request->get('end');
-		$user_work_history->job_title = $request->get('job_title');
-		$user_work_history->job_description = $request->get('job_description');
+		$user_work_history->company = $data['company'];
+		$user_work_history->start = $data['start'];
+		$user_work_history->end = $data['end'];
+		$user_work_history->job_title = $data['job_title'];
+		$user_work_history->job_description = $data['job_description'];
 
 		return $user_work_history->save();
 	}

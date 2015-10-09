@@ -52,23 +52,30 @@ class UsersController extends Controller
 
 	public function editProfile($id, EditProfileRequest $request)
 	{
-		$user_id = \Auth::user()->id;
-		
-		if ($user_id != $id) {
+		$data = json_decode($request->get('data'), true);
+		dd($data);
+		$token = \JWTAuth::getToken($data['access_token']);
+		$user = \JWTAuth::getUser($token);
+
+		if ($user->id != $id) {
 			return response()->json(['status' => 'access for denied'], 403);
 		}
-		if ( !$this->user->save($request, $user_id))
-			return response()->json(['status' => false, 'message' => 'Error when save infromation user'], 500);
 
-		if( !$this->user_education->save($request, $request->get('user_education_id'), $user_id)) {
+		if ( !$this->user->save($data['user'], $user->id)) {
+			return response()->json(['status' => false, 'message' => 'Error when save infromation user'], 500);
+		}
+
+		if( !$this->user_education->save($data['user_education'], $data['user_education']['id'], $user->id)) {
 			return response()->json(['status' => false, 'message' => 'Error when save information education user'], 500);
 		}
 
-		if ( !$this->user_work_history->save($request, $request->get('user_work_history_id'),  $user_id)) {
+		if ( !$this->user_work_history->save($data['user_work_history'], 
+			$data['user_work_history']['user_work_history_id'], 
+			$user->id)) {
 			return response()->json(['status' => false, 'message' => 'Error when save information work history'], 500);
 		}
 
-		if ( !$this->user_skill->save($request, $request->get('user_skill_id'), $user_id)) {
+		if ( !$this->user_skill->save($data['user_skill'], $data['user_skill']['user_skill_id'], $user->id)) {
 			return response()-json(['status' => false, 'message' => 'Error when save information skill of user']);
 		}
 

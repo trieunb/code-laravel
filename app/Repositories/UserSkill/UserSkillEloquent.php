@@ -21,16 +21,16 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	 * @param int $user_id
 	 * @return mixed      
 	 */
-	public function save($request, $id = null, $user_id)
+	public function save($data, $id = null, $user_id)
 	{
 		$user_skill = $id ? $this->getById($id) : new UserSkill;
 
 		if ( $id == null) $user_skill->user_id = $user_id;
 
-		$user_skill->skill_name = $request->get('skill_name');
-		$user_skill->skill_test = $request->get('skill_test');
-		$user_skill->skill_test_point = $request->get('skill_test_point');
-		$user_skill->experience = $request->get('experience');
+		$user_skill->skill_name = $data['skill_name'];
+		$user_skill->skill_test = $data['skill_test'];
+		$user_skill->skill_test_point = $data['skill_test_point'];
+		$user_skill->experience = $data['experience'];
 
 		return $user_skill->save();
 	}
