@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Bican\Roles\Traits\Slugable;
 use Illuminate\Database\Eloquent\Model;
+use Bican\Roles\Traits\RoleHasRelations;
+use Bican\Roles\Contracts\RoleHasRelations as RoleHasRelationsContract;
 
-class Role extends Model
+class Role extends Model implements RoleHasRelationsContract
 {
+    use Slugable, RoleHasRelations;
 	/**
 	 * Table name
 	 * @var string
@@ -13,10 +17,17 @@ class Role extends Model
     protected $table = 'roles';
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * Create a new model instance.
+     *
+     * @param array $attributes
+     * @return void
      */
-    public function users()
+    public function __construct(array $attributes = [])
     {
-    	return $this->belongsToMany(User::class, 'roles_users', 'role_id', 'user_id');
+        parent::__construct($attributes);
+
+        if ($connection = config('roles.connection')) {
+            $this->connection = $connection;
+        }
     }
 }

@@ -31,5 +31,6 @@ return array(
     'Crypt' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
     'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
+    'Bican\\Roles' => array($vendorDir . '/bican/roles/src'),
     'Artdarek\\OAuth' => array($vendorDir . '/oriceon/oauth-5-laravel/src'),
 );

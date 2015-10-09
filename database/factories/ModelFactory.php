@@ -42,7 +42,8 @@ $factory->define(App\Models\Category::class, function(Faker\Generator $faker) {
 
 $factory->define(App\Models\Role::class, function(Faker\Generator $faker) {
 	return [
-		'role_name' => $faker->name
+		'name' => $faker->name,
+		'slug' => $faker->name
 	];
 });
 
