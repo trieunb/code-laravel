@@ -14,12 +14,15 @@ use Hash;
 use Auth;
 use App\Http\Requests\UserRegisterRequest;
 use Artdarek\OAuth\Facade\OAuth;
+use App\Repositories\User\UserInterface;
 
 class AuthenticateController extends Controller
 {
-    public function __construct()
+    protected $user;
+    public function __construct(UserInterface $user)
     {
         //$this->middleware('jwt.auth', ['except' => ['authenticate']]);
+        $this->user = $user;
     }
 
     /**
@@ -29,7 +32,7 @@ class AuthenticateController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = $this->user->getAll();
         return $users;
     }
 
@@ -57,10 +60,9 @@ class AuthenticateController extends Controller
                     'error_description' => 'invalid_credentials'
                 ], 401);
             } else {
-                $user = User::where('email', $request->input('email'))->first();
-                $user->oauth_token = $token;
-                $user->exp_time_token = $exp_datetime;
-                $user->save();
+                $user = json_decode($this->user
+                    ->getDataWhereClause('email', '=', $request->input('email')),true);
+                $this->user->update(['oauth_token' => $token], $user[0]['id']);
                 return response()->json([
                     'status' => 1,
                     'success' => true,
@@ -78,13 +80,28 @@ class AuthenticateController extends Controller
 
     public function postRegister(UserRegisterRequest $request)
     {
-        $user = new User();
-        $user->firstname = $request->input('firstname');
-        $user->lastname = $request->input('lastname');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
-        return redirect()->route('auth.login');
+        $token = JWTAuth::fromUser($request);
+        $data = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'oauth_token' => $token,
+        ];
+        $user = $this->user->create($data);
+        if ($user) {
+            return response()->json([
+                    'status' => 1,
+                    'success' => true,
+                    'token' => $token,
+                ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'success' => false,
+                'error_description' => 'could_not_create_token'
+            ], 500);
+        }
     }
 
     public function getLoginWithLinkedin(Request $request)

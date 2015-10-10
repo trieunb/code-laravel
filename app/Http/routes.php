@@ -29,6 +29,7 @@ Route::group(['namespace' => 'Frontend'], function() {
 });
 
 Route::group(['prefix' => 'api'], function() {
+    get('/user', 'API\AuthenticateController@index');
     Route::controller('auth', 'API\AuthenticateController', [
       'getLogin' => 'auth.login',
       'getRegister' => 'auth.register',
