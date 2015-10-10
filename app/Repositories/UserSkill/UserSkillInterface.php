@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories\UserSKill;
+namespace App\Repositories\UserSkill;
 
 use App\Repositories\Repository;
 

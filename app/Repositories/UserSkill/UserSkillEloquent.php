@@ -1,9 +1,9 @@
 <?php
-namespace App\Repositories\UserSKill;
+namespace App\Repositories\UserSkill;
 
 use App\Models\UserSkill;
 use App\Repositories\AbstractRepository;
-use App\Repositories\UserSKill\UserSkillInterface;
+use App\Repositories\UserSkill\UserSkillInterface;
 
 class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 {
