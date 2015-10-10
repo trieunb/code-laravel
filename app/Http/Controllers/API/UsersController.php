@@ -50,34 +50,56 @@ class UsersController extends Controller
 		$this->user_skill = $user_skill;
 	}
 
-	public function editProfile($id, EditProfileRequest $request)
+	public function editProfile($id, Request $request)
 	{
-		$data = json_decode($request->get('data'), true);
-		dd($data);
-		$token = \JWTAuth::getToken($data['access_token']);
-		$user = \JWTAuth::getUser($token);
+		$data = $request->all();
+		$user = \JWTAuth::getUser($data['access_token']);
+
+
 
 		if ($user->id != $id) {
 			return response()->json(['status' => 'access for denied'], 403);
 		}
+		$rules_user = [
+			'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'avatar' => 'image',
+            'dob' => 'required',
+            'city' => 'required', 
+            'state' => 'required'
+        ];
+        $rules_user_education = [
+        	'school_name' => 'required',
+            'start' => 'required',
+            'end' => 'required',
+            'degree' => 'required',
+            'result' => 'required'
+        ];
+        $rules_user_work_history = [
+        	'company' => 'required',
+            'work_history_start' => 'required',
+            'work_history_end' => 'required',
+            'job_title' => 'required',
+            'job_description' => 'required'
+        ];
 
-		if ( !$this->user->save($data['user'], $user->id)) {
+		if (\Validator::make($data['user'], $rules_user)->fails())
+			return response()->json(['status' => false, 'message' => 'Information user invalid'], 402); 
+
+		if (\Validator::make($data['user_educations'], $rules_user_education)->fails())
+			return response()->json(['status' => false, 'message' => 'Information user education invalid'], 402); 
+
+		if (\Validator::make($data['user_work_histories'], $rules_user_work_history)->fails())
+			return response()->json(['status' => false, 'message' => 'Information user work history invalid'], 402); 
+
+		if ( !$this->user->saveFromApi($data['user'], $user->id)) {
 			return response()->json(['status' => false, 'message' => 'Error when save infromation user'], 500);
 		}
 
-		if( !$this->user_education->save($data['user_education'], $data['user_education']['id'], $user->id)) {
-			return response()->json(['status' => false, 'message' => 'Error when save information education user'], 500);
-		}
-
-		if ( !$this->user_work_history->save($data['user_work_history'], 
-			$data['user_work_history']['user_work_history_id'], 
-			$user->id)) {
-			return response()->json(['status' => false, 'message' => 'Error when save information work history'], 500);
-		}
-
-		if ( !$this->user_skill->save($data['user_skill'], $data['user_skill']['user_skill_id'], $user->id)) {
-			return response()-json(['status' => false, 'message' => 'Error when save information skill of user']);
-		}
+		$this->user_education->saveFromApi($data['user_educations'], $user->id);
+		$this->user_work_history->saveFromApi($data['user_work_histories'], $user->id);
+		$this->user_skill->saveFromApi($data['user_skills'],  $user->id);
 
 		return response()->json(['status' => true], 200);
 	}

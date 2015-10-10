@@ -11,5 +11,5 @@ interface UserInterface extends Repository
 	 * @param  int $id  if $id == null => create else update
 	 * @return mixed      
 	 */
-	public function save($data, $id = null);
+	public function saveFromApi($data, $id = null);
 }
