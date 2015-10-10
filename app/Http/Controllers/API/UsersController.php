@@ -9,6 +9,10 @@ use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSKill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
+use App\ValidatorApi\UserEducation_Rule;
+use App\ValidatorApi\UserWorkHistory_Rule;
+use App\ValidatorApi\User_Rule;
+use App\ValidatorApi\ValidatorAPiException;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -50,53 +54,35 @@ class UsersController extends Controller
 		$this->user_skill = $user_skill;
 	}
 
-	public function editProfile($id, Request $request)
-	{
+	public function editProfile($id, Request $request, 
+		User_Rule $user_rule, 
+		UserWorkHistory_Rule $user_work_history_rule,
+		UserEducation_Rule $user_education_rule
+	) {
 		$data = $request->all();
-		$user = \JWTAuth::getUser($data['access_token']);
-
-
+		$user = \JWTAuth::toUser($data['token']);
 
 		if ($user->id != $id) {
 			return response()->json(['status' => 'access for denied'], 403);
 		}
-		$rules_user = [
-			'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'avatar' => 'image',
-            'dob' => 'required',
-            'city' => 'required', 
-            'state' => 'required'
-        ];
-        $rules_user_education = [
-        	'school_name' => 'required',
-            'start' => 'required',
-            'end' => 'required',
-            'degree' => 'required',
-            'result' => 'required'
-        ];
-        $rules_user_work_history = [
-        	'company' => 'required',
-            'work_history_start' => 'required',
-            'work_history_end' => 'required',
-            'job_title' => 'required',
-            'job_description' => 'required'
-        ];
 
-		if (\Validator::make($data['user'], $rules_user)->fails())
-			return response()->json(['status' => false, 'message' => 'Information user invalid'], 402); 
-
-		if (\Validator::make($data['user_educations'], $rules_user_education)->fails())
-			return response()->json(['status' => false, 'message' => 'Information user education invalid'], 402); 
-
-		if (\Validator::make($data['user_work_histories'], $rules_user_work_history)->fails())
-			return response()->json(['status' => false, 'message' => 'Information user work history invalid'], 402); 
-
-		if ( !$this->user->saveFromApi($data['user'], $user->id)) {
-			return response()->json(['status' => false, 'message' => 'Error when save infromation user'], 500);
+		try {
+			$user_rule->validate($data['user'], $user->id);	
+		} catch (ValidatorAPiException $e) {
+			return response()->json(['status' => false, 'message' => $e->getErrors()]);
+		}
+		try {
+			$user_work_history_rule->validate($data['user_educations']);
+		} catch (ValidatorAPiException $e) {
+			return response()->json(['status' => false, 'message' => $e->getErrors()]);
+		}
+		try {
+			$user_education_rule->validate($data['user_work_histories']);
+		} catch (ValidatorAPiException $e) {
+			return response()->json(['status' => false, 'message' => $e->getErrors()]);
 		}
 
+		$this->user->saveFromApi($data['user'], $user->id);
 		$this->user_education->saveFromApi($data['user_educations'], $user->id);
 		$this->user_work_history->saveFromApi($data['user_work_histories'], $user->id);
 		$this->user_skill->saveFromApi($data['user_skills'],  $user->id);
