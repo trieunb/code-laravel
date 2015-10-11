@@ -68,9 +68,7 @@ class UsersController extends Controller
 		UserEducation_Rule $user_education_rule,
 		UserSkill_Rule $user_skill_rule
 	) {
-		
 		$user = \JWTAuth::toUser($request->get('token'));
-		dd($data, $user);
 		if ($user->id != $id) {
 			return response()->json(['status' => 'access for denied'], 403);
 		}
