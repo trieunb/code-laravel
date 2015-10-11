@@ -10,6 +10,7 @@ use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
 use App\ValidatorApi\UserEducation_Rule;
+use App\ValidatorApi\UserSkill_Rule;
 use App\ValidatorApi\UserWorkHistory_Rule;
 use App\ValidatorApi\User_Rule;
 use App\ValidatorApi\ValidatorAPiException;
@@ -54,12 +55,19 @@ class UsersController extends Controller
 		$this->user_skill = $user_skill;
 	}
 
-	public function editProfile($id, Request $request, 
+	public function getProfile(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+
+		return $this->user->getProfile($user->id);
+	}
+
+	public function postProfile($id, Request $request, 
 		User_Rule $user_rule, 
 		UserWorkHistory_Rule $user_work_history_rule,
-		UserEducation_Rule $user_education_rule
+		UserEducation_Rule $user_education_rule,
+		UserSkill_Rule $user_skill_rule
 	) {
-		$data = $request->all();
 		
 		$user = \JWTAuth::toUser($request->get('token'));
 		dd($data, $user);
@@ -72,8 +80,7 @@ class UsersController extends Controller
 		} catch (ValidatorAPiException $e) {
 			return response()->json(['status' => false, 'message' => $e->getErrors()]);
 		}
-		dd($data);
-		/*try {
+		try {
 			$user_work_history_rule->validate($request->get('user_educations'));
 		} catch (ValidatorAPiException $e) {
 			return response()->json(['status' => false, 'message' => $e->getErrors()]);
@@ -82,8 +89,13 @@ class UsersController extends Controller
 			$user_education_rule->validate($request->get('user_work_histories'));
 		} catch (ValidatorAPiException $e) {
 			return response()->json(['status' => false, 'message' => $e->getErrors()]);
-		}*/
-		dd($data);
+		}
+		try {
+			$user_skill_rule->validate($request->get('user_skills'));
+		} catch (ValidatorAPiException $e) {
+			return response()->json(['status' => false, 'message' => $e->getErrors()]);
+		}
+		
 		$this->user->saveFromApi($request->get('user'), $user->id);
 		$this->user_education->saveFromApi($request->get('user_educations'), $user->id);
 		$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);

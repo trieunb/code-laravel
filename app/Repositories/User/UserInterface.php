@@ -12,4 +12,11 @@ interface UserInterface extends Repository
 	 * @return mixed      
 	 */
 	public function saveFromApi($data, $id = null);
+
+	/**
+	 * Get profile
+	 * @param  int $id 
+	 * @return mixed     
+	 */
+	public function getProfile($id);
 }

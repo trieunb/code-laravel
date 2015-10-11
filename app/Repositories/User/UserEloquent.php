@@ -46,4 +46,17 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 		return $user->save();
 	}
+
+	/**
+	 * Get profile
+	 * @param  int $user_id 
+	 * @return mixed     
+	 */
+	public function getProfile($user_id)
+	{
+		return $this->model
+			->with(['user_educations', 'user_work_histories', 'user_skills'])
+			->findOrFail($user_id)
+			->toJson();
+	}
 }

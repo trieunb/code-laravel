@@ -36,5 +36,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
       'getLoginWithLinkedin' => 'auth.linkedin'
     ]);
 
-    post('/user/{id}/edit', ['uses' => 'UsersController@editProfile']);
+    get('/user/profile', 'UsersController@getProfile');
+    post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
 });
