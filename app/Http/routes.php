@@ -28,11 +28,14 @@ Route::group(['namespace' => 'Frontend'], function() {
 
 });
 
-Route::group(['prefix' => 'api'], function() {
-    Route::controller('auth', 'API\AuthenticateController', [
+Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
+    Route::controller('auth', 'AuthenticateController', [
       'getLogin' => 'auth.login',
-      'getRegister' 	=> 'auth.register',
+      'getRegister'   => 'auth.register',
       'postLogin' => 'auth.login',
       'getLoginWithLinkedin' => 'auth.linkedin'
     ]);
+
+    get('/user/profile', 'UsersController@getProfile');
+    post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
 });

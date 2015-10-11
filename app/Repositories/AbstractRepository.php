@@ -76,4 +76,26 @@ abstract class AbstractRepository
 	{
 		return $this->model->where($field, $operator, $value)->get();
 	}
+
+	/**
+	 * get data has in array with column
+	 * @param  string $field 
+	 * @param  array  $data  
+	 * @return mixed        
+	 */
+	public function getDataWhereIn($field,array $data)
+	{
+		return $this->model->whereIn($field, $data)->get();
+	}
+
+	/**
+	 * get data has not in array with column
+	 * @param  string $field 
+	 * @param  array  $data  
+	 * @return mixed        
+	 */
+	public function getDataWhereNotIn($field, array $data)
+	{
+		return $this->model->whereNotIn($field, $data)->get();
+	}
 }
