@@ -33,7 +33,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
       'getLogin' => 'auth.login',
       'getRegister'   => 'auth.register',
       'postLogin' => 'auth.login',
-      'getLoginWithLinkedin' => 'auth.linkedin'
+      'getLoginWithLinkedin' => 'auth.linkedin',
+      'getLoginWithGoogle' => 'auth.google'
     ]);
 
 
