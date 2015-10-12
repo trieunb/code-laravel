@@ -79,18 +79,36 @@ class UsersController extends Controller
 			return response()->json(['status' => false, 'message' => $e->getErrors()]);
 		}
 		try {
-			$user_work_history_rule->validate($request->get('user_educations'));
+			if (count($request->get('user_educations')) > 1) {
+				foreach ($request->get('user_educations') as $user_education_data) {
+						$user_education_rule->validate($user_education_data);
+				}
+			} else {
+				$user_education_rule->validate($request->get('user_educations'));
+			}
+		} catch (ValidatorAPiException $e) {
+			return response()->json(['status' => false, 'message' => $e->getErrors()]);
+		}	
+		
+		try {
+			if (count($request->get('user_work_histories')) > 1) {
+				foreach ($request->get('user_work_histories') as $user_work_history_data) {
+					$user_work_history_rule->validate($user_work_history_data);
+				}
+			} else {
+				$user_work_history_rule->validate($request->get('user_work_histories'));	
+			}
 		} catch (ValidatorAPiException $e) {
 			return response()->json(['status' => false, 'message' => $e->getErrors()]);
 		}
 		try {
-			$user_education_rule->validate($request->get('user_work_histories'));
-		} catch (ValidatorAPiException $e) {
-			return response()->json(['status' => false, 'message' => $e->getErrors()]);
-		}
-		try {
-			$user_skill_rule->validate($request->get('user_skills'));
-		} catch (ValidatorAPiException $e) {
+			if (count($request->get('user_skills')) > 1) {
+				foreach ($request->get('user_skills') as $user_skill_data) {
+					$user_skill_rule->validate($user_skill_data);
+				}	
+			}else {
+				$user_skill_rule->validate($request->get('user_skills'));
+			}		} catch (ValidatorAPiException $e) {
 			return response()->json(['status' => false, 'message' => $e->getErrors()]);
 		}
 		

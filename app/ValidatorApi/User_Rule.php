@@ -2,7 +2,6 @@
 
 namespace App\ValidatorApi;
 
-
 class User_Rule extends AbstractValidator
 {
 	protected function rules($params)
