@@ -37,6 +37,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
       'getLoginWithGoogle' => 'auth.google'
     ]);
 
+
     get('/user/profile', 'UsersController@getProfile');
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
 });
+

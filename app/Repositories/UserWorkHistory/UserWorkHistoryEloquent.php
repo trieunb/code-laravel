@@ -30,26 +30,24 @@ class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHist
 		$dataPrepareForCreate = [];
 
 		foreach ($data as $value) {
-			if ($value != null) {
+			if ($value['id'] != null && $value['id'] != '') {
 				$ids[] = $value['id'];
 			} else {
 				$dataPrepareForCreate[] = $value;
 			}
 		}
-		
-		$dataIds_has_ids = $this->getDataWhereIn('id', $ids);
 
-		if (count($dataIds_has_ids) > 0) {
+		if (count($ids) > 0) {
 			$dataPrepareForUpdate = [];
-			foreach ($dataIds_has_ids as $user_work_history) {
-				array_walk($data, function(&$value) use ($user_work_history, &$dataPrepareForUpdate){
-					if ($user_work_history->id == $value['id'])
+			foreach ($ids as $id) {
+				array_walk($data, function(&$value) use ($id, &$dataPrepareForUpdate){
+					if ($id == $value['id'])
 						$dataPrepareForUpdate[] = $value;
 				});
 			}
 
 			if (count($dataPrepareForUpdate) == 1) $this->saveOneRecord($dataPrepareForUpdate, $user_id);
-			else $this->model->updateMultiRecord($dataPrepareForUpdate);
+			else $this->model->updateMultiRecord($dataPrepareForUpdate, $ids);
 		}
 
 		if (count($dataPrepareForCreate) == 1) 
@@ -66,15 +64,16 @@ class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHist
 	 */
 	public function saveOneRecord($data, $user_id)
 	{
-		$user_work_history = $data['$id'] ? $data['$id'] : new UserWorkHistory;
+		$dataPrepareSave = $data[0];
+		$user_work_history = $dataPrepareSave['$id'] ? $dataPrepareSave['$id'] : new UserWorkHistory;
 
-		if ($data['$id'] == null) $user_work_history->user_id = $user_id;
+		if ($dataPrepareSave['$id'] == null) $user_work_history->user_id = $user_id;
 
-		$user_work_history->company = $data['company'];
-		$user_work_history->start = $data['start'];
-		$user_work_history->end = $data['end'];
-		$user_work_history->job_title = $data['job_title'];
-		$user_work_history->job_description = $data['job_description'];
+		$user_work_history->company = $dataPrepareSave['company'];
+		$user_work_history->start = $dataPrepareSave['start'];
+		$user_work_history->end = $dataPrepareSave['end'];
+		$user_work_history->job_title = $dataPrepareSave['job_title'];
+		$user_work_history->job_description = $dataPrepareSave['job_description'];
 
 		return $user_work_history->save();
 	}

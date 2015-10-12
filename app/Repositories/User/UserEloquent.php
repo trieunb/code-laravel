@@ -56,7 +56,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	{
 		return $this->model
 			->with(['user_educations', 'user_work_histories', 'user_skills'])
-			->findOrFail($user_id)
-			->toJson();
+			->findOrFail($user_id);
 	}
 }

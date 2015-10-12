@@ -2,7 +2,6 @@
 
 namespace App\ValidatorApi;
 
-
 class User_Rule extends AbstractValidator
 {
 	protected function rules($params)
@@ -14,7 +13,8 @@ class User_Rule extends AbstractValidator
             'avatar' => 'image',
             'dob' => 'required',
             'city' => 'required', 
-            'state' => 'required'
+            'state' => 'required',
+            'country' => 'required'
 		];
 	}
 }

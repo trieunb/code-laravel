@@ -58,8 +58,10 @@ class UsersController extends Controller
 	public function getProfile(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
-
 		return $this->user->getProfile($user->id);
+		return response()->json([
+			'status_code' => 200, 'status' => true, 'data' => $this->user->getProfile($user->id)
+		]);
 	}
 
 	public function postProfile($id, Request $request, 
@@ -70,28 +72,46 @@ class UsersController extends Controller
 	) {
 		$user = \JWTAuth::toUser($request->get('token'));
 		if ($user->id != $id) {
-			return response()->json(['status' => 'access for denied'], 403);
+			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
 
 		try {
 			$user_rule->validate($request->get('user'), $user->id);	
 		} catch (ValidatorAPiException $e) {
-			return response()->json(['status' => false, 'message' => $e->getErrors()]);
+			return response()->json(['status_code' => 412, 'status' => false, 'message' => $e->getErrors()], 412);
 		}
 		try {
-			$user_work_history_rule->validate($request->get('user_educations'));
+			if (count($request->get('user_educations')) > 1) {
+				foreach ($request->get('user_educations') as $user_education_data) {
+						$user_education_rule->validate($user_education_data);
+				}
+			} else {
+				$user_education_rule->validate($request->get('user_educations'));
+			}
 		} catch (ValidatorAPiException $e) {
-			return response()->json(['status' => false, 'message' => $e->getErrors()]);
+			return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+		}	
+		
+		try {
+			if (count($request->get('user_work_histories')) > 1) {
+				foreach ($request->get('user_work_histories') as $user_work_history_data) {
+					$user_work_history_rule->validate($user_work_history_data);
+				}
+			} else {
+				$user_work_history_rule->validate($request->get('user_work_histories'));	
+			}
+		} catch (ValidatorAPiException $e) {
+			return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
 		}
 		try {
-			$user_education_rule->validate($request->get('user_work_histories'));
-		} catch (ValidatorAPiException $e) {
-			return response()->json(['status' => false, 'message' => $e->getErrors()]);
-		}
-		try {
-			$user_skill_rule->validate($request->get('user_skills'));
-		} catch (ValidatorAPiException $e) {
-			return response()->json(['status' => false, 'message' => $e->getErrors()]);
+			if (count($request->get('user_skills')) > 1) {
+				foreach ($request->get('user_skills') as $user_skill_data) {
+					$user_skill_rule->validate($user_skill_data);
+				}	
+			}else {
+				$user_skill_rule->validate($request->get('user_skills'));
+			}		} catch (ValidatorAPiException $e) {
+			return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
 		}
 		
 		$this->user->saveFromApi($request->get('user'), $user->id);
@@ -99,6 +119,6 @@ class UsersController extends Controller
 		$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
 		$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
 
-		return response()->json(['status' => true], 200);
+		return response()->json(['status_code' => 200, 'status' => true]);
 	}
 }

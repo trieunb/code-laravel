@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserWorkHistory extends Model
 {
+
+    protected $fillable = [
+        'user_id',
+        'company',
+        'start',
+        'end',
+        'job_title',
+        'job_description'
+    ];
+
 	/**
 	 * Table name
 	 * @var string
@@ -25,39 +35,40 @@ class UserWorkHistory extends Model
     {
         $sql = '';
         foreach ($data as $value) {
-            $sql .= " WHEN id = ".addslashes($value['id']).' THEN '.$field;
+            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".$value[$field]."'";
         }
 
         return $sql .= ' END';
     }
 
-    public function updateMultiRecord($dataPrepareUpdate)
+    public function updateMultiRecord($dataPrepareUpdate, array $ids)
     {
         $sql = 'UPDATE `user_work_histories` SET company = CASE ';
-        $sql .= $this->model->updateColumnWithClause($dataPrepareUpdate, 'company');
-        $sql .= ' , start = CASE '.$this->model->updateColumnWithClause($dataPrepareUpdate, 'start');
-        $sql .= ' , end = CASE '.$this->model->updateColumnWithClause($dataPrepareUpdate, 'end');
-        $sql .= ' , job_title = CASE '.$this->model->updateColumnWithClause($dataPrepareUpdate, 'job_title');
-        $sql .= ' , job_description = CASE '.$this->model->updateColumnWithClause($dataPrepareUpdate, 'job_description');
+        $sql .= $this->updateColumnWithClause($dataPrepareUpdate, 'company');
+        $sql .= ' , start = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'start');
+        $sql .= ' , end = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'end');
+        $sql .= ' , job_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'job_title');
+        $sql .= ' , job_description = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'job_description');
         $sql .= ' WHERE id IN ('.implode(',', $ids).')';
 
-        DB::update(DB::raw($sql));
+        \DB::update(\DB::raw($sql));
     }
 
     public function insertMultiRecord($dataPrepareForCreate, $user_id)
     {
-        $user = User::find($user_id);
+        //$user = User::find($user_id);
         $user_work_histories = [];
         foreach ($dataPrepareForCreate as $value) {
-            $user_work_histories[] = new UserWorkHistory([
+            $user_work_histories[] = [
                 'company' => $value['company'],
                 'start' => $value['start'],
                 'end' => $value['end'],
                 'job_title' => $value['job_title'],
                 'job_description' => $value['job_description']
-            ]);
+            ];
         }
 
-        $user->user_work_histories->save($user_work_histories);
+        $this->insert($user_work_histories);
+        // $user->user_work_histories()->save($user_work_histories);
     }
 }
