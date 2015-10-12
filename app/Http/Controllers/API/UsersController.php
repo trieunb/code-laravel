@@ -59,7 +59,9 @@ class UsersController extends Controller
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
 
-		return $this->user->getProfile($user->id);
+		return response()->json([
+			'status_code' => 200, 'status' => 'success', 'data' =>$this->user->getProfile($user->id)
+		]);
 	}
 
 	public function postProfile($id, Request $request, 
@@ -117,6 +119,6 @@ class UsersController extends Controller
 		$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
 		$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
 
-		return response()->json(['status' => true], 200);
+		return response()->json(['status_code' => 200, 'status' => 'success']);
 	}
 }
