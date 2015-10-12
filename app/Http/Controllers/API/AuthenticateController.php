@@ -57,7 +57,7 @@ class AuthenticateController extends Controller
                 return response()->json([
                     'status' => 0,
                     'success' => false,
-                    'error_description' => 'invalid_credentials'
+                    'error_description' => 'invalid credentials'
                 ], 401);
             } else {
                 $user = json_decode($this->user
@@ -73,7 +73,7 @@ class AuthenticateController extends Controller
             return response()->json([
                 'status' => 0,
                 'success' => false,
-                'error_description' => 'could_not_create_token'
+                'error_description' => 'could not create token'
             ], 500);
         }
     }
@@ -99,7 +99,7 @@ class AuthenticateController extends Controller
             return response()->json([
                 'status' => 0,
                 'success' => false,
-                'error_description' => 'could_not_create_token'
+                'error_description' => 'could not create token'
             ], 500);
         }
     }
@@ -141,7 +141,7 @@ class AuthenticateController extends Controller
                 return response()->json([
                     'status' => 0,
                     'success' => false,
-                    'error_description' => 'could_not_create_token'
+                    'error_description' => 'could not create token'
                 ], 500);
             }
         }
