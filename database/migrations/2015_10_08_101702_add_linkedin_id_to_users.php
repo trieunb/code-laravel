@@ -13,7 +13,7 @@ class AddLinkedinIdToUsers extends Migration
     public function up()
     {
         Schema::table('users', function($table) {
-            $table->integer('linkedin_id')->after('id');
+            $table->string('linkedin_id')->after('id');
         });
     }
 
