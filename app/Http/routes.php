@@ -34,10 +34,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
       'getRegister'   => 'auth.register',
       'postLogin' => 'auth.login',
       'getLoginWithLinkedin' => 'auth.linkedin',
-      'getLoginWithGoogle' => 'auth.google'
     ]);
-
-
     get('/user/profile', 'UsersController@getProfile');
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
 });

@@ -42,9 +42,6 @@
                                     <div class="form-group">
                                         <a href="{{route('auth.linkedin')}}" class="btn btn-lg btn-primary btn-block">Sign in with LinkedIn</a>
                                     </div>
-                                    <div class="form-group">
-                                        <a href="{{route('auth.google')}}" class="btn btn-lg btn-primary btn-block">Sign in with Google</a>
-                                    </div>
                                 </div>
                             </div>
                         </fieldset>

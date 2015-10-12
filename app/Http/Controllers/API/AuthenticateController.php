@@ -120,9 +120,9 @@ class AuthenticateController extends Controller
             $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-            if ( $result['id']) {
-                $user_login = User::where('linkedin_id', $result['id'])->first();
-                if ( !$user_login) {
+            if ( @$result['id']) {
+                $user = User::where('linkedin_id', $result['id'])->first();
+                if ( ! $user) {
                     $user = User::create([
                         'linkedin_id' => $result['id'],
                         'firstname' => $result['firstName'],
@@ -134,7 +134,7 @@ class AuthenticateController extends Controller
                     ]);
                     Auth::login($user, true);
                 } else {
-                    $user = User::findOrFail($user_login->id);
+                    $user = User::findOrFail($user->id);
                     $user->token = $token->getAccessToken();
                     $user->save();
                     Auth::login($user, true);
@@ -155,42 +155,6 @@ class AuthenticateController extends Controller
         else
         {
             $url = $linkedinService->getAuthorizationUri(['state'=>'DCEEFWF45453sdffef424']);
-            return redirect((string)$url);
-        }
-    }
-    public function getLoginWithGoogle(Request $request)
-    {
-        // get data from request
-        $code = $request->get('code');
-
-        // get google service
-        $googleService = \OAuth::consumer('Google');
-
-        // check if code is valid
-
-        // if code is provided get user data and sign in
-        if ( ! is_null($code))
-        {
-            // This was a callback request from google, get the token
-            $token = $googleService->requestAccessToken($code);
-
-            // Send a request with it
-            $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-
-            $message = 'Your unique Google user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
-            echo $message. "<br/>";
-
-            //Var_dump
-            //display whole array.
-            dd($result);
-        }
-        // if not ask for permission first
-        else
-        {
-            // get googleService authorization
-            $url = $googleService->getAuthorizationUri();
-
-            // return to google login url
             return redirect((string)$url);
         }
     }

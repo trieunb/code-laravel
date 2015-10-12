@@ -52,7 +52,7 @@ class User extends Model implements AuthenticatableContract,
         'state',
         'country',
         'password',
-        'oauth_token',
+        'token',
         'exp_time_token'
     ];
 
