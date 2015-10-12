@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\belongsTo;
 
@@ -19,5 +20,43 @@ class UserSkill extends Model
     public function user()
     {
     	return $this->belongsTo(User::class);
+    }
+
+    public function updateColumnWithClause($data, $field) 
+    {
+        $sql = '';
+        foreach ($data as $value) {
+            $sql .= " WHEN id = ".addslashes($value['id']).' THEN '.$field;
+        }
+
+        return $sql .= ' END';
+    }
+
+    public function updateMultiRecord($dataPrepareUpdate)
+    {
+        $sql = 'UPDATE `user_skills` SET skill_name = CASE ';
+        $sql .= $this->model->updateColumnWithClause($dataPrepareUpdate, 'skill_name');
+        $sql .= ' , skill_test = CASE '.$this->model->updateColumnWithClause($dataPrepareUpdate, 'skill_test');
+        $sql .= ' , skill_test_point = CASE '.$this->model->updateColumnWithClause($dataPrepareUpdate, 'skill_test_point');
+        $sql .= ' , experience = CASE '.$this->model->updateColumnWithClause($dataPrepareUpdate, 'experience');
+        $sql .= ' WHERE id IN ('.implode(',', $ids).')';
+
+        DB::update(DB::raw($sql));
+    }
+
+    public function insertMultiRecord($dataPrepareForCreate, $user_id)
+    {
+        $user = User::find($user_id);
+        $user_skills = [];
+        foreach ($dataPrepareForCreate as $value) {
+            $user_skills[] = new UserWorkHistory([
+                'skill_name' => $value['skill_name'],
+                'skill_test' => $value['skill_test'],
+                'skill_test_point' => $value['skill_test_point'],
+                'experience' => $value['experience']
+            ]);
+        }
+        $user->user_skills->save($user_skills);
+        
     }
 }

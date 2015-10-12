@@ -13,14 +13,14 @@
 Route::pattern('id', '[0-9]+');
 
 Route::get('/', function () {
-	\Auth::loginUsingId(2);
-	// \Auth::logout();
+  \Auth::loginUsingId(2);
+  // \Auth::logout();
     return view('welcome');
 });
 
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin|member'], function() {
-	get('/test', 'DashBoardsController@index');
+  get('/', 'DashBoardsController@index');
 });
 
 
@@ -28,12 +28,14 @@ Route::group(['namespace' => 'Frontend'], function() {
 
 });
 
-Route::group(['prefix' => 'api'], function() {
-    get('/user', 'API\AuthenticateController@index');
-    Route::controller('auth', 'API\AuthenticateController', [
+Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
+    Route::controller('auth', 'AuthenticateController', [
       'getLogin' => 'auth.login',
-      'getRegister' => 'auth.register',
+      'getRegister'   => 'auth.register',
       'postLogin' => 'auth.login',
       'getLoginWithLinkedin' => 'auth.linkedin'
     ]);
+
+    get('/user/profile', 'UsersController@getProfile');
+    post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
 });

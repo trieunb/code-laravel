@@ -5,4 +5,6 @@ Homestead.json
 composer.lock
 _ide_helper.php
 storage/debugbar
+vendor/composer
 vendor
+config/app.php

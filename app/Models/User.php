@@ -16,11 +16,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Bican\Roles\Traits\HasRoleAndPermission;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
+use Laravel\Cashier\Billable;
+use Laravel\Cashier\Contracts\Billable as BillableContract;
 
-class User extends Model implements AuthenticatableContract,                                    CanResetPasswordContract,
-                                    HasRoleAndPermissionContract
+class User extends Model implements AuthenticatableContract,                                    
+                                    CanResetPasswordContract,
+                                    HasRoleAndPermissionContract,
+                                    BillableContract
 {
-    use Authenticatable, CanResetPassword, HasRoleAndPermission;
+    use Authenticatable, CanResetPassword, HasRoleAndPermission, Billable;
 
     /**
      * The database table used by the model.

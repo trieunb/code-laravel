@@ -17,38 +17,46 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * Create or Update data
-	 * @param  mixed $request 
-	 * @param  int $id   
-	 * @return bool      
+	 * @param  mixed $data 
+	 * @param  int $user_id   
+	 * @return mixed      
 	 */
-	public function save($request, $id = null)
+	public function saveFromApi($data, $user_id = null)
 	{
-		$user = $id ? $this->getById($id) : new User;
-		$user->firstname = $request->get('firstname');
-		$user->lastname = $request->get('lastname');
-		$user->email = $request->get('email');
-		$user->dob = $request->get('dob');
+		$user = $data['id'] ? $this->getById($data['id']) : new User;
+		$user->firstname = $data['firstname'];
+		$user->lastname = $data['lastname'];
+		$user->email = $data['email'];
+		$user->dob = $data['dob'];
 
-		if ($request->hasFile('avatar')) {
-			$filename = User::renameImage($request->file('avatar'));
-			$image = \Image::make(public_path(User::$path.$filename));
-
-			if ($image->resize(User::$img_with, User::$img_height)->save()) {
-				$user->avatar = User::$path.$filename;
-			}
+		if ($data['avatar']) {
+			$user->avatar = $data['avatar'];
 		}
 
-		$user->address = $request->get('address');
-		$user->mobile_phone = $request->get('mobile_phone');
-		$user->home_phone = $request->get('home_phone');
-		$user->city = $request->get('city');
-		$user->state = $request->get('state');
-		$user->country = $request->get('country');
+		$user->address = $data['address'];
+		$user->mobile_phone = $data['mobile_phone'];
+		$user->home_phone = $data['home_phone'];
+		$user->city = $data['city'];
+		$user->state = $data['state'];
+		$user->country = $data['country'];
 		
-		if ($request->has('password')) {
-			$user->password = bcrypt($request->get('password'));
+		if (array_key_exists('password', $data)) {
+			$user->password = bcrypt($data['password']);
 		}
 
 		return $user->save();
+	}
+
+	/**
+	 * Get profile
+	 * @param  int $user_id 
+	 * @return mixed     
+	 */
+	public function getProfile($user_id)
+	{
+		return $this->model
+			->with(['user_educations', 'user_work_histories', 'user_skills'])
+			->findOrFail($user_id)
+			->toJson();
 	}
 }

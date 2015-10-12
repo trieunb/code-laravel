@@ -6,10 +6,10 @@ interface Repository
 	/**
 	 * Create or Update data
 	 * @param  mixed $data 
-	 * @param  int $id   
-	 * @return bool      
+	 * @param  int $id  if $id == null => create else update
+	 * @return mixed      
 	 */
-	public function save($data, $id = null);
+	// public function save($data, $id = null);
 
 	/**
 	 * Get all data
@@ -62,4 +62,20 @@ interface Repository
 	 * @return mixed           
 	 */
 	public function getDataWhereClause($field, $operator, $value);
+	
+	/**
+	 * get data has in array with column
+	 * @param  string $field 
+	 * @param  array  $data  
+	 * @return mixed        
+	 */
+	public function getDataWhereIn($field,array $data);
+
+	/**
+	 * get data has not in array with column
+	 * @param  string $field 
+	 * @param  array  $data  
+	 * @return mixed        
+	 */
+	public function getDataWhereNotIn($field, array $data);
 }
