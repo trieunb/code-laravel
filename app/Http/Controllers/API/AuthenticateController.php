@@ -53,7 +53,7 @@ class AuthenticateController extends Controller
         $credentials = $request->only('email', 'password');
         $exp_datetime = Carbon::now()->addDays(5);
         $exp = ['exp' => strtotime($exp_datetime)];
-        
+
         try {
             $token = JWTAuth::attempt($credentials, $exp);
 
@@ -87,7 +87,7 @@ class AuthenticateController extends Controller
         $token = JWTAuth::fromUser($request);
        
         try {
-            $rules->validate($request->all(), null);
+            $rules->validate($request->all());
             $this->user->registerUser($request, $token);
 
             return response()->json([
