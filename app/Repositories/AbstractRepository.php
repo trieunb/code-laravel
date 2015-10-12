@@ -113,4 +113,16 @@ abstract class AbstractRepository
 	{
 		return $this->model->whereNotIn($field, $data)->get();
 	}
+
+	/**
+	 * get first data with clause 
+	 * @param  string $field    [column table]
+	 * @param  string $operator Ex: '=', '!='
+	 * @param  mixed $value    
+	 * @return mixed           
+	 */
+	public function getFirstDataWhereClause($field, $operator, $value)
+	{
+		return $this->model->where($field, $operator, $value)->first();
+	}
 }
