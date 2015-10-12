@@ -62,7 +62,7 @@ class AuthenticateController extends Controller
             } else {
                 $user = json_decode($this->user
                     ->getDataWhereClause('email', '=', $request->input('email')),true);
-                $this->user->update(['oauth_token' => $token], $user[0]['id']);
+                $this->user->update(['token' => $token], $user[0]['id']);
                 return response()->json([
                     'status' => 1,
                     'success' => true,
@@ -78,29 +78,36 @@ class AuthenticateController extends Controller
         }
     }
 
-    public function postRegister(UserRegisterRequest $request)
+    public function postRegister(Request $request)
     {
         $token = JWTAuth::fromUser($request);
-        $data = [
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'oauth_token' => $token,
+        $rules = [
+            'firstname' => 'required|max:50',
+            'lastname' => 'required|max:45',
+            'email' => 'required|email|unique:users|max:100',
+            'password' => 'required|confirmed|min:6',
         ];
-        $user = $this->user->create($data);
-        if ($user) {
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 0,
+                'success' => false,
+                'error_description' => 'The provided authorization grant is invalid'
+            ], 500);
+        } else {
+            $data = [
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'token' => $token,
+            ];
+            $this->user->create($data);
             return response()->json([
                     'status' => 1,
                     'success' => true,
                     'token' => $token,
                 ]);
-        } else {
-            return response()->json([
-                'status' => 0,
-                'success' => false,
-                'error_description' => 'could not create token'
-            ], 500);
         }
     }
 
@@ -123,12 +130,12 @@ class AuthenticateController extends Controller
                         'email' => $result['emailAddress'],
                         'avatar' => $result['pictureUrl'],
                         'country' => $result['location']["name"],
-                        'oauth_token' => $token->getAccessToken(),
+                        'token' => $token->getAccessToken(),
                     ]);
                     Auth::login($user, true);
                 } else {
                     $user = User::findOrFail($user_login->id);
-                    $user->oauth_token = $token->getAccessToken();
+                    $user->token = $token->getAccessToken();
                     $user->save();
                     Auth::login($user, true);
                 }
