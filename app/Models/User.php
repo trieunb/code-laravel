@@ -73,15 +73,7 @@ class User extends Model implements AuthenticatableContract,
         return strtotime($date);
     }
 
-    /**
-     * Override get dob
-     * @param  string $date 
-     * @return string       
-     */
-    public function getDobAttribute($date)
-    {
-        return strtotime($date);
-    }
+    
 
     /**
      * path folder uploads
