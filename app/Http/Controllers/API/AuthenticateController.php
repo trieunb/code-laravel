@@ -55,25 +55,25 @@ class AuthenticateController extends Controller
             $token = JWTAuth::attempt($credentials, $exp);
             if (! $token) {
                 return response()->json([
-                    'status' => 0,
+                    'status' => 500,
                     'success' => false,
-                    'error_description' => 'invalid credentials'
+                    'message' => 'invalid credentials'
                 ], 401);
             } else {
                 $user = json_decode($this->user
                     ->getDataWhereClause('email', '=', $request->input('email')),true);
                 $this->user->update(['token' => $token], $user[0]['id']);
                 return response()->json([
-                    'status' => 1,
+                    'status' => 200,
                     'success' => true,
                     'token' => $token
                 ]);
             }
         } catch (JWTException $e) {
             return response()->json([
-                'status' => 0,
+                'status' => 500,
                 'success' => false,
-                'error_description' => 'could not create token'
+                'message' => 'could not create token'
             ], 500);
         }
     }
@@ -90,9 +90,9 @@ class AuthenticateController extends Controller
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json([
-                'status' => 0,
+                'status' => 500,
                 'success' => false,
-                'error_description' => 'The provided authorization grant is invalid'
+                'message' => 'The provided authorization grant is invalid'
             ], 500);
         } else {
             $data = [
@@ -104,7 +104,7 @@ class AuthenticateController extends Controller
             ];
             $this->user->create($data);
             return response()->json([
-                    'status' => 1,
+                    'status' => 200,
                     'success' => true,
                     'token' => $token,
                 ]);
@@ -146,9 +146,9 @@ class AuthenticateController extends Controller
                 ]);
             } else {
                 return response()->json([
-                    'status' => 0,
+                    'status' => 500,
                     'success' => false,
-                    'error_description' => 'could not create token'
+                    'message' => 'could not create token'
                 ], 500);
             }
         }
