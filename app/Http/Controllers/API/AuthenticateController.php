@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;;
+use App\Http\Requests;
+use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
+use App\Repositories\User\UserInterface;
+use App\ValidatorApi\RegisterForm_Rule;
+use App\ValidatorApi\ValidatorAPiException;
+use Artdarek\OAuth\Facade\OAuth;
+use Auth;
+use Carbon\Carbon;;
+use Hash;
+use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
-use Hash;
-use Auth;
-use App\Http\Requests\UserRegisterRequest;
-use Artdarek\OAuth\Facade\OAuth;
-use App\Repositories\User\UserInterface;
 
 class AuthenticateController extends Controller
 {
@@ -60,9 +62,8 @@ class AuthenticateController extends Controller
                     'message' => 'invalid credentials'
                 ], 500);
             } else {
-                $user = json_decode($this->user
-                    ->getDataWhereClause('email', '=', $request->input('email')),true);
-                $this->user->update(['token' => $token], $user[0]['id']);
+                $user = $this->user->getDataWhereClause('email', '=', $request->input('email'))->first();
+                $this->user->update(['token' => $token], $user->id);
                 return response()->json([
                     'status_code' => 200,
                     'status' => true,
@@ -78,36 +79,25 @@ class AuthenticateController extends Controller
         }
     }
 
-    public function postRegister(Request $request)
+    public function postRegister(Request $request, RegisterForm_Rule $rules)
     {
         $token = JWTAuth::fromUser($request);
-        $rules = [
-            'firstname' => 'required|max:50',
-            'lastname' => 'required|max:45',
-            'email' => 'required|email|unique:users|max:100',
-            'password' => 'required|min:6',
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'status_code' => 500,
-                'status' => false,
-                'message' => 'The provided authorization grant is invalid'
-            ], 500);
-        } else {
-            $data = [
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
-                'token' => $token,
-            ];
-            $this->user->create($data);
+       
+        try {
+            $rules->validate($request->all(), null);
+            $this->user->registerUser($request, $token);
+
             return response()->json([
                     'status_code' => 200,
                     'status' => true,
                     'token' => $token,
                 ]);
+        } catch(ValidatorAPiException $e) {
+            return response()->json([
+                'status_code' => 500,
+                'status' => false,
+                'message' => $e->getErrors()
+            ], 500);
         }
     }
 
@@ -120,25 +110,21 @@ class AuthenticateController extends Controller
             $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
+           
             if ( $result['id']) {
-                $user_login = User::where('linkedin_id', $result['id'])->first();
+
+                $user_login = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
+
                 if ( !$user_login) {
-                    $user = User::create([
-                        'linkedin_id' => $result['id'],
-                        'firstname' => $result['firstName'],
-                        'lastname' => $result['lastName'],
-                        'email' => $result['emailAddress'],
-                        'avatar' => $result['pictureUrl'],
-                        'country' => $result['location']["name"],
-                        'token' => $token->getAccessToken(),
-                    ]);
-                    Auth::login($user, true);
+                    $user = $this->user->createUserFromOAuth($result, $token->getAccessToken());
                 } else {
-                    $user = User::findOrFail($user_login->id);
+                    $user = $this->user->getById($user_login->id);
                     $user->token = $token->getAccessToken();
                     $user->save();
-                    Auth::login($user, true);
                 }
+
+                Auth::login($user, true);
+
                 return response()->json([
                     'status_code' => 200,
                     'status' => true,

@@ -19,4 +19,20 @@ interface UserInterface extends Repository
 	 * @return mixed     
 	 */
 	public function getProfile($id);
+
+	/**
+	 * save data Register user
+	 * @param  mixed $request 
+	 * @param  string $token 
+	 * @return void       
+	 */
+	public function registerUser($request, $token);
+
+	/**
+	 * Create User get inforation to Oauth2
+	 * @param  array $data  
+	 * @param  string $token 
+	 * @return mixed        
+	 */
+	public function createUserFromOAuth($data, $token);
 }

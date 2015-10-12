@@ -78,4 +78,13 @@ interface Repository
 	 * @return mixed        
 	 */
 	public function getDataWhereNotIn($field, array $data);
+
+	/**
+	 * get first data with clause 
+	 * @param  string $field    [column table]
+	 * @param  string $operator Ex: '=', '!='
+	 * @param  mixed $value    
+	 * @return mixed           
+	 */
+	public function getFirstDataWhereClause($field, $operator, $value);
 }
