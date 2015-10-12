@@ -53,23 +53,26 @@ class AuthenticateController extends Controller
         $credentials = $request->only('email', 'password');
         $exp_datetime = Carbon::now()->addDays(5);
         $exp = ['exp' => strtotime($exp_datetime)];
+        
         try {
             $token = JWTAuth::attempt($credentials, $exp);
+
             if (! $token) {
                 return response()->json([
                     'status_code' => 500,
                     'status' => false,
                     'message' => 'invalid credentials'
                 ], 500);
-            } else {
-                $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
-                $this->user->update(['token' => $token], $user->id);
-                return response()->json([
-                    'status_code' => 200,
-                    'status' => true,
-                    'token' => $token
-                ]);
             }
+
+            $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
+            $this->user->update(['token' => $token], $user->id);
+
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'token' => $token
+            ]);
         } catch (JWTException $e) {
             return response()->json([
                 'status_code' => 500,
