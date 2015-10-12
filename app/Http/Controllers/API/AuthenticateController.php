@@ -55,24 +55,24 @@ class AuthenticateController extends Controller
             $token = JWTAuth::attempt($credentials, $exp);
             if (! $token) {
                 return response()->json([
-                    'status' => 500,
-                    'success' => false,
+                    'status_code' => 500,
+                    'status' => false,
                     'message' => 'invalid credentials'
-                ], 401);
+                ], 500);
             } else {
                 $user = json_decode($this->user
                     ->getDataWhereClause('email', '=', $request->input('email')),true);
                 $this->user->update(['token' => $token], $user[0]['id']);
                 return response()->json([
-                    'status' => 200,
-                    'success' => true,
+                    'status_code' => 200,
+                    'status' => true,
                     'token' => $token
                 ]);
             }
         } catch (JWTException $e) {
             return response()->json([
-                'status' => 500,
-                'success' => false,
+                'status_code' => 500,
+                'status' => false,
                 'message' => 'could not create token'
             ], 500);
         }
@@ -85,13 +85,13 @@ class AuthenticateController extends Controller
             'firstname' => 'required|max:50',
             'lastname' => 'required|max:45',
             'email' => 'required|email|unique:users|max:100',
-            'password' => 'required|confirmed|min:6',
+            'password' => 'required|min:6',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json([
-                'status' => 500,
-                'success' => false,
+                'status_code' => 500,
+                'status' => false,
                 'message' => 'The provided authorization grant is invalid'
             ], 500);
         } else {
@@ -104,8 +104,8 @@ class AuthenticateController extends Controller
             ];
             $this->user->create($data);
             return response()->json([
-                    'status' => 200,
-                    'success' => true,
+                    'status_code' => 200,
+                    'status' => true,
                     'token' => $token,
                 ]);
         }
@@ -140,14 +140,14 @@ class AuthenticateController extends Controller
                     Auth::login($user, true);
                 }
                 return response()->json([
-                    'status' => 1,
-                    'success' => true,
+                    'status_code' => 200,
+                    'status' => true,
                     'token' => $token->getAccessToken(),
                 ]);
             } else {
                 return response()->json([
-                    'status' => 500,
-                    'success' => false,
+                    'status_code' => 500,
+                    'status' => false,
                     'message' => 'could not create token'
                 ], 500);
             }
@@ -155,6 +155,42 @@ class AuthenticateController extends Controller
         else
         {
             $url = $linkedinService->getAuthorizationUri(['state'=>'DCEEFWF45453sdffef424']);
+            return redirect((string)$url);
+        }
+    }
+    public function getLoginWithGoogle(Request $request)
+    {
+        // get data from request
+        $code = $request->get('code');
+
+        // get google service
+        $googleService = \OAuth::consumer('Google');
+
+        // check if code is valid
+
+        // if code is provided get user data and sign in
+        if ( ! is_null($code))
+        {
+            // This was a callback request from google, get the token
+            $token = $googleService->requestAccessToken($code);
+
+            // Send a request with it
+            $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
+
+            $message = 'Your unique Google user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
+            echo $message. "<br/>";
+
+            //Var_dump
+            //display whole array.
+            dd($result);
+        }
+        // if not ask for permission first
+        else
+        {
+            // get googleService authorization
+            $url = $googleService->getAuthorizationUri();
+
+            // return to google login url
             return redirect((string)$url);
         }
     }
