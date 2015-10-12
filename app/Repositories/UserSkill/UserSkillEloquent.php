@@ -30,17 +30,16 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 		$dataPrepareForCreate = [];
 
 		foreach ($data as $value) {
-			if ($value['id'] != null)
+			if ($value['id'] != null && $value['id'] != '')
 				$ids[] = $value['id'];
 			else $dataPrepareForCreate[] = $value;
 		}
 
-		$dataIds_has_ids = $this->getDataWhereIn('id', $ids);
-		if (count($dataIds_has_ids) > 0) {
+		if (count($ids) > 0) {
 			$dataPrepareForUpdate = [];
-			foreach ($dataIds_has_ids as $user_skill) {
-				array_walk($data, function(&$value) use ($user_skill, &$dataPrepareForUpdate ){
-					if ($user_skill->id == $value['id']) 
+			foreach ($ids as $id) {
+				array_walk($data, function(&$value) use ($id, &$dataPrepareForUpdate ){
+					if ($id == $value['id']) 
 						$dataPrepareForUpdate[] = $value;
 				});
 			}
@@ -48,7 +47,7 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 			if (count($dataPrepareForUpdate) == 1) 
 				$this->saveOneRecord($dataPrepareForUpdate, $user_skill);
 			else 
-				$this->model->updateMultiRecord($dataPrepareForUpdate);
+				$this->model->updateMultiRecord($dataPrepareForUpdate, $ids);
 		}
 
 		if (count($dataPrepareForCreate) == 1) 
@@ -59,14 +58,15 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 
 	public function saveOneRecord($data, $user_id)
 	{
-		$user_skill = $data['id'] ? $this->getById($data['id']) : new UserSkill;
+		$dataPrepareSave = $data[0];
+		$user_skill = $dataPrepareSave['id'] ? $this->getById($dataPrepareSave['id']) : new UserSkill;
 
-		if ( $data['id'] == null) $user_skill->user_id = $user_id;
+		if ( $dataPrepareSave['id'] == null) $user_skill->user_id = $user_id;
 
-		$user_skill->skill_name = $data['skill_name'];
-		$user_skill->skill_test = $data['skill_test'];
-		$user_skill->skill_test_point = $data['skill_test_point'];
-		$user_skill->experience = $data['experience'];
+		$user_skill->skill_name = $dataPrepareSave['skill_name'];
+		$user_skill->skill_test = $dataPrepareSave['skill_test'];
+		$user_skill->skill_test_point = $dataPrepareSave['skill_test_point'];
+		$user_skill->experience = $dataPrepareSave['experience'];
 
 		return $user_skill->save();
 	}
