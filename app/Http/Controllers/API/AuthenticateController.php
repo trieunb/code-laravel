@@ -116,12 +116,12 @@ class AuthenticateController extends Controller
            
             if ( $result['id']) {
 
-                $user_login = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
+                $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
 
-                if ( !$user_login) {
+                if ( !$user) {
                     $user = $this->user->createUserFromOAuth($result, $token->getAccessToken());
                 } else {
-                    $user = $this->user->getById($user_login->id);
+                    $user = $this->user->getById($user->id);
                     $user->token = $token->getAccessToken();
                     $user->save();
                 }
@@ -144,42 +144,6 @@ class AuthenticateController extends Controller
         else
         {
             $url = $linkedinService->getAuthorizationUri(['state'=>'DCEEFWF45453sdffef424']);
-            return redirect((string)$url);
-        }
-    }
-    public function getLoginWithGoogle(Request $request)
-    {
-        // get data from request
-        $code = $request->get('code');
-
-        // get google service
-        $googleService = \OAuth::consumer('Google');
-
-        // check if code is valid
-
-        // if code is provided get user data and sign in
-        if ( ! is_null($code))
-        {
-            // This was a callback request from google, get the token
-            $token = $googleService->requestAccessToken($code);
-
-            // Send a request with it
-            $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
-
-            $message = 'Your unique Google user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
-            echo $message. "<br/>";
-
-            //Var_dump
-            //display whole array.
-            dd($result);
-        }
-        // if not ask for permission first
-        else
-        {
-            // get googleService authorization
-            $url = $googleService->getAuthorizationUri();
-
-            // return to google login url
             return redirect((string)$url);
         }
     }

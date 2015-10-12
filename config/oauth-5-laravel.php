@@ -32,7 +32,6 @@ return [
 		    'client_secret' => '3lk97XvW9yWMIDpkEnT_BWDm',
 		    'scope'         => ['userinfo_email', 'userinfo_profile'],
 		],  
-
 	]
 
 ];
