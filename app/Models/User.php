@@ -63,7 +63,22 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * Override get exp_time_token
+     * @param  string $date 
+     * @return string       
+     */
     public function getExpTimeTokenAttribute($date)
+    {
+        return strtotime($date);
+    }
+
+    /**
+     * Override get dob
+     * @param  string $date 
+     * @return string       
+     */
+    public function getDobAttribute($date)
     {
         return strtotime($date);
     }
