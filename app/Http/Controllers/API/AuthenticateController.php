@@ -113,33 +113,15 @@ class AuthenticateController extends Controller
             $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-<<<<<<< HEAD
-            if ( @$result['id']) {
-                $user = User::where('linkedin_id', $result['id'])->first();
-                if ( ! $user) {
-                    $user = User::create([
-                        'linkedin_id' => $result['id'],
-                        'firstname' => $result['firstName'],
-                        'lastname' => $result['lastName'],
-                        'email' => $result['emailAddress'],
-                        'avatar' => $result['pictureUrl'],
-                        'country' => $result['location']["name"],
-                        'token' => $token->getAccessToken(),
-                    ]);
-                    Auth::login($user, true);
-                } else {
-                    $user = User::findOrFail($user->id);
-=======
            
             if ( $result['id']) {
 
-                $user_login = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
+                $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
 
-                if ( !$user_login) {
+                if ( !$user) {
                     $user = $this->user->createUserFromOAuth($result, $token->getAccessToken());
                 } else {
-                    $user = $this->user->getById($user_login->id);
->>>>>>> 5f2a6b95bbfd1da286db95ecf4d17a5860ef96ba
+                    $user = $this->user->getById($user->id);
                     $user->token = $token->getAccessToken();
                     $user->save();
                 }
