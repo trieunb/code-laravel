@@ -62,7 +62,7 @@ class AuthenticateController extends Controller
                     'message' => 'invalid credentials'
                 ], 500);
             } else {
-                $user = $this->user->getDataWhereClause('email', '=', $request->input('email'))->first();
+                $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
                 $this->user->update(['token' => $token], $user->id);
                 return response()->json([
                     'status_code' => 200,
