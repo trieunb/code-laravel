@@ -46,8 +46,10 @@ class User extends Model implements AuthenticatableContract,
         'lastname',
         'email',
         'dob',
+        'gender',
         'avatar',
         'address',
+        'soft_skill',
         'mobile_phone',
         'home_phone',
         'city',
@@ -58,6 +60,14 @@ class User extends Model implements AuthenticatableContract,
         'exp_time_token'
     ];
 
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'soft_skill' => 'json',
+    ];
     /**
      * The attributes excluded from the model's JSON form.
      *

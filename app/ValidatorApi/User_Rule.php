@@ -12,6 +12,7 @@ class User_Rule extends AbstractValidator
             'email' => 'required|email|unique:users,email,'.$params,
             'avatar' => 'image',
             'dob' => 'required',
+            'gender' => 'required',
             'city' => 'required', 
             'state' => 'required',
             'country' => 'required'

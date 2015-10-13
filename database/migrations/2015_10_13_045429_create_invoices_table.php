@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTemplateColumn extends Migration
+class CreateInvoicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,11 @@ class AddTemplateColumn extends Migration
      */
     public function up()
     {
-        Schema::table('templates', function($table) {
-            $table->text('template')->after('name');
+        Schema::create('invoices', function(Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->tinyInteger('status');
+            $table->timestamps();
         });
     }
 
@@ -24,6 +27,6 @@ class AddTemplateColumn extends Migration
      */
     public function down()
     {
-        Schema::drop('templates');
+        Schema::drop('invoices');
     }
 }
