@@ -28,31 +28,26 @@ class UserEducationEloquent extends AbstractRepository implements UserEducationI
 
 		$ids = [];
 		$dataPrepareForCreate = [];
-
 		foreach ($data as $value) {
-			if ($value['id'] != null) {
+			if ($value['id'] != null && $value['id'] != '') {
 				$ids[] = $value['id'];
 			} else {
 				$dataPrepareForCreate[] = $value;
 			}
 		}
-
-		$dataIds_has_ids = $this->getDataWhereIn('id', $ids);
-		
-		if ( count($dataIds_has_ids) > 0) {
+		if ( count($ids) > 0) {
 			$dataPrepareForUpdate = [];
-			foreach ($dataIds_has_ids as $user_education) {
-				array_walk($data, function(&$value) use (&$dataPrepareForUpdate, $user_education) {
-					if ($value['id'] == $user_education->id) {
+			foreach ($ids as $id) {
+				array_walk($data, function(&$value) use (&$dataPrepareForUpdate, $id) {
+					if ($value['id'] == $id) {
 						$dataPrepareForUpdate[] = $value;
 					}
 				});
 			}
-
 			if (count($dataPrepareForUpdate) == 1) 
 				$this->saveOneRecord($dataPrepareForUpdate, $user_id);
 			else 
-				$this->model->updateMultiRecord($dataPrepareForUpdate);
+				$this->model->updateMultiRecord($dataPrepareForUpdate, $ids);
 		}
 
 		if (count($dataPrepareForCreate) == 1) 
@@ -69,14 +64,15 @@ class UserEducationEloquent extends AbstractRepository implements UserEducationI
 	 */
 	public function saveOneRecord($data, $user_id)
 	{
-		$user_education = $data['id'] ? $this->getById($data['id']) : new UserEducation;
-		if ($data['id'] == null) $user_education->user_id = $user_id;
+		$dataPrepareSave = $data[0];
+		$user_education = $dataPrepareSave['id'] ? $this->getById($dataPrepareSave['id']) : new UserEducation;
+		if ($dataPrepareSave['id'] == null) $user_education->user_id = $user_id;
 
-		$user_education->school_name = $data['school_name'];
-		$user_education->start = $data['start'];
-		$user_education->end = $data['end'];
-		$user_education->degree = $data['degree'];
-		$user_education->result = $data['result'];
+		$user_education->school_name = $dataPrepareSave['school_name'];
+		$user_education->start = $dataPrepareSave['start'];
+		$user_education->end = $dataPrepareSave['end'];
+		$user_education->degree = $dataPrepareSave['degree'];
+		$user_education->result = $dataPrepareSave['result'];
 
 		return $user_education->save();
 	}

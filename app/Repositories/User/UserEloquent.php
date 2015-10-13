@@ -56,7 +56,44 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	{
 		return $this->model
 			->with(['user_educations', 'user_work_histories', 'user_skills'])
-			->findOrFail($user_id)
-			->toJson();
+			->findOrFail($user_id);
+	}
+
+	/**
+	 * save data Register user
+	 * @param  mixed $request 
+	 * @param  string $token 
+	 * @return void       
+	 */
+	public function registerUser($request, $token)
+	{
+		$data = [
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'password' => \Hash::make($request->input('password')),
+            'token' => $token,
+        ];
+
+        $this->model->create($data);
+	}
+
+	/**
+	 * Create User get inforation to Oauth2
+	 * @param  array $data  
+	 * @param  string $token 
+	 * @return mixed        
+	 */
+	public function createUserFromOAuth($data, $token)
+	{
+		return $this->model->create([
+            'linkedin_id' => $data['id'],
+            'firstname' => $data['firstName'],
+            'lastname' => $data['lastName'],
+            'email' => $data['emailAddress'],
+            'avatar' => $data['pictureUrl'],
+            'country' => $data['location']["name"],
+            'token' => $token
+        ]);
 	}
 }

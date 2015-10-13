@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLinkedinIdToUsers extends Migration
+class AddTemplateColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AddLinkedinIdToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function($table) {
-            $table->string('linkedin_id')->after('id');
+         Schema::table('templates', function($table) {
+            $table->text('template')->after('name');
         });
     }
 
@@ -24,6 +24,6 @@ class AddLinkedinIdToUsers extends Migration
      */
     public function down()
     {
-        Schema::drop('users');
+        Schema::drop('templates');
     }
 }

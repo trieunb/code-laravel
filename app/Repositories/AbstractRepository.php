@@ -44,7 +44,22 @@ abstract class AbstractRepository
 	{
 		return $this->model->whereIn('id', $ids)->delete();
 	}
-
+	/**
+	 * @param array $data
+	 * @param $id
+	 * @return mixed
+	 */
+	public function update(array $data, $id) {
+        return $this->model->where('id', '=', $id)->update($data);
+    }
+ 	/**
+ 	 * @param array $data
+ 	 * @return mixed
+ 	 */
+ 	public function create(array $data)
+ 	{
+ 		return $this->model->create($data);
+ 	}
 	/**
 	 * Eager Loading
 	 * @param  array  $relationship [relationship]
@@ -97,5 +112,17 @@ abstract class AbstractRepository
 	public function getDataWhereNotIn($field, array $data)
 	{
 		return $this->model->whereNotIn($field, $data)->get();
+	}
+
+	/**
+	 * get first data with clause 
+	 * @param  string $field    [column table]
+	 * @param  string $operator Ex: '=', '!='
+	 * @param  mixed $value    
+	 * @return mixed           
+	 */
+	public function getFirstDataWhereClause($field, $operator, $value)
+	{
+		return $this->model->where($field, $operator, $value)->first();
 	}
 }
