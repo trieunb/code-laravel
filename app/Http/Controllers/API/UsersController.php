@@ -63,7 +63,7 @@ class UsersController extends Controller
 	public function getProfile(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
-		return $this->user->getProfile($user->id);
+		
 		return response()->json([
 			'status_code' => 200, 'status' => true, 'data' => $this->user->getProfile($user->id)
 		]);
