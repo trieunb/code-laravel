@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTemplatesTable extends Migration
+class CreateMarketsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,13 @@ class CreateTemplatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('templates', function(Blueprint $table) {
+        Schema::create('template_markets', function(Blueprint $table) {
             $table->increments('id');
+            $table->integer('cat_id')->index();
             $table->integer('user_id');
             $table->string('name');
+            $table->text('template');
+            $table->decimal('price');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ class CreateTemplatesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('templates');
+        Schema::drop('template_markets');
     }
 }

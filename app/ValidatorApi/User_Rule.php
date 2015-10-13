@@ -7,7 +7,7 @@ class User_Rule extends AbstractValidator
 	protected function rules($params)
 	{
 		return [
-			'firstname' => 'required',
+		'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email,'.$params,
             'avatar' => 'image',
