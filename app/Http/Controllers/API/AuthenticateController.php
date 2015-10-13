@@ -126,8 +126,6 @@ class AuthenticateController extends Controller
                     $user->save();
                 }
 
-                Auth::login($user, true);
-
                 return response()->json([
                     'status_code' => 200,
                     'status' => true,
