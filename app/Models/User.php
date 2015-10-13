@@ -4,10 +4,11 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\Role;
+use App\Models\Template;
+use App\Models\TemplateMarket;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
 use App\Models\UserWorkHistory;
-use App\Template;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 use Bican\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Auth\Authenticatable;
@@ -116,13 +117,22 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * User belongs to many templates.
+     * User has many templates.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function templates()
     {
         return $this->hasMany(Template::class);
+    }
+
+    /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function template_markets()
+    {
+        return $this->hasMany(TemplateMarket::class);
     }
 
     /**
