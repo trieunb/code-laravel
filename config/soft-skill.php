@@ -1,7 +1,10 @@
 <?php
 
 return [
-	'question' => '[
-		{"Question 1" : 0}, {"Question 2" : 0}, {"Question 3" : 0}, {"Question 4" : 0}
-	]'
+	'question' => [
+		['question_1' => 1], 
+		['question_2' => 2], 
+		['question_3' =>3],
+		['question_4' =>4]
+	]
 ];
