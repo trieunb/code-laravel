@@ -19,4 +19,17 @@ class Template extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function insertMultiRecord($dataPrepareForCreate, $user_id)
+    {
+        $user_templates = [];
+        foreach ($dataPrepareForCreate as $value) {
+            $user_templates[] = [
+                'user_id' => $user_id,
+                'name' => $value['name'],
+                'tamplate' => $value['template']
+            ];
+        }
+        $this->insert($user_templates);
+    }
 }

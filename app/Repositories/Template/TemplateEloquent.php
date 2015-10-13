@@ -18,15 +18,43 @@ class TemplateEloquent extends AbstractRepository implements TemplateInterface
      * @param $date
      * @return mixed
      */
-    public function saveTemplate($data)
+    public function saveTemplate($data, $user_id)
     {
-        // $template = $data['id'] ? 
-        // $this->getById($data['id']) : 
-        // new Template;
-        $template->user_id = $data['user_id'];
-        $template->name = $data['name'];
-        $template->template $data['template'];
-        return $template->save();
+        if (count($data) == 1) {
+            $this->saveOneRecord($data, $user_id);
+        } 
+
+        $ids = [];
+        $dataPrepareForCreate = [];
+        foreach ($data as $value) {
+            if ($value['id'] != null && $value['id'] != '') {
+                $ids[] = $value['id'];
+            } else {
+                $dataPrepareForCreate[] = $value;
+            }
+        }
+
+        if (count($dataPrepareForCreate) == 1) 
+            $this->saveOneRecord($dataPrepareForCreate, $user_id);
+        else 
+            $this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
     }
 
+    /**
+     * Save Or Update One Record
+     * @param  mixed $data    
+     * @param  int $user_id 
+     * @return mixed          
+     */
+    public function saveOneRecord($data, $user_id)
+    {
+        $dataPrepareSave = $data[0];
+        $user_template = $dataPrepareSave['id'] ? $this->getById($dataPrepareSave['id']) : new UserEducation;
+        if ($dataPrepareSave['id'] == null) $user_template->user_id = $user_id;
+
+        $user_template->name = $dataPrepareSave['name'];
+        $user_template->template = $dataPrepareSave['template'];
+
+        return $user_template->save();
+    }
 }

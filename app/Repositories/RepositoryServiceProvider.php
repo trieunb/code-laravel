@@ -23,7 +23,7 @@ use App\Repositories\UserWorkHistory\UserWorkHistoryEloquent;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserEloquent;
 use App\Repositories\User\UserInterface;
-use App\Template;
+use App\Models\Template;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider

@@ -9,6 +9,7 @@ use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
+use App\Repositories\Template\TemplateInterface;
 use App\ValidatorApi\UserEducation_Rule;
 use App\ValidatorApi\UserSkill_Rule;
 use App\ValidatorApi\UserWorkHistory_Rule;
@@ -42,10 +43,13 @@ class UsersController extends Controller
 	 */
 	protected $user_skill;
 
+	protected $template;
+
 	public function __construct(UserInterface $user, 
 		UserEducationInterface $user_education,
 		UserWorkHistoryInterface $user_work_history,
-		UserSkillInterface $user_skill
+		UserSkillInterface $user_skill,
+		TemplateInterface $template
 	) {
 		$this->middleware('jwt.auth');
 
@@ -53,6 +57,7 @@ class UsersController extends Controller
 		$this->user_education = $user_education;
 		$this->user_work_history = $user_work_history;
 		$this->user_skill = $user_skill;
+		$this->template = $template;
 	}
 
 	public function getProfile(Request $request)
@@ -133,5 +138,14 @@ class UsersController extends Controller
 		}
 		
 		return response()->json(['status_code' => 200, 'status' => true]);
+	}
+
+	public function postTemplates(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		// return $this->user->getTemplateFromUser($user->id);
+		if ($request->has('templates')) {
+			$this->template->saveTemplate($request->get('templates'), $user->id);
+		}
 	}
 }

@@ -96,4 +96,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'token' => $token
         ]);
 	}
+
+	public function getTemplateFromUser($user_id) {
+		return $this->model
+            ->with(['templates'])
+            ->findOrFail($user_id);
+	}
 }

@@ -35,4 +35,6 @@ interface UserInterface extends Repository
 	 * @return mixed        
 	 */
 	public function createUserFromOAuth($data, $token);
+
+	public function getTemplateFromUser($id);
 }
