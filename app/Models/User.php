@@ -7,6 +7,9 @@ use App\Models\Role;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
 use App\Models\UserWorkHistory;
+use App\Template;
+use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
+use Bican\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -14,8 +17,6 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use Bican\Roles\Traits\HasRoleAndPermission;
-use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Contracts\Billable as BillableContract;
 
@@ -73,8 +74,6 @@ class User extends Model implements AuthenticatableContract,
         return strtotime($date);
     }
 
-    
-
     /**
      * path folder uploads
      * @var string
@@ -83,6 +82,7 @@ class User extends Model implements AuthenticatableContract,
 
     public static $img_width = 200;
     public static $img_height = 200;
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -90,8 +90,6 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->hasMany(Category::class);
     }
-
-  
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -115,6 +113,16 @@ class User extends Model implements AuthenticatableContract,
     public function user_work_histories()
     {
         return $this->hasMany(UserWorkHistory::class);
+    }
+
+    /**
+     * User belongs to many templates.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function templates()
+    {
+        return $this->belongsToMany(Template::class, 'template_user', 'user_id', 'template_id');
     }
 
     /**

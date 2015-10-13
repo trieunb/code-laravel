@@ -74,51 +74,64 @@ class UsersController extends Controller
 		if ($user->id != $id) {
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
-
-		try {
-			$user_rule->validate($request->get('user'), $user->id);	
-		} catch (ValidatorAPiException $e) {
-			return response()->json(['status_code' => 412, 'status' => false, 'message' => $e->getErrors()], 412);
-		}
-		try {
-			if (count($request->get('user_educations')) > 1) {
-				foreach ($request->get('user_educations') as $user_education_data) {
-						$user_education_rule->validate($user_education_data);
-				}
-			} else {
-				$user_education_rule->validate($request->get('user_educations'));
-			}
-		} catch (ValidatorAPiException $e) {
-			return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
-		}	
 		
-		try {
-			if (count($request->get('user_work_histories')) > 1) {
-				foreach ($request->get('user_work_histories') as $user_work_history_data) {
-					$user_work_history_rule->validate($user_work_history_data);
-				}
-			} else {
-				$user_work_history_rule->validate($request->get('user_work_histories'));	
+		if ($request->has('user')) {
+			try {
+				$user_rule->validate($request->get('user'), $user->id);	
+				$this->user->saveFromApi($request->get('user'), $user->id);
+			} catch (ValidatorAPiException $e) {
+				return response()->json(['status_code' => 412, 'status' => false, 'message' => $e->getErrors()], 412);
 			}
-		} catch (ValidatorAPiException $e) {
-			return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
 		}
-		try {
-			if (count($request->get('user_skills')) > 1) {
-				foreach ($request->get('user_skills') as $user_skill_data) {
-					$user_skill_rule->validate($user_skill_data);
-				}	
-			}else {
-				$user_skill_rule->validate($request->get('user_skills'));
-			}		} catch (ValidatorAPiException $e) {
-			return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+
+		if ($request->has('user_educations')) {
+			try {
+				if (count($request->get('user_educations')) > 1) {
+					foreach ($request->get('user_educations') as $user_education_data) {
+							$user_education_rule->validate($user_education_data);
+					}
+				} else {
+					$user_education_rule->validate($request->get('user_educations'));
+				}
+
+				$this->user_education->saveFromApi($request->get('user_educations'), $user->id);
+			} catch (ValidatorAPiException $e) {
+				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+			}	
 		}
 		
-		$this->user->saveFromApi($request->get('user'), $user->id);
-		$this->user_education->saveFromApi($request->get('user_educations'), $user->id);
-		$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
-		$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
+		if ($request->has('user_work_histories')) {
+			try {
+				if (count($request->get('user_work_histories')) > 1) {
+					foreach ($request->get('user_work_histories') as $user_work_history_data) {
+						$user_work_history_rule->validate($user_work_history_data);
+					}
+				} else {
+					$user_work_history_rule->validate($request->get('user_work_histories'));	
+				}
 
+				$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
+			} catch (ValidatorAPiException $e) {
+				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+			}
+		}
+		
+		if ($request->has('user_skills')) {
+			try {
+				if (count($request->get('user_skills')) > 1) {
+					foreach ($request->get('user_skills') as $user_skill_data) {
+						$user_skill_rule->validate($user_skill_data);
+					}	
+				}else {
+					$user_skill_rule->validate($request->get('user_skills'));
+				}		
+
+					$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
+			} catch (ValidatorAPiException $e) {
+				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+			}
+		}
+		
 		return response()->json(['status_code' => 200, 'status' => true]);
 	}
 }
