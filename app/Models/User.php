@@ -59,15 +59,7 @@ class User extends Model implements AuthenticatableContract,
         'token',
         'exp_time_token'
     ];
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'soft_skill' => 'json',
-    ];
+    
     /**
      * The attributes excluded from the model's JSON form.
      *
