@@ -32,8 +32,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		if ($data['avatar']) {
 			$user->avatar = $data['avatar'];
 		}
-
+		$user->gender = $data['gender'];
 		$user->address = $data['address'];
+		$user->soft_skill = $data['soft_skill'];
 		$user->mobile_phone = $data['mobile_phone'];
 		$user->home_phone = $data['home_phone'];
 		$user->city = $data['city'];
@@ -72,6 +73,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
+            'soft_skill' => config('soft-skill.question'),
             'token' => $token,
         ];
 
@@ -93,6 +95,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'email' => $data['emailAddress'],
             'avatar' => $data['pictureUrl'],
             'country' => $data['location']["name"],
+            'soft_skill' => config('soft-skill.question'),
             'token' => $token
         ]);
 	}

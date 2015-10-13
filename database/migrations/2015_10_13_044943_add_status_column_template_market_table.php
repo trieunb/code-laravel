@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTemplateColumn extends Migration
+class AddStatusColumnTemplateMarketTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AddTemplateColumn extends Migration
      */
     public function up()
     {
-        Schema::table('templates', function($table) {
-            $table->text('template')->after('name');
+        Schema::table('template_markets', function($table) {
+            $table->tinyInteger('status')->after('price');
         });
     }
 
@@ -24,6 +24,6 @@ class AddTemplateColumn extends Migration
      */
     public function down()
     {
-        Schema::drop('templates');
+        //
     }
 }
