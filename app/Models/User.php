@@ -122,7 +122,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function templates()
     {
-        return $this->belongsToMany(Template::class, 'template_user', 'user_id', 'template_id');
+        return $this->hasMany(Template::class);
     }
 
     /**

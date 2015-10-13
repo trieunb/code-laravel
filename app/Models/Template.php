@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Template extends Model
 {
+    protected $table = "templates";
 	/**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
@@ -21,8 +22,8 @@ class Template extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users()
+    public function user()
     {
-    	return $this->belongsToMany(User::class);
+    	return $this->belongsTo(User::class);
     }
 }
