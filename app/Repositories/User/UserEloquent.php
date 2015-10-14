@@ -34,7 +34,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		}
 		$user->gender = $data['gender'];
 		$user->address = $data['address'];
-		$user->soft_skill = $data['soft_skill'];
+		$user->soft_skill = json_decode($data['soft_skill'], true);
 		$user->mobile_phone = $data['mobile_phone'];
 		$user->home_phone = $data['home_phone'];
 		$user->city = $data['city'];
