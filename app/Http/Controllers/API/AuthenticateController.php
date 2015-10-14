@@ -113,6 +113,7 @@ class AuthenticateController extends Controller
             $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
+            // dd($result);die();
             if ( $result['id']) {
 
                 $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
@@ -121,8 +122,7 @@ class AuthenticateController extends Controller
                     $user = $this->user->createUserFromOAuth($result, $token->getAccessToken());
                 } else {
                     $user = $this->user->getById($user->id);
-                    $user->token = $token->getaccessToken();
-                    $user->save();
+                    $this->user->updateUserFromOauth($result, $token->getAccessToken(), $user->id);
                 }
 
                 return response()->json([

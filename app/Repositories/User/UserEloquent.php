@@ -97,10 +97,25 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'email' => $data['emailAddress'],
             'avatar' => $data['pictureUrl'],
             'country' => $data['location']["name"],
+            'link_profile' => $data['publicProfileUrl'],
             'soft_skill' => config('soft-skill.question'),
             'token' => $token
         ]);
 	}
+
+    public function updateUserFromOauth($data, $token, $id)
+    {
+        $user = $this->getById($id);
+        $user->firstname = $data['firstName'];
+        $user->lastname = $data['lastName'];
+        $user->email = $data['emailAddress'];
+        $user->avatar = $data['pictureUrl'];
+        $user->country = $data['location']['name'];
+        $user->link_profile = $data['publicProfileUrl'];
+        $user->token = $token;
+        return $user->save();
+
+    }
 
 	public function getTemplateFromUser($user_id) {
 		return $this->model
