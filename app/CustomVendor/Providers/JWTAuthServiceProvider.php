@@ -25,8 +25,11 @@ class JWTAuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
+        /*$this->publishes([
             __DIR__.'/../config/config.php' => config_path('jwt.php')
+        ], 'config');*/
+        $this->publishes([
+            __DIR__.'/../../../vendor/tymon/jwt-auth/src/config/config.php' => config_path('jwt.php')
         ], 'config');
 
         $this->bootBindings();

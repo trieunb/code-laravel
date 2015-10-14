@@ -1,6 +1,7 @@
 <?php
 
 use PhpOffice\PhpWord\IOFactory;
+use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,8 +43,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 });
 
 get('/docs', function() {
-  $phpWord = IOFactory::load(public_path('test.docx'));
+ /* $phpWord = IOFactory::load(public_path('test.docx'));
   $objWriter = IOFactory::createWriter($phpWord, 'HTML');
   $objWriter->save('test.html');
-  dd($objWriter);
+  dd($objWriter);*/
+  CloudConvert::file(public_path('test.docx'))->to(public_path('test.html'));
+  return "done";
 });
