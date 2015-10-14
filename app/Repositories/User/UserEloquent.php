@@ -27,7 +27,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		$user->firstname = $data['firstname'];
 		$user->lastname = $data['lastname'];
 		$user->email = $data['email'];
-		$user->dob = $data['dob'];
+		$user->dob = Carbon\Carbon::createFromTimestamp($data['dob']);
 
 		if ($data['avatar']) {
 			$user->avatar = $data['avatar'];
