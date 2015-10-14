@@ -28,28 +28,32 @@ class UserWorkHistory extends Model
     	return $this->belongsTo(User::class);
     }
 
-    public function updateColumnWithClause($data, $field) 
+    public function updateColumnWithClause($data, $field, &$params = []) 
     {
-        $sql = '';
+        $params['sql'] = '';
         foreach ($data as $value) {
-            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".addslashes($value[$field])."'";
+            $params['sql'] .= " WHEN id = ? THEN ? ";
+            $params['param'][] = $value['id']; 
+            $params['param'][] = $value[$field]; 
         }
+        $params['sql'] .= ' END';
 
-        return $sql .= ' END';
+        return $params;
     }
 
     public function updateMultiRecord($dataPrepareUpdate, array $ids)
     {
         $sql = 'UPDATE `user_work_histories` SET company = CASE ';
-        $sql .= $this->updateColumnWithClause($dataPrepareUpdate, 'company');
-        $sql .= ' , sub_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'sub_title');
-        $sql .= ' , start = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'start');
-        $sql .= ' , end = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'end');
-        $sql .= ' , job_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'job_title');
-        $sql .= ' , job_description = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'job_description');
+        $params = ['sql' => '', 'param' => []];
+        $sql .= $this->updateColumnWithClause($dataPrepareUpdate, 'company', $params)['sql'];
+        $sql .= ' , sub_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'sub_title', $params)['sql'];
+        $sql .= ' , start = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'start', $params)['sql'];
+        $sql .= ' , end = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'end', $params)['sql'];
+        $sql .= ' , job_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'job_title', $params)['sql'];
+        $sql .= ' , job_description = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'job_description', $params)['sql'];
         $sql .= ' WHERE id IN ('.implode(',', $ids).')';
 
-        \DB::update(\DB::raw($sql));
+        \DB::update($sql, $params['param']);
     }
 
     public function insertMultiRecord($dataPrepareForCreate, $user_id)

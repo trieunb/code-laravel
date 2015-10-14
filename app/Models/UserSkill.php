@@ -29,26 +29,30 @@ class UserSkill extends Model
     	return $this->belongsTo(User::class);
     }
 
-    public function updateColumnWithClause($data, $field) 
+    public function updateColumnWithClause($data, $field, &$params = []) 
     {
-        $sql = '';
+        $params['sql'] = '';
         foreach ($data as $value) {
-            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".addslashes($value[$field])."'";
+            $params['sql'] .= " WHEN id = ? THEN ? ";
+            $params['param'][] = $value['id']; 
+            $params['param'][] = $value[$field]; 
         }
+        $params['sql'] .= ' END';
 
-        return $sql .= ' END';
+        return $params;
     }
 
     public function updateMultiRecord($dataPrepareUpdate, array $ids)
     {
         $sql = 'UPDATE `user_skills` SET skill_name = CASE ';
-        $sql .= $this->updateColumnWithClause($dataPrepareUpdate, 'skill_name');
-        $sql .= ' , skill_test = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'skill_test');
-        $sql .= ' , skill_test_point = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'skill_test_point');
-        $sql .= ' , experience = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'experience');
+        $params = ['sql' => '', 'param' => []];
+        $sql .= $this->updateColumnWithClause($dataPrepareUpdate, 'skill_name', $params)['sql'];
+        $sql .= ' , skill_test = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'skill_test', $params)['sql'];
+        $sql .= ' , skill_test_point = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'skill_test_point', $params)['sql'];
+        $sql .= ' , experience = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'experience', $params)['sql'];
         $sql .= ' WHERE id IN ('.implode(',', $ids).')';
 
-        \DB::update(\DB::raw($sql));
+        \DB::update($sql, $params['param']);
     }
 
     public function insertMultiRecord($dataPrepareForCreate, $user_id)
