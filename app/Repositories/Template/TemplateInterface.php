@@ -5,5 +5,5 @@ use App\Repositories\Repository;
 
 interface TemplateInterface extends Repository
 {
-	
+	public function saveTemplate($data, $user_id);
 }

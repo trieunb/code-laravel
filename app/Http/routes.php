@@ -32,20 +32,46 @@ Route::group(['namespace' => 'Frontend'], function() {
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
-    Route::controller('auth', 'AuthenticateController', [
+
+    /*Route::controller('auth', 'AuthenticateController', [
       'getLogin' => 'auth.login',
       'getRegister'   => 'auth.register',
       'postLogin' => 'auth.login',
-      'getLoginWithLinkedin' => 'auth.linkedin',
+      'postLoginWithLinkedin' => 'auth.linkedin',
+    ]);*/
+    get('auth/login', [
+      'as' => 'auth.login', 
+      'uses' => 'AuthenticateController@getLogin'
     ]);
+    get('auth/register', [
+      'as' => 'auth.register', 
+      'uses' => 'AuthenticateController@getRegister'
+    ]);
+    post('auth/register', [
+      'as' => 'auth.register', 
+      'uses' => 'AuthenticateController@postRegister'
+    ]);
+    post('auth/login', [
+      'as' => 'auth.login', 
+      'uses' => 'AuthenticateController@postLogin'
+    ]);
+    Route::any('auth/login-with-linkedin', 
+      ['as' => 'auth.linkedin', 
+      'uses' => 'AuthenticateController@postLoginWithLinkedin']);
+
     get('/user/profile', 'UsersController@getProfile');
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
+    post('/user/template', [
+      'uses' => 'UsersController@postTemplates'
+    ]);
 });
 
 get('/docs', function() {
  /* $phpWord = IOFactory::load(public_path('test.docx'));
   $objWriter = IOFactory::createWriter($phpWord, 'HTML');
   $objWriter->save('test.html');
+  dd($objWriter);
+});
   dd($objWriter);*/
   CloudConvert::file(public_path('test.docx'))->to(public_path('test.html'));
   return "done";

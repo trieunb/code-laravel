@@ -104,7 +104,7 @@ class AuthenticateController extends Controller
         }
     }
 
-    public function getLoginWithLinkedin(Request $request)
+    public function postLoginWithLinkedin(Request $request)
     {
         $code = $request->get('code');
         $linkedinService = OAuth::consumer('Linkedin');
@@ -113,25 +113,23 @@ class AuthenticateController extends Controller
             $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-           
             if ( $result['id']) {
 
                 $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
-
                 if ( !$user) {
                     $user = $this->user->createUserFromOAuth($result, $token->getAccessToken());
                 } else {
                     $user = $this->user->getById($user->id);
-                    $user->token = $token->getAccessToken();
-                    $user->save();
+                    $this->user->updateUserFromOauth($result, $token->getAccessToken(), $user->id);
                 }
-
-                Auth::login($user, true);
-
+                Auth::login($user);
+                $user = Auth::user();
+                $token = \JWTAuth::fromUser($user);
+                $this->user->update(['token' => $token], $user->id);
                 return response()->json([
                     'status_code' => 200,
                     'status' => true,
-                    'token' => $token->getAccessToken(),
+                    'token' => $token,
                 ]);
             } else {
                 return response()->json([
@@ -143,7 +141,7 @@ class AuthenticateController extends Controller
         }
         else
         {
-            $url = $linkedinService->getAuthorizationUri(['state'=>'DCEEFWF45453sdffef424']);
+            $url = $linkedinService->getAuthorizationUri(['state' => 'DCEeFWf45A53sdfKef424']);
             return redirect((string)$url);
         }
     }
