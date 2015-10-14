@@ -1,5 +1,7 @@
 <?php
 
+use PhpOffice\PhpWord\IOFactory;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -63,3 +65,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     ]);
 });
 
+get('/docs', function() {
+  $phpWord = IOFactory::load(public_path('test.docx'));
+  $objWriter = IOFactory::createWriter($phpWord, 'HTML');
+  $objWriter->save('test.html');
+  dd($objWriter);
+});

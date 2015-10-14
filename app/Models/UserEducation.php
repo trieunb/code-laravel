@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserEducation extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'school_name',
-        'start',
-        'end',
-        'degree',
-        'result'
-    ];
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['*'];
+    
 	/**
 	 * Table name
 	 * @var string
@@ -33,7 +32,7 @@ class UserEducation extends Model
     {
         $sql = '';
         foreach ($data as $value) {
-            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".$value[$field]."'";
+            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".addslashes($value[$field])."'";
         }
 
         return $sql .= ' END';

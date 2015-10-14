@@ -8,14 +8,12 @@ use Illuminate\Database\Eloquent\belongsTo;
 
 class UserSkill extends Model
 {
-
-    protected $fillable = [
-        'user_id',
-        'skill_name',
-        'skill_test',
-        'skill_test_point',
-        'experience'
-    ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['*'];
 
 	/**
 	 * Table name
@@ -35,7 +33,7 @@ class UserSkill extends Model
     {
         $sql = '';
         foreach ($data as $value) {
-            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".$value[$field]."'";
+            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".addslashes($value[$field])."'";
         }
 
         return $sql .= ' END';

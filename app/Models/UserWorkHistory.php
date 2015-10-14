@@ -7,15 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserWorkHistory extends Model
 {
-
-    protected $fillable = [
-        'user_id',
-        'company',
-        'start',
-        'end',
-        'job_title',
-        'job_description'
-    ];
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['*'];
 
 	/**
 	 * Table name
@@ -35,7 +32,7 @@ class UserWorkHistory extends Model
     {
         $sql = '';
         foreach ($data as $value) {
-            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".$value[$field]."'";
+            $sql .= " WHEN id = ".addslashes($value['id'])." THEN '".addslashes($value[$field])."'";
         }
 
         return $sql .= ' END';

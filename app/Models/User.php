@@ -40,25 +40,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = [
-        'linkedin_id',
-        'firstname',
-        'lastname',
-        'email',
-        'dob',
-        'gender',
-        'avatar',
-        'address',
-        'soft_skill',
-        'mobile_phone',
-        'home_phone',
-        'city',
-        'state',
-        'country',
-        'password',
-        'token',
-        'exp_time_token'
-    ];
+    protected $fillable = ['*'];
 
     /**
      * The attributes that should be casted to native types.
