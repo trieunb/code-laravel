@@ -43,10 +43,12 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 });
 
 get('/docs', function() {
- /* $phpWord = IOFactory::load(public_path('test.docx'));
-  $objWriter = IOFactory::createWriter($phpWord, 'HTML');
-  $objWriter->save('test.html');
-  dd($objWriter);*/
+  $phpWord = IOFactory::load(public_path('test.html'));
+  dd($PhpWord);
+  $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+
+  $objWriter->save('test1243.html');
+  dd($objWriter);
   CloudConvert::file(public_path('test.docx'))->to(public_path('test.html'));
   return "done";
 });

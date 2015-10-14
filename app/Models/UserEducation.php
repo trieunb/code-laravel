@@ -46,6 +46,7 @@ class UserEducation extends Model
         $sql = 'UPDATE `user_educations` SET school_name = CASE ';
         $params = ['sql' => '', 'param' => []];
         $sql .= $this->updateColumnWithClause($dataPrepareUpdate, 'school_name', $params)['sql'];
+        $sql .= ' , sub_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'sub_title', $params)['sql'];
         $sql .= ' , start = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'start', $params)['sql'];
         $sql .= ' , end = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'end', $params)['sql'];
         $sql .= ' , degree = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'degree', $params)['sql'];

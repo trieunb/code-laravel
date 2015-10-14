@@ -69,6 +69,7 @@ class UserEducationEloquent extends AbstractRepository implements UserEducationI
 		if ($dataPrepareSave['id'] == null) $user_education->user_id = $user_id;
 
 		$user_education->school_name = $dataPrepareSave['school_name'];
+		$user_education->sub_title = $dataPrepareSave['sub_title'];
 		$user_education->start = $dataPrepareSave['start'];
 		$user_education->end = $dataPrepareSave['end'];
 		$user_education->degree = $dataPrepareSave['degree'];
