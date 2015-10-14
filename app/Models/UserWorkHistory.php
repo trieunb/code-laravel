@@ -45,6 +45,7 @@ class UserWorkHistory extends Model
     {
         $sql = 'UPDATE `user_work_histories` SET company = CASE ';
         $sql .= $this->updateColumnWithClause($dataPrepareUpdate, 'company');
+        $sql .= ' , sub_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'sub_title');
         $sql .= ' , start = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'start');
         $sql .= ' , end = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'end');
         $sql .= ' , job_title = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, 'job_title');
@@ -61,6 +62,7 @@ class UserWorkHistory extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_work_histories[] = [
                 'company' => $value['company'],
+                'sub_title' => $value['sub_title'],
                 'start' => $value['start'],
                 'end' => $value['end'],
                 'job_title' => $value['job_title'],

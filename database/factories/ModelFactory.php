@@ -74,6 +74,7 @@ $factory->define(App\Models\UserWorkHistory::class, function(Faker\Generator $fa
 	return [
 		'user_id' => rand(1, 10),
 		'company' => $faker->company,
+		'sub_title' => $faker->name,
 		'start' => $faker->name,
 		'end' => $faker->name,
 		'job_title' => $faker->name,

@@ -70,6 +70,7 @@ class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHist
 		if ($dataPrepareSave['$id'] == null) $user_work_history->user_id = $user_id;
 
 		$user_work_history->company = $dataPrepareSave['company'];
+		$user_work_history->sub_title = $dataPrepareSave['sub_title'];
 		$user_work_history->start = $dataPrepareSave['start'];
 		$user_work_history->end = $dataPrepareSave['end'];
 		$user_work_history->job_title = $dataPrepareSave['job_title'];
