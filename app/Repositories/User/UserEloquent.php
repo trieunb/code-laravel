@@ -21,22 +21,22 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 * @param  int $user_id   
 	 * @return mixed      
 	 */
-	public function saveFromApi($data, $user_id)
+	public function saveFromApi($data, $user_id = null)
 	{
 		$user =  $this->getById($user_id);
 		$user->firstname = $data['firstname'];
 		$user->lastname = $data['lastname'];
 		$user->email = $data['email'];
 		$user->link_profile = $data['link_profile'];
-		$user->inforation = $data['inforation'];
-		$user->dob = Carbon\Carbon::createFromTimestamp($data['dob']);
+		$user->infomation = $data['infomation'];
+		$user->dob = \Carbon\Carbon::createFromTimestamp($data['dob']);
 
 		if ($data['avatar']) {
 			$user->avatar = $data['avatar'];
 		}
 		$user->gender = $data['gender'];
 		$user->address = $data['address'];
-		$user->soft_skill = json_decode($data['soft_skill'], true);
+		$user->soft_skill = $data['soft_skill'];
 		$user->mobile_phone = $data['mobile_phone'];
 		$user->home_phone = $data['home_phone'];
 		$user->city = $data['city'];

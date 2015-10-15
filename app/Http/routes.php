@@ -74,6 +74,10 @@ get('/docs', function() {
   dd($objWriter);
 });
   dd($objWriter);*/
+  $obj = new DOMDocument();
+  dd($obj->load(public_path('test.docx')));
+
   CloudConvert::file(public_path('test.docx'))->to(public_path('test.html'));
   return "done";
 });
+
