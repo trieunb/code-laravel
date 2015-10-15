@@ -140,12 +140,13 @@ class UsersController extends Controller
 		return response()->json(['status_code' => 200, 'status' => true]);
 	}
 
-	public function postTemplates(Request $request)
+	public function getTemplates(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
-		// return $this->user->getTemplateFromUser($user->id);
-		if ($request->has('templates')) {
-			$this->template->saveTemplate($request->get('templates'), $user->id);
-		}
+		return response()->json([
+			'status_code' => 200,
+			'status' => true,
+			'data' => $this->user->getTemplateFromUser($user->id)
+		]); 
 	}
 }

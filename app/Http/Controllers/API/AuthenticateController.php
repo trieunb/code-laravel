@@ -110,17 +110,17 @@ class AuthenticateController extends Controller
         $linkedinService = OAuth::consumer('Linkedin');
         if ( ! is_null($code))
         {
-            $token = $linkedinService->requestAccessToken($code);
+            // $token = $linkedinService->requestAccessToken($code);
             $result = json_decode($linkedinService
                 ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-            if ( $result['id']) {
+            if ( @$result['id']) {
 
                 $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
                 if ( !$user) {
-                    $user = $this->user->createUserFromOAuth($result, $token->getAccessToken());
+                    $user = $this->user->createUserFromOAuth($result, $code);
                 } else {
                     $user = $this->user->getById($user->id);
-                    $this->user->updateUserFromOauth($result, $token->getAccessToken(), $user->id);
+                    $this->user->updateUserFromOauth($result, $code, $user->id);
                 }
                 Auth::login($user);
                 $user = Auth::user();
