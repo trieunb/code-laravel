@@ -2,11 +2,11 @@
 namespace App\Repositories\Objective;
 
 use App\Models\Objective;
-use App\Repositories\AbstractRepository;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
 use App\Repositories\Objective\ObjectiveInterface;
 
-class ObjectiveEloquent extends AbstractRepository implements ObjectiveInterface
+class ObjectiveEloquent extends AbstractDefineMethodRepository implements ObjectiveInterface
 {
 	use SaveFromApiTrait;
 

@@ -2,11 +2,11 @@
 namespace App\Repositories\UserWorkHistory;
 
 use App\Models\UserWorkHistory;
-use App\Repositories\AbstractRepository;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 
-class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHistoryInterface
+class UserWorkHistoryEloquent extends AbstractDefineMethodRepository implements UserWorkHistoryInterface
 {
 	use SaveFromApiTrait;
 	/**

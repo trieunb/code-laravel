@@ -3,10 +3,10 @@ namespace App\Repositories\UserEducation;
 
 use App\Models\UserEducation;
 use App\Repositories\SaveFromApiTrait;
-use App\Repositories\AbstractRepository;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\UserEducation\UserEducationInterface;
 
-class UserEducationEloquent extends AbstractRepository implements UserEducationInterface
+class UserEducationEloquent extends AbstractDefineMethodRepository implements UserEducationInterface
 {
 	use SaveFromApiTrait;
 	/**
