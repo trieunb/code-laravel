@@ -71,6 +71,5 @@ class UserEducation extends Model
         }
 
         $this->insert($user_educations);
-        // $user->user_educations()->save($user_educations);
     }
 }
