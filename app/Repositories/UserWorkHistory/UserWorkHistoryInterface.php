@@ -13,4 +13,12 @@ interface UserWorkHistoryInterface extends Repository
 	 * @return mixed      
 	 */
 	public function saveFromApi($request, $user_id);
+
+	/**
+	 * Create Or Update One record
+	 * @param  mixed $data    
+	 * @param  int $user_id 
+	 * @return mixed          
+	 */
+	public function saveOneRecord($data, $user_id);
 }

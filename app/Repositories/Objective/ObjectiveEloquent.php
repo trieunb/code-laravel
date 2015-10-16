@@ -17,10 +17,10 @@ class ObjectiveEloquent extends AbstractRepository implements ObjectiveInterface
 	protected $model;
 
 	/**
-	 * fields for update
-	 * @var array
+	 * Fields for update data
+	 * @var $field_work_save
 	 */
-	protected $field_table_for_update = ['title', 'content'];
+	protected $field_work_save = ['title', 'content'];
 
 	public function __construct(Objective $objective)
 	{

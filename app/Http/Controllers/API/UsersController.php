@@ -105,7 +105,7 @@ class UsersController extends Controller
 							$user_education_rule->validate($user_education_data);
 					}
 				} else {
-					$user_education_rule->validate($request->get('user_educations'));
+					$user_education_rule->validate($request->get('user_educations')[0]);
 				}
 
 				$this->user_education->saveFromApi($request->get('user_educations'), $user->id);
@@ -121,7 +121,7 @@ class UsersController extends Controller
 						$user_work_history_rule->validate($user_work_history_data);
 					}
 				} else {
-					$user_work_history_rule->validate($request->get('user_work_histories'));	
+					$user_work_history_rule->validate($request->get('user_work_histories')[0]);	
 				}
 
 				$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
@@ -137,7 +137,7 @@ class UsersController extends Controller
 						$user_skill_rule->validate($user_skill_data);
 					}	
 				}else {
-					$user_skill_rule->validate($request->get('user_skills'));
+					$user_skill_rule->validate($request->get('user_skills')[0]);
 				}		
 
 				$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
@@ -153,7 +153,7 @@ class UsersController extends Controller
 						$objective_rule->validate($objective);
 					}
 				} else {
-					$objective_rule->validate($request->get('objectives'));
+					$objective_rule->validate($request->get('objectives')[0]);
 				}
 
 				$this->objective->saveFromApi($request->get('objectives'), $id);

@@ -13,4 +13,12 @@ interface UserEducationInterface extends Repository
 	 * @return mixed      
 	 */
 	public function saveFromApi($data, $user_id);
+
+	/**
+	 * Save Or Update One Record
+	 * @param  mixed $data    
+	 * @param  int $user_id 
+	 * @return mixed          
+	 */
+	public function saveOneRecord($data, $user_id);
 }

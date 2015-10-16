@@ -36,7 +36,7 @@ trait SaveFromApiTrait
 			if (count($dataPrepareForUpdate) == 1) 
 				$this->saveOneRecord($dataPrepareForUpdate, $user_id);
 			else 
-				$this->model->updateMultiRecord($dataPrepareForUpdate, $this->field_table_for_update, $ids);
+				$this->model->updateMultiRecord($dataPrepareForUpdate, $this->field_work_save, $ids);
 		}
 
 		if (count($dataPrepareForCreate) == 1) 
