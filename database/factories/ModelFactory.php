@@ -82,3 +82,11 @@ $factory->define(App\Models\UserWorkHistory::class, function(Faker\Generator $fa
 		'job_description' => $faker->text
 	];
 });
+
+$factory->define(App\Models\Objective::class, function(Faker\Generator $faker) {
+	return [
+		'user_id' => rand(1, 10),
+		'title' => $faker->name,
+		'content' => $faker->text
+	];
+});

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Category;
+use App\Models\Objective;
 use App\Models\Role;
 use App\Models\Template;
 use App\Models\TemplateMarket;
@@ -150,6 +151,15 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function objectives()
+    {
+        return $this->hasMany(Objective::class);
+    }
+
+    /**
      * Rename Image after upload 
      * @param  mixed $request 
      * @return string          
@@ -165,13 +175,11 @@ class User extends Model implements AuthenticatableContract,
     {
         $avatar = new static;
         $name = $avatar->id.time().$file->getClientOriginalName();
-
-        
         
         if ( !$file->move(public_path($avatar->path.'origin/'), $name)) {
             throw new UploadException('Error when save image');
         }
-     //   dd(public_path($avatar->path.'thumb/'), $file->getRealPath());
+
         $resize = \Image::make(public_path($avatar->path.'origin/'.$name))
             ->resize($avatar->img_width_thumb, $avatar->img_height_thumb)
             ->save(public_path($avatar->path.'thumb/').$name);
