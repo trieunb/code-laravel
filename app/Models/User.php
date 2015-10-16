@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Contracts\Billable as BillableContract;
-use Stripe\FileUpload;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -162,7 +161,7 @@ class User extends Model implements AuthenticatableContract,
         return time().md5($filename[0]).'.'.end($filename);
     }
 
-    public static function uploadAvatar($file)
+    public static function uploadAvatar(UploadedFile $file)
     {
         $avatar = new static;
         $name = $avatar->id.time().$file->getClientOriginalName();
