@@ -3,10 +3,10 @@ namespace App\Repositories\UserSkill;
 
 use App\Models\UserSkill;
 use App\Repositories\SaveFromApiTrait;
-use App\Repositories\AbstractRepository;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\UserSkill\UserSkillInterface;
 
-class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
+class UserSkillEloquent extends AbstractDefineMethodRepository implements UserSkillInterface
 {
 	use SaveFromApiTrait;
 	
