@@ -9,12 +9,12 @@ class UserWorkHistory_Rule extends AbstractValidator
 	protected function rules($params)
 	{
 		return [
-			'company' => 'required',
-			'sub_title' => 'required',
+			'company' => 'required|min:3',
+			'sub_title' => 'required|min:3',
             'start' => 'required|integer',
             'end' => 'required|integer',
-            'job_title' => 'required',
-            'job_description' => 'required'
+            'job_title' => 'required|min:3',
+            'job_description' => 'required|min:3'
 		];
 	}
 }

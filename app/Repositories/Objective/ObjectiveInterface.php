@@ -1,9 +1,9 @@
 <?php
-namespace App\Repositories\UserEducation;
+namespace App\Repositories\Objective;
 
 use App\Repositories\Repository;
 
-interface UserEducationInterface extends Repository
+interface ObjectiveInterface extends Repository
 {
 	/**
 	 * Create or Update data
@@ -15,7 +15,7 @@ interface UserEducationInterface extends Repository
 	public function saveFromApi($data, $user_id);
 
 	/**
-	 * Save Or Update One Record
+	 * Create Or Update One Record
 	 * @param  mixed $data    
 	 * @param  int $user_id 
 	 * @return mixed          

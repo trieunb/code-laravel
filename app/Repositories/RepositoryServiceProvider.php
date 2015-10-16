@@ -2,7 +2,9 @@
 namespace App\Repositories;
 
 use App\Models\Category;
+use App\Models\Objective;
 use App\Models\Role;
+use App\Models\Template;
 use App\Models\TemplateMarket;
 use App\Models\User;
 use App\Models\UserEducation;
@@ -10,6 +12,8 @@ use App\Models\UserSkill;
 use App\Models\UserWorkHistory;
 use App\Repositories\Category\CategoryEloquent;
 use App\Repositories\Category\CategoryInterface;
+use App\Repositories\Objective\ObjectiveEloquent;
+use App\Repositories\Objective\ObjectiveInterface;
 use App\Repositories\Role\RoleEloquent;
 use App\Repositories\Role\RoleInterface;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
@@ -23,7 +27,6 @@ use App\Repositories\UserWorkHistory\UserWorkHistoryEloquent;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserEloquent;
 use App\Repositories\User\UserInterface;
-use App\Models\Template;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -65,6 +68,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
 		$this->app->bind(TemplateMarketInterface::class, function() {
 			return new TemplateEloquent(new TemplateMarket);
+		});
+
+		$this->app->bind(ObjectiveInterface::class, function() {
+			return new ObjectiveEloquent(new Objective);
 		});
 	}
 }
