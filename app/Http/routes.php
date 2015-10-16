@@ -59,25 +59,14 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
       ['as' => 'auth.linkedin', 
       'uses' => 'AuthenticateController@postLoginWithLinkedin']);
 
+    /**
+     * User Route
+     */
     get('/user/profile', 'UsersController@getProfile');
+    get('/user/template', ['uses' => 'UsersController@getTemplates']);
+
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
-    get('/user/template', [
-      'uses' => 'UsersController@getTemplates'
-    ]);
+    post('/user/{id}/upload', ['uses' => 'UsersController@uploadImage']);
 });
 
-get('/docs', function() {
-
- /* $phpWord = IOFactory::load(public_path('test.docx'));
-  $objWriter = IOFactory::createWriter($phpWord, 'HTML');
-  $objWriter->save('test.html');
-  dd($objWriter);
-});
-  dd($objWriter);*/
-  $obj = new DOMDocument();
-  dd($obj->load(public_path('test.docx')));
-
-  CloudConvert::file(public_path('test.docx'))->to(public_path('test.html'));
-  return "done";
-});
 

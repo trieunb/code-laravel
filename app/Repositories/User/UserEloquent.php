@@ -6,6 +6,7 @@ use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 
 
+
 class UserEloquent extends AbstractRepository implements UserInterface
 {
 	protected $model;
@@ -30,10 +31,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		$user->link_profile = $data['link_profile'];
 		$user->infomation = $data['infomation'];
 		$user->dob = $data['dob'];
-
-		if ($data['avatar']) {
-			$user->avatar = $data['avatar'];
-		}
 		$user->gender = $data['gender'];
 		$user->address = $data['address'];
 		$user->soft_skill = $data['soft_skill'];
@@ -121,5 +118,19 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		return $this->model
             ->with(['templates'])
             ->findOrFail($user_id);
+	}
+
+	/**
+	 * Upload avatar
+	 * @param  mixed $file    
+	 * @param  int $user_id 
+	 * @return mixed          
+	 */
+	public function uploadImage($file, $user_id)
+	{
+		$user = $this->getById($user_id);
+		$user->avatar = User::uploadAvatar($file);
+
+		return $user->save();
 	}
 }

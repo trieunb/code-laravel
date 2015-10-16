@@ -7,9 +7,9 @@ class UserEducation_Rule extends AbstractValidator
 	{
 		return [
 			'school_name' => 'required',
-            'start' => 'required',
             'sub_title' => 'required',
-            'end' => 'required',
+            'start' => 'required|integer',
+            'end' => 'required|integer',
             'degree' => 'required',
             'result' => 'required'
 		];

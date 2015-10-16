@@ -5,16 +5,18 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
+use App\Repositories\Template\TemplateInterface;
 use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
-use App\Repositories\Template\TemplateInterface;
 use App\ValidatorApi\UserEducation_Rule;
 use App\ValidatorApi\UserSkill_Rule;
 use App\ValidatorApi\UserWorkHistory_Rule;
 use App\ValidatorApi\User_Rule;
 use App\ValidatorApi\ValidatorAPiException;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -148,5 +150,30 @@ class UsersController extends Controller
 			'status' => true,
 			'data' => $this->user->getTemplateFromUser($user->id)
 		]); 
+	}
+
+	public function uploadImage($id, Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+
+		if ($user->id != $id) {
+			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
+		}
+
+		try {
+			$this->validate($request, ['avatar' => 'image',]);	
+		} catch (ValidationException $e) {
+			return response()->json([
+				'status_code' => 412, 'status' => false, 'message' => $e->getErrors()],
+			412);
+		}
+		try {
+			return $this->user->uploadImage($request->file('avatar'), $user->id)
+			? response()->json(['status_code' => 200, 'status' => true])
+			: response()->json(['status_code' => 500, 'status' => false, 'message' => 'Error when Upload Image']);
+		} catch(UploadException $e) {
+			return response()->json(['status_code' => 500, 'status' => false, 'message' => $e->getErrorMessage()]);
+		}
+		
 	}
 }
