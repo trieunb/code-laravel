@@ -27,7 +27,7 @@ class Template extends Model
             $user_templates[] = [
                 'user_id' => $user_id,
                 'name' => $value['name'],
-                'tamplate' => $value['template']
+                'template' => $value['template']
             ];
         }
         $this->insert($user_templates);

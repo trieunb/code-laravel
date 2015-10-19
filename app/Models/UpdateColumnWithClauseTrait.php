@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 
+use Carbon\Carbon;
+
 trait UpdateColumnWithClauseTrait
 {
 	/**
@@ -23,7 +25,7 @@ trait UpdateColumnWithClauseTrait
         return $params;
     }
 
-     public function updateMultiRecord($dataPrepareUpdate, array $fields, array $ids)
+    public function updateMultiRecord($dataPrepareUpdate, array $fields, array $ids)
     {
         $sql = 'UPDATE `'.$this->table.'` SET '.$fields[0].' = CASE ';
         $params = ['sql' => '', 'param' => []];
@@ -35,7 +37,7 @@ trait UpdateColumnWithClauseTrait
         	 $sql .= ' , '.$field.' = CASE '.$this->updateColumnWithClause($dataPrepareUpdate, $field, $params)['sql'];
         }
   
-        $sql .= ' WHERE id IN ('.implode(',', $ids).')';
+        $sql .= ' , updated_at = "'.Carbon::now().'" WHERE id IN ('.implode(',', $ids).')';
 
         \DB::update($sql, $params['param']);
     }
