@@ -35,7 +35,9 @@ class UserSkill extends Model
                 'skill_name' => $value['skill_name'],
                 'skill_test' => $value['skill_test'],
                 'skill_test_point' => $value['skill_test_point'],
-                'experience' => $value['experience']
+                'experience' => $value['experience'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ];
         }
 
