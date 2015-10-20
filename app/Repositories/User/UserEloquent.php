@@ -25,6 +25,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function saveFromApi($data, $user_id = null)
 	{
 		$user =  $this->getById($user_id);
+
 		if (isset($data['firstname']))
 			$user->firstname = $data['firstname'];
 		if (isset($data['lastname']))
