@@ -36,7 +36,9 @@ class UserWorkHistory extends Model
                 'start' => $value['start'],
                 'end' => $value['end'],
                 'job_title' => $value['job_title'],
-                'job_description' => $value['job_description']
+                'job_description' => $value['job_description'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ];
         }
 

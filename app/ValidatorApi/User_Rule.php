@@ -2,30 +2,41 @@
 
 namespace App\ValidatorApi;
 
+use Illuminate\Validation\Factory as ValidatorFactory;
+use Illuminate\Http\Request;
+
 class User_Rule extends AbstractValidator
 {
+      private $request;
+
+      public function __construct(Request $request, ValidatorFactory $validator)
+      {
+            parent::__construct($validator);
+            $this->request = $request;
+      }
+
 	protected function rules($params)
 	{
             $rules = [];
-            if ($this->has('firstname'))
+            if (isset($this->request->get('user')['firstname']))
                   $rules['firstname'] = 'required|min:3';
-            if ($this->has('lastname'))
+            if (isset($this->request->get('user')['lastname']))
                   $rules['lastname'] = 'required|min:3';
-            if ($this->has('email'))
+            if (isset($this->request->get('user')['email']))
                   $rules['email'] = 'required|email|unique:users,email,'.$params;
-            if ($this->has('mobile_phone')) 
-                  $rules['mobile_phone'] = 'integer|min:9|max:11';
-            if ($this->has('home_phone'))
-                  $rules['home_phone'] = 'integer|min:9|max:11';
-            if ($this->has('dob'))
+            if (isset($this->request->get('user')['mobile_phone'])) 
+                  $rules['mobile_phone'] = 'min:9|max:11';
+            if (isset($this->request->get('user')['home_phone']))
+                  $rules['home_phone'] = 'min:9|max:11';
+            if (isset($this->request->get('user')['dob']))
                   $rules['dob'] = 'required';
-            if ($this->has('gender'))
+            if (isset($this->request->get('user')['gender']))
                   $rules['gender'] = 'required';
-            if ($this->has('state'))
+            if (isset($this->request->get('user')['state']))
                   $rules['state'] = 'required|min:3';
-            if ($this->has('city'))
+            if (isset($this->request->get('user')['city']))
                   $rules['city'] = 'required|min:3';
-            if ($this->has('country'))
+            if (isset($this->request->get('user')['country']))
                   $rules['country'] = 'required|min:3';
 		return $rules;
 	}

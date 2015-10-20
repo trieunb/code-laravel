@@ -31,7 +31,9 @@ class Objective extends Model
             $objectives[] = [
                 'user_id' => $user_id,
                 'title' => $value['title'],
-                'content' => $value['content']
+                'content' => $value['content'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ];
         }
 

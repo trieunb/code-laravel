@@ -2,8 +2,6 @@
 
 namespace App\ValidatorApi;
 
-
-
 class UserWorkHistory_Rule extends AbstractValidator
 {
 	protected function rules($params)
