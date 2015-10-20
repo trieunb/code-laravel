@@ -4,10 +4,19 @@ namespace App\Repositories\Template;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Template\TemplateInterface;
 use App\Models\Template;
+use App\Repositories\SaveFromApiTrait;
 
 class TemplateEloquent extends AbstractRepository implements TemplateInterface
 {
+    use SaveFromApiTrait;
+
 	protected $model;
+
+    /**
+     * Fields for update data
+     * @var $field_work_save
+     */
+    protected $field_work_save = ['user_id', 'name', 'template'];
 
 	public function __construct(Template $template)
 	{
@@ -18,27 +27,27 @@ class TemplateEloquent extends AbstractRepository implements TemplateInterface
      * @param $date
      * @return mixed
      */
-    public function saveTemplate($data, $user_id)
-    {
-        if (count($data) == 1) {
-            $this->saveOneRecord($data, $user_id);
-        } 
+    // public function saveTemplate($data, $user_id)
+    // {
+    //     if (count($data) == 1) {
+    //         $this->saveOneRecord($data, $user_id);
+    //     } 
 
-        $ids = [];
-        $dataPrepareForCreate = [];
-        foreach ($data as $value) {
-            if ($value['id'] != null && $value['id'] != '') {
-                $ids[] = $value['id'];
-            } else {
-                $dataPrepareForCreate[] = $value;
-            }
-        }
+    //     $ids = [];
+    //     $dataPrepareForCreate = [];
+    //     foreach ($data as $value) {
+    //         if ($value['id'] != null && $value['id'] != '') {
+    //             $ids[] = $value['id'];
+    //         } else {
+    //             $dataPrepareForCreate[] = $value;
+    //         }
+    //     }
 
-        if (count($dataPrepareForCreate) == 1) 
-            $this->saveOneRecord($dataPrepareForCreate, $user_id);
-        else 
-            $this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
-    }
+    //     if (count($dataPrepareForCreate) == 1) 
+    //         $this->saveOneRecord($dataPrepareForCreate, $user_id);
+    //     else 
+    //         $this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
+    // }
 
     /**
      * Save Or Update One Record

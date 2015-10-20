@@ -5,11 +5,20 @@ namespace App\Models;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\UpdateColumnWithClauseTrait;
 
 class Template extends Model
 {
+
+    use UpdateColumnWithClauseTrait;
+
     protected $table = "templates";
     
+    protected $fillable = [
+        'user_id',
+        'name',
+        'template'
+    ];
     /**
      * Teamplate belongs to user.
      *

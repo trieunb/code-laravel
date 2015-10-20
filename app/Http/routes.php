@@ -64,6 +64,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('/user/profile', 'UsersController@getProfile');
     get('/user/template', ['uses' => 'UsersController@getTemplates']);
+    post('user/template', ['uses' => 'UsersController@postTemplates']);
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/{id}/upload', ['uses' => 'UsersController@uploadImage']);
