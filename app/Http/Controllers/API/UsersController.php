@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
+use App\Http\Requests\UserFormRequest;
 use App\Repositories\Objective\ObjectiveInterface;
 use App\Repositories\Template\TemplateInterface;
 use App\Repositories\UserEducation\UserEducationInterface;
@@ -78,7 +79,7 @@ class UsersController extends Controller
 	}
 
 	public function postProfile($id, Request $request, 
-		User_Rule $user_rule, 
+		UserFormRequest $user_rule, 
 		UserWorkHistory_Rule $user_work_history_rule,
 		UserEducation_Rule $user_education_rule,
 		UserSkill_Rule $user_skill_rule,
@@ -89,14 +90,14 @@ class UsersController extends Controller
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
 		
-		if ($request->has('user')) {
+		/*if ($request->has('user')) {
 			try {
 				$user_rule->validate($request->get('user'), $user->id);	
 				$this->user->saveFromApi($request->get('user'), $user->id);
 			} catch (ValidatorAPiException $e) {
 				return response()->json(['status_code' => 412, 'status' => false, 'message' => $e->getErrors()], 412);
 			}
-		}
+		}*/
 
 		if ($request->has('user_educations')) {
 			try {
