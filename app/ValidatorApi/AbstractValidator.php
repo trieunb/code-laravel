@@ -47,7 +47,6 @@ abstract class AbstractValidator
 	 */
 	public function validate(array $data, $params = null)
 	{
-		
 		$this->validation = $this->validator->make($data, $this->rules($params));
 
 		if ($this->validation->fails()) {
