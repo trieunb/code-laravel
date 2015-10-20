@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\UpdateColumnWithClauseTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Objective extends Model
 {
+	use UpdateColumnWithClauseTrait;
+
 	/**
 	 * Table name
 	 * @var string
@@ -19,5 +22,21 @@ class Objective extends Model
     public function user()
     {
     	return $this->belongsTo(User::class);
+    }
+
+    public function insertMultiRecord($dataPrepareForCreate, $user_id)
+    {
+        $objectives = [];
+        foreach ($dataPrepareForCreate as $value) {
+            $objectives[] = [
+                'user_id' => $user_id,
+                'title' => $value['title'],
+                'content' => $value['content'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ];
+        }
+
+        $this->insert($objectives);
     }
 }

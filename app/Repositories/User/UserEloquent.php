@@ -25,20 +25,35 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function saveFromApi($data, $user_id = null)
 	{
 		$user =  $this->getById($user_id);
-		$user->firstname = $data['firstname'];
-		$user->lastname = $data['lastname'];
-		$user->email = $data['email'];
-		$user->link_profile = $data['link_profile'];
-		$user->infomation = $data['infomation'];
-		$user->dob = $data['dob'];
-		$user->gender = $data['gender'];
-		$user->address = $data['address'];
-		$user->soft_skill = $data['soft_skill'];
-		$user->mobile_phone = $data['mobile_phone'];
-		$user->home_phone = $data['home_phone'];
-		$user->city = $data['city'];
-		$user->state = $data['state'];
-		$user->country = $data['country'];
+
+		if (isset($data['firstname']))
+			$user->firstname = $data['firstname'];
+		if (isset($data['lastname']))
+			$user->lastname = $data['lastname'];
+		if (isset($data['email']))
+			$user->email = $data['email'];
+		if (isset($data['link_profile']))
+			$user->link_profile = $data['link_profile'];
+		if (isset($data['infomation']))
+			$user->infomation = $data['infomation'];
+		if (isset($data['dob']))
+			$user->dob = $data['dob'];
+		if (isset($data['gender']))
+			$user->gender = $data['gender'];
+		if (isset($data['address']))
+			$user->address = $data['address'];
+		if (isset($data['soft_skill']))
+			$user->soft_skill = $data['soft_skill'];
+		if (isset($data['mobile_phone']))
+			$user->mobile_phone = $data['mobile_phone'];
+		if (isset($data['home_phone']))
+			$user->home_phone = $data['home_phone'];
+		if (isset($data['city']))
+			$user->city = $data['city'];
+		if (isset($data['state']))
+			$user->state = $data['state'];
+		if (isset($data['country']))
+			$user->country = $data['country'];
 		
 		if (array_key_exists('password', $data)) {
 			$user->password = bcrypt($data['password']);
@@ -55,7 +70,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function getProfile($user_id)
 	{
 		return $this->model
-			->with(['user_educations', 'user_work_histories', 'user_skills'])
+			->with(['user_educations', 'user_work_histories', 'user_skills', 'objectives'])
 			->findOrFail($user_id);
 	}
 
