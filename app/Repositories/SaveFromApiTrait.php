@@ -25,6 +25,16 @@ trait SaveFromApiTrait
 			}
 		}
 		if ( count($ids) > 0) {
+			$objects = $this->getDataWhereClause('user_id', '=', $user_id);
+			$idsPrepareDelete = [];
+
+			foreach ($objects as $object) {
+				if ( !in_array($object->id, $ids))
+					$idsPrepareDelete[] = $object->id;
+			}
+
+			$this->model->whereIn('id', $idsPrepareDelete)->delete();
+
 			$dataPrepareForUpdate = [];
 			foreach ($ids as $id) {
 				array_walk($data, function(&$value) use (&$dataPrepareForUpdate, $id) {
