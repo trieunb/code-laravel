@@ -17,8 +17,10 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'lastname' => $faker->lastname,
         'email' => $faker->email,
         'dob' => $faker->dateTime(),
+        'gender' => rand(0,1),
         'avatar' => $faker->imageUrl(200, 200),
         'address' => $faker->address,
+        'soft_skill' => config('soft-skill.question'),
         'mobile_phone' => $faker->phoneNumber,
         'home_phone' => $faker->phoneNumber,
         'city' => $faker->city,
@@ -51,6 +53,7 @@ $factory->define(App\Models\UserEducation::class, function(Faker\Generator $fake
 	return [
 		'user_id' => rand(1, 10),
 		'school_name' => $faker->company,
+		'sub_title' => $faker->name,
 		'start' => $faker->name,
 		'end' => $faker->name,
 		'degree' => $faker->text,
@@ -72,9 +75,26 @@ $factory->define(App\Models\UserWorkHistory::class, function(Faker\Generator $fa
 	return [
 		'user_id' => rand(1, 10),
 		'company' => $faker->company,
+		'sub_title' => $faker->name,
 		'start' => $faker->name,
 		'end' => $faker->name,
 		'job_title' => $faker->name,
 		'job_description' => $faker->text
+	];
+});
+
+$factory->define(App\Models\Objective::class, function(Faker\Generator $faker) {
+	return [
+		'user_id' => rand(1, 10),
+		'title' => $faker->name,
+		'content' => $faker->text
+	];
+});
+
+$factory->define(App\Models\Reference::class, function(Faker\Generator $faker) {
+	return [
+		'user_id' => rand(1, 10),
+		'reference' => $faker->name,
+		'content' => $faker->text
 	];
 });

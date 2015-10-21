@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Category;
+use App\Models\Objective;
 use App\Models\Role;
 use App\Models\Template;
 use App\Models\TemplateMarket;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Contracts\Billable as BillableContract;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class User extends Model implements AuthenticatableContract,                                    
                                     CanResetPasswordContract,
@@ -45,19 +48,31 @@ class User extends Model implements AuthenticatableContract,
         'firstname',
         'lastname',
         'email',
+        'link_profile',
+        'infomation',
         'dob',
+        'gender',
         'avatar',
         'address',
+        'soft_skill',
         'mobile_phone',
         'home_phone',
         'city',
         'state',
         'country',
         'password',
-        'token',
-        'exp_time_token'
+        'token'
     ];
 
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'soft_skill' => 'json',
+        'avatar' => 'json'
+    ];
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -79,10 +94,10 @@ class User extends Model implements AuthenticatableContract,
      * path folder uploads
      * @var string
      */
-    public static $path = 'uploads/';
+    public $path = 'uploads/';
 
-    public static $img_width = 200;
-    public static $img_height = 200;
+    public $img_width_thumb = 200;
+    public $img_height_thumb = 200;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -136,6 +151,15 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function objectives()
+    {
+        return $this->hasMany(Objective::class);
+    }
+
+    /**
      * Rename Image after upload 
      * @param  mixed $request 
      * @return string          
@@ -147,4 +171,26 @@ class User extends Model implements AuthenticatableContract,
         return time().md5($filename[0]).'.'.end($filename);
     }
 
+    public static function uploadAvatar(UploadedFile $file)
+    {
+        $avatar = new static;
+        $name = $avatar->id.time().$file->getClientOriginalName();
+        
+        if ( !$file->move(public_path($avatar->path.'origin/'), $name)) {
+            throw new UploadException('Error when save image');
+        }
+
+        $resize = \Image::make(public_path($avatar->path.'origin/'.$name))
+            ->resize($avatar->img_width_thumb, $avatar->img_height_thumb)
+            ->save(public_path($avatar->path.'thumb/').$name);
+        
+        if( !$resize) {
+            throw new UploadException('Error when resize image');
+        }
+
+        return [
+            'origin' => asset($avatar->path.'origin/'.$name), 
+            'thumb' => asset($avatar->path.'thumb/'.$name)
+        ];
+    }
 }

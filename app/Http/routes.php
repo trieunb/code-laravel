@@ -31,14 +31,43 @@ Route::group(['namespace' => 'Frontend'], function() {
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
-    Route::controller('auth', 'AuthenticateController', [
+
+    /*Route::controller('auth', 'AuthenticateController', [
       'getLogin' => 'auth.login',
       'getRegister'   => 'auth.register',
       'postLogin' => 'auth.login',
-      'getLoginWithLinkedin' => 'auth.linkedin',
+      'postLoginWithLinkedin' => 'auth.linkedin',
+    ]);*/
+    get('auth/login', [
+      'as' => 'auth.login', 
+      'uses' => 'AuthenticateController@getLogin'
     ]);
+    get('auth/register', [
+      'as' => 'auth.register', 
+      'uses' => 'AuthenticateController@getRegister'
+    ]);
+    post('auth/register', [
+      'as' => 'auth.register', 
+      'uses' => 'AuthenticateController@postRegister'
+    ]);
+    post('auth/login', [
+      'as' => 'auth.login', 
+      'uses' => 'AuthenticateController@postLogin'
+    ]);
+    Route::any('auth/login-with-linkedin', 
+      ['as' => 'auth.linkedin', 
+      'uses' => 'AuthenticateController@postLoginWithLinkedin']);
+
+    /**
+     * User Route
+     */
     get('/user/profile', 'UsersController@getProfile');
+    get('/user/template', ['uses' => 'UsersController@getTemplates']);
+    post('user/template', ['uses' => 'UsersController@postTemplates']);
+    post('user/template/market', ['uses' => 'UsersController@postTemplatesFromMarket']);
+
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
+    post('/user/{id}/upload', ['uses' => 'UsersController@uploadImage']);
 });
 
 get('/test', function() {

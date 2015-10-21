@@ -6,6 +6,7 @@ use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 
 
+
 class UserEloquent extends AbstractRepository implements UserInterface
 {
 	protected $model;
@@ -23,22 +24,36 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function saveFromApi($data, $user_id = null)
 	{
-		$user = $data['id'] ? $this->getById($data['id']) : new User;
-		$user->firstname = $data['firstname'];
-		$user->lastname = $data['lastname'];
-		$user->email = $data['email'];
-		$user->dob = $data['dob'];
+		$user =  $this->getById($user_id);
 
-		if ($data['avatar']) {
-			$user->avatar = $data['avatar'];
-		}
-
-		$user->address = $data['address'];
-		$user->mobile_phone = $data['mobile_phone'];
-		$user->home_phone = $data['home_phone'];
-		$user->city = $data['city'];
-		$user->state = $data['state'];
-		$user->country = $data['country'];
+		if (isset($data['firstname']))
+			$user->firstname = $data['firstname'];
+		if (isset($data['lastname']))
+			$user->lastname = $data['lastname'];
+		if (isset($data['email']))
+			$user->email = $data['email'];
+		if (isset($data['link_profile']))
+			$user->link_profile = $data['link_profile'];
+		if (isset($data['infomation']))
+			$user->infomation = $data['infomation'];
+		if (isset($data['dob']))
+			$user->dob = $data['dob'];
+		if (isset($data['gender']))
+			$user->gender = $data['gender'];
+		if (isset($data['address']))
+			$user->address = $data['address'];
+		if (isset($data['soft_skill']))
+			$user->soft_skill = $data['soft_skill'];
+		if (isset($data['mobile_phone']))
+			$user->mobile_phone = $data['mobile_phone'];
+		if (isset($data['home_phone']))
+			$user->home_phone = $data['home_phone'];
+		if (isset($data['city']))
+			$user->city = $data['city'];
+		if (isset($data['state']))
+			$user->state = $data['state'];
+		if (isset($data['country']))
+			$user->country = $data['country'];
 		
 		if (array_key_exists('password', $data)) {
 			$user->password = bcrypt($data['password']);
@@ -55,7 +70,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function getProfile($user_id)
 	{
 		return $this->model
-			->with(['user_educations', 'user_work_histories', 'user_skills'])
+			->with(['user_educations', 'user_work_histories', 'user_skills', 'objectives'])
 			->findOrFail($user_id);
 	}
 
@@ -72,6 +87,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
+            'soft_skill' => config('soft-skill.question'),
             'token' => $token,
         ];
 
@@ -93,7 +109,53 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'email' => $data['emailAddress'],
             'avatar' => $data['pictureUrl'],
             'country' => $data['location']["name"],
+            'link_profile' => $data['publicProfileUrl'],
+            'soft_skill' => config('soft-skill.question'),
             'token' => $token
         ]);
+	}
+
+    public function updateUserFromOauth($data, $token, $id)
+    {
+        $user = $this->getById($id);
+        $user->firstname = $data['firstName'];
+        $user->lastname = $data['lastName'];
+        $user->email = $data['emailAddress'];
+        $user->avatar = $data['pictureUrl'];
+        $user->country = $data['location']['name'];
+        $user->link_profile = $data['publicProfileUrl'];
+        $user->token = $token;
+        return $user->save();
+
+    }
+    
+	public function getTemplateFromUser($user_id) {
+		return $this->model
+            ->with(['templates'])
+            ->findOrFail($user_id);
+	}
+
+    /**
+     * get all template from market place
+     */
+    public function getAlltemplatesFromMarketPlace($user_id)
+    {
+        return $this->model
+                ->with(['template_markets'])
+                ->findOrFail($user_id);
+    }
+
+	/**
+	 * Upload avatar
+	 * @param  mixed $file    
+	 * @param  int $user_id 
+	 * @return mixed          
+	 */
+	public function uploadImage($file, $user_id)
+	{
+		$user = $this->getById($user_id);
+		$user->avatar = User::uploadAvatar($file);
+
+		return $user->save();
 	}
 }

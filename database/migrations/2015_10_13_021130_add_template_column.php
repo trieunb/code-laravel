@@ -12,7 +12,7 @@ class AddTemplateColumn extends Migration
      */
     public function up()
     {
-         Schema::table('templates', function($table) {
+        Schema::table('templates', function($table) {
             $table->text('template')->after('name');
         });
     }

@@ -35,4 +35,22 @@ interface UserInterface extends Repository
 	 * @return mixed        
 	 */
 	public function createUserFromOAuth($data, $token);
+
+	/**
+	 * 
+	 */
+	public function getTemplateFromUser($id);
+
+	/**
+	 * get all template from market place
+	 */
+	public function getAlltemplatesFromMarketPlace($user_id);
+
+	/**
+	 * Upload avatar
+	 * @param  mixed $file    
+	 * @param  int $user_id 
+	 * @return mixed          
+	 */
+	public function uploadImage($file, $user_id);
 }
