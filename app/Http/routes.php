@@ -71,7 +71,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 });
 
 get('/test', function() {
-  $phpWord = new \PhpOffice\PhpWord\PhpWord();
+/*  $phpWord = new \PhpOffice\PhpWord\PhpWord();
   $section = $phpWord->addSection();
   $html = '<h1>Adding element via HTML</h1>';
 $html .= '<p>Some well formed HTML snippet needs to be used</p>';
@@ -90,5 +90,9 @@ $pdf = app()->make('dompdf.wrapper');
 $pdf->loadHTML($html);
  $pdf->save(public_path('test.pdf'));
 
-  dd($html);
+  dd($html);*/
+  header("Content-type: application/vnd.ms-word");
+  header("Content-Disposition: attachment; Filename=12345.doc");
+  $html = file_get_contents(public_path('test.html'));
+  echo $html;
 });
