@@ -227,10 +227,20 @@ class UsersController extends Controller
 				];
 			}
 			Template::insert($data);
-			// $this->template->saveFromApi($request->get('templates'), $user->id);
 		}
 		return response()->json(['status_code' => 200, 'status' => true]);
 		
+	}
+
+	public function getAllTemplatesFromMarket(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		return response()->json([
+			'status_code' => 200,
+			'status' => true,
+			'data' => $this->user->getAlltemplatesFromMarketPlace($user->id)
+		]);
+
 	}
 
 	public function postTemplatesFromMarket(Request $request)

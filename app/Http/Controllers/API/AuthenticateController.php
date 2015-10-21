@@ -145,40 +145,4 @@ class AuthenticateController extends Controller
             return redirect((string)$url);
         }
     }
-
-    // public function postLoginWithLinkedin(Request $request)
-    // {
-    //     $link_token = $request->get('link_token');
-    //     $linkedinService = OAuth::consumer('Linkedin');
-    //     // $token = $linkedinService->requestAccessToken($link_token)->getAccessToken();
-    //     // dd($linkedinService);die();
-    //     $result = json_decode($linkedinService
-    //         ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-    //     // dd($result);die();
-    //     if ( @$result['id']) {
-
-    //         $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
-    //         if ( !$user) {
-    //             $user = $this->user->createUserFromOAuth($result, $link_token);
-    //         } else {
-    //             $user = $this->user->getById($user->id);
-    //             $this->user->updateUserFromOauth($result, $link_token, $user->id);
-    //         }
-    //         Auth::login($user);
-    //         $user = Auth::user();
-    //         $token = \JWTAuth::fromUser($user);
-    //         $this->user->update(['token' => $token], $user->id);
-    //         return response()->json([
-    //             'status_code' => 200,
-    //             'status' => true,
-    //             'token' => $token,
-    //         ]);
-    //     } else {
-    //         return response()->json([
-    //             'status_code' => 500,
-    //             'status' => false,
-    //             'message' => 'could not create token'
-    //         ], 500);
-    //     }
-    // }
 }
