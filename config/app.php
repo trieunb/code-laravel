@@ -161,7 +161,6 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        RobbieP\CloudConvertLaravel\CloudConvertLaravelServiceProvider::class,
     ],
 
     /*
@@ -217,7 +216,6 @@ return [
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
-        'CloudConvert'=> RobbieP\CloudConvertLaravel\Facades\CloudConvert::class,
     ],
 
 ];

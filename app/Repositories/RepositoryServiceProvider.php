@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\Objective;
+use App\Models\Reference;
 use App\Models\Role;
 use App\Models\Template;
 use App\Models\TemplateMarket;
@@ -14,6 +15,8 @@ use App\Repositories\Category\CategoryEloquent;
 use App\Repositories\Category\CategoryInterface;
 use App\Repositories\Objective\ObjectiveEloquent;
 use App\Repositories\Objective\ObjectiveInterface;
+use App\Repositories\Reference\ReferenceEloquent;
+use App\Repositories\Reference\ReferenceInterface;
 use App\Repositories\Role\RoleEloquent;
 use App\Repositories\Role\RoleInterface;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
@@ -72,6 +75,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
 		$this->app->bind(ObjectiveInterface::class, function() {
 			return new ObjectiveEloquent(new Objective);
+		});
+
+		$this->app->bind(ReferenceInterface::class, function() {
+			return new ReferenceEloquent(new Reference);
 		});
 	}
 }
