@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
 use App\Repositories\Objective\ObjectiveInterface;
+use App\Repositories\Reference\ReferenceInterface;
 use App\Repositories\Template\TemplateInterface;
 use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
 use App\ValidatorApi\Objective_Rule;
+use App\ValidatorApi\Reference_Rule;
 use App\ValidatorApi\UserEducation_Rule;
 use App\ValidatorApi\UserSkill_Rule;
 use App\ValidatorApi\UserWorkHistory_Rule;
@@ -49,16 +51,31 @@ class UsersController extends Controller
 	 */
 	protected $user_skill;
 
+	/**
+	 * TemplateInterface
+	 * @var [type]
+	 */
 	protected $template;
 	
+	/**
+	 * ObjectiveInterface
+	 * @var [type]
+	 */
 	protected $objective;
+
+	/**
+	 * ReferenceInterface
+	 * @var [type]
+	 */
+	protected $reference;
 
 	public function __construct(UserInterface $user, 
 		UserEducationInterface $user_education,
 		UserWorkHistoryInterface $user_work_history,
 		UserSkillInterface $user_skill,
 		TemplateInterface $template,
-		ObjectiveInterface $objective
+		ObjectiveInterface $objective,
+		ReferenceInterface $reference
 	) {
 		$this->middleware('jwt.auth');
 
@@ -68,6 +85,7 @@ class UsersController extends Controller
 		$this->user_skill = $user_skill;
 		$this->template = $template;
 		$this->objective = $objective;
+		$this->reference = $reference;
 	}
 
 	public function getProfile(Request $request)
@@ -84,7 +102,8 @@ class UsersController extends Controller
 		UserWorkHistory_Rule $user_work_history_rule,
 		UserEducation_Rule $user_education_rule,
 		UserSkill_Rule $user_skill_rule,
-		Objective_Rule $objective_rule
+		Objective_Rule $objective_rule,
+		Reference_Rule $reference_rule
 	) {
 		$user = \JWTAuth::toUser($request->get('token'));
 		if ($user->id != $id) {
@@ -160,6 +179,22 @@ class UsersController extends Controller
 
 				$this->objective->saveFromApi($request->get('objectives'), $id);
 			} catch (ValidatorAPiException $e) {
+				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+			}
+		}
+
+		if ($request->has('references')) {
+			try {
+				if (count($request->get('references')) > 1) {
+					foreach ($request->get('references') as $reference) {
+						$reference_rule->validate($reference);
+					}
+				} else {
+					$reference_rule->validate($request->get('references')[0]);
+				}
+
+				$this->reference->saveFromApi($request->get('references'), $id);
+			} catch(ValidatorAPiException $e) {
 				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
 			}
 		}
