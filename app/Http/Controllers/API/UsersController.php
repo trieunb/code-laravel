@@ -22,6 +22,8 @@ use App\ValidatorApi\ValidatorAPiException;
 use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use App\Models\Template;
+use Carbon\Carbon;
 
 class UsersController extends Controller
 {
@@ -208,6 +210,47 @@ class UsersController extends Controller
 			'status' => true,
 			'data' => $this->user->getTemplateFromUser($user->id)
 		]); 
+	}
+
+	public function postTemplates(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		if ($request->has('templates')) {
+			$data = [];
+			foreach ($request->get('templates') as $value) {
+				$data[] = [
+					'user_id' => $user->id,
+					'name' => $value['name'],
+				 	'template' => $value['template'],
+				 	'created_at' => Carbon::now(),
+				 	'updated_at' => Carbon::now()
+				];
+			}
+			Template::insert($data);
+		}
+		return response()->json(['status_code' => 200, 'status' => true]);
+		
+	}
+
+	public function getAllTemplatesFromMarket(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		return response()->json([
+			'status_code' => 200,
+			'status' => true,
+			'data' => $this->user->getAlltemplatesFromMarketPlace($user->id)
+		]);
+
+	}
+
+	public function postTemplatesFromMarket(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		return response()->json([
+			'status_code' => 200,
+			'status' => true,
+			'data' => $request->get('option_templates')
+		]);
 	}
 
 	public function uploadImage($id, Request $request)

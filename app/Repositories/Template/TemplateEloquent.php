@@ -4,10 +4,19 @@ namespace App\Repositories\Template;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Template\TemplateInterface;
 use App\Models\Template;
+use App\Repositories\SaveFromApiTrait;
 
 class TemplateEloquent extends AbstractRepository implements TemplateInterface
 {
+    use SaveFromApiTrait;
+
 	protected $model;
+
+    /**
+     * Fields for update data
+     * @var $field_work_save
+     */
+    protected $field_work_save = ['user_id', 'name', 'template'];
 
 	public function __construct(Template $template)
 	{

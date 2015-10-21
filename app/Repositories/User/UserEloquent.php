@@ -128,12 +128,22 @@ class UserEloquent extends AbstractRepository implements UserInterface
         return $user->save();
 
     }
-
+    
 	public function getTemplateFromUser($user_id) {
 		return $this->model
             ->with(['templates'])
             ->findOrFail($user_id);
 	}
+
+    /**
+     * get all template from market place
+     */
+    public function getAlltemplatesFromMarketPlace($user_id)
+    {
+        return $this->model
+                ->with(['template_markets'])
+                ->findOrFail($user_id);
+    }
 
 	/**
 	 * Upload avatar
