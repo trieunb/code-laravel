@@ -90,3 +90,11 @@ $factory->define(App\Models\Objective::class, function(Faker\Generator $faker) {
 		'content' => $faker->text
 	];
 });
+
+$factory->define(App\Models\Reference::class, function(Faker\Generator $faker) {
+	return [
+		'user_id' => rand(1, 10),
+		'reference' => $faker->name,
+		'content' => $faker->text
+	];
+});
