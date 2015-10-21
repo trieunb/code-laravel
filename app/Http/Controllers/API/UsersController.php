@@ -198,6 +198,16 @@ class UsersController extends Controller
 		
 	}
 
+	public function postTemplatesFromMarket(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		return response()->json([
+			'status_code' => 200,
+			'status' => true,
+			'data' => $request->get('option_templates')
+		]);
+	}
+
 	public function uploadImage($id, Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
