@@ -12,6 +12,7 @@ use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
+use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\ValidatorApi\Objective_Rule;
 use App\ValidatorApi\Reference_Rule;
 use App\ValidatorApi\UserEducation_Rule;
@@ -57,6 +58,7 @@ class UsersController extends Controller
 	 */
 	protected $template;
 	
+	protected $template_market;
 	/**
 	 * ObjectiveInterface
 	 * @var [type]
@@ -75,7 +77,8 @@ class UsersController extends Controller
 		UserSkillInterface $user_skill,
 		TemplateInterface $template,
 		ObjectiveInterface $objective,
-		ReferenceInterface $reference
+		ReferenceInterface $reference,
+		TemplateMarketInterface $template_market
 	) {
 		$this->middleware('jwt.auth');
 
@@ -86,6 +89,7 @@ class UsersController extends Controller
 		$this->template = $template;
 		$this->objective = $objective;
 		$this->reference = $reference;
+		$this->template_market = $template_market;
 	}
 
 	public function getProfile(Request $request)
@@ -239,6 +243,17 @@ class UsersController extends Controller
 			'status_code' => 200,
 			'status' => true,
 			'data' => $this->user->getAlltemplatesFromMarketPlace($user->id)
+		]);
+
+	}
+
+	public function getDetailTemplate(Request $request, $template_id)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		return response()->json([
+			'status_code' => 200,
+			'status' => true,
+			'data' => $this->template_market->getDetailTemplate($template_id)
 		]);
 
 	}
