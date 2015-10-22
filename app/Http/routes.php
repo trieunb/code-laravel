@@ -1,7 +1,6 @@
 <?php
 
 use PhpOffice\PhpWord\IOFactory;
-use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,4 +70,29 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('/user/{id}/upload', ['uses' => 'UsersController@uploadImage']);
 });
 
+get('/test', function() {
+/*  $phpWord = new \PhpOffice\PhpWord\PhpWord();
+  $section = $phpWord->addSection();
+  $html = '<h1>Adding element via HTML</h1>';
+$html .= '<p>Some well formed HTML snippet needs to be used</p>';
+$html .= '<p>With for example <strong>some<sup>1</sup> <em>inline</em> formatting</strong><sub>1</sub></p>';
+$html .= '<p>Unordered (bulleted) list:</p>';
+$html .= '<ul><li>Item 1</li><li>Item 2</li><ul><li>Item 2.1</li><li>Item 2.1</li></ul></ul>';
+$html .= '<p>Ordered (numbered) list:</p>';
+$html .= '<ol><li>Item 1</li><li>Item 2</li></ol>';
+$html .= '<img src="'.public_path('assets/images/avatar_2x.png').'"/>';
+$html .= '<p>Some well formed HTML snippet needs to be used</p>';
+  \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
 
+$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+$objWriter->save(public_path('helloWorld.docx'));
+$pdf = app()->make('dompdf.wrapper');
+$pdf->loadHTML($html);
+ $pdf->save(public_path('test.pdf'));
+
+  dd($html);*/
+  header("Content-type: application/vnd.ms-word");
+  header("Content-Disposition: attachment; Filename=12345.doc");
+  $html = file_get_contents(public_path('test.html'));
+  echo $html;
+});
