@@ -48,7 +48,7 @@ trait SaveFromApiTrait
 
 		if (count($dataPrepareForCreate) == 1) 
 			$this->saveOneRecord($dataPrepareForCreate, $user_id);
-		else 
+		else if (count($dataPrepareForCreate) > 1)
 			$this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
 	}
 
