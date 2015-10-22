@@ -11,12 +11,9 @@ trait SaveFromApiTrait
 	 */
 	public function saveFromApi($data, $user_id)
 	{
-		if (count($data) == 1) {
-			$this->saveOneRecord($data, $user_id);
-		} 
-
 		$ids = [];
 		$dataPrepareForCreate = [];
+		
 		foreach ($data as $value) {
 			if ($value['id'] != null && $value['id'] != '') {
 				$ids[] = $value['id'];
@@ -49,7 +46,7 @@ trait SaveFromApiTrait
 				$this->model->updateMultiRecord($dataPrepareForUpdate, $this->field_work_save, $ids);
 		}
 
-		if (count($dataPrepareForCreate) == 1) 
+		if (count($dataPrepareForCreate) > 1) 
 			$this->saveOneRecord($dataPrepareForCreate, $user_id);
 		else 
 			$this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
