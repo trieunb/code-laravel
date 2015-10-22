@@ -9,10 +9,19 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
 {
 	protected $model;
 
-	public function __construct(TemplateMarket $model)
+	public function __construct(TemplateMarket $template_market)
 	{
-		$this->model = $model;
+		$this->model = $template_market;
 	}
 
+    public function getAllTemplateMarket()
+    {
+        return $this->getAll();
+    }
+
+    public function getDetailTemplateMarket($template_id)
+    {
+        return $this->model->findOrFail($template_id);
+    }
 
 }
