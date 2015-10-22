@@ -5,5 +5,7 @@ use App\Repositories\Repository;
 
 interface TemplateMarketInterface extends Repository
 {
-	public function getDetailTemplate($template_id);
+    public function getAllTemplateMarket();
+    
+	public function getDetailTemplateMarket($template_id);
 }
