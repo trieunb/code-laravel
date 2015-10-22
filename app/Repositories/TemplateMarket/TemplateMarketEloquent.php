@@ -14,7 +14,12 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
 		$this->model = $template_market;
 	}
 
-    public function getDetailTemplate($template_id)
+    public function getAllTemplateMarket()
+    {
+        return $this->getAll();
+    }
+
+    public function getDetailTemplateMarket($template_id)
     {
         return $this->model->findOrFail($template_id);
     }

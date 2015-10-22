@@ -69,6 +69,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/{id}/upload', ['uses' => 'UsersController@uploadImage']);
+
+    get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
+    get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
 
 get('/test', function() {
