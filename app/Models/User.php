@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\Objective;
+use App\Models\Reference;
 use App\Models\Role;
 use App\Models\Template;
 use App\Models\TemplateMarket;
@@ -159,6 +160,14 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany(Objective::class);
     }
 
+    /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function references()
+    {
+        return $this->hasMany(Reference::class);
+    }
     /**
      * Rename Image after upload 
      * @param  mixed $request 
