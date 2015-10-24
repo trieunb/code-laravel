@@ -19,7 +19,8 @@
         "bican/roles": "2.1.*",
         "barryvdh/laravel-dompdf": "0.6.*",
         "gloudemans/shoppingcart": "~1.3",
-        "robbiep/cloudconvert-laravel": "2.*"
+        "robbiep/cloudconvert-laravel": "2.*",
+        "guzzlehttp/guzzle": "^6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

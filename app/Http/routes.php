@@ -54,6 +54,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
       'as' => 'auth.login', 
       'uses' => 'AuthenticateController@postLogin'
     ]);
+    post('auth/reset-password', ['uses' => 'AuthenticateController@postResetPassword']);
     Route::any('auth/login-with-linkedin', 
       ['as' => 'auth.linkedin', 
       'uses' => 'AuthenticateController@postLoginWithLinkedin']);
