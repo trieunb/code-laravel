@@ -5,14 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
+use App\Models\Template;
 use App\Repositories\Objective\ObjectiveInterface;
 use App\Repositories\Reference\ReferenceInterface;
+use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateInterface;
 use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
-use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\ValidatorApi\Objective_Rule;
 use App\ValidatorApi\Reference_Rule;
 use App\ValidatorApi\UserEducation_Rule;
@@ -20,11 +21,11 @@ use App\ValidatorApi\UserSkill_Rule;
 use App\ValidatorApi\UserWorkHistory_Rule;
 use App\ValidatorApi\User_Rule;
 use App\ValidatorApi\ValidatorAPiException;
+use Carbon\Carbon;
 use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
-use App\Models\Template;
-use Carbon\Carbon;
 
 class UsersController extends Controller
 {
@@ -113,7 +114,7 @@ class UsersController extends Controller
 		if ($user->id != $id) {
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
-
+		Log::info('test api', $request->all());
 		if ( !$request->only(['user', 'user_educations', 'user_work_histories', 'user_skills', 
 			'objectives', 'references'])) {
 			return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Not crendential']);
@@ -280,13 +281,13 @@ class UsersController extends Controller
 		]);
 	}
 
-	public function uploadImage($id, Request $request)
+	public function uploadImage(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
 
-		if ($user->id != $id) {
+		/*if ($user->id != $id) {
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
-		}
+		}*/
 
 		try {
 			$this->validate($request, ['avatar' => 'image',]);	
@@ -296,9 +297,10 @@ class UsersController extends Controller
 			412);
 		}
 		try {
-			return $this->user->uploadImage($request->file('avatar'), $user->id)
-			? response()->json(['status_code' => 200, 'status' => true])
-			: response()->json(['status_code' => 500, 'status' => false, 'message' => 'Error when Upload Image']);
+			$avatar = $this->user->uploadImage($request->file('avatar'), $user->id);
+			return $avatar != ''
+				? response()->json(['status_code' => 200, 'status' => true, 'data' => $avatar])
+				: response()->json(['status_code' => 500, 'status' => false, 'message' => 'Error when Upload Image']);
 		} catch(UploadException $e) {
 			return response()->json(['status_code' => 500, 'status' => false, 'message' => $e->getErrorMessage()]);
 		}
