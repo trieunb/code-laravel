@@ -63,13 +63,17 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('/user/profile', 'UsersController@getProfile');
     get('/user/template', ['uses' => 'UsersController@getTemplates']);
-    post('user/template', ['uses' => 'UsersController@postTemplates']);
     get('user/template/market', ['uses' => 'UsersController@getAllTemplatesFromMarket']);
     get('user/template/{id}', ['uses' => 'UsersController@getDetailTemplate']);
 
+    post('user/template', ['uses' => 'UsersController@postTemplates']);
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
+    get('/user/convert', ['uses' => 'UsersController@convert']);
 
+    /**
+     * Market Route
+     */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });

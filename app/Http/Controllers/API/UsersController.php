@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helper\ConvertDocxToHtml;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
+use App\Jobs\ConvertFile;
 use App\Models\Template;
 use App\Repositories\Objective\ObjectiveInterface;
 use App\Repositories\Reference\ReferenceInterface;
@@ -305,5 +307,12 @@ class UsersController extends Controller
 			return response()->json(['status_code' => 500, 'status' => false, 'message' => $e->getErrorMessage()]);
 		}
 		
+	}
+
+	public function convert(Request $request)
+	{
+		$convert = new ConvertDocxToHtml(public_path('test.docx'), 'html');
+		$data = $convert->startingConvert();
+		$this->dispatch(new ConvertFile($convert, $data, public_path('test.zip')));
 	}
 }

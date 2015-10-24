@@ -12,7 +12,7 @@ class ConvertDocxToHtml
 		$this->targetFormat = $targetFormat;
 	}
 
-	protected function convert()
+	public function startingConvert()
 	{
 	  	$sourceFile = curl_file_create($this->sourceFilePath);
 		$postData = [
@@ -32,10 +32,9 @@ class ConvertDocxToHtml
 		return json_decode($body, true);
 	}
 
-	protected function getJobAfterConvert()
+	public function getJobAfterConvert(array $job)
 	{
-		$job = $this->convert();
-		var_dump($job);
+
 		if ( !$job['sandbox']) {
 			return false;
 		}
@@ -46,17 +45,13 @@ class ConvertDocxToHtml
 		curl_setopt($ch, CURLOPT_USERPWD, config('third-party.zamzar.api') . ":"); // Set the API key as the basic auth username
 		$body = curl_exec($ch);
 		curl_close($ch);
-
 		return json_decode($body, true);
 	}
 
-	public function downloadFiles($nameZipFile)
+	public function downloadFiles(array $job, $nameZipFile)
 	{
-		$job = $this->getJobAfterConvert();
-
-		$localFilename = $nameZipFile;
-
-		if ($job['status'] === 'failed') {
+		$localFilename = $nameZipFile;	
+		if ($job['status'] !== 'successful') {
 			return false;
 		}
 		$fileId = '';
@@ -64,16 +59,14 @@ class ConvertDocxToHtml
 		foreach ($job['target_files'] as $target_file) {
 			if (strpos($target_file['name'], '.zip')) {
 				$fileId = $target_file['id'];
-				echo "co".$fileId;
 				break;
-			}else echo $target_file['name'];
+			}
 		}
 
 		if ($fileId == '') {
-			var_dump($job);
-			throw new \Exception('Not found zip file');
+			return false;
 		}
-
+		var_dump($job, config('third-party.zamzar.url').'files/'.$fileId.'/content');
 		$ch = curl_init(); // Init curl
 		curl_setopt($ch, CURLOPT_URL, config('third-party.zamzar.url').'files/'.$fileId.'/content'); // API endpoint
 		curl_setopt($ch, CURLOPT_USERPWD, config('third-party.zamzar.api') . ":"); // Set the API key as the basic auth username
@@ -84,18 +77,18 @@ class ConvertDocxToHtml
 
 		$body = curl_exec($ch);
 		curl_close($ch);
-
+		var_dump($body);
 		if($body) {
-			$zip = new ZipArchive;
+			$zip = new \ZipArchive();
 
-			$res = $zip->open(public_path($nameZipFile));
+			$res = $zip->open($nameZipFile);
 			if ($res === TRUE) {
 				$zip->extractTo(public_path());
 				$zip->close();
 			  	return true;
 			} 
 
-			throw new \Exception('Cannot unzip file');
+			return false;
 		}
 	}
 }
