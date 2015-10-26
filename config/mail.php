@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => env('MAIL_USERNAME'), 'name' => null],
+    'from' => ['address' => 'trieunb08@gmail.com', 'name' => 'SFR Software'],
 
     /*
     |--------------------------------------------------------------------------

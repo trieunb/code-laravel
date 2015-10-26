@@ -17,17 +17,11 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
-use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Mail\Message;
-use App\Http\Requests\PasswordRequest;
-use App\Http\Requests\ResetPasswordRequest;
 use Mail;
+use YOzaz\LaravelSwiftmailer\Mailer;
 
 class AuthenticateController extends Controller
 {
-
-    use ResetsPasswords;
 
     protected $user;
     public function __construct(UserInterface $user)
@@ -113,28 +107,20 @@ class AuthenticateController extends Controller
         }
     }
 
+
     public function postLoginWithLinkedin(Request $request)
     {
+        $user_linkedin = $request->get('user_info');
         $token = $request->get('token');
-        $OAuth = new OAuth();
-        $OAuth::setHttpClient('CurlClient');
-        $linkedinService = $OAuth::consumer('Linkedin');
-        // $linkedinService = OAuth::consumer('Linkedin');
-        // $token = $linkedinService->requestAccessToken($linkedin_token);
-        $result = json_decode($linkedinService
-            ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address)?format=json'), true);
-        return $result; die();
-
-        if ( @$result['id']) {
-            $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
-            if ( !$user) {
-                $user = $this->user->createUserFromOAuth($result, $token);
+        if (! is_null($user_linkedin)) {
+            $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $user_linkedin['linkedin_id']);
+            if (empty($user)) {
+                $user = $this->user->createUserFromOAuth($user_linkedin, $token);
             } else {
                 $user = $this->user->getById($user->id);
-                $this->user->updateUserFromOauth($result, $token, $user->id);
+                $this->user->updateUserFromOauth($user_linkedin, $token, $user->id);
             }
             Auth::login($user);
-            $user = Auth::user();
             $token = \JWTAuth::fromUser($user);
             $this->user->update(['token' => $token], $user->id);
             return response()->json([
@@ -144,50 +130,12 @@ class AuthenticateController extends Controller
             ]);
         } else {
             return response()->json([
-                'status_code' => 500,
+                'status_code' => 401,
                 'status' => false,
                 'message' => 'could not create token'
-            ], 500);
+            ], 401);
         }
     }
-
-    // public function postLoginWithLinkedin(Request $request)
-    // {
-    //     // get data from request
-    //     $code = $request->get('code');
-
-    //     $linkedinService = OAuth::consumer('Linkedin');
-
-
-    //     if ( ! is_null($code))
-    //     {
-    //         // This was a callback request from linkedin, get the token
-    //         $token = $linkedinService->requestAccessToken($code);
-
-    //         // Send a request with it. Please note that XML is the default format.
-    //         $result = json_decode($linkedinService->request
-    //             (
-    //                 '/people/~?format=json'
-    //             ), true);
-
-    //         // Show some of the resultant data
-    //         echo 'Your linkedin first name is ' . $result['firstName'] . ' and your last name is ' . $result['lastName'];
-
-    //         //Var_dump
-    //         //display whole array.
-    //         dd($result);
-
-    //     }
-    //     // if not ask for permission first
-    //     else
-    //     {
-    //         // get linkedinService authorization
-    //         $url = $linkedinService->getAuthorizationUri(['state'=>'DCEEFWF45453sdffef424']);
-
-    //         // return to linkedin login url
-    //         return redirect((string)$url);
-    //     }
-    // }
 
     public function postResetPassword(Request $request)
     {
@@ -196,18 +144,11 @@ class AuthenticateController extends Controller
         if (!is_null($user)) {
             $password = $this->randomPassword(8);
             $this->user->update(['password' => Hash::make($password)], $user->id);
-            
-            $response = Password::sendResetLink($request->only('email'), 
-                function (Message $message) {
-                    $message->subject('Your Password Reset Link');
+            $mail = new Mailer(); 
+            $mail->send('emails.forgetPassword', ['pass' => $password], function($m) use ($user) {
+                $m->to($user->email, $user->firstname . ' ' . $user->lastname)
+                  ->subject('Welcome');
             });
-            switch ($response) {
-                case Password::RESET_LINK_SENT:
-                   return redirect()->back()->with('success', trans($response));
-
-                case Password::INVALID_USER:
-                   return redirect()->back()->withErrors(['email' => trans($response)]);
-            }
 
             return response()->json([
                 'status_code' => 200,

@@ -103,13 +103,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function createUserFromOAuth($data, $token)
 	{
 		return $this->model->create([
-            'linkedin_id' => $data['id'],
-            'firstname' => $data['firstName'],
-            'lastname' => $data['lastName'],
-            'email' => $data['emailAddress'],
-            'avatar' => $data['pictureUrl'],
-            'country' => $data['location']["name"],
-            'link_profile' => $data['publicProfileUrl'],
+            'linkedin_id' => $data['linkedin_id'],
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'email' => $data['email'],
+            'avatar' => $data['avatar'],
+            'country' => $data['country'],
+            'link_profile' => $data['link_profile'],
             'soft_skill' => config('soft-skill.question'),
             'token' => $token
         ]);
@@ -118,12 +118,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function updateUserFromOauth($data, $token, $id)
     {
         $user = $this->getById($id);
-        $user->firstname = $data['firstName'];
-        $user->lastname = $data['lastName'];
-        $user->email = $data['emailAddress'];
-        $user->avatar = $data['pictureUrl'];
-        $user->country = $data['location']['name'];
-        $user->link_profile = $data['publicProfileUrl'];
+        $user->firstname = $data['firstname'];
+        $user->lastname = $data['lastname'];
+        $user->email = $data['email'];
+        $user->avatar = $data['avatar'];
+        $user->country = $data['country'];
+        $user->link_profile = $data['link_profile'];
         $user->token = $token;
         return $user->save();
 
