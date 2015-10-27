@@ -2,7 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Helper\ConvertDocxToHtml;
+use App\Events\ConvertedFile;
+use App\Helper\ZamzarApi;
 use App\Jobs\Job;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +23,7 @@ class ConvertFile extends Job implements SelfHandling, ShouldQueue
      *
      * @return void
      */
-    public function __construct(ConvertDocxToHtml $convert ,$data, $nameZipFile)
+    public function __construct(ZamzarApi $convert ,$data, $nameZipFile)
     {
         $this->data = $data;
         $this->nameZipFile = $nameZipFile;
@@ -36,10 +37,17 @@ class ConvertFile extends Job implements SelfHandling, ShouldQueue
      */
     public function handle()
     {
+        if (array_key_exists('erros', $this->data))
+            return;
         $data = $this->convert->getJobAfterConvert($this->data);
-        if ($data['status'] != 'successful') {
-            $this->release(3);
-        }else return $this->convert->downloadFiles($data, $this->nameZipFile);
+        if ( !is_array($data)) return response()->json(['status_code' => 401, 'status' => false, 'message' => 'Not credentials']);
+
+        if ($data['status'] != 'successful' && !array_key_exists('erros', $this->data)) {
+            //$this->release(1);
+            app('Illuminate\Contracts\Bus\Dispatcher')->dispatch(new ConvertFile($this->convert, $this->data, $this->nameZipFile));
+        }else {
+            $fileHtml = $this->convert->downloadFiles($data, $this->nameZipFile);
+        }
         
     }
 }

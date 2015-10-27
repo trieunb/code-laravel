@@ -33,7 +33,7 @@ class UserEducation extends Model
             $user_educations[] = [
                 'user_id' => $user_id,
                 'school_name' => $value['school_name'],
-                'sub_title' => $value['sub_title'],
+                'title' => $value['title'],
                 'start' => $value['start'],
                 'end' => $value['end'],
                 'degree' => $value['degree'],

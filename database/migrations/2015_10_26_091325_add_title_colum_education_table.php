@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTemplateColumn extends Migration
+class AddTitleColumEducationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AddTemplateColumn extends Migration
      */
     public function up()
     {
-        Schema::table('templates', function($table) {
-            $table->text('template')->after('name');
+         Schema::table('user_educations', function($table) {
+            $table->string('title', 100)->after('user_id');
         });
     }
 
@@ -24,6 +24,9 @@ class AddTemplateColumn extends Migration
      */
     public function down()
     {
-        Schema::drop('templates');
+        Schema::table('user_educations', function ($table) {
+            $table->dropColumn('title');
+
+        });
     }
 }

@@ -18,7 +18,9 @@
         "oriceon/oauth-5-laravel": "dev-master",
         "bican/roles": "2.1.*",
         "barryvdh/laravel-dompdf": "0.6.*",
-        "gloudemans/shoppingcart": "~1.3"
+        "gloudemans/shoppingcart": "~1.3",
+        "predis/predis": "^1.0",
+        "yangqi/htmldom": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -53,6 +53,7 @@ $factory->define(App\Models\UserEducation::class, function(Faker\Generator $fake
 	return [
 		'user_id' => rand(1, 10),
 		'school_name' => $faker->company,
+		'title' => $faker->name,
 		'sub_title' => $faker->name,
 		'start' => $faker->name,
 		'end' => $faker->name,

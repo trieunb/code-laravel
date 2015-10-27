@@ -65,6 +65,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('/user/template', ['uses' => 'UsersController@getTemplates']);
     get('user/template/market', ['uses' => 'UsersController@getAllTemplatesFromMarket']);
     get('user/template/{id}', ['uses' => 'UsersController@getDetailTemplate']);
+    get('user/template/view/{id}', ['uses' => 'UsersController@viewTemplate']);
 
     post('user/template', ['uses' => 'UsersController@postTemplates']);
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
@@ -76,15 +77,4 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
-});
-
-get('/abcd', function() {
-    $convert = new App\Helper\ConvertDocxToHtml(public_path('test.docx'), 'html');
-    try {
-                dd($convert->downloadFiles('test.zip'));
-        
-    } catch (\Exception $e) {
-        dd($e);
-    }
-    
 });

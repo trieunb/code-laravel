@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helper\ConvertDocxToHtml;
+use App\Helper\ZamzarApi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
 use App\Jobs\ConvertFile;
-use App\Models\Template;
 use App\Repositories\Objective\ObjectiveInterface;
 use App\Repositories\Reference\ReferenceInterface;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
@@ -287,10 +286,6 @@ class UsersController extends Controller
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
 
-		/*if ($user->id != $id) {
-			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
-		}*/
-
 		try {
 			$this->validate($request, ['avatar' => 'image',]);	
 		} catch (ValidationException $e) {
@@ -311,8 +306,25 @@ class UsersController extends Controller
 
 	public function convert(Request $request)
 	{
-		$convert = new ConvertDocxToHtml(public_path('test.docx'), 'html');
+		// $template = $this->template->getByid($)
+		$convert = new ZamzarApi(public_path('test.docx'), 'html');
 		$data = $convert->startingConvert();
+		if ( !is_array($data)) {
+			return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when convert file']);
+		}
+
 		$this->dispatch(new ConvertFile($convert, $data, public_path('test.zip')));
+	}
+
+	public function viewTemplate(Request $request, $id)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+
+		if ($user->id != $id) {
+			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
+		}
+		$template = $this->template->getByid($id);
+
+		return view()->make('frontend.template.view', compact('template'));
 	}
 }

@@ -16,8 +16,8 @@ class Template extends Model
     
     protected $fillable = [
         'user_id',
-        'name',
-        'template'
+        'source',
+        'source_convert'
     ];
     /**
      * Teamplate belongs to user.
@@ -35,8 +35,8 @@ class Template extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_templates[] = [
                 'user_id' => $user_id,
-                'name' => $value['name'],
-                'template' => $value['template']
+                'source' => $value['source'],
+                'source_convert' => $value['source_convert']
             ];
         }
         $this->insert($user_templates);

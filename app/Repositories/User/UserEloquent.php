@@ -25,7 +25,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function saveFromApi($data, $user_id = null)
 	{
 		$user =  $this->getById($user_id);
-
 		if (isset($data['firstname']))
 			$user->firstname = $data['firstname'];
 		if (isset($data['lastname']))
@@ -58,7 +57,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		if (array_key_exists('password', $data)) {
 			$user->password = bcrypt($data['password']);
 		}
-
+		
 		return $user->save();
 	}
 
