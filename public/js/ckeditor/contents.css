@@ -3,20 +3,7 @@ Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 
-body
-{
-	/* Font */
-	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
-	font-size: 12px;
 
-	/* Text color */
-	color: #333;
-
-	/* Remove the background color to make it transparent */
-	background-color: #fff;
-
-	margin: 20px;
-}
 
 
 .cke_editable
@@ -127,15 +114,10 @@ figure > figcaption
 	display: block; /* For IE8 */
 }
 
-a > img {
-	padding: 1px;
-	margin: 1px;
-	border: none;
-	outline: 1px solid #0782C1;
-}
+
 nobr {
     white-space: nowrap;
 }
-nobr {
+nowrap {
     white-space: nowrap;
 }
