@@ -162,6 +162,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         Yangqi\Htmldom\HtmldomServiceProvider::class,
+        YOzaz\LaravelSwiftmailer\ServiceProvider::class,
     ],
 
     /*
@@ -218,6 +219,7 @@ return [
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
         'Htmldom'   => 'Yangqi\Htmldom\Htmldom',
+        'Mail'      =>  YOzaz\LaravelSwiftmailer\Facade::class,
     ],
 
 ];
