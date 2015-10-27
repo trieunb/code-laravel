@@ -63,10 +63,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * User Route
      */
     get('/user/profile', 'UsersController@getProfile');
-    get('/user/template', ['uses' => 'TemplateController@getTemplates']);
-    post('user/template', ['uses' => 'TemplateController@postTemplates']);
-    get('user/template/market', ['uses' => 'TemplateController@getAllTemplatesFromMarket']);
-    get('user/template/{id}', ['uses' => 'TemplateController@getDetailTemplate']);
+    get('/template', ['uses' => 'TemplateController@getTemplates']);
+    post('/template', ['uses' => 'TemplateController@postTemplates']);
+    get('/template/market', ['uses' => 'TemplateController@getAllTemplatesFromMarket']);
+    get('/template/{id}', ['uses' => 'TemplateController@getDetailTemplate']);
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
