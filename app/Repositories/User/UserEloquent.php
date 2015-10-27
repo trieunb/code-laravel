@@ -131,6 +131,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->dob = $data['dob'];
         if (isset($data['gender']))
             $user->gender = $data['gender'];
+        if (isset($data['avatar']))
+            $user->avatar = $data['avatar'];
         if (isset($data['address']))
             $user->address = $data['address'];
         if (isset($data['soft_skill']))
