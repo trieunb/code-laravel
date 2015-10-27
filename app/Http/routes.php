@@ -70,7 +70,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
+    get('/user/convert', ['uses' => 'UsersController@convert']);
 
+    /**
+     * Market Route
+     */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
