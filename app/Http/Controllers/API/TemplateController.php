@@ -4,10 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\User\UserInterface;
 use App\Repositories\Template\TemplateInterface;
+use Carbon\Carbon;
 
 class TemplateController extends Controller
 {
@@ -17,7 +19,6 @@ class TemplateController extends Controller
 
     public function __construct(UserInterface $user, TemplateInterface $template)
     {
-        $this->middleware('jwt.auth');
         $this->user = $user;
         $this->template = $template;
     }
@@ -40,8 +41,8 @@ class TemplateController extends Controller
             foreach ($request->get('templates') as $value) {
                 $data[] = [
                     'user_id' => $user->id,
-                    'name' => $value['name'],
-                    'template' => $value['template'],
+                    'source' => $value['source'],
+                    'source_convert' => $value['source_convert'],
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ];
