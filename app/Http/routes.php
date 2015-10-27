@@ -54,6 +54,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
       'as' => 'auth.login', 
       'uses' => 'AuthenticateController@postLogin'
     ]);
+    post('auth/reset-password', ['uses' => 'AuthenticateController@postResetPassword']);
     Route::any('auth/login-with-linkedin', 
       ['as' => 'auth.linkedin', 
       'uses' => 'AuthenticateController@postLoginWithLinkedin']);
@@ -62,11 +63,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * User Route
      */
     get('/user/profile', 'UsersController@getProfile');
-    get('/user/template', ['uses' => 'UsersController@getTemplates']);
-    get('user/template/market', ['uses' => 'UsersController@getAllTemplatesFromMarket']);
-    get('user/template/{id}', ['uses' => 'UsersController@getDetailTemplate']);
+    get('/user/template', ['uses' => 'TemplateController@getTemplates']);
+    post('user/template', ['uses' => 'TemplateController@postTemplates']);
+    get('user/template/market', ['uses' => 'TemplateController@getAllTemplatesFromMarket']);
+    get('user/template/{id}', ['uses' => 'TemplateController@getDetailTemplate']);
 
-    post('user/template', ['uses' => 'UsersController@postTemplates']);
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
     get('/user/convert', ['uses' => 'UsersController@convert']);
