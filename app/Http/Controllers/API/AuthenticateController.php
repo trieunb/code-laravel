@@ -108,53 +108,6 @@ class AuthenticateController extends Controller
         }
     }
 
-    // public function postLoginWithLinkedin(Request $request)
-    // {
-    //     $linkedin_token = $request->get('code');
-    //     $OAuth = new OAuth();
-    //     $OAuth::setHttpClient('CurlClient');
-    //     $linkedinService = $OAuth::consumer('Linkedin');
-    //     if (! is_null($linkedin_token)) {
-    //         $token = $linkedinService->requestAccessToken($linkedin_token);
-    //         $result = json_decode($linkedinService
-    //             ->request('/people/~:(id,first-name,last-name,headline,member-url-resources,picture-url,location,public-profile-url,email-address,positions)?format=json'), true);
-    //         return $result;die();
-
-    //         if ( @$result['id']) {
-    //             $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $result['id']);
-    //             if ( !$user) {
-    //                 $user = $this->user->createUserFromOAuth($result, $token);
-    //             } else {
-    //                 $user = $this->user->getById($user->id);
-    //                 $this->user->updateUserFromOauth($result, $token, $user->id);
-    //             }
-    //             Auth::login($user);
-    //             $user = Auth::user();
-    //             $token = \JWTAuth::fromUser($user);
-    //             $this->user->update(['token' => $token], $user->id);
-    //             return response()->json([
-    //                 'status_code' => 200,
-    //                 'status' => true,
-    //                 'token' => $token,
-    //             ]);
-    //         } else {
-    //             return response()->json([
-    //                 'status_code' => 500,
-    //                 'status' => false,
-    //                 'message' => 'could not create token'
-    //             ], 500);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         // get linkedinService authorization
-    //         $url = $linkedinService->getAuthorizationUri(['state'=>'DCEEFWF45453sdffef424']);
-
-    //         // return to linkedin login url
-    //         return redirect((string)$url);
-    //     }
-    // }
-
     public function postLoginWithLinkedin(Request $request)
     {
         $user_linkedin = $request->get('user_info');

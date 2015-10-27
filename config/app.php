@@ -161,7 +161,7 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        Yangqi\Htmldom\HtmldomServiceProvider::class,
+        // Yangqi\Htmldom\HtmldomServiceProvider::class,
         YOzaz\LaravelSwiftmailer\ServiceProvider::class,
     ],
 
@@ -218,7 +218,7 @@ return [
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
-        'Htmldom'   => 'Yangqi\Htmldom\Htmldom',
+        'Htmldom'   => Yangqi\Htmldom\Htmldom::class,
         'Mail'      =>  YOzaz\LaravelSwiftmailer\Facade::class,
     ],
 
