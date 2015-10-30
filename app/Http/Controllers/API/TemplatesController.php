@@ -11,7 +11,7 @@ use App\Repositories\User\UserInterface;
 use App\Repositories\Template\TemplateInterface;
 use Carbon\Carbon;
 
-class TemplateController extends Controller
+class TemplatesController extends Controller
 {
     protected $user;
 
@@ -67,6 +67,7 @@ class TemplateController extends Controller
     public function getDetailTemplate(Request $request, $template_id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+        
         if (is_null($template_id)) {
             return response()->json([
                 'status_code' => 404,
@@ -76,7 +77,7 @@ class TemplateController extends Controller
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template_market->getDetailTemplateMarket($template_id)
+            'data' => $this->template->getDetailTemplate($template_id, $user->id)->template
         ]);
         
 

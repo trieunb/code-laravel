@@ -59,6 +59,7 @@
         </header>
         <main>
             @yield('content')
+            
         </main>
 
         <footer>

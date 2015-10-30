@@ -1,6 +1,11 @@
 <?php
 
+
+use Barryvdh\DomPDF\PDF;
+use Illuminate\Support\Facades\File;
 use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\TemplateProcessor;
+use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,40 +37,21 @@ Route::group(['namespace' => 'Frontend'], function() {
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
+    /**
+     * Authenticate Route
+     */
+    get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticateController@getLogin']);
+    get('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticateController@getRegister']);
 
-    /*Route::controller('auth', 'AuthenticateController', [
-      'getLogin' => 'auth.login',
-      'getRegister'   => 'auth.register',
-      'postLogin' => 'auth.login',
-      'postLoginWithLinkedin' => 'auth.linkedin',
-    ]);*/
-    get('auth/login', [
-      'as' => 'auth.login', 
-      'uses' => 'AuthenticateController@getLogin'
-    ]);
-    get('auth/register', [
-      'as' => 'auth.register', 
-      'uses' => 'AuthenticateController@getRegister'
-    ]);
-    post('auth/register', [
-      'as' => 'auth.register', 
-      'uses' => 'AuthenticateController@postRegister'
-    ]);
-    post('auth/login', [
-      'as' => 'auth.login', 
-      'uses' => 'AuthenticateController@postLogin'
-    ]);
+    post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticateController@postRegister']);
+    post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticateController@postLogin']);
     post('auth/reset-password', ['uses' => 'AuthenticateController@postResetPassword']);
-    Route::any('auth/login-with-linkedin', 
-      ['as' => 'auth.linkedin', 
-      'uses' => 'AuthenticateController@postLoginWithLinkedin']);
+    Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticateController@postLoginWithLinkedin']);
 
     /**
      * User Route
      */
-
     get('/user/profile', 'UsersController@getProfile');
-
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
@@ -73,15 +59,35 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Template Route
      */
-    
-    get('template', ['uses' => 'TemplateController@getTemplates']);
-    get('template/market', ['uses' => 'TemplateController@getAllTemplatesFromMarket']);
-    get('template/{id}', ['uses' => 'TemplateController@getDetailTemplate']);
-    post('template', ['uses' => 'TemplateController@postTemplates']);
+    get('template', ['uses' => 'TemplatesController@getTemplates']);
+    get('template/market', ['uses' => 'TemplatesController@getAllTemplatesFromMarket']);
+    get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
 
+    post('template', ['uses' => 'TemplatesController@postTemplates']);
+    post('template/edit/{id}', ['as' => 'frontend.template.post.edit', 'uses' => 'TemplatesController@edit']);
     /**
      * Market Route
      */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+});
+get('test', function() {
+  //  $pdf = App::make('dompdf.wrapper');
+     /*\PDF::loadFile(public_path('test1.html'))
+        ->setPaper('a3')
+        ->setOrientation('landscape')
+        ->save(public_path('test5.pdf'));*/
+    /*$file = File::get(public_path('CURRICULUM VITAE_TanHt.docx'));
+
+    $response = response()->make($file, 200);
+    $response->header('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    $response->header('Content-Disposition', ' attachment;filename="' . public_path('CURRICULUM VITAE_TanHt.docx') . '"');
+     return $response;*/
+     var_dump((new \App\Models\User)->newQuery());
+    // return view()->make('frontend.testword');
+    /*$templateProcessor = new TemplateProcessor(public_path('CURRICULUM VITAE_TanHt.docx'));
+    echo "<prev>";
+
+    dd($templateProcessor->cloneBlock('Tan'));
+    echo "/<prev>";*/
 });
