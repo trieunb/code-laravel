@@ -2,58 +2,28 @@
 namespace App\Repositories\UserEducation;
 
 use App\Models\UserEducation;
-use App\Repositories\AbstractRepository;
+use App\Repositories\SaveFromApiTrait;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\UserEducation\UserEducationInterface;
 
-class UserEducationEloquent extends AbstractRepository implements UserEducationInterface
+class UserEducationEloquent extends AbstractDefineMethodRepository implements UserEducationInterface
 {
+	use SaveFromApiTrait;
+	/**
+	 * UserEducation
+	 * @var $model
+	 */
 	protected $model;
+
+	/**
+	 * Fields for update data
+	 * @var $field_work_save
+	 */
+	protected $field_work_save = ['school_name','title', 'start', 'end', 'degree', 'result'];
 
 	public function __construct(UserEducation $user_education)
 	{
 		$this->model = $user_education;
-	}
-
-	/**
-	 * Create or Update data
-	 * @param  mixed $data 
-	 * @param int $user_id
-	 * @return mixed      
-	 */
-	public function saveFromApi($data, $user_id)
-	{
-		if (count($data) == 1) {
-			$this->saveOneRecord($data, $user_id);
-		} 
-
-		$ids = [];
-		$dataPrepareForCreate = [];
-		foreach ($data as $value) {
-			if ($value['id'] != null && $value['id'] != '') {
-				$ids[] = $value['id'];
-			} else {
-				$dataPrepareForCreate[] = $value;
-			}
-		}
-		if ( count($ids) > 0) {
-			$dataPrepareForUpdate = [];
-			foreach ($ids as $id) {
-				array_walk($data, function(&$value) use (&$dataPrepareForUpdate, $id) {
-					if ($value['id'] == $id) {
-						$dataPrepareForUpdate[] = $value;
-					}
-				});
-			}
-			if (count($dataPrepareForUpdate) == 1) 
-				$this->saveOneRecord($dataPrepareForUpdate, $user_id);
-			else 
-				$this->model->updateMultiRecord($dataPrepareForUpdate, $ids);
-		}
-
-		if (count($dataPrepareForCreate) == 1) 
-			$this->saveOneRecord($dataPrepareForCreate, $user_id);
-		else 
-			$this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
 	}
 
 	/**
@@ -69,6 +39,7 @@ class UserEducationEloquent extends AbstractRepository implements UserEducationI
 		if ($dataPrepareSave['id'] == null) $user_education->user_id = $user_id;
 
 		$user_education->school_name = $dataPrepareSave['school_name'];
+		$user_education->title = $dataPrepareSave['title'];
 		$user_education->start = $dataPrepareSave['start'];
 		$user_education->end = $dataPrepareSave['end'];
 		$user_education->degree = $dataPrepareSave['degree'];

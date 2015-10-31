@@ -2,58 +2,28 @@
 namespace App\Repositories\UserWorkHistory;
 
 use App\Models\UserWorkHistory;
-use App\Repositories\AbstractRepository;
+use App\Repositories\AbstractDefineMethodRepository;
+use App\Repositories\SaveFromApiTrait;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 
-class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHistoryInterface
+class UserWorkHistoryEloquent extends AbstractDefineMethodRepository implements UserWorkHistoryInterface
 {
+	use SaveFromApiTrait;
+	/**
+	 * UserWorkHistory
+	 * @var $model
+	 */
 	protected $model;
+
+	/**
+	 * Fields for update data
+	 * @var $field_work_save
+	 */
+	protected $field_work_save = ['company', 'start', 'end', 'job_title', 'job_description'];
 
 	public function __construct(UserWorkHistory $user_work_history)
 	{
 		$this->model = $user_work_history;
-	}
-
-	/**
-	 * Create or Update data
-	 * @param  mixed $data 
-	 * @param int $user_id
-	 * @return mixed      
-	 */
-	public function saveFromApi($data, $user_id)
-	{
-		if (count($data) == 1) {
-			$this->saveOneRecord($data, $user_id);
-		}
-		
-		$ids = [];
-		$dataPrepareForCreate = [];
-
-		foreach ($data as $value) {
-			if ($value['id'] != null && $value['id'] != '') {
-				$ids[] = $value['id'];
-			} else {
-				$dataPrepareForCreate[] = $value;
-			}
-		}
-
-		if (count($ids) > 0) {
-			$dataPrepareForUpdate = [];
-			foreach ($ids as $id) {
-				array_walk($data, function(&$value) use ($id, &$dataPrepareForUpdate){
-					if ($id == $value['id'])
-						$dataPrepareForUpdate[] = $value;
-				});
-			}
-
-			if (count($dataPrepareForUpdate) == 1) $this->saveOneRecord($dataPrepareForUpdate, $user_id);
-			else $this->model->updateMultiRecord($dataPrepareForUpdate, $ids);
-		}
-
-		if (count($dataPrepareForCreate) == 1) 
-			$this->saveOneRecord($dataPrepareForCreate, $user_id);
-		else 
-			$this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
 	}
 
 	/**
@@ -65,9 +35,9 @@ class UserWorkHistoryEloquent extends AbstractRepository implements UserWorkHist
 	public function saveOneRecord($data, $user_id)
 	{
 		$dataPrepareSave = $data[0];
-		$user_work_history = $dataPrepareSave['$id'] ? $dataPrepareSave['$id'] : new UserWorkHistory;
+		$user_work_history = $dataPrepareSave['id'] ? $this->getById($dataPrepareSave['id']) : new UserWorkHistory;
 
-		if ($dataPrepareSave['$id'] == null) $user_work_history->user_id = $user_id;
+		if ($dataPrepareSave['id'] == null || $dataPrepareSave['id'] == '') $user_work_history->user_id = $user_id;
 
 		$user_work_history->company = $dataPrepareSave['company'];
 		$user_work_history->start = $dataPrepareSave['start'];

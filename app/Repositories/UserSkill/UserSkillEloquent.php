@@ -2,12 +2,25 @@
 namespace App\Repositories\UserSkill;
 
 use App\Models\UserSkill;
-use App\Repositories\AbstractRepository;
+use App\Repositories\SaveFromApiTrait;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\UserSkill\UserSkillInterface;
 
-class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
+class UserSkillEloquent extends AbstractDefineMethodRepository implements UserSkillInterface
 {
+	use SaveFromApiTrait;
+	
+	/**
+	 * UserSKill
+	 * @var $model
+	 */
 	protected $model;
+
+	/**
+	 * Fields for update data
+	 * @var $field_work_save
+	 */
+	protected $field_work_save = ['skill_name', 'skill_test', 'skill_test_point', 'experience'];
 
 	public function __construct(UserSkill $user_skill)
 	{
@@ -15,47 +28,11 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	}
 
 	/**
-	 * Create or Update data
-	 * @param  mixed $data 
-	 * @param int $user_id
-	 * @return mixed      
+	 * Create Or Update One record
+	 * @param  mixed $data    
+	 * @param  int $user_id 
+	 * @return mixed          
 	 */
-	public function saveFromApi($data, $user_id)
-	{
-		if (count($data) == 1) {
-			$this->saveOneRecord($data, $user_id);
-		}
-		
-		$ids = [];
-		$dataPrepareForCreate = [];
-
-		foreach ($data as $value) {
-			if ($value['id'] != null && $value['id'] != '')
-				$ids[] = $value['id'];
-			else $dataPrepareForCreate[] = $value;
-		}
-
-		if (count($ids) > 0) {
-			$dataPrepareForUpdate = [];
-			foreach ($ids as $id) {
-				array_walk($data, function(&$value) use ($id, &$dataPrepareForUpdate ){
-					if ($id == $value['id']) 
-						$dataPrepareForUpdate[] = $value;
-				});
-			}
-
-			if (count($dataPrepareForUpdate) == 1) 
-				$this->saveOneRecord($dataPrepareForUpdate, $user_skill);
-			else 
-				$this->model->updateMultiRecord($dataPrepareForUpdate, $ids);
-		}
-
-		if (count($dataPrepareForCreate) == 1) 
-			$this->saveOneRecord($dataPrepareForCreate, $user_id);
-		else 
-			$this->model->insertMultiRecord($dataPrepareForCreate, $user_id);
-	}
-
 	public function saveOneRecord($data, $user_id)
 	{
 		$dataPrepareSave = $data[0];

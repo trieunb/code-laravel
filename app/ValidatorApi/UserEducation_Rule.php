@@ -6,11 +6,11 @@ class UserEducation_Rule extends AbstractValidator
 	protected function rules($params)
 	{
 		return [
-			'school_name' => 'required',
-            'start' => 'required',
-            'end' => 'required',
-            'degree' => 'required',
-            'result' => 'required'
+			'school_name' => 'required|min:3',
+            'start' => 'required|integer',
+            'end' => 'required|integer',
+            'degree' => 'required|min:3',
+            'result' => 'required|min:3'
 		];
 	}
 }

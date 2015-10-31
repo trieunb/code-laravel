@@ -5,5 +5,6 @@ use App\Repositories\Repository;
 
 interface TemplateInterface extends Repository
 {
-	
+	// public function saveTemplate($data, $user_id);
+    public function saveFromApi($data, $user_id);
 }
