@@ -154,10 +154,15 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     }
     
-	public function getTemplateFromUser($user_id) {
+    /**
+	 * Get template for user id
+	 * @param  int $id
+	 * @return mixed
+	 */
+	public function getTemplateFromUser($id) {
 		return $this->model
             ->with(['templates'])
-            ->findOrFail($user_id);
+            ->findOrFail($id);
 	}
 
     /**

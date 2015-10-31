@@ -12,7 +12,7 @@ class AddTitleColumEducationTable extends Migration
      */
     public function up()
     {
-         Schema::table('user_educations', function($table) {
+        Schema::table('user_educations', function($table) {
             $table->string('title', 100)->after('user_id');
         });
     }
@@ -26,7 +26,6 @@ class AddTitleColumEducationTable extends Migration
     {
         Schema::table('user_educations', function ($table) {
             $table->dropColumn('title');
-
         });
     }
 }

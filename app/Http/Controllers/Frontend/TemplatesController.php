@@ -20,11 +20,11 @@ class TemplatesController extends Controller
 		$this->template = $template;
     }
 
-    public function detail($id)
+    public function detail($id, Request $request)
     {
 		$template = $this->template->getByid($id);
-		
-		return view()->make('frontend.template.view', compact('template'));
+		return response()->json(['data' => $template->template]);
+		return view()->make('frontend.template.detail', compact('template'));
     }
 
     public function convert(Request $request)
@@ -37,5 +37,18 @@ class TemplatesController extends Controller
 		}
 
 		$this->dispatch(new ConvertFile($convert, $data, public_path('test.zip')));
+	}
+
+	public function edit($id, Request $request)
+	{
+		$template = $this->template->getByid($id);
+		\Storage::delete($template->source);
+		$html = new \Htmldom($template->source_convert);
+
+		foreach ($html->find('body') as $element) {
+			$element->outertext = $request->body; 
+		}
+		
+		$html->save($template->source_convert);
 	}
 }
