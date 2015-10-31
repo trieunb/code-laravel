@@ -1,10 +1,10 @@
 <?php
 namespace App\Repositories\Template;
 
-use App\Repositories\AbstractRepository;
-use App\Repositories\Template\TemplateInterface;
 use App\Models\Template;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
+use App\Repositories\Template\TemplateInterface;
 
 class TemplateEloquent extends AbstractDefineMethodRepository implements TemplateInterface
 {

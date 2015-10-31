@@ -53,6 +53,17 @@ class TemplatesController extends Controller
         
     }
 
+    public function showEditContent($id, $section, Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = $this->template->getDetailTemplate($id, $user->id)->template;
+        $content = array_get($template, $section);
+
+        return $content == null
+            ? response()->json(['status_code' => 400, 'status' => false, 'message' => 'Section not exists'])
+            : view()->make('frontend.template.edit_content', compact('content'));
+    }
+
     public function getAllTemplatesFromMarket(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -77,10 +88,31 @@ class TemplatesController extends Controller
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template->getDetailTemplate($template_id, $user->id)->template
+            'data' => [
+                'id' => $template_id,
+                'content' => $this->template->getDetailTemplate($template_id, $user->id)->template
+            ]
         ]);
-        
+    }
 
+    public function getFull($id, Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = $this->template->getDetailTemplate($id, $user->id);
+        $content = '';
+        foreach ($template->template as $html) {
+            $content .= $html;
+        }
+
+         return response()->json([
+            'status_code' => 200,
+            'status' => true,
+            'data' => [
+                'id' => $id,
+                'title' => $template->title,
+                'content' => $content
+            ]
+        ]);
     }
 
     public function postTemplatesFromMarket(Request $request)

@@ -60,17 +60,19 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Template Route
      */
     get('template', ['uses' => 'TemplatesController@getTemplates']);
+    get('template/edit-content/{id}/{section}', ['uses' => 'TemplatesController@showEditContent']);
     get('template/market', ['uses' => 'TemplatesController@getAllTemplatesFromMarket']);
     get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
-
+    get('template/full/{id}', 'TemplatesController@getFull');
     post('template', ['uses' => 'TemplatesController@postTemplates']);
     post('template/edit/{id}', ['as' => 'frontend.template.post.edit', 'uses' => 'TemplatesController@edit']);
     /**
      * Market Route
      */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
-    get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+    get('market/detail-template/{id}/{name}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
+get('/abcd', 'API\TemplatesController@convertHtmlToImage');
 get('test', function() {
   //  $pdf = App::make('dompdf.wrapper');
      /*\PDF::loadFile(public_path('test1.html'))
