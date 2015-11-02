@@ -55,7 +55,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
-    get('/user/status', ['uses' => 'UsersController@getStatus']);
 
     /**
      * Template Route
@@ -64,8 +63,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/edit-content/{id}/{section}', ['uses' => 'TemplatesController@showEditContent']);
     get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
     get('template/full/{id}', 'TemplatesController@getFull');
+    get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
+
     post('template', ['uses' => 'TemplatesController@postTemplates']);
     post('template/edit/{id}', ['as' => 'frontend.template.post.edit', 'uses' => 'TemplatesController@edit']);
+    post('template/full/edit/{id}', 'TemplatesController@postFullEdit');
     /**
      * Market Route
      */
@@ -73,23 +75,3 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('market/detail-template/{id}/{name}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
 get('/abcd', 'API\TemplatesController@convertHtmlToImage');
-get('test', function() {
-  //  $pdf = App::make('dompdf.wrapper');
-     /*\PDF::loadFile(public_path('test1.html'))
-        ->setPaper('a3')
-        ->setOrientation('landscape')
-        ->save(public_path('test5.pdf'));*/
-    /*$file = File::get(public_path('CURRICULUM VITAE_TanHt.docx'));
-
-    $response = response()->make($file, 200);
-    $response->header('Content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    $response->header('Content-Disposition', ' attachment;filename="' . public_path('CURRICULUM VITAE_TanHt.docx') . '"');
-     return $response;*/
-     var_dump((new \App\Models\User)->newQuery());
-    // return view()->make('frontend.testword');
-    /*$templateProcessor = new TemplateProcessor(public_path('CURRICULUM VITAE_TanHt.docx'));
-    echo "<prev>";
-
-    dd($templateProcessor->cloneBlock('Tan'));
-    echo "/<prev>";*/
-});

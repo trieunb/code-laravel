@@ -16,10 +16,13 @@ class Template extends Model
     
     protected $fillable = [
         'user_id',
+        'cat_id',
         'title',
         'source',
         'source_convert',
-        'template'
+        'template',
+        'template_full',
+        'price'
     ];
     protected $casts = [
         'template' => 'json'
