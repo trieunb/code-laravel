@@ -64,6 +64,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
     get('template/full/{id}', 'TemplatesController@getFull');
     get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
+    get('template/basic', 'TemplatesController@getBasicTemplate');
 
     post('template', ['uses' => 'TemplatesController@postTemplates']);
     post('template/edit/{id}', ['as' => 'frontend.template.post.edit', 'uses' => 'TemplatesController@edit']);

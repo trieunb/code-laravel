@@ -126,4 +126,12 @@ class TemplatesController extends Controller
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
 
+    public function getBasicTemplate(Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = $this->user->getProfile($user->id);
+        return $template;die();
+        // return view()->make('frontend.template.basic_template', compact('template'));
+    }
+
 }

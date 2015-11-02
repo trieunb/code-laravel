@@ -21,13 +21,12 @@
         <div class="fw w_bg"  >
               <h1>Template</h1>
                 <div id="user" contenteditable="true">
-                    {!! $template->template['user'] !!}
+                    {!! $template->template['info'] !!}
                 </div>    
                 <hr>
-                <div class="user_education" contenteditable="true">{!! $template->template['user_education'] !!}</div>    
-                <div class="user_work_histories" contenteditable="true">{!! $template->template['user_work_histories'] !!}</div>    
-                <div class="user_skills" contenteditable="true">{!! $template->template['user_skills'] !!}</div>    
-                <div class="user_skills" contenteditable="true">{!! $template->template['user_skills'] !!}</div>    
+                <div class="user_education" contenteditable="true">{!! $template->template['education'] !!}</div>    
+                <div class="user_work_histories" contenteditable="true">{!! $template->template['work_histories'] !!}</div>    
+                <div class="user_skills" contenteditable="true">{!! $template->template['skills'] !!}</div>    
                 <div class="references" contenteditable="true">{!! $template->template['references'] !!}</div>    
                 <div class="objectives" contenteditable="true">{!! $template->template['objectives'] !!}</div>    
                 <button id="btn-save" type="submit" class="btn btn-primary">Save</button>
