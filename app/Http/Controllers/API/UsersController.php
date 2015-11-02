@@ -232,4 +232,15 @@ class UsersController extends Controller
 		}
 		
 	}
+
+	public function getStatus(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+
+		return response()->json([
+			'status_code' => 200,
+			'status' => true,
+			'status_value' => config('status_user.status_user')
+		]);
+	}
 }

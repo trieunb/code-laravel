@@ -163,7 +163,7 @@ return [
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         // Yangqi\Htmldom\HtmldomServiceProvider::class,
         YOzaz\LaravelSwiftmailer\ServiceProvider::class,
-        RobbieP\CloudConvertLaravel\CloudConvertLaravelServiceProvider::class,  
+        // RobbieP\CloudConvertLaravel\CloudConvertLaravelServiceProvider::class,  
     ],
 
     /*

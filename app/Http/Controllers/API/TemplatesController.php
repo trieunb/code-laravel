@@ -29,7 +29,7 @@ class TemplatesController extends Controller
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->user->getTemplateFromUser($user->id)
+            'data' => $this->user->getTemplateFromUser($user->id)->templates
         ]); 
     }
 
@@ -41,8 +41,11 @@ class TemplatesController extends Controller
             foreach ($request->get('templates') as $value) {
                 $data[] = [
                     'user_id' => $user->id,
+                    'title' => $value['title'],
                     'source' => $value['source'],
                     'source_convert' => $value['source_convert'],
+                    'template' => $value['template'],
+                    'thumbnail' => $value['thumbnail'],
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ];
@@ -64,16 +67,6 @@ class TemplatesController extends Controller
             : view()->make('frontend.template.edit_content', compact('content'));
     }
 
-    public function getAllTemplatesFromMarket(Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => $this->user->getAlltemplatesFromMarketPlace($user->id)
-        ]);
-
-    }
 
     public function getDetailTemplate(Request $request, $template_id)
     {
@@ -90,6 +83,7 @@ class TemplatesController extends Controller
             'status' => true,
             'data' => [
                 'id' => $template_id,
+                'title' => $this->template->getDetailTemplate($template_id, $user->id)->title,
                 'content' => $this->template->getDetailTemplate($template_id, $user->id)->template
             ]
         ]);
@@ -132,15 +126,4 @@ class TemplatesController extends Controller
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
 
-
-    public function postTemplatesFromMarket(Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => $request->get('option_templates')
-        ]);
-    }
 }

@@ -31,6 +31,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->lastname = $data['lastname'];
 		if (isset($data['email']))
 			$user->email = $data['email'];
+        if (isset($data['status']))
+            $user->status = $data['status'];
 		if (isset($data['link_profile']))
 			$user->link_profile = $data['link_profile'];
 		if (isset($data['infomation']))

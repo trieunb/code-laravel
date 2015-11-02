@@ -61,7 +61,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('template', ['uses' => 'TemplatesController@getTemplates']);
     get('template/edit-content/{id}/{section}', ['uses' => 'TemplatesController@showEditContent']);
-    get('template/market', ['uses' => 'TemplatesController@getAllTemplatesFromMarket']);
     get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
     get('template/full/{id}', 'TemplatesController@getFull');
     get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
