@@ -99,10 +99,8 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getDetailTemplate($id, $user->id);
-        $content = '';
-        foreach ($template->template as $html) {
-            $content .= $html;
-        }
+
+        $content = $template->template_full;
 
          return response()->json([
             'status_code' => 200,
@@ -115,9 +113,30 @@ class TemplatesController extends Controller
         ]);
     }
 
+    public function getFullEdit($id, Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = $this->template->getDetailTemplate($id, $user->id);
+        $content = $template->template_full;
+
+        return view()->make('frontend.template.full', compact('content'));
+    }
+
+    public function postFullEdit($id, Request $request)
+    {
+        $template = $this->template->getById($id);
+        $template->template_full = $request->get('content');
+
+        return $template->save()
+            ? response()->json(['status_code' => 200, 'status' => true, 'content' => $request->get('content')])
+            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
+    }
+
+
     public function postTemplatesFromMarket(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+
         return response()->json([
             'status_code' => 200,
             'status' => true,

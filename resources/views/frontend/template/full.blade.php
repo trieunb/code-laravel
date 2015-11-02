@@ -7,8 +7,14 @@
 	<link rel="stylesheet" href="">
 </head>
 <body>
-	<div contenteditable="true">{!! $content !!}</div>    
-  
+	<div id="editor" contenteditable="true">{!! $content !!}</div>    
 	<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
+	<script>
+		$(document).ready(function() {
+			$('#editor img').click(function() {
+				alert('abcd');
+			});
+		});
+	</script>
 </body>
 </html>
