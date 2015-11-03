@@ -38,7 +38,7 @@ header .navbar .navbar-collapse .navbar-right .dropdown > a {
   color: #59525a;
 }
 body {
-  background: #f3f3f3;
+  background: #ffffff;
   font-family: OpenSans;
 }
 main {
@@ -491,4 +491,39 @@ body button:active,
 body button:focus,
 body button:hover {
   outline: none;
+}
+/*-------------- TEMPLATE BASIC ------------*/
+.image-avatar { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+.text-info { 
+   position: absolute; 
+   bottom: 30px; 
+   width: 100%; 
+}
+
+.info {
+  background: #9b8578;
+  color: white;
+  font-weight: 600;
+}
+.box {
+  background: #f3f3f3;
+  padding: 15px;
+  border-top: 3px solid #D8D8D8;
+  border-bottom: 3px solid #D8D8D8;
+}
+.header-title {
+  color: red;
+  font-weight: 600;
+  padding-left: 15px;
+}
+p.full-name {
+  font-size: 30px;
+  font-weight: 600;
+}
+#ex1Slider .slider-selection {
+  background: #BABABA;
 }
