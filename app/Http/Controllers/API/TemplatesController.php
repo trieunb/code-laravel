@@ -200,4 +200,12 @@ class TemplatesController extends Controller
         $template = $this->template->getById($id);
 
     }
+
+    public function view($id)
+    {
+        $template = $this->template->getById($id);
+        $template_full = str_replace('contenteditable="true"', '', $template->template_full);
+        
+        return view()->make('api.template.index', compact('template_full'));
+    }
 }
