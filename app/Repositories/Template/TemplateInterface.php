@@ -21,4 +21,6 @@ interface TemplateInterface extends Repository
      * @return mixed          
      */
     public function getDetailTemplate($id, $user_id);
+
+    public function getBasicTemplate($user_id);
 }
