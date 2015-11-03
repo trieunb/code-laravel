@@ -56,18 +56,6 @@ class TemplatesController extends Controller
         
     }
 
-    public function showEditContent($id, $section, Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->getDetailTemplate($id, $user->id)->template;
-        $content = array_get($template, $section);
-
-        return $content == null
-            ? response()->json(['status_code' => 400, 'status' => false, 'message' => 'Section not exists'])
-            : view()->make('frontend.template.edit_content', compact('content'));
-    }
-
-
     public function getDetailTemplate(Request $request, $template_id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -122,7 +110,7 @@ class TemplatesController extends Controller
         $template->template_full = $request->get('content');
 
         return $template->save()
-            ? response()->json(['status_code' => 200, 'status' => true, 'content' => $request->get('content')])
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
 
@@ -192,5 +180,24 @@ class TemplatesController extends Controller
         } 
     }
 
+    public function create()
+    {
+        return view()->make('api.template.create');
+    }
 
+    public function postCreate(Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template_full = preg_replace('/\t|\n+/', '', $request->get('template_full'));
+
+        return $this->template->createTemplate($user->id, $request->get('title'), $request->get('price'), $template_full)
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Create template successfully'])
+            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
+    }
+
+    public function attach($id, Request $request)
+    {
+        $template = $this->template->getById($id);
+
+    }
 }

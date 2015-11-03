@@ -8,7 +8,7 @@ header .navbar {
   padding-bottom: 10px;
 }
 header .navbar .logo {
-  background: url("../images/logo.jpg") no-repeat;
+  background: url("http://localhost/resume-builder-html/images/logo.jpg") no-repeat;
   width: 125px;
   height: 100px;
   display: inline-block;
@@ -195,7 +195,7 @@ main .wrapper .box-item .box-title span {
   width: 35px;
   height: 35px;
   position: absolute;
-  background: url("../images/info.png") no-repeat;
+  background: url("http://localhost/resume-builder-html/images/info.png") no-repeat;
   background-size: 100% 100%;
   right: 0;
   top: 0;
@@ -354,7 +354,7 @@ footer .copyright div {
 }
 .box-premium ul li {
   font-size: 107%;
-  background: url("../images/tick.png") no-repeat;
+  background: url("http://localhost/resume-builder-html/images/tick.png") no-repeat;
   background-position: left center;
   padding-left: 30px;
   font-weight: 500;
@@ -400,7 +400,7 @@ footer .copyright div {
   padding: 30px 30px 20px 30px;
   border-top: 1px solid #aaaaaa;
   margin-top: 20px;
-  background: #FFFFFF url("../images/hire.png") no-repeat;
+  background: #FFFFFF url("http://localhost/resume-builder-html/images/hire.png") no-repeat;
   background-position: right bottom;
 }
 .box-hire h3 {
@@ -474,6 +474,9 @@ footer .copyright div {
   display: table;
   clear: both;
 }
+.text-red {
+  color: #cc0000;
+}
 .av {
   display: inline-block;
 }
@@ -492,7 +495,150 @@ body button:focus,
 body button:hover {
   outline: none;
 }
-/*-------------- TEMPLATE BASIC ------------*/
+<<<<<<< HEAD
+<<<<<<< HEAD
+.btn-trans.fill.edit {
+  background: #CC0000;
+  border-radius: 5px;
+  padding: 15px;
+  color: #FFFFFF;
+  width: 100%;
+  margin: 20px 0px;
+}
+@media screen and (max-width: 390px) {
+  .mobile .box-title .col-md-6 .btn-trans.fill {
+    margin-left: 105px;
+    margin-top: 10px;
+  }
+}
+@media screen and (max-width: 355px) {
+  .mobile .box-title .col-md-6 .collapsed.start,
+  .mobile .box-title .col-md-6 .btn-trans.fill {
+    margin-left: 105px;
+    margin-top: 10px;
+  }
+}
+.mobile .box-title {
+  padding-top: 20px;
+  background: #FFFFFF;
+  border-top: 1px solid #aaaaaa;
+}
+.mobile .box-title .col-md-6 {
+  text-align: left;
+}
+.mobile .box-title .col-md-6 .collapsed.end {
+  display: none;
+}
+.mobile .box-title .col-md-6 .collapsed.start {
+  display: inline-block;
+}
+.mobile .box-title .col-md-6 .start {
+  display: none;
+}
+.mobile .box-title .col-md-6 .btn-trans.fill {
+  background: #cc0000;
+  color: #FFFFFF;
+}
+.mobile .box-title .col-md-6.edit {
+  padding: 10px 0px 20px 15px;
+  border-bottom: 1px solid #aaaaaa;
+}
+.mobile .box-title .fw .content .title {
+  padding: 20px 0px;
+}
+.mobile .box-title .fw .content .control {
+  padding: 20px 0px;
+  text-align: center;
+  border-top: 1px solid #aaaaaa;
+}
+.mobile .box-title .fw .content .control > ul {
+  position: relative;
+}
+.mobile .box-title .fw .content .control li {
+  padding: 0px;
+}
+.mobile .box-title .fw .content .control li .arrow {
+  display: none;
+  color: #333333;
+}
+.mobile .box-title .fw .content .control li > a.circle {
+  background: #f4f4f4;
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border-radius: 50%;
+  line-height: 50px;
+  margin: 0px 5px;
+  text-align: center;
+  color: #bfbfbf;
+  font-size: 151%;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu {
+  border-radius: 0px;
+  max-width: 50vw;
+  border: 2px solid #84c414;
+  background: #84c414;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu .top {
+  padding: 10px;
+  position: relative;
+  color: #FFFFFF;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu .top .close {
+  opacity: 1;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #FFFFFF;
+  font-size: 114%;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu .list {
+  background: #f3f3f3;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu .list li {
+  position: relative;
+  border-bottom: 1px solid #aaaaaa;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu .list li a {
+  padding: 10px;
+  display: block;
+  color: #333333;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu .list li:last-child {
+  border: none;
+}
+.mobile .box-title .fw .content .control li .dropdown-menu .dropdown-menu {
+  left: 100%;
+  top: 0;
+  margin-top: 0;
+  padding: 0px;
+}
+.mobile .box-title .fw .content .control li.open > a.circle {
+  background: #84c414;
+  color: #FFFFFF;
+}
+.mobile .box-title .fw .content .control li.open li.active .arrow {
+  display: block;
+}
+.mobile .box-title .fw .content .control li.open li.active > a {
+  color: #84c414;
+  background: #FFFFFF;
+}
+ #myPanel {
+    width: 100% !important;
+    position: fixed;
+    top: 0;
+  }
+@media screen and (max-width: 440px) {
+    #myPanel {
+     
+    }
+    #editor {
+      margin-top: 60px;
+      margin-left: 35px;
+    }
+}
+
 .image-avatar { 
    position: relative; 
    width: 100%; /* for IE 6 */
@@ -527,3 +673,4 @@ p.full-name {
 #ex1Slider .slider-selection {
   background: #BABABA;
 }
+
