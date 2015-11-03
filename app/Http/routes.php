@@ -73,7 +73,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/basic', 'TemplatesController@getBasicTemplate');
 
     post('template', ['uses' => 'TemplatesController@postTemplates']);
-    post('template/edit/{id}', ['as' => 'frontend.template.post.edit', 'uses' => 'TemplatesController@edit']);
+    post('template/edit/{id}', ['uses' => 'TemplatesController@postEdit']);
     post('template/full/edit/{id}', 'TemplatesController@postFullEdit');
     /**
      * Market Route

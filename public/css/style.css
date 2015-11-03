@@ -495,6 +495,7 @@ body button:focus,
 body button:hover {
   outline: none;
 }
+<<<<<<< HEAD
 .btn-trans.fill.edit {
   background: #CC0000;
   border-radius: 5px;
@@ -621,4 +622,17 @@ body button:hover {
 .mobile .box-title .fw .content .control li.open li.active > a {
   color: #84c414;
   background: #FFFFFF;
+ #myPanel {
+    width: 100% !important;
+    position: fixed;
+    top: 0;
+  }
+@media screen and (max-width: 440px) {
+  #myPanel {
+   
+  }
+  #editor {
+    margin-top: 60px;
+    margin-left: 35px;
+  }
 }

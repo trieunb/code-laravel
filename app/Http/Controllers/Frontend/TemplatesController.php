@@ -16,7 +16,7 @@ class TemplatesController extends Controller
 
     public function __construct(TemplateInterface $template)
     {
-    	$this->middleware('jwt.auth', ['except' => ['create', 'postCreate']]);
+    	$this->middleware('jwt.auth', ['except' => ['create']]);
 
 		$this->template = $template;
     }
@@ -53,15 +53,17 @@ class TemplatesController extends Controller
 		$html->save($template->source_convert);
 	}
 
-	public function create()
+	public function create(Request $request)
 	{
-		return view()->make('frontend.template.create');
+		$token = $request->get('token');
+
+		return view()->make('frontend.template.create', compact('token'));
 	}
 
 	public function postCreate(Request $request)
 	{
-		$token = \JWTAuth::fromUser($request);
-		$user = \JWTAuth::toUser($token);
-		dd($token, \JWTAuth::getToken(), $user);
+		$user = \JWTAuth::toUser($request->get('token'));
+
+		
 	}
 }

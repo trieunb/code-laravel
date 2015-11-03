@@ -56,18 +56,6 @@ class TemplatesController extends Controller
         
     }
 
-    public function showEditContent($id, $section, Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->getDetailTemplate($id, $user->id)->template;
-        $content = array_get($template, $section);
-
-        return $content == null
-            ? response()->json(['status_code' => 400, 'status' => false, 'message' => 'Section not exists'])
-            : view()->make('frontend.template.edit_content', compact('content'));
-    }
-
-
     public function getDetailTemplate(Request $request, $template_id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -87,6 +75,29 @@ class TemplatesController extends Controller
                 'content' => $this->template->getDetailTemplate($template_id, $user->id)->template
             ]
         ]);
+    }
+
+    public function showEditContent($id, $section, Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = $this->template->getDetailTemplate($id, $user->id)->template;
+        $content = array_get($template, $section);
+
+        return $content == null
+            ? response()->json(['status_code' => 400, 'status' => false, 'message' => 'Section not exists'])
+            : view()->make('frontend.template.edit_content', compact('content'));
+    }
+
+    public function postEdit($id, Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = $this->template->getDetailTemplate($id, $user->id);
+        $data = $template->template;
+        array_set($data, $request->get('section'), $request->get('content'));
+        $template->template = $data;
+        return $template->save()
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
+            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
 
     public function getFull($id, Request $request)
@@ -122,7 +133,7 @@ class TemplatesController extends Controller
         $template->template_full = $request->get('content');
 
         return $template->save()
-            ? response()->json(['status_code' => 200, 'status' => true, 'content' => $request->get('content')])
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
 
