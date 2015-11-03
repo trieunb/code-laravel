@@ -60,10 +60,11 @@ class TemplatesController extends Controller
 		return view()->make('frontend.template.create', compact('token'));
 	}
 
-	public function postCreate(Request $request)
+	public function postCreate(CreateTemplateRequest $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
-
-		
+		return $this->template->createTemplate($user->id, $request->get('title'), $request->get('price'), $request->get('template_full')) 
+			? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Create template successfully'])
+			: response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
 	}
 }

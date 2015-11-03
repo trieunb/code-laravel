@@ -1,12 +1,15 @@
-@extends('frontend.app')
-
-@section('title')
-Create Template
-@endsection
-
-@section('content')
-
-<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+<body>
+	<div class="container">
 	@include('partial.notifications')
 	<div class="row">
 		<form action="{{ route('frontend.template.post.create') }}" id="create-form" method="POST">
@@ -82,19 +85,13 @@ Create Template
 					</div>
 				</div>
 			</div>
-			<br>
-			<button type="submit" class="btn btn-primary">Create</button>
 		</form>
 	</div>
 </div>
-@stop
-
-@section('script_files')
-<script src="{{  asset('js/nicEdit.js') }}"></script>
-@stop
-
-@section('scripts')
-<script>
+	<script src="{{ asset('js/jquery-2.1.4.js') }}"></script>
+	<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+	<script src="{{  asset('js/nicEdit.js') }}"></script>
+	<script>
 	bkLib.onDomLoaded(function() {
 		var myNicEditor = new nicEditor();
 		myNicEditor.setPanel('myPanel');
@@ -102,27 +99,6 @@ Create Template
 		myNicEditor.addInstance('content');
 		myNicEditor.addInstance('info');
 	});
-	$(document).ready(function() {
-		$('#create-form').submit(function(e) {
-			e.preventDefault();
-			var template = '';
-			template += $('#content_editor').html();
-			// template = template.replace(/\t|\n+/g, '');
-
-			$.ajax({
-				url: $(this).attr('action'),
-				type: 'POST',
-				data: {
-					title : $('#title').val(),
-					price : $('#price').val(),
-					template_full : template,
-					token : '{{ $token }}',
-				},
-				success: function(result) {
-					console.log(result);
-				}
-			});
-		});
-	});
 </script>
-@stop
+</body>
+</html>

@@ -623,6 +623,7 @@ body button:hover {
 .mobile .box-title .fw .content .control li.open li.active > a {
   color: #84c414;
   background: #FFFFFF;
+}
  #myPanel {
     width: 100% !important;
     position: fixed;

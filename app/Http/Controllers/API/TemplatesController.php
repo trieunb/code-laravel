@@ -203,5 +203,24 @@ class TemplatesController extends Controller
         } 
     }
 
+    public function create()
+    {
+        return view()->make('api.template.create');
+    }
 
+    public function postCreate(Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template_full = preg_replace('/\t|\n+/', '', $request->get('template_full'));
+
+        return $this->template->createTemplate($user->id, $request->get('title'), $request->get('price'), $template_full)
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Create template successfully'])
+            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
+    }
+
+    public function attach($id, Request $request)
+    {
+        $template = $this->template->getById($id);
+        
+    }
 }
