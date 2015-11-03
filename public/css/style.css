@@ -492,3 +492,17 @@ body button:focus,
 body button:hover {
   outline: none;
 }
+ #myPanel {
+    width: 100% !important;
+    position: fixed;
+    top: 0;
+  }
+@media screen and (max-width: 440px) {
+  #myPanel {
+   
+  }
+  #editor {
+  margin-top: 60px;
+  margin-left: 35px;
+}
+}
