@@ -66,6 +66,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
     get('template/basic', 'TemplatesController@getBasicTemplate');
 
+    post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', ['uses' => 'TemplatesController@postTemplates']);
     post('template/edit/{id}', ['as' => 'frontend.template.post.edit', 'uses' => 'TemplatesController@edit']);
     post('template/full/edit/{id}', 'TemplatesController@postFullEdit');
@@ -73,6 +74,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Market Route
      */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
-    get('market/detail-template/{id}/{name}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+    get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
 get('/abcd', 'API\TemplatesController@convertHtmlToImage');
