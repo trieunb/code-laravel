@@ -67,7 +67,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('template', ['uses' => 'TemplatesController@getTemplates']);
     get('template/create', 'TemplatesController@create');
-    get('template/edit-content/{id}/{section}', ['uses' => 'TemplatesController@showEditContent']);
+ 
     get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
     get('template/full/{id}', 'TemplatesController@getFull');
     get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
@@ -75,7 +75,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', ['uses' => 'TemplatesController@postTemplates']);
-    post('template/edit/{id}', ['uses' => 'TemplatesController@postEdit']);
     post('template/full/edit/{id}', 'TemplatesController@postFullEdit');
     post('template/create', 'TemplatesController@postCreate');
     post('template/{id}/attach', 'TemplatesController@attach');
