@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Helper\ZamzarApi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\CreateTemplateRequest;
 use App\Jobs\ConvertFile;
 use App\Repositories\Template\TemplateInterface;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class TemplatesController extends Controller
 
     public function __construct(TemplateInterface $template)
     {
-    	$this->middleware('jwt.auth');
+    	$this->middleware('jwt.auth', ['except' => ['create', 'postCreate']]);
 
 		$this->template = $template;
     }
@@ -50,5 +51,17 @@ class TemplatesController extends Controller
 		}
 		
 		$html->save($template->source_convert);
+	}
+
+	public function create()
+	{
+		return view()->make('frontend.template.create');
+	}
+
+	public function postCreate(Request $request)
+	{
+		$token = \JWTAuth::fromUser($request);
+		$user = \JWTAuth::toUser($token);
+		dd($token, \JWTAuth::getToken(), $user);
 	}
 }

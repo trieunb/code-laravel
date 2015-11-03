@@ -32,8 +32,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
 
 
 Route::group(['namespace' => 'Frontend'], function() {
-    get('/template/{id}', ['uses' => 'TemplatesController@detail']);
-    get('/template/convert', ['uses' => 'TemplatesController@convert']);
+    /**
+     * Template Route
+     */
+    get('template/create', ['as' => 'frontend.template.get.create', 'uses' => 'TemplatesController@create']);
+    get('template/{id}', ['uses' => 'TemplatesController@detail']);
+    get('template/convert', ['uses' => 'TemplatesController@convert']);
+
+    post('template/create', ['as' => 'frontend.template.post.create', 'uses' => 'TemplatesController@postCreate']);
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
