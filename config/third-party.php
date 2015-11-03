@@ -3,6 +3,6 @@
 return [
 	'zamzar' => [
 		'url' => 'https://sandbox.zamzar.com/v1/',
-		'api' => '4c351abedbbf53f117bed9ce3cf2381091c8f255'
+		'api' => 'eb9ff6935b5ae75109d603295e6f0ec55c987fe0'
 	]
 ];

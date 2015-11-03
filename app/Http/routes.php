@@ -1,6 +1,11 @@
 <?php
 
+
+use Barryvdh\DomPDF\PDF;
+use Illuminate\Support\Facades\File;
 use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\TemplateProcessor;
+use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,40 +37,21 @@ Route::group(['namespace' => 'Frontend'], function() {
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
+    /**
+     * Authenticate Route
+     */
+    get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticateController@getLogin']);
+    get('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticateController@getRegister']);
 
-    /*Route::controller('auth', 'AuthenticateController', [
-      'getLogin' => 'auth.login',
-      'getRegister'   => 'auth.register',
-      'postLogin' => 'auth.login',
-      'postLoginWithLinkedin' => 'auth.linkedin',
-    ]);*/
-    get('auth/login', [
-      'as' => 'auth.login', 
-      'uses' => 'AuthenticateController@getLogin'
-    ]);
-    get('auth/register', [
-      'as' => 'auth.register', 
-      'uses' => 'AuthenticateController@getRegister'
-    ]);
-    post('auth/register', [
-      'as' => 'auth.register', 
-      'uses' => 'AuthenticateController@postRegister'
-    ]);
-    post('auth/login', [
-      'as' => 'auth.login', 
-      'uses' => 'AuthenticateController@postLogin'
-    ]);
+    post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticateController@postRegister']);
+    post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticateController@postLogin']);
     post('auth/reset-password', ['uses' => 'AuthenticateController@postResetPassword']);
-    Route::any('auth/login-with-linkedin', 
-      ['as' => 'auth.linkedin', 
-      'uses' => 'AuthenticateController@postLoginWithLinkedin']);
+    Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticateController@postLoginWithLinkedin']);
 
     /**
      * User Route
      */
-
     get('/user/profile', 'UsersController@getProfile');
-
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
@@ -73,15 +59,20 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Template Route
      */
-    
-    get('template', ['uses' => 'TemplateController@getTemplates']);
-    get('template/market', ['uses' => 'TemplateController@getAllTemplatesFromMarket']);
-    get('template/{id}', ['uses' => 'TemplateController@getDetailTemplate']);
-    post('template', ['uses' => 'TemplateController@postTemplates']);
+    get('template', ['uses' => 'TemplatesController@getTemplates']);
+    get('template/edit-content/{id}/{section}', ['uses' => 'TemplatesController@showEditContent']);
+    get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
+    get('template/full/{id}', 'TemplatesController@getFull');
+    get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
+    get('template/basic', 'TemplatesController@getBasicTemplate');
 
+    post('template', ['uses' => 'TemplatesController@postTemplates']);
+    post('template/edit/{id}', ['as' => 'frontend.template.post.edit', 'uses' => 'TemplatesController@edit']);
+    post('template/full/edit/{id}', 'TemplatesController@postFullEdit');
     /**
      * Market Route
      */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
-    get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+    get('market/detail-template/{id}/{name}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
+get('/abcd', 'API\TemplatesController@convertHtmlToImage');

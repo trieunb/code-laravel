@@ -43,10 +43,22 @@ class MarketPlaceController extends Controller
                 'message' => 'token provider'
             ], 500);
         }
+
         return response()->json([
             'status_code' => 200,
             'status' => true,
             'data' => $this->template_market->getDetailTemplateMarket($template_id)
         ]); 
+    }
+
+    public function postTemplatesFromMarket(Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+
+        return response()->json([
+            'status_code' => 200,
+            'status' => true,
+            'data' => $request->get('option_templates')
+        ]);
     }
 }

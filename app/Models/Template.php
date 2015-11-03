@@ -16,8 +16,16 @@ class Template extends Model
     
     protected $fillable = [
         'user_id',
+        'cat_id',
+        'title',
         'source',
-        'source_convert'
+        'source_convert',
+        'template',
+        'template_full',
+        'price'
+    ];
+    protected $casts = [
+        'template' => 'json'
     ];
     /**
      * Teamplate belongs to user.
@@ -35,6 +43,7 @@ class Template extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_templates[] = [
                 'user_id' => $user_id,
+                'title' => $value['title'],
                 'source' => $value['source'],
                 'source_convert' => $value['source_convert']
             ];

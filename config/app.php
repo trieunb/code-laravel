@@ -163,6 +163,7 @@ return [
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
         // Yangqi\Htmldom\HtmldomServiceProvider::class,
         YOzaz\LaravelSwiftmailer\ServiceProvider::class,
+        // RobbieP\CloudConvertLaravel\CloudConvertLaravelServiceProvider::class,  
     ],
 
     /*
@@ -220,6 +221,7 @@ return [
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
         'Htmldom'   => Yangqi\Htmldom\Htmldom::class,
         'Mail'      =>  YOzaz\LaravelSwiftmailer\Facade::class,
+        'PDF'       => Barryvdh\DomPDF\Facade::class
     ],
 
 ];

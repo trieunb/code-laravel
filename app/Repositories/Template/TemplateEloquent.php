@@ -1,12 +1,12 @@
 <?php
 namespace App\Repositories\Template;
 
-use App\Repositories\AbstractRepository;
-use App\Repositories\Template\TemplateInterface;
 use App\Models\Template;
+use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
+use App\Repositories\Template\TemplateInterface;
 
-class TemplateEloquent extends AbstractRepository implements TemplateInterface
+class TemplateEloquent extends AbstractDefineMethodRepository implements TemplateInterface
 {
     use SaveFromApiTrait;
 
@@ -16,7 +16,7 @@ class TemplateEloquent extends AbstractRepository implements TemplateInterface
      * Fields for update data
      * @var $field_work_save
      */
-    protected $field_work_save = ['user_id', 'name', 'template'];
+    protected $field_work_save = ['user_id', 'title', 'source', 'source_convert', 'template'];
 
 	public function __construct(Template $template)
 	{
@@ -61,9 +61,28 @@ class TemplateEloquent extends AbstractRepository implements TemplateInterface
         $user_template = $dataPrepareSave['id'] ? $this->getById($dataPrepareSave['id']) : new UserEducation;
         if ($dataPrepareSave['id'] == null) $user_template->user_id = $user_id;
 
-        $user_template->name = $dataPrepareSave['name'];
+        $user_template->title = $dataPrepareSave['title'];
+        $user_template->source = $dataPrepareSave['source'];
+        $user_template->source_convert = $dataPrepareSave['source_convert'];
         $user_template->template = $dataPrepareSave['template'];
 
         return $user_template->save();
     }
+
+     /**
+     * Get template for user
+     * @param  int $id      
+     * @param  int $user_id 
+     * @return mixed          
+     */
+    public function getDetailTemplate($id, $user_id)
+    {
+        return $this->model->where('user_id', '=', $user_id)->findOrFail($id);
+    }
+
+    public function getBasicTemplate($user_id)
+    {
+        return $this->getById($user_id);
+    }
+
 }
