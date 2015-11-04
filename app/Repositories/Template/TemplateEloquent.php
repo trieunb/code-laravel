@@ -16,7 +16,8 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * Fields for update data
      * @var $field_work_save
      */
-    protected $field_work_save = ['user_id', 'title', 'source', 'source_convert', 'template'];
+    protected $field_work_save = ['user_id', 'cat_id', 'title', 'content',
+     'price', 'thumbnail', 'type', 'status'];
 
 	public function __construct(Template $template)
 	{
@@ -61,10 +62,13 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $user_template = $dataPrepareSave['id'] ? $this->getById($dataPrepareSave['id']) : new UserEducation;
         if ($dataPrepareSave['id'] == null) $user_template->user_id = $user_id;
 
+        $user_template->cat_id = $dataPrepareSave['cat_id'];
         $user_template->title = $dataPrepareSave['title'];
-        $user_template->source = $dataPrepareSave['source'];
-        $user_template->source_convert = $dataPrepareSave['source_convert'];
-        $user_template->template = $dataPrepareSave['template'];
+        $user_template->content = $dataPrepareSave['content'];
+        $user_template->thumbnail = $dataPrepareSave['thumbnail'];
+        $user_template->price = $dataPrepareSave['price'];
+        $user_template->type = $dataPrepareSave['type'];
+        $user_template->status = $dataPrepareSave['status'];
 
         return $user_template->save();
     }
@@ -98,10 +102,10 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->user_id = $user_id;
         $template->title = $request->get('title');
         $template->price = $request->get('price');
-        $template->template_full = $request->get('template_full');
+        $template->content = preg_replace('/\t|\n+/', '', $request->get('content'));
         $template->type = $request->get('type');
 
-        return $template->save();
+        return $template->save() ? $template : null;
     }
 
       /**
@@ -113,7 +117,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     public function editTemplate($id, $content)
     {
         $template = $this->getById($id);
-        $template->template_full = $content;
+        $template->content = $content;
 
         return $template->save();
     }

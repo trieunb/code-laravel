@@ -115,7 +115,7 @@ Create Template
 				data: {
 					title : $('#title').val(),
 					price : $('#price').val(),
-					template_full : template,
+					content : template,
 					token : '{{ $token }}',
 				},
 				success: function(result) {
