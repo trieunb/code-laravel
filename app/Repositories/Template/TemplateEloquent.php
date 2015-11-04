@@ -103,4 +103,18 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
         return $template->save();
     }
+
+      /**
+     * Edit template
+     * @param  int $id      primary key
+     * @param  string $content 
+     * @return mixed          
+     */
+    public function editTemplate($id, $content)
+    {
+        $template = $this->getById($id);
+        $template->template_full = $content;
+
+        return $template->save();
+    }
 }

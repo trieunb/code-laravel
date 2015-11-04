@@ -29,6 +29,7 @@ class TemplatesController extends Controller
     public function getTemplates(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+        
         return response()->json([
             'status_code' => 200,
             'status' => true,
@@ -62,20 +63,15 @@ class TemplatesController extends Controller
     public function getDetailTemplate(Request $request, $template_id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        
-        if (is_null($template_id)) {
-            return response()->json([
-                'status_code' => 404,
-                'status' => false,
-            ]);
-        }
+        $template = $this->template->getDetailTemplate($template_id, $user->id);
+
         return response()->json([
             'status_code' => 200,
             'status' => true,
             'data' => [
                 'id' => $template_id,
-                'title' => $this->template->getDetailTemplate($template_id, $user->id)->title,
-                'content' => $this->template->getDetailTemplate($template_id, $user->id)->template
+                'title' => $tempalte->title,
+                'content' => $template->template
             ]
         ]);
     }
@@ -87,14 +83,10 @@ class TemplatesController extends Controller
 
         $content = $template->template_full;
 
-         return response()->json([
+        return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => [
-                'id' => $id,
-                'title' => $template->title,
-                'content' => $content
-            ]
+            'data' => ['id' => $id,'title' => $template->title,'content' => $content]
         ]);
     }
 
@@ -109,10 +101,7 @@ class TemplatesController extends Controller
 
     public function postFullEdit($id, Request $request)
     {
-        $template = $this->template->getById($id);
-        $template->template_full = $request->get('content');
-
-        return $template->save()
+        return$this->template->getById($id, $request->get('content'))
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
@@ -121,7 +110,7 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->user->getProfile($user->id);
-        // return $template;
+
         return view()->make('frontend.template.basic_template', compact('template'));
     }
 
