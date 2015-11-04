@@ -72,12 +72,13 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/full/{id}', 'TemplatesController@getFull');
     get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
     get('template/basic', 'TemplatesController@getBasicTemplate');
-
+    get('template/{id}/attach', 'TemplatesController@attach');
+    
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', ['uses' => 'TemplatesController@postTemplates']);
     post('template/full/edit/{id}', 'TemplatesController@postFullEdit');
     post('template/create', 'TemplatesController@postCreate');
-    post('template/{id}/attach', 'TemplatesController@attach');
+    
     /**
      * Market Route
      */
