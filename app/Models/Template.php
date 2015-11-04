@@ -12,8 +12,15 @@ class Template extends Model
 
     use UpdateColumnWithClauseTrait;
 
+    /**
+     * Table name
+     * @var $table
+     */
     protected $table = "templates";
     
+    protected $casts = [
+    	'image' => 'json'
+    ];
 
     /**
      * Teamplate belongs to user.
@@ -34,7 +41,7 @@ class Template extends Model
                 'cat_id' => $user_id,
                 'title' => $value['title'],
                 'content' => $value['content'],
-                'thumbnail' => $value['thumbnail'],
+                'image' => $value['image'],
                 'price' => $value['price'],
                 'status' => $value['status'],
                 'type' => $value['type'],

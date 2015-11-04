@@ -17,7 +17,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * @var $field_work_save
      */
     protected $field_work_save = ['user_id', 'cat_id', 'title', 'content',
-     'price', 'thumbnail', 'type', 'status'];
+     'price', 'image', 'type', 'status'];
 
 	public function __construct(Template $template)
 	{
@@ -65,7 +65,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $user_template->cat_id = $dataPrepareSave['cat_id'];
         $user_template->title = $dataPrepareSave['title'];
         $user_template->content = $dataPrepareSave['content'];
-        $user_template->thumbnail = $dataPrepareSave['thumbnail'];
+        $user_template->image = $dataPrepareSave['image'];
         $user_template->price = $dataPrepareSave['price'];
         $user_template->type = $dataPrepareSave['type'];
         $user_template->status = $dataPrepareSave['status'];
