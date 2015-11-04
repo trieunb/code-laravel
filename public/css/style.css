@@ -495,10 +495,10 @@ body button:hover {
 /*-------------- TEMPLATE BASIC ------------*/
 .image-avatar { 
    position: relative; 
-   width: 100%; /* for IE 6 */
+   width: 100%; 
 }
 
-.text-info { 
+.text-infomation { 
    position: absolute; 
    bottom: 30px; 
    width: 100%; 
