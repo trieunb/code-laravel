@@ -24,8 +24,8 @@
 					@else
 					<img  id="image" src="{{ asset('images/avatar.jpg') }}">
 					@endif
-					<div class="text-info text-center">
-						<p class=full-name>Fullname:</p>
+					<div class="">
+						<p class="full-name">Fullname:</p>
 						<span>Link Profile:</span><br>
 						<span>Email:</span>
 					</div>

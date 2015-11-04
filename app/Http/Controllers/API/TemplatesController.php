@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\sendMailAttachFile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Template;
-use Illuminate\Http\Request;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
-use App\Repositories\User\UserInterface;
 use App\Repositories\Template\TemplateInterface;
+use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class TemplatesController extends Controller
 {
@@ -19,6 +20,8 @@ class TemplatesController extends Controller
 
     public function __construct(UserInterface $user, TemplateInterface $template)
     {
+        $this->middleware('jwt.auth');
+
         $this->user = $user;
         $this->template = $template;
     }
@@ -197,11 +200,21 @@ class TemplatesController extends Controller
 
     public function attach($id, Request $request)
     {
-        $template = $this->template->getById($id);
+        $user = \JWTAuth::toUser($request->get('token'));
 
+        $template = $this->template->getById($id);
+        $template_full = $template->template_full;
+        $url = $request->url();
+        
+        \PDF::loadView('api.template.index', compact('template_full', 'url'))
+            ->save(public_path('pdf/'.$template->title.'.pdf'));
+
+        event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->title.'.pdf')));
+
+        return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
     }
 
-    public function view($id)
+    public function view($id, Request $request)
     {
         $template = $this->template->getById($id);
         $template_full = str_replace('contenteditable="true"', '', $template->template_full);
