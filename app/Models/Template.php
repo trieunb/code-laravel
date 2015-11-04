@@ -22,6 +22,7 @@ class Template extends Model
         'source_convert',
         'template',
         'template_full',
+        'template_basic',
         'price'
     ];
     protected $casts = [

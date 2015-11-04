@@ -45,7 +45,7 @@
                         <span>Education</span>
                     </div>
                     <div class="box">
-                        <label>School Name:</label>
+                        <label>School Name: </label>
                         @foreach($template->user_educations as $education)
                         <span>
                             {!! $education['school_name'] !!}  
@@ -58,7 +58,7 @@
                         <span>Work Experience</span>
                     </div>
                     <div class="box">
-                        <label>Company:</label>
+                        <label>Company: </label>
                         @foreach($template->user_work_histories as $work)
                         <span>
                             {!! $work['company'] !!}

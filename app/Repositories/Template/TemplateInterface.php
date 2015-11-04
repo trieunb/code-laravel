@@ -23,4 +23,14 @@ interface TemplateInterface extends Repository
     public function getDetailTemplate($id, $user_id);
 
     public function getBasicTemplate($user_id);
+
+    /**
+     * Create template
+     * @param  int $user_id  
+     * @param  string $title    
+     * @param  int $price    
+     * @param  string $template_full 
+     * @return mixed           
+     */
+    public function createTemplate($user_id, $title, $price, $template_full);
 }

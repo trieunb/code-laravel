@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Helper\ZamzarApi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\CreateTemplateRequest;
 use App\Jobs\ConvertFile;
 use App\Repositories\Template\TemplateInterface;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class TemplatesController extends Controller
 
     public function __construct(TemplateInterface $template)
     {
-    	$this->middleware('jwt.auth');
+    	$this->middleware('jwt.auth', ['except' => ['create']]);
 
 		$this->template = $template;
     }
@@ -50,5 +51,20 @@ class TemplatesController extends Controller
 		}
 		
 		$html->save($template->source_convert);
+	}
+
+	public function create(Request $request)
+	{
+		$token = $request->get('token');
+
+		return view()->make('frontend.template.create', compact('token'));
+	}
+
+	public function postCreate(CreateTemplateRequest $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		return $this->template->createTemplate($user->id, $request->get('title'), $request->get('price'), $request->get('template_full')) 
+			? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Create template successfully'])
+			: response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
 	}
 }
