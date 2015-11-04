@@ -26,7 +26,7 @@ class TemplatesController extends Controller
         $this->template = $template;
     }
 
-    public function getTemplates(Request $request)
+    public function getAllTemplate(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         
@@ -106,58 +106,180 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $info = "<span>" . $user_info->infomation . "<span>";
-        $skills = [];
-        foreach($user_info->soft_skill as $sk) {
-            $skills[] = "<li>" . $sk['question'] . "</li>";
-        }
-        $skills = "<h1>Skill</h1><ul>" . implode('', $skills) . "</ul>";
-
+        $avatar = ($user_info->avatar)
+                ? asset($user_info->avatar['origin']) 
+                : asset('images/avatar.jpg');
+        $header = '<div class="image-avatar" 
+                    style="  position: relative;
+                    width: 100%;">
+                    <img style="width:100%;" id="image" src="' . $avatar . '">
+                    <div class="text-info" 
+                    style="position: absolute;
+                    bottom: 30px;
+                    width: 100%;
+                    text-align:center;">
+                        <p style="font-size:30px;">' . $user_info->firstname . ' ' . $user_info->lastname .'</p>
+                        <span>' . $user_info->link_profile .'</span><br>
+                        <span>'. $user_info->email .'</span>
+                    </div></div>';
+        
+        $info = '<div class="info text-center" 
+        style="background: #9b8578;
+        color: white;
+        font-weight:600;
+        text-align:center;">
+                    <span>' . $user_info->address . '</span><br>
+                    <span>' . $user_info->city . ',' . $user_info->state . '</span><br>
+                    <span>Tell:' . $user_info->mobile_phone . '</span>
+                </div>';
+        $intro = '<div class="content-box">
+                    <div class="header-title" 
+                    style="color: red;
+                    font-weight:600;
+                    padding:15px;">
+                        <span>Infomation</span>
+                    </div>
+                    <div class="box" 
+                    style="background: #f3f3f3;
+                    padding: 15px;
+                    border-top: 3px solid #D8D8D8;
+                    border-bottom: 3px solid #D8D8D8;"><span>' . $user_info->infomation . '</span></div>
+                </div>';
         $educations = [];
         foreach ($user_info->user_educations as $edu) {
-            $educations[] = "<li>" . $edu['school_name'] . "</li>";
+            $educations[] = '<span>' . $edu['school_name'] . '</span> , ';
         }
-        $educations = "<ul>" . implode('', $educations) . "</ul>";
+
+        $educations = '<div class="content-box">
+                        <div class="header-title"
+                        style="color: red;
+                        font-weight:600;
+                        padding:15px;">
+                            <span>Education</span>
+                        </div>
+                        <div class="box"
+                        style="background: #f3f3f3;
+                        padding: 15px;
+                        border-top: 3px solid #D8D8D8;
+                        border-bottom: 3px solid #D8D8D8;">
+                            <label>School Name: </label>' . implode('', $educations) . '</div>
+                    </div>';
+
+        $skills = [];
+        foreach($user_info->soft_skill as $sk) {
+            $skills[] = "<span>" . $sk['question'] . "</span>,";
+        }
+        $skills = '<div class="content-box">
+                        <div class="header-title"
+                        style="color: red;
+                        font-weight:600;
+                        padding:15px;">
+                            <span>Skills</span>
+                        </div>
+                        <div class="box"
+                        style="background: #f3f3f3;
+                        padding: 15px;
+                        border-top: 3px solid #D8D8D8;
+                        border-bottom: 3px solid #D8D8D8;">' . implode('', $skills) . ' </div>
+                    </div>';
 
         $work_histories = [];
         foreach ($user_info->user_work_histories as $histories) {
-            $work_histories[] = "<li>" . $histories['company'] . "</li>";
+            $work_histories[] = "<span>" . $histories['company'] . "</span> ,";
         }
-        $work_histories = "<h1>Work</h1><ul>" . implode('', $work_histories) . "</ul>";
+        $work_histories = '<div class="content-box">
+                        <div class="header-title"
+                        style="color: red;
+                        font-weight:600;
+                        padding:15px;">
+                            <span>Work Experience</span>
+                        </div>
+                        <div class="box"
+                        style="background: #f3f3f3;
+                        padding: 15px;
+                        border-top: 3px solid #D8D8D8;
+                        border-bottom: 3px solid #D8D8D8;">
+                            <label>Company: </label>' . implode('', $work_histories) . '</div>
+                    </div>';
 
         $references = [];    
         foreach ($user_info->references as $ref) {
-            $references[] = "<li>" . $ref['reference'] . "</li>";
+            $references[] = "<span>" . $ref['reference'] . "</span>,";
         }
-        $references = "<h1>References</h1><ul>" . implode('', $references) . "</ul>";
+        $references = '<div class="content-box">
+                        <div class="header-title"
+                        style="color: red;
+                        font-weight:600;
+                        padding:15px;">
+                            <span>Eeferences</span>
+                        </div>
+                        <div class="box"
+                        style="background: #f3f3f3;
+                        padding: 15px;
+                        border-top: 3px solid #D8D8D8;
+                        border-bottom: 3px solid #D8D8D8;">' . implode('', $references) . '</div>
+                    </div>';
 
         $objectives = [];
         foreach ($user_info->objectives as $obj) {
-            $objectives[] = "<li>" . $obj['title'] . "</li>";
+            $objectives[] = "<span>" . $obj['title'] . "</span>,";
         }
-        $objectives = "<h1>Objectives</h1><ul>" . implode('', $objectives) . "</ul>";
-        // return $objectives;die();
-        $template = [
-            "info" => $info,
-            "education" => $educations,
-            "work_histories" => $work_histories,
-            "skills" => $skills,
-            "references" => $references,
-            "objectives" => $objectives
-        ];
+        $objectives = '<div class="content-box">
+                        <div class="header-title"
+                        style="color: red;
+                        font-weight:600;
+                        padding:15px;">
+                            <span>objectives</span>
+                        </div>
+                        <div class="box"
+                        style="background: #f3f3f3;
+                        padding: 15px;
+                        border-top: 3px solid #D8D8D8;
+                        border-bottom: 3px solid #D8D8D8;">' . implode('', $objectives) . '</div>
+                    </div>';
 
-        $templates = new Template();
-        $templates->user_id = $user_info->id;
-        $templates->title = "Basic Template";
-        $templates->template = $template;
-        return $templates; die();
-        if ($templates->save()) {
-            return response()->json([
+        $template_html = '<div class="container">
+            <div class="row">'
+                . $header
+                . $info
+                . $intro
+                . $educations 
+                . $skills
+                . $work_histories
+                . $references
+                . $objectives .
+            '</div>
+        </div>';
+        $template_bs = Template::where('type', '=', 1)->first();
+        if ( ! $template_bs) {
+            $template_bs = new Template();
+            $template_bs->user_id = $user_info->id;
+            $template_bs->title = "Basic Template";
+            $template_bs->type = 1;
+        }
+        $template_bs->content = $template_html;
+        $template_bs->save();
+        return response()->json([
                 "status_code" => 200,
                 "status" => true,
-                "message" => "saved successfully"
+                "data" => $template_bs
             ]);
-        } 
+        
+    }
+
+    public function updateBasicTemplate(Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template_basic = $request->get('template_basic')['content'];
+        $template_bs = Template::where('type', '=', 1)->first();
+        $template_bs->content = $template_basic;
+        $template_bs->save();
+        return $template_bs->content;
+        // return response()->json([
+        //         "status_code" => 200,
+        //         "status" => true,
+        //         "message" => "updated successfully"
+        //     ]);
     }
 
     public function create()
