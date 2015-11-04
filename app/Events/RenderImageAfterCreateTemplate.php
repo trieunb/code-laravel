@@ -82,7 +82,7 @@ class RenderImageAfterCreateTemplate extends Event
         if (!$resize) return null;
 
         $template = $template->getById($this->template_id);
-        $template->thumbnail = [
+        $template->image = [
             'origin' => asset('images/template/'.$this->filename),
             'thumb' =>asset('public/thumb/'.$this->filename)
         ];

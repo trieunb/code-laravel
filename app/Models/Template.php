@@ -19,7 +19,7 @@ class Template extends Model
     protected $table = "templates";
     
     protected $casts = [
-    	'thumbnail' => 'json'
+    	'image' => 'json'
     ];
 
     /**
@@ -41,7 +41,7 @@ class Template extends Model
                 'cat_id' => $user_id,
                 'title' => $value['title'],
                 'content' => $value['content'],
-                'thumbnail' => $value['thumbnail'],
+                'image' => $value['image'],
                 'price' => $value['price'],
                 'status' => $value['status'],
                 'type' => $value['type'],

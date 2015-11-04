@@ -49,7 +49,7 @@ class TemplatesController extends Controller
                     'cat_id' => $value['cat_id'],
                     'title' => $value['title'],
                     'content' => $value['content'],
-                    'thumbnail' => $value['thumbnail'],
+                    'image' => $value['image'],
                     'price' => $value['price'],
                     'status' => $value['status'],
                     'type' => $value['type'],
@@ -90,7 +90,7 @@ class TemplatesController extends Controller
 
     public function postEdit($id, Request $request)
     {
-        return$this->template->getById($id, $request->get('content'))
+        return $this->template->editTemplate($id, $request->get('content'))
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
