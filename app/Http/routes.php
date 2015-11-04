@@ -3,6 +3,7 @@
 
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\TemplateProcessor;
 use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
@@ -84,4 +85,3 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
-get('/abcd', 'API\TemplatesController@convertHtmlToImage');

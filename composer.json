@@ -23,8 +23,7 @@
         "yangqi/htmldom": "dev-master",
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "swiftmailer/swiftmailer": "~5.4",
-        "yozaz/laravel-swiftmailer": "~3.0",
-        "phpoffice/phpword": "dev-master"
+        "yozaz/laravel-swiftmailer": "~3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

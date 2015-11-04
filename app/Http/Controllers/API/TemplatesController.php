@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\RenderImageAfterCreateTemplate;
 use App\Events\sendMailAttachFile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -72,7 +73,7 @@ class TemplatesController extends Controller
             'status' => true,
             'data' => [
                 'id' => $id,
-                'title' => $tempalte->title,
+                'title' => $template->title,
                 'content' => $template->content
             ]
         ]);
@@ -169,9 +170,11 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $result = $this->template->createTemplate($user->id, $request);
-        
-        return $result
-            ? response()->json(['status_code' => 200, 'status' => true, 'message' => $result])
+
+        $template = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
+
+        return $template
+            ? response()->json(['status_code' => 200, 'status' => true, 'data' => $template])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
     }
 
@@ -181,9 +184,9 @@ class TemplatesController extends Controller
 
         $template = $this->template->getById($id);
         $content = $template->content;
-        $url = $request->url();
+        $render = true;
         
-        \PDF::loadView('api.template.index', compact('content', 'url'))
+        \PDF::loadView('api.template.index', compact('content', 'render'))
             ->save(public_path('pdf/'.$template->title.'.pdf'));
 
         event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->title.'.pdf')));

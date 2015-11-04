@@ -12,8 +12,15 @@ class Template extends Model
 
     use UpdateColumnWithClauseTrait;
 
+    /**
+     * Table name
+     * @var $table
+     */
     protected $table = "templates";
     
+    protected $casts = [
+    	'thumbnail' => 'json'
+    ];
 
     /**
      * Teamplate belongs to user.

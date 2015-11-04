@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Events\RenderImageAfterCreateTemplate;
 use App\Helper\ZamzarApi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -9,6 +10,7 @@ use App\Http\Requests\CreateTemplateRequest;
 use App\Jobs\ConvertFile;
 use App\Repositories\Template\TemplateInterface;
 use Illuminate\Http\Request;
+use Imagick;
 
 class TemplatesController extends Controller
 {
@@ -64,8 +66,10 @@ class TemplatesController extends Controller
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
 		$result = $this->template->createTemplate($user->id, $request);
-		return $result
-			? response()->json(['status_code' => 200, 'status' => true, 'data' => $result])
+	  	$template = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
+	  	
+		return $template
+			? response()->json(['status_code' => 200, 'status' => true, 'data' => $template])
 			: response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
 	}
 }

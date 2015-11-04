@@ -1,7 +1,7 @@
 @extends('api.app')
 
 @section('css')
-	@if(isset($url))
+	@if(isset($render))
 		<style>
 			body{font-family: 'dejavu sans';}
 			p.full-name {
