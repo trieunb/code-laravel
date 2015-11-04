@@ -26,7 +26,7 @@ class TemplatesController extends Controller
         $this->template = $template;
     }
 
-    public function getTemplates(Request $request)
+    public function getAllTemplate(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         
@@ -262,12 +262,12 @@ class TemplatesController extends Controller
                 . $objectives .
             '</div>
         </div>';
-        $template_bs = Template::where('template_basic', '=', 1)->first();
+        $template_bs = Template::where('type', '=', 1)->first();
         if ( ! $template_bs) {
             $template_bs = new Template();
             $template_bs->user_id = $user_info->id;
             $template_bs->title = "Basic Template";
-            $template_bs->template_basic = 1;
+            $template_bs->type = 1;
         }
         $template_bs->template_full = $template_html;
         $template_bs->save();
@@ -284,7 +284,7 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template_basic = $request->get('template_full');
-        $template_bs = Template::where('template_basic', '=', 1)->first();
+        $template_bs = Template::where('type', '=', 1)->first();
         $template_bs->template_full = $template_basic;
         $template_bs->save();
         return $template_bs->template_full;
