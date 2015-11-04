@@ -14,20 +14,7 @@ class Template extends Model
 
     protected $table = "templates";
     
-    protected $fillable = [
-        'user_id',
-        'cat_id',
-        'title',
-        'source',
-        'source_convert',
-        'template',
-        'template_full',
-        'type',
-        'price'
-    ];
-    protected $casts = [
-        'template' => 'json'
-    ];
+
     /**
      * Teamplate belongs to user.
      *
@@ -44,9 +31,13 @@ class Template extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_templates[] = [
                 'user_id' => $user_id,
+                'cat_id' => $user_id,
                 'title' => $value['title'],
-                'source' => $value['source'],
-                'source_convert' => $value['source_convert']
+                'content' => $value['content'],
+                'thumbnail' => $value['thumbnail'],
+                'price' => $value['price'],
+                'status' => $value['status'],
+                'type' => $value['type'],
             ];
         }
         $this->insert($user_templates);

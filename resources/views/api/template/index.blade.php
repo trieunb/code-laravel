@@ -14,6 +14,6 @@
 
 @section('content')
 	<div class="row">
-		{!! $template_full !!}
+		{!! $content !!}
 	</div>
 @stop

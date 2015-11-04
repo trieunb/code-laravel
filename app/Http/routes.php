@@ -65,18 +65,18 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Template Route
      */
-    get('template', ['uses' => 'TemplatesController@getTemplates']);
+    get('template', 'TemplatesController@getAllTemplate');
     get('template/create', 'TemplatesController@create');
     get('template/view/{id}', 'TemplatesController@view');
-    get('template/{id}', ['uses' => 'TemplatesController@getDetailTemplate']);
-    get('template/full/{id}', 'TemplatesController@getFull');
-    get('template/full/edit/{id}', 'TemplatesController@getFullEdit');
+    get('template/edit/{id}', 'TemplatesController@edit');
+    get('template/edit/view/{id}', 'TemplatesController@editView');
     get('template/basic', 'TemplatesController@getBasicTemplate');
     get('template/{id}/attach', 'TemplatesController@attach');
+    post('template/preview', 'TemplatesController@updateBasicTemplate');
     
     post('template/basic', 'TemplatesController@postBasicTemplate');
-    post('template', ['uses' => 'TemplatesController@postTemplates']);
-    post('template/full/edit/{id}', 'TemplatesController@postFullEdit');
+    post('template', 'TemplatesController@postTemplates');
+    post('template/edit/{id}', 'TemplatesController@postEdit');
     post('template/create', 'TemplatesController@postCreate');
     
     /**
