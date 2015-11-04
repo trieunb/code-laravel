@@ -85,21 +85,21 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         return $this->getById($user_id);
     }
 
-      /**
-     * Create template basic
+     /**
+     * Create template
      * @param  int $user_id  
-     * @param  string $title    
-     * @param  int $price    
-     * @param  string $template_full 
+     * @param  mixed $request
+     * @param  int $type 
      * @return mixed           
      */
-    public function createTemplate($user_id, $title, $price, $template_full)
+    public function createTemplate($user_id, $request)
     {
         $template = new Template;
         $template->user_id = $user_id;
-        $template->title = $title;
-        $template->price = $price;
-        $template->template_full = $template_full;
+        $template->title = $request->get('title');
+        $template->price = $request->get('price');
+        $template->template_full = $request->get('template_full');
+        $template->type = $request->get('type');
 
         return $template->save();
     }

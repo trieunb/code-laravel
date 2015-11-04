@@ -182,7 +182,7 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $template_full = preg_replace('/\t|\n+/', '', $request->get('template_full'));
 
-        return $this->template->createTemplate($user->id, $request->get('title'), $request->get('price'), $template_full)
+        return $this->template->createTemplate($user->id, $request)
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Create template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
     }
