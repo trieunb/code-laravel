@@ -29,6 +29,7 @@ class TemplatesController extends Controller
     public function getTemplates(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+        
         return response()->json([
             'status_code' => 200,
             'status' => true,
@@ -44,11 +45,13 @@ class TemplatesController extends Controller
             foreach ($request->get('templates') as $value) {
                 $data[] = [
                     'user_id' => $user->id,
+                    'cat_id' => $value['cat_id'],
                     'title' => $value['title'],
-                    'source' => $value['source'],
-                    'source_convert' => $value['source_convert'],
-                    'template' => $value['template'],
+                    'content' => $value['content'],
                     'thumbnail' => $value['thumbnail'],
+                    'price' => $value['price'],
+                    'status' => $value['status'],
+                    'type' => $value['type'],
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ];
@@ -59,60 +62,34 @@ class TemplatesController extends Controller
         
     }
 
-    public function getDetailTemplate(Request $request, $template_id)
+    public function edit(Request $request, $id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        
-        if (is_null($template_id)) {
-            return response()->json([
-                'status_code' => 404,
-                'status' => false,
-            ]);
-        }
+        $template = $this->template->getDetailTemplate($id, $user->id);
+
         return response()->json([
             'status_code' => 200,
             'status' => true,
             'data' => [
-                'id' => $template_id,
-                'title' => $this->template->getDetailTemplate($template_id, $user->id)->title,
-                'content' => $this->template->getDetailTemplate($template_id, $user->id)->template
-            ]
-        ]);
-    }
-
-    public function getFull($id, Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->getDetailTemplate($id, $user->id);
-
-        $content = $template->template_full;
-
-         return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => [
                 'id' => $id,
-                'title' => $template->title,
-                'content' => $content
+                'title' => $tempalte->title,
+                'content' => $template->content
             ]
         ]);
     }
 
-    public function getFullEdit($id, Request $request)
+    public function editView($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getDetailTemplate($id, $user->id);
-        $content = $template->template_full;
+        $content = $template->content;
 
         return view()->make('frontend.template.full', compact('content'));
     }
 
-    public function postFullEdit($id, Request $request)
+    public function postEdit($id, Request $request)
     {
-        $template = $this->template->getById($id);
-        $template->template_full = $request->get('content');
-
-        return $template->save()
+        return$this->template->getById($id, $request->get('content'))
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
@@ -121,7 +98,7 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->user->getProfile($user->id);
-        // return $template;
+
         return view()->make('frontend.template.basic_template', compact('template'));
     }
 
@@ -191,10 +168,10 @@ class TemplatesController extends Controller
     public function postCreate(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $template_full = preg_replace('/\t|\n+/', '', $request->get('template_full'));
-
-        return $this->template->createTemplate($user->id, $request->get('title'), $request->get('price'), $template_full)
-            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Create template successfully'])
+        $result = $this->template->createTemplate($user->id, $request);
+        
+        return $result
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => $result])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
     }
 
@@ -203,10 +180,10 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
 
         $template = $this->template->getById($id);
-        $template_full = $template->template_full;
+        $content = $template->content;
         $url = $request->url();
         
-        \PDF::loadView('api.template.index', compact('template_full', 'url'))
+        \PDF::loadView('api.template.index', compact('content', 'url'))
             ->save(public_path('pdf/'.$template->title.'.pdf'));
 
         event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->title.'.pdf')));
@@ -217,8 +194,8 @@ class TemplatesController extends Controller
     public function view($id, Request $request)
     {
         $template = $this->template->getById($id);
-        $template_full = str_replace('contenteditable="true"', '', $template->template_full);
+        $content = str_replace('contenteditable="true"', '', $template->content);
         
-        return view()->make('api.template.index', compact('template_full'));
+        return view()->make('api.template.index', compact('content'));
     }
 }
