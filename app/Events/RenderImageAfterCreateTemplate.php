@@ -44,7 +44,7 @@ class RenderImageAfterCreateTemplate extends Event
     public function render(TemplateInterface $template)
     {
 
-        \PDF::loadView('api.template.index', ['content' => $this->content, 'render' => true])
+        \PDF::loadView('api.template.index', ['content' => $this->content])
             ->save(public_path('pdf/tmp.pdf'));
 
         $this->createImage();
