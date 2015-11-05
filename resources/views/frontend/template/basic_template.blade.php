@@ -1,13 +1,12 @@
 <div class="container">
     <div class="row">
         <div class="image-avatar" 
-            style="position: relative;">
-            <div style="overflow: hidden;height:768px;">
+            style="position: relative;
+            overflow: hidden;max-height:768px;">
                 <img style="width:100%;" id="image" 
                     src="{{($template->avatar) 
                     ? asset($template->avatar['origin']) 
                     : asset('images/avatar.jpg')}}">
-                </div>
             <div class="text-info" 
                 style="position: absolute;
                 bottom: 30px;

@@ -38,7 +38,7 @@ class RenderImageAfterCreateTemplate extends Event
     { 
         $this->template_id = $template_id;
         $this->content = $content;
-        $this->filename = $title.'.jpg';
+        $this->filename = str_slug($title).'.jpg';
     }
 
     public function render(TemplateInterface $template)
@@ -50,7 +50,7 @@ class RenderImageAfterCreateTemplate extends Event
         
         $this->createImage();
 
-        \File::delete(public_path().'/pdf/tmp.pdf');
+        // \File::delete(public_path().'/pdf/tmp.pdf');
 
         return $this->saveImage($template);
     }

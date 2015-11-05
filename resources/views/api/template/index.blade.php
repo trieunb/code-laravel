@@ -10,16 +10,20 @@
 	<link rel="stylesheet" href="css/style.css">
 	<style>
 		body{font-family: 'dejavu sans';}
-		*{
-			page-break-after: avoid;
+		img {
+		  
+		  
 		}
+		
 	</style>
 </head>
 <body>
 	<div class="container">
 		<div class="row">
+		
 			{!! $content !!}
 		</div>
+
 	</div>
 	<script src="js/jquery-2.1.4.js"></script>
 	<script src="js/bootstrap.min.js"></script>
