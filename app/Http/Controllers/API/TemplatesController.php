@@ -164,7 +164,8 @@ class TemplatesController extends Controller
                 </div>';
         $educations = [];
         foreach ($user_info->user_educations as $edu) {
-            $educations[] = '<ul style="list-style:none">
+            $educations[] = '<ul style="">
+                            <label style="font-weight:600; margin-left:-20px">Title: </label><span>' . $edu['school_name'] . '</span>
                             <li><label style="font-weight:600">School: </label>' . $edu['school_name'] . '</li>
                             <li><label style="font-weight:600">Time: </label>' . $edu['start'] . '-' . $edu['end'] . '</li>
                             <li><label style="font-weight:600">Degree: </label>' . $edu['degree'] . '</li>
@@ -209,7 +210,8 @@ class TemplatesController extends Controller
 
         $work_histories = [];
         foreach ($user_info->user_work_histories as $histories) {
-            $work_histories[] = '<ul style="list-style:none">
+            $work_histories[] = '<ul style="">
+                                <label style="font-weight:600; margin-left:-20px">Job Name: </label><span>' . $histories['job_title'] . '</span>
                                 <li><label style="font-weight:600">Company: </label>' . $histories['company'] . '</li>
                                 <li><label style="font-weight:600">Time: </label>' . $histories['start'] . '-' . $edu['end'] . '</li>
                                 <li><label style="font-weight:600">Description: </label>' . $histories['   job_description'] . '</li>
