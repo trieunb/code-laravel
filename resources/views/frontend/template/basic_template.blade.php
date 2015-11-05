@@ -95,16 +95,15 @@
                 padding: 15px;
                 border-top: 3px solid #D8D8D8;
                 border-bottom: 3px solid #D8D8D8;">
-                @foreach($template->user_skills as $sk)
+                @foreach($template->soft_skill as $sk)
                 <ul style="list-style:none">
                     <li>
-                        <label style="font-weight:600">Name: </label>{{$sk['skill_name']}}
+                        <label style="font-weight:600">Name: </label>{{$sk['question']}}
                     </li>
                     <li>
-                        <label style="font-weight:600">Point: </label>{{$sk['skill_test_point']}}
+                        <label style="font-weight:600">Point: </label>{{$sk['value']}}
                     </li>
                     <li>
-                        <label style="font-weight:600">Experience: </label>{{$sk['experience']}}
                     </li>
                 </ul>
                 <hr>
@@ -170,7 +169,7 @@
                 style="color: red;
                 font-weight:600;
                 padding:15px;">
-                <span>objectives</span>
+                <span>Objective</span>
             </div>
             <div class="box"
                 style="background: #f3f3f3;
