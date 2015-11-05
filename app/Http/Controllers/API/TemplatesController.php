@@ -117,19 +117,11 @@ class TemplatesController extends Controller
         $dob = date("Y-m-d", $user_info->dob);
         $age = $this->user->GetAge($dob);
         $template_html = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
-        $template_bs = Template::where('type', '=', 1)->first();
-        if ( ! $template_bs) {
-            $template_bs = new Template();
-            $template_bs->user_id = $user_info->id;
-            $template_bs->title = "Basic Template";
-            $template_bs->type = 1;
-        }
-        $template_bs->content = $template_html;
-        $template_bs->save();
+        
         return response()->json([
                 "status_code" => 200,
                 "status" => true,
-                "data" => $template_bs
+                "data" => $$this->template->createTemplateBasic($user_info->id, $template_html)
             ]);
         
     }
