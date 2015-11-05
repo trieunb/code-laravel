@@ -143,4 +143,12 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         
         return $template->save() ? $template : null;
     }
+
+    public function deleteTemplate($id, $temp_id)
+    {
+        $template = $this->model->where('user_id', $id)->findOrFail($temp_id);
+        return $template->delete();
+        
+        
+    }
 }

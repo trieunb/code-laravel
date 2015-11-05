@@ -79,6 +79,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('template', 'TemplatesController@postTemplates');
     post('template/edit/{id}', 'TemplatesController@postEdit');
     post('template/create', 'TemplatesController@postCreate');
+    post('template/delete/{id}', 'TemplatesController@postDeleteTemplate');
     
     /**
      * Market Route

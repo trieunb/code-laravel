@@ -139,6 +139,24 @@ class TemplatesController extends Controller
             ]);
     }
 
+    public function postDeleteTemplate(Request $request, $temp_id)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = Template::where('id', $temp_id)->first();
+        if (!$template)
+        {
+            return response()->json([
+                'status_code' => 404,
+                'status' => false,
+                'message' => 'page not found'
+            ]);
+        } else {
+            return $this->template->deleteTemplate($user->id, $temp_id)
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Delete template successfully'])
+            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when delete Template']);
+        }
+    }
+
     public function create()
     {
         return view()->make('api.template.create');
