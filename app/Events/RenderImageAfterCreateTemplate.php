@@ -38,15 +38,15 @@ class RenderImageAfterCreateTemplate extends Event
     { 
         $this->template_id = $template_id;
         $this->content = $content;
-        $this->filename = $title.'.jpg';
+        $this->filename = str_slug($title).'.jpg';
     }
 
     public function render(TemplateInterface $template)
     {
-
+        $this->content = replace_url_img($this->content);
         \PDF::loadView('api.template.index', ['content' => $this->content])
             ->save(public_path('pdf/tmp.pdf'));
-
+        
         $this->createImage();
 
         \File::delete(public_path().'/pdf/tmp.pdf');
@@ -60,7 +60,8 @@ class RenderImageAfterCreateTemplate extends Event
      */
     private function createImage()
     {
-        $img = new \Imagick(public_path('pdf/tmp.pdf'));
+        $img = new \Imagick();
+        $img->readImage(public_path('pdf/tmp.pdf[0]'));
         $img->setImageFormat('jpg');
         $img->setSize(200, 200);
         $img->writeImage(public_path('images/template/'.$this->filename));
