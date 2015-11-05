@@ -116,13 +116,13 @@ class TemplatesController extends Controller
         $user_info = $this->user->getProfile($user->id);
         $dob = date("Y-m-d", $user_info->dob);
         $age = $this->user->GetAge($dob);
-        $template_html = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
+        $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
         
         return response()->json([
-                "status_code" => 200,
-                "status" => true,
-                "data" => $$this->template->createTemplateBasic($user_info->id, $template_html)
-            ]);
+            "status_code" => 200,
+            "status" => true,
+            "data" => $$this->template->createTemplateBasic($user_info->id, $content)
+        ]);
         
     }
 

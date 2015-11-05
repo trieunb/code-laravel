@@ -74,8 +74,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/edit/view/{id}', 'TemplatesController@editView');
     get('template/basic', 'TemplatesController@getBasicTemplate');
     get('template/{id}/attach', 'TemplatesController@attach');
+
     post('template/preview', 'TemplatesController@updateBasicTemplate');
-    
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', 'TemplatesController@postTemplates');
     post('template/edit/{id}', 'TemplatesController@postEdit');

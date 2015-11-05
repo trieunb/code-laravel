@@ -103,7 +103,9 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->user_id = $user_id;
         $template->title = $request->get('title');
         $template->price = $request->get('price');
-        $template->content = preg_replace('/\t|\n+/', '', $request->get('content'));
+        $template->content = $request->get('content') != '' 
+            ? preg_replace('/\t|\n+/', '', $request->get('content'))
+            : '<div contenteditable="true></div>';
         $template->type = $request->get('type');
 
         return $template->save() ? $template : null;
