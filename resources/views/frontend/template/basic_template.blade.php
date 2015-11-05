@@ -2,7 +2,7 @@
     <div class="row">
         <div class="image-avatar" 
             style="position: relative;
-            overflow: hidden;max-height:768px;">
+            overflow: hidden;max-height:400;">
                 <img style="width:100%;" id="image" 
                     src="{{($template->avatar) 
                     ? asset($template->avatar['origin']) 
