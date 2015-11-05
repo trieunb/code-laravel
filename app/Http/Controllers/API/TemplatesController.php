@@ -121,7 +121,7 @@ class TemplatesController extends Controller
         return response()->json([
                 "status_code" => 200,
                 "status" => true,
-                "data" => $$this->template->createTemplateBasic($user_info->id, $template_html)
+                "data" => $this->template->createTemplateBasic($user_info->id, $template_html)
             ]);
         
     }
