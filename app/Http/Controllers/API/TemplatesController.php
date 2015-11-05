@@ -117,6 +117,7 @@ class TemplatesController extends Controller
         $dob = date("Y-m-d", $user_info->dob);
         $age = $this->user->GetAge($dob);
         $template_html = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
+        return $template_html; die();
         return response()->json([
                 "status_code" => 200,
                 "status" => true,
