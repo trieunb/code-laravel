@@ -145,6 +145,8 @@ class TemplatesController extends Controller
                 </div>';
 
         $gender = $user_info->gender ? 'Male' : 'Female';
+        $dob = date("Y-m-d", $user_info->dob);
+        $age = $this->user->GetAge($dob);
         $intro = '<div class="content-box">
                     <div class="header-title" 
                     style="color: red;
@@ -158,7 +160,7 @@ class TemplatesController extends Controller
                     border-top: 3px solid #D8D8D8;
                     border-bottom: 3px solid #D8D8D8;">
                     <ul style="list-style:none">
-                        <li><label style="font-weight:600">Birthday: </label>' . date("Y-m-d", $user_info->dob) . '</li>
+                        <li><label style="font-weight:600">Age: </label>' . $age . '</li>
                         <li><label style="font-weight:600">Gender: </label>' . $gender . '</li>
                         <li> <label style="font-weight:600">Info: </label>' . $user_info->infomation . '</li>
                     </ul></div>
