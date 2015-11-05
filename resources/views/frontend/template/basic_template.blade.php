@@ -1,12 +1,13 @@
 <div class="container">
     <div class="row">
         <div class="image-avatar" 
-            style="position: relative;
-            width: 100%;">
-            <img style="width:100%;" id="image" 
-                src="{{($template->avatar) 
-                ? asset($template->avatar['origin']) 
-                : asset('images/avatar.jpg')}}">
+            style="position: relative;">
+            <div style="overflow: hidden;height:768px;">
+                <img style="width:100%;" id="image" 
+                    src="{{($template->avatar) 
+                    ? asset($template->avatar['origin']) 
+                    : asset('images/avatar.jpg')}}">
+                </div>
             <div class="text-info" 
                 style="position: absolute;
                 bottom: 30px;
@@ -24,9 +25,9 @@
             font-weight:600;
             text-align:center;">
             <span>{{$template->address}}</span><br>
-            <span>{{$template->city
+                    <span>{{($template->city)
                     ? $template->city . ', ' . $template->state
-                    : ''}}</span><br>
+                    : null}}</span><br>
             <span>Tell: {{$template->mobile_phone}}</span>
         </div>
         <div class="content-box">
@@ -67,8 +68,8 @@
             border-top: 3px solid #D8D8D8;
             border-bottom: 3px solid #D8D8D8;">
             @foreach ($template->user_educations as $edu)
+                <label style="font-weight:600;">{{$edu['title']}}</label>
                 <ul style="">
-                    <label style="font-weight:600; margin-left:-20px">{{$edu['title']}}</label>
                     <li>
                         <label style="font-weight:600">School: </label>{{$edu['school_name']}}
                     </li>
@@ -103,8 +104,6 @@
                     <li>
                         <label style="font-weight:600">Point: </label>{{$sk['value']}}
                     </li>
-                    <li>
-                    </li>
                 </ul>
                 <hr>
                 @endforeach
@@ -123,8 +122,8 @@
                 border-top: 3px solid #D8D8D8;
                 border-bottom: 3px solid #D8D8D8;">
                 @foreach ($template->user_work_histories as $histories)
+                <label style="font-weight:600;">{{$histories['job_title']}}</label>
                 <ul style="">
-                    <label style="font-weight:600; margin-left:-20px">{{$histories['job_title']}}</label>
                     <li>
                         <label style="font-weight:600">Company: </label>{{$histories['company']}}
                     </li>
@@ -132,7 +131,7 @@
                         <label style="font-weight:600">Time: </label>{{$histories['start'] . '-' . $edu['end']}}
                     </li>
                     <li>
-                        <label style="font-weight:600">Description: </label> {{$histories['   job_description']}}
+                        <label style="font-weight:600">Description: </label>{{$histories['job_description']}}
                     </li>
                 </ul>
                 <hr>
