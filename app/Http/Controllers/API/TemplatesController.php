@@ -63,19 +63,14 @@ class TemplatesController extends Controller
         
     }
 
-    public function getDetailTemplate(Request $request, $template_id)
+    public function getDetailTemplate(Request $request, $id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        if (is_null($template_id)) {
-            return response()->json([
-                'status_code' => 404,
-                'status' => false,
-            ]);
-        }
+      
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template->getDetailTemplate($template_id, $user->id)
+            'data' => $this->template->getDetailTemplate($id, $user->id)
         ]);
     }
 
@@ -106,35 +101,12 @@ class TemplatesController extends Controller
 
     public function postEdit($id, Request $request)
     {
-        $result = $this->template->editTemplate($id, $request->get('content'));
-        \Log::info('debug1', [$result->content, $result->title]);
-        $filename = $result->title.'.jpg';
-         \PDF::loadView('api.template.index', ['content' => $result->content, 'render' => true])
-            ->save(public_path('pdf/tmp.pdf'));
-             \Log::info('debug12');
-        /*    \Log::info('debug2');
-        $img = new \Imagick(public_path('pdf/tmp.pdf'));
-        $img->setImageFormat('jpg');
-        $img->setSize(200, 200);
-        \Log::info('debug22');
-        $img->writeImage(public_path('images/template/'.$filename));
-        $img->clear();
-        $img->destroy();
-        $resize = \Image::make(public_path('images/template/'.$filename))
-            ->resize(200,150)
-            ->save(public_path('thumb/template/'.$filename));
-         \Log::info('debug3', [$resize, $filename]);
-        if (!$resize) return null;
-
-        $template = $this->template->getById($result->id);
-        $template->image = [
-            'origin' => asset('images/template/'.$filename),
-            'thumb' =>asset('public/thumb/'.$filename)
-        ];*/
-        return 'done';
-        // event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
+        $user = \JWTAuth::toUser($request->get('token'));
+        $result = $this->template->editTemplate($id, $user->id, $request->get('content'));
+       
+        event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
         
-        return $template->save()
+        return $result
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
@@ -331,17 +303,16 @@ class TemplatesController extends Controller
 
     public function updateBasicTemplate(Request $request)
     {
-        $user = \JWTAuth::toUser($request->get('token'));
         $template_basic = $request->get('template_basic')['content'];
         $template_bs = Template::where('type', '=', 1)->first();
         $template_bs->content = $template_basic;
         $template_bs->save();
-        return $template_bs->content;
-        // return response()->json([
-        //         "status_code" => 200,
-        //         "status" => true,
-        //         "message" => "updated successfully"
-        //     ]);
+
+        return response()->json([
+                "status_code" => 200,
+                "status" => true,
+                "message" => "updated successfully"
+            ]);
     }
 
     public function create()
@@ -364,7 +335,6 @@ class TemplatesController extends Controller
     public function attach($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-
         $template = $this->template->getById($id);
         $content = $template->content;
         $render = true;
@@ -391,7 +361,6 @@ class TemplatesController extends Controller
                 'content' => $content
             ]
         ]);
-        // return view()->make('api.template.index', compact('content'));
     }
 
 
