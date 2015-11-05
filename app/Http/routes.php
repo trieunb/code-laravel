@@ -66,6 +66,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Template Route
      */
     get('template', 'TemplatesController@getAllTemplate');
+    get('template/detail/{id}', 'TemplatesController@getDetailTemplate');
     get('template/create', 'TemplatesController@create');
     get('template/view/{id}', 'TemplatesController@view');
     get('template/edit/{id}', 'TemplatesController@edit');

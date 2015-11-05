@@ -62,6 +62,22 @@ class TemplatesController extends Controller
         
     }
 
+    public function getDetailTemplate(Request $request, $template_id)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        if (is_null($template_id)) {
+            return response()->json([
+                'status_code' => 404,
+                'status' => false,
+            ]);
+        }
+        return response()->json([
+            'status_code' => 200,
+            'status' => true,
+            'data' => $this->template->getDetailTemplate($template_id, $user->id)
+        ]);
+    }
+
     public function edit(Request $request, $id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -147,9 +163,12 @@ class TemplatesController extends Controller
                 </div>';
         $educations = [];
         foreach ($user_info->user_educations as $edu) {
-            $educations[] = '<span>' . $edu['school_name'] . '</span> , ';
+            $educations[] = '<ul style="list-style:none">
+                            <li><label style="font-weight:600">School: </label>' . $edu['school_name'] . '</li>
+                            <li><label style="font-weight:600">Time: </label>' . $edu['start'] . '-' . $edu['end'] . '</li>
+                            <li><label style="font-weight:600">Degree: </label>' . $edu['degree'] . '</li>
+                            </ul><hr>';
         }
-
         $educations = '<div class="content-box">
                         <div class="header-title"
                         style="color: red;
@@ -161,13 +180,17 @@ class TemplatesController extends Controller
                         style="background: #f3f3f3;
                         padding: 15px;
                         border-top: 3px solid #D8D8D8;
-                        border-bottom: 3px solid #D8D8D8;">
-                            <label>School Name: </label>' . implode('', $educations) . '</div>
+                        border-bottom: 3px solid #D8D8D8;">' 
+                        . implode('', $educations) . '</div>
                     </div>';
 
         $skills = [];
-        foreach($user_info->soft_skill as $sk) {
-            $skills[] = "<span>" . $sk['question'] . "</span>,";
+        foreach($user_info->user_skills as $sk) {
+            $skills[] = '<ul style="list-style:none">
+                        <li><label style="font-weight:600">Name: </label>' . $sk['skill_name'] . '</li>
+                        <li><label style="font-weight:600">Point: </label>' . $sk['skill_test_point'] . '</li>
+                        <li><label style="font-weight:600">Experience: </label>' . $sk['experience'] . '</li>
+                        </ul><hr>';
         }
         $skills = '<div class="content-box">
                         <div class="header-title"
@@ -185,7 +208,11 @@ class TemplatesController extends Controller
 
         $work_histories = [];
         foreach ($user_info->user_work_histories as $histories) {
-            $work_histories[] = "<span>" . $histories['company'] . "</span> ,";
+            $work_histories[] = '<ul style="list-style:none">
+                                <li><label style="font-weight:600">Company: </label>' . $histories['company'] . '</li>
+                                <li><label style="font-weight:600">Time: </label>' . $histories['start'] . '-' . $edu['end'] . '</li>
+                                <li><label style="font-weight:600">Description: </label>' . $histories['   job_description'] . '</li>
+                                </ul><hr>';
         }
         $work_histories = '<div class="content-box">
                         <div class="header-title"
@@ -198,13 +225,16 @@ class TemplatesController extends Controller
                         style="background: #f3f3f3;
                         padding: 15px;
                         border-top: 3px solid #D8D8D8;
-                        border-bottom: 3px solid #D8D8D8;">
-                            <label>Company: </label>' . implode('', $work_histories) . '</div>
+                        border-bottom: 3px solid #D8D8D8;">' 
+                        . implode('', $work_histories) . '</div>
                     </div>';
 
         $references = [];    
         foreach ($user_info->references as $ref) {
-            $references[] = "<span>" . $ref['reference'] . "</span>,";
+            $references[] = '<ul style="list-style:none">
+                            <li><label style="font-weight:600">References: </label>' . $ref['reference'] . '</li>
+                            <li><label style="font-weight:600">Content: </label>' . $ref['content'] . '</li>
+                            </ul><hr>';
         }
         $references = '<div class="content-box">
                         <div class="header-title"
@@ -222,7 +252,10 @@ class TemplatesController extends Controller
 
         $objectives = [];
         foreach ($user_info->objectives as $obj) {
-            $objectives[] = "<span>" . $obj['title'] . "</span>,";
+            $objectives[] = '<ul style="list-style:none">
+                            <li><label style="font-weight:600">Title: </label>' . $obj['title'] . '</li>
+                            <li><label style="font-weight:600">Content: </label>' . $obj['content'] . '</li>
+                            </ul><hr>';
         }
         $objectives = '<div class="content-box">
                         <div class="header-title"
@@ -259,11 +292,12 @@ class TemplatesController extends Controller
         }
         $template_bs->content = $template_html;
         $template_bs->save();
-        return response()->json([
-                "status_code" => 200,
-                "status" => true,
-                "data" => $template_bs
-            ]);
+        return $template_bs->content;
+        // return response()->json([
+        //         "status_code" => 200,
+        //         "status" => true,
+        //         "data" => $template_bs
+        //     ]);
         
     }
 
