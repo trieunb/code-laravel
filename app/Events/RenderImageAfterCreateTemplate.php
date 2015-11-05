@@ -44,13 +44,12 @@ class RenderImageAfterCreateTemplate extends Event
     public function render(TemplateInterface $template)
     {
         $this->content = replace_url_img($this->content);
-        \Log::info($this->content);
         \PDF::loadView('api.template.index', ['content' => $this->content])
             ->save(public_path('pdf/tmp.pdf'));
         
         $this->createImage();
 
-        // \File::delete(public_path().'/pdf/tmp.pdf');
+        \File::delete(public_path().'/pdf/tmp.pdf');
 
         return $this->saveImage($template);
     }
