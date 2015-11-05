@@ -292,12 +292,11 @@ class TemplatesController extends Controller
         }
         $template_bs->content = $template_html;
         $template_bs->save();
-        return $template_bs->content;
-        // return response()->json([
-        //         "status_code" => 200,
-        //         "status" => true,
-        //         "data" => $template_bs
-        //     ]);
+        return response()->json([
+                "status_code" => 200,
+                "status" => true,
+                "data" => $template_bs
+            ]);
         
     }
 
