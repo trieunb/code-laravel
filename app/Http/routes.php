@@ -87,3 +87,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
 });
+
+get('test', function() {
+    $im = imagegrabscreen();
+    imagepng($im, "myscreenshot.png");
+    imagedestroy($im);
+
+    return  view('welcome');
+});

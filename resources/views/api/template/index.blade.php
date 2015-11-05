@@ -10,6 +10,9 @@
 	<link rel="stylesheet" href="css/style.css">
 	<style>
 		body{font-family: 'dejavu sans';}
+		*{
+			page-break-after: avoid;
+		}
 	</style>
 </head>
 <body>
