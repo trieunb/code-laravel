@@ -296,28 +296,12 @@ class TemplatesController extends Controller
         }
         $template_bs->content = $template_html;
         $template_bs->save();
-        return $template_bs->content;
-        // return response()->json([
-        //         "status_code" => 200,
-        //         "status" => true,
-        //         "data" => $template_bs
-        //     ]);
+        return response()->json([
+                "status_code" => 200,
+                "status" => true,
+                "data" => $template_bs
+            ]);
         
-    }
-
-    public function updateBasicTemplate(Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $template_basic = $request->get('template_basic')['content'];
-        $template_bs = Template::where('type', '=', 1)->first();
-        $template_bs->content = $template_basic;
-        $template_bs->save();
-        return $template_bs->content;
-        // return response()->json([
-        //         "status_code" => 200,
-        //         "status" => true,
-        //         "message" => "updated successfully"
-        //     ]);
     }
 
     public function create()
