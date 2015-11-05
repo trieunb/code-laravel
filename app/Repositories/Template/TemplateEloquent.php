@@ -119,6 +119,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template = $this->getById($id);
         $template->content = $content;
 
-        return $template->save();
+        return $template->save() ? $template : null;
     }
 }

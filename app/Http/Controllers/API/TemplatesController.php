@@ -90,7 +90,35 @@ class TemplatesController extends Controller
 
     public function postEdit($id, Request $request)
     {
-        return $this->template->editTemplate($id, $request->get('content'))
+        $result = $this->template->editTemplate($id, $request->get('content'));
+        \Log::info('debug1', [$result->content, $result->title]);
+        $filename = $result->title.'.jpg';
+         \PDF::loadView('api.template.index', ['content' => $result->content, 'render' => true])
+            ->save(public_path('pdf/tmp.pdf'));
+             \Log::info('debug12');
+        /*    \Log::info('debug2');
+        $img = new \Imagick(public_path('pdf/tmp.pdf'));
+        $img->setImageFormat('jpg');
+        $img->setSize(200, 200);
+        \Log::info('debug22');
+        $img->writeImage(public_path('images/template/'.$filename));
+        $img->clear();
+        $img->destroy();
+        $resize = \Image::make(public_path('images/template/'.$filename))
+            ->resize(200,150)
+            ->save(public_path('thumb/template/'.$filename));
+         \Log::info('debug3', [$resize, $filename]);
+        if (!$resize) return null;
+
+        $template = $this->template->getById($result->id);
+        $template->image = [
+            'origin' => asset('images/template/'.$filename),
+            'thumb' =>asset('public/thumb/'.$filename)
+        ];*/
+        return 'done';
+        // event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
+        
+        return $template->save()
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
@@ -293,10 +321,10 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $result = $this->template->createTemplate($user->id, $request);
 
-        $template = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
+        // $template = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
 
-        return $template
-            ? response()->json(['status_code' => 200, 'status' => true, 'data' => $template])
+        return $result
+            ? response()->json(['status_code' => 200, 'status' => true, 'data' => $result])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
     }
 
@@ -321,6 +349,17 @@ class TemplatesController extends Controller
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
         
-        return view()->make('api.template.index', compact('content'));
+        return response()->json([
+            'status_code' => 200,
+            'status' => true,
+            'data' => [
+                'id' => $id,
+                'title' => $template->title,
+                'content' => $content
+            ]
+        ]);
+        // return view()->make('api.template.index', compact('content'));
     }
+
+
 }
