@@ -14,9 +14,7 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			{!! $content !!}
-		</div>
+		{!! $content !!}
 	</div>
 	<script src="js/jquery-2.1.4.js"></script>
 	<script src="js/bootstrap.min.js"></script>

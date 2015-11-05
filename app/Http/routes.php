@@ -73,8 +73,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/edit/{id}', 'TemplatesController@edit');
     get('template/edit/view/{id}', 'TemplatesController@editView');
     get('template/{id}/attach', 'TemplatesController@attach');
+
     post('template/preview', 'TemplatesController@updateBasicTemplate');
-    
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', 'TemplatesController@postTemplates');
     post('template/edit/{id}', 'TemplatesController@postEdit');
@@ -86,4 +86,12 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+});
+
+get('test', function() {
+    $im = imagegrabscreen();
+    imagepng($im, "myscreenshot.png");
+    imagedestroy($im);
+
+    return  view('welcome');
 });

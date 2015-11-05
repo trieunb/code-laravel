@@ -124,7 +124,7 @@ class UsersController extends Controller
 				$user_rule->validate($request->get('user'), $user->id);	
 				$this->user->saveFromApi($request->get('user'), $user->id);
 			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code' => 412, 'status' => false, 'message' => $e->getErrors()], 412);
+				return response()->json(['status_code' => 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
 		}
 
@@ -140,7 +140,7 @@ class UsersController extends Controller
 
 				$this->user_education->saveFromApi($request->get('user_educations'), $user->id);
 			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}	
 		}
 		
@@ -156,7 +156,7 @@ class UsersController extends Controller
 
 				$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
 			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
 		}
 		
@@ -172,7 +172,7 @@ class UsersController extends Controller
 
 				$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
 			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
 		}
 
@@ -188,7 +188,7 @@ class UsersController extends Controller
 
 				$this->objective->saveFromApi($request->get('objectives'), $id);
 			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
 		}
 
@@ -204,7 +204,7 @@ class UsersController extends Controller
 
 				$this->reference->saveFromApi($request->get('references'), $id);
 			} catch(ValidatorAPiException $e) {
-				return response()->json(['status_code', 412, 'status' => false, 'message' => $e->getErrors()], 412);
+				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
 		}
 		
@@ -216,11 +216,15 @@ class UsersController extends Controller
 		$user = \JWTAuth::toUser($request->get('token'));
 
 		try {
-			$this->validate($request, ['avatar' => 'image',]);	
+			$this->validate($request, ['avatar' => 'image']);	
+			if ($request->file('avatar')->getSize() > 10485760) {
+				return response()->json([
+				'status_code' => 422, 'status' => false, 'message' => 'File is wrong type or over 10Mb in size!']);
+			}
 		} catch (ValidationException $e) {
 			return response()->json([
-				'status_code' => 412, 'status' => false, 'message' => $e->getErrors()],
-			412);
+				'status_code' => 422, 'status' => false, 'message' => $e->getErrors()],
+			422);
 		}
 		try {
 			$avatar = $this->user->uploadImage($request->file('avatar'), $user->id);
