@@ -111,14 +111,6 @@ class TemplatesController extends Controller
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
 
-    public function getBasicTemplate(Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->user->getProfile($user->id);
-
-        return view()->make('frontend.template.basic_template', compact('template'));
-    }
-
     public function postBasicTemplate(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -139,16 +131,20 @@ class TemplatesController extends Controller
                         <span>' . $user_info->link_profile .'</span><br>
                         <span>'. $user_info->email .'</span>
                     </div></div>';
-        
+        $cty_state = $user_info->city
+                    ? '<span>' . $user_info->city . ', ' . $user_info->state . '</span><br>'
+                    : '';
         $info = '<div class="info text-center" 
         style="background: #9b8578;
         color: white;
         font-weight:600;
         text-align:center;">
-                    <span>' . $user_info->address . '</span><br>
-                    <span>' . $user_info->city . ',' . $user_info->state . '</span><br>
-                    <span>Tell:' . $user_info->mobile_phone . '</span>
+                    <span>' . $user_info->address . '</span><br>'
+                    . $cty_state . 
+                    '<span>Tell:' . $user_info->mobile_phone . '</span>
                 </div>';
+
+        $gender = $user_info->gender ? 'Male' : 'Female';
         $intro = '<div class="content-box">
                     <div class="header-title" 
                     style="color: red;
@@ -160,12 +156,17 @@ class TemplatesController extends Controller
                     style="background: #f3f3f3;
                     padding: 15px;
                     border-top: 3px solid #D8D8D8;
-                    border-bottom: 3px solid #D8D8D8;"><span>' . $user_info->infomation . '</span></div>
+                    border-bottom: 3px solid #D8D8D8;">
+                    <ul style="list-style:none">
+                        <li><label style="font-weight:600">Birthday: </label>' . date("Y-m-d", $user_info->dob) . '</li>
+                        <li><label style="font-weight:600">Gender: </label>' . $gender . '</li>
+                        <li> <label style="font-weight:600">Info: </label>' . $user_info->infomation . '</li>
+                    </ul></div>
                 </div>';
         $educations = [];
         foreach ($user_info->user_educations as $edu) {
             $educations[] = '<ul style="">
-                            <label style="font-weight:600; margin-left:-20px">Title: </label><span>' . $edu['school_name'] . '</span>
+                            <label style="font-weight:600; margin-left:-20px">'. $edu['school_name'] . '</label>
                             <li><label style="font-weight:600">School: </label>' . $edu['school_name'] . '</li>
                             <li><label style="font-weight:600">Time: </label>' . $edu['start'] . '-' . $edu['end'] . '</li>
                             <li><label style="font-weight:600">Degree: </label>' . $edu['degree'] . '</li>
@@ -211,7 +212,7 @@ class TemplatesController extends Controller
         $work_histories = [];
         foreach ($user_info->user_work_histories as $histories) {
             $work_histories[] = '<ul style="">
-                                <label style="font-weight:600; margin-left:-20px">Job Name: </label><span>' . $histories['job_title'] . '</span>
+                                <label style="font-weight:600; margin-left:-20px">' . $histories['job_title'] . '</label>
                                 <li><label style="font-weight:600">Company: </label>' . $histories['company'] . '</li>
                                 <li><label style="font-weight:600">Time: </label>' . $histories['start'] . '-' . $edu['end'] . '</li>
                                 <li><label style="font-weight:600">Description: </label>' . $histories['   job_description'] . '</li>
@@ -244,7 +245,7 @@ class TemplatesController extends Controller
                         style="color: red;
                         font-weight:600;
                         padding:15px;">
-                            <span>Eeferences</span>
+                            <span>References</span>
                         </div>
                         <div class="box"
                         style="background: #f3f3f3;
@@ -295,11 +296,12 @@ class TemplatesController extends Controller
         }
         $template_bs->content = $template_html;
         $template_bs->save();
-        return response()->json([
-                "status_code" => 200,
-                "status" => true,
-                "data" => $template_bs
-            ]);
+        return $template_bs->content;
+        // return response()->json([
+        //         "status_code" => 200,
+        //         "status" => true,
+        //         "data" => $template_bs
+        //     ]);
         
     }
 

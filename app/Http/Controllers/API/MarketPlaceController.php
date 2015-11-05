@@ -36,13 +36,7 @@ class MarketPlaceController extends Controller
     public function getDetailTemplateMarket(Request $request, $template_id)
     {
         $token = \JWTAuth::toUser($request->get('token'));
-        // $status = $this->template_market->getDetailTemplateMarket($template_id)->status;
-        // return $status; die();
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => $this->template_market->getDetailTemplateMarket($template_id)
-        ]); 
+        return $this->template_market->getDetailTemplateMarket($template_id);
     }
 
     public function postTemplatesFromMarket(Request $request)
