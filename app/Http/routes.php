@@ -40,13 +40,13 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Authenticate Route
      */
-    get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticateController@getLogin']);
-    get('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticateController@getRegister']);
+    get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticatesController@getLogin']);
+    get('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticatesController@getRegister']);
 
-    post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticateController@postRegister']);
-    post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticateController@postLogin']);
-    post('auth/reset-password', ['uses' => 'AuthenticateController@postResetPassword']);
-    Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticateController@postLoginWithLinkedin']);
+    post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticatesController@postRegister']);
+    post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticatesController@postLogin']);
+    post('auth/reset-password', ['uses' => 'AuthenticatesController@postResetPassword']);
+    Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticatesController@postLoginWithLinkedin']);
 
     /**
      * User Route
@@ -77,8 +77,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Market Route
      */
-    get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
-    get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+    get('market/all-template', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/detail-template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
 
     /**
      * Cart Route

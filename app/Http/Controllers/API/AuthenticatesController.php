@@ -21,13 +21,16 @@ use Mail;
 use YOzaz\LaravelSwiftmailer\Mailer;
 use JWTFactory;
 
-class AuthenticateController extends Controller
+class AuthenticatesController extends Controller
 {
-
+    /**
+     * UserInterface
+     * @var $user
+     */
     protected $user;
+
     public function __construct(UserInterface $user)
     {
-        //$this->middleware('jwt.auth', ['except' => ['authenticate']]);
         $this->user = $user;
     }
 
@@ -129,19 +132,20 @@ class AuthenticateController extends Controller
                 'status' => true,
                 'token' => $token,
             ]);
-        } else {
-            return response()->json([
-                'status_code' => 401,
-                'status' => false,
-                'message' => 'could not create token'
-            ], 401);
         }
+
+        return response()->json([
+            'status_code' => 401,
+            'status' => false,
+            'message' => 'could not create token'
+        ], 401);
     }
 
     public function postResetPassword(Request $request)
     {
         $email = $request->get('email');
         $user = $this->user->getFirstDataWhereClause('email', '=', $email);
+
         if (!is_null($user)) {
             $password = $this->randomPassword(8);
             $this->user->update(['password' => Hash::make($password)], $user->id);
@@ -156,13 +160,14 @@ class AuthenticateController extends Controller
                 'status' => true,
                 'password' => $password
             ]);
-        } else {
-            return response()->json([
-                'status_code' => 403,
-                'status' => false,
-                'message' => 'Invalid email'
-            ], 403);
         }
+
+        return response()->json([
+            'status_code' => 403,
+            'status' => false,
+            'message' => 'Invalid email'
+        ], 403);
+        
     }
 
     function randomPassword($length) {

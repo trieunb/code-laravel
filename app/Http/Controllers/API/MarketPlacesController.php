@@ -7,7 +7,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 
-class MarketPlaceController extends Controller
+class MarketPlacesController extends Controller
 {
     protected $template_market;
 
