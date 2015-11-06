@@ -4,8 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use App\Http\Requests\UserRegisterRequest;
-use App\Models\User;
 use App\Repositories\User\UserInterface;
 use App\ValidatorApi\RegisterForm_Rule;
 use App\ValidatorApi\ValidatorAPiException;
@@ -17,8 +15,6 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
-use Mail;
-use YOzaz\LaravelSwiftmailer\Mailer;
 use JWTFactory;
 
 class AuthenticatesController extends Controller
@@ -149,8 +145,8 @@ class AuthenticatesController extends Controller
         if (!is_null($user)) {
             $password = $this->randomPassword(8);
             $this->user->update(['password' => Hash::make($password)], $user->id);
-            $mail = new Mailer(); 
-            $mail->send('emails.forgetPassword', ['pass' => $password], function($m) use ($user) {
+
+            \Mail::send('emails.forgetPassword', ['pass' => $password], function($m) use ($user) {
                 $m->to($user->email, $user->firstname . ' ' . $user->lastname)
                   ->subject('Welcome');
             });

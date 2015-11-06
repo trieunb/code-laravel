@@ -19,7 +19,9 @@ use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
 |
 */
 Route::pattern('id', '[0-9]+');
-
+get('/', function() {
+    return view('welcome');
+});
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin|member'], function() {
     get('/', 'DashBoardsController@index');
 });
@@ -84,10 +86,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Cart Route
      */
     
-    post('cart/buy/{id}', 'CartsController@postBuy');
+    get('cart/buy/{id}', 'CartsController@postBuy');
 });
 
 get('test', function() {
-
-    return  view('api.template.create');
+dd(\Cart::content());
 });
