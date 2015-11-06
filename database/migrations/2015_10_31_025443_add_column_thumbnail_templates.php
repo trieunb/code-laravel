@@ -13,7 +13,7 @@ class AddColumnThumbnailTemplates extends Migration
     public function up()
     {
         Schema::table('templates', function($table) {
-            $table->string('thumbnail')->after('template');
+            $table->string('image')->after('title');
         });
     }
 
@@ -25,7 +25,7 @@ class AddColumnThumbnailTemplates extends Migration
     public function down()
     {
         Schema::table('templates', function ($table) {
-            $table->dropColumn('thumbnail');
+            $table->dropColumn('image');
         });
     }
 }

@@ -20,13 +20,6 @@ use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
 */
 Route::pattern('id', '[0-9]+');
 
-Route::get('/', function () {
-    \Auth::loginUsingId(2);
-    // \Auth::logout();
-      return view('welcome');
-});
-
-
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin|member'], function() {
     get('/', 'DashBoardsController@index');
 });
@@ -86,6 +79,12 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+
+    /**
+     * Cart Route
+     */
+    
+    post('cart/buy/{id}', 'CartsController@postBuy');
 });
 
 get('test', function() {

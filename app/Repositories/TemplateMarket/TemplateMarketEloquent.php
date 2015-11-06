@@ -21,21 +21,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
 
     public function getDetailTemplateMarket($template_id)
     {
-        $status = $this->model->findOrFail($template_id)->status;
-        if ( $status ) {
-            return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'data' => $this->model->where('status', 1)->findOrFail($template_id)
-            ]); 
-        } else {
-            return response()->json([
-                "status_code" => 404,
-                "status" => false,
-                "message" => "page not found"
-            ]);
-        }
-        
+        $template_mk = $this->model->findOrFail($template_id);
+
+        return $template_mk->status == 1 ? $template_mk : null;
     }
 
 }
