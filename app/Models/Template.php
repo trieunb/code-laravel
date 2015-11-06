@@ -23,6 +23,31 @@ class Template extends Model
     ];
 
     /**
+     * The "booting" method of the model.
+     *
+     * @return void
+    */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function($post) {
+            $post->slug = str_slug($post->title);
+
+            $latestSlug = static::whereRaw("slug RLIKE '^{$post->slug}(-[0-9]*)?$'")
+                ->latest('id')
+                ->pluck('slug');
+
+            if ($latestSlug) {
+                $pieces = explode('-', $latestSlug);
+                $number = intval(end($pieces));
+                $post->slug .= '-'. ($number + 1);
+            }
+        });
+    }
+
+
+    /**
      * Teamplate belongs to user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

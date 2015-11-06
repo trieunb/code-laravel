@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TemplateMarket extends Model
 {
+    protected $casts = [
+        'image' => 'json'
+    ];
 	/**
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

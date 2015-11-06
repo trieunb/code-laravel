@@ -13,7 +13,7 @@ class AddSlugColumnForTemplatesTable extends Migration
     public function up()
     {
         Schema::table('templates', function($table) {
-            $table->string('slug')->after('title');
+            $table->string('slug')->after('title')->unique();
         });
     }
 
