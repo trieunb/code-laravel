@@ -16,7 +16,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * Fields for update data
      * @var $field_work_save
      */
-    protected $field_work_save = ['user_id', 'cat_id', 'title', 'content',
+    protected $field_work_save = ['user_id', 'cat_id', 'title', 'slug', 'content',
      'price', 'image', 'type', 'status'];
 
 	public function __construct(Template $template)
@@ -64,6 +64,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
         $user_template->cat_id = $dataPrepareSave['cat_id'];
         $user_template->title = $dataPrepareSave['title'];
+        $user_template->slug = str_slug($dataPrepareSave['title']);
         $user_template->content = $dataPrepareSave['content'];
         $user_template->image = $dataPrepareSave['image'];
         $user_template->price = $dataPrepareSave['price'];
@@ -102,6 +103,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template = new Template;
         $template->user_id = $user_id;
         $template->title = $request->get('title');
+        $template->slug = str_slug($request->get('title'));
         $template->price = $request->get('price');
         $template->content = $request->get('content') != '' 
             ? preg_replace('/\t|\n+/', '', $request->get('content'))
@@ -139,6 +141,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             $template = new Template();
             $template->user_id = $user_id;
             $template->title = "Basic Template";
+            $template->title = str_slug("Basic Template");
             $template->type = 1;
         }
         $template->content = $content;

@@ -26,6 +26,7 @@ class RenderImageAfterCreateTemplate extends Event
      * @var $template_id
      */
     private $template_id;
+    private $PROPERTY;
 
     use SerializesModels;
 
@@ -34,11 +35,11 @@ class RenderImageAfterCreateTemplate extends Event
      *
      * @return void
      */
-    public function __construct($template_id, $content, $title)
+    public function __construct($template_id, $content, $slug)
     { 
         $this->template_id = $template_id;
         $this->content = $content;
-        $this->filename = str_slug($title).'.jpg';
+        $this->filename = $slug;
     }
 
     public function render(TemplateInterface $template)
@@ -46,11 +47,11 @@ class RenderImageAfterCreateTemplate extends Event
         $this->content = replace_url_img($this->content);
         try {
              \PDF::loadView('api.template.index', ['content' => $this->content])
-            ->save(public_path('pdf/tmp.pdf'));
+            ->save(public_path('pdf/'.$this->filename.'.pdf'));
         
             $this->createImage();
 
-            \File::delete(public_path().'/pdf/tmp.pdf');
+            // \File::delete(public_path().'/pdf/tmp.pdf');
 
             return $this->saveImage($template);
         } catch (\Exception $e) {
@@ -68,7 +69,7 @@ class RenderImageAfterCreateTemplate extends Event
         $img->readImage(public_path('pdf/tmp.pdf[0]'));
         $img->setImageFormat('jpg');
         $img->setSize(200, 200);
-        $img->writeImage(public_path('images/template/'.$this->filename));
+        $img->writeImage(public_path('images/template/'.$this->filename.'.jpg'));
         $img->clear();
         $img->destroy();
     }
@@ -80,16 +81,16 @@ class RenderImageAfterCreateTemplate extends Event
      */
     private function saveImage($template)
     {
-         $resize = \Image::make(public_path('images/template/'.$this->filename))
+         $resize = \Image::make(public_path('images/template/'.$this->filename.'.jpg'))
             ->resize(200,150)
-            ->save(public_path('thumb/template/'.$this->filename));
+            ->save(public_path('thumb/template/'.$this->filename.'.jpg'));
         
         if (!$resize) return null;
 
         $template = $template->getById($this->template_id);
         $template->image = [
-            'origin' => asset('images/template/'.$this->filename),
-            'thumb' =>asset('public/thumb/'.$this->filename)
+            'origin' => asset('images/template/'.$this->filename.'.jpg'),
+            'thumb' =>asset('public/thumb/'.$this->filename.'.jpg')
         ];
         
         return $template->save();

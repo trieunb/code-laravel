@@ -48,6 +48,7 @@ class TemplatesController extends Controller
                     'user_id' => $user->id,
                     'cat_id' => $value['cat_id'],
                     'title' => $value['title'],
+                    'slug' => str_slug($value['title']),
                     'content' => $value['content'],
                     'image' => $value['image'],
                     'price' => $value['price'],
@@ -106,7 +107,7 @@ class TemplatesController extends Controller
         if (!$result) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
         
-        $render = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
+        $render = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->slug));
         
         return $render
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
@@ -147,18 +148,18 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = Template::where('id', $temp_id)->first();
-        if (!$template)
-        {
+        
+        if (!$template) {
             return response()->json([
                 'status_code' => 404,
                 'status' => false,
                 'message' => 'page not found'
             ]);
-        } else {
-            return $this->template->deleteTemplate($user->id, $temp_id)
+        }
+        
+        return $this->template->deleteTemplate($user->id, $temp_id)
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Delete template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when delete Template']);
-        }
     }
 
     public function create()
@@ -182,11 +183,14 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
-        
-        \PDF::loadView('api.template.index', ['content' => $template->content])
-            ->save(public_path('pdf/'.$template->title.'.pdf'));
 
-        event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->title.'.pdf')));
+        if ( !\File::exists(public_path('pdf/'.$template->slug.'.pdf'))) {
+             \PDF::loadView('api.template.index', ['content' => $template->content])
+            ->save(public_path('pdf/'.$template->slug.'.pdf'));
+        }
+       
+        \Log::info('request email');
+        event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->slug.'.pdf')));
 
         return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
     }
