@@ -88,9 +88,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 });
 
 get('test', function() {
-    $im = imagegrabscreen();
-    imagepng($im, "myscreenshot.png");
-    imagedestroy($im);
 
-    return  view('welcome');
+    return  view('api.template.create');
 });

@@ -44,14 +44,18 @@ class RenderImageAfterCreateTemplate extends Event
     public function render(TemplateInterface $template)
     {
         $this->content = replace_url_img($this->content);
-        \PDF::loadView('api.template.index', ['content' => $this->content])
+        try {
+             \PDF::loadView('api.template.index', ['content' => $this->content])
             ->save(public_path('pdf/tmp.pdf'));
         
-        $this->createImage();
+            $this->createImage();
 
-        \File::delete(public_path().'/pdf/tmp.pdf');
+            \File::delete(public_path().'/pdf/tmp.pdf');
 
-        return $this->saveImage($template);
+            return $this->saveImage($template);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -88,7 +92,7 @@ class RenderImageAfterCreateTemplate extends Event
             'thumb' =>asset('public/thumb/'.$this->filename)
         ];
         
-        return $template->save() ? $template : null;
+        return $template->save();
     }
 
     /**

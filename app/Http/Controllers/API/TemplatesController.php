@@ -102,12 +102,15 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $result = $this->template->editTemplate($id, $user->id, $request->get('content'));
-       
-        event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
         
-        return $result
+        if (!$result) 
+            return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
+        
+        $render = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
+        
+        return $render
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
-            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
+            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when render file']);
     }
 
     public function postBasicTemplate(Request $request)
@@ -174,7 +177,7 @@ class TemplatesController extends Controller
     {
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
-        return view()->make('api.template.index', compact('content'));
+        // return view()->make('api.template.index', compact('content'));
         return response()->json([
             'status_code' => 200,
             'status' => true,
