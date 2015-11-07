@@ -57,4 +57,11 @@ interface TemplateInterface extends Repository
      * @return mixed          
      */
     public function deleteTemplate($id, $temp_id);
+
+    /**
+     * Create Template after buy market place
+     * @param  array $data    
+     * @return mixed          
+     */
+    public function createTemplateFromMarket($data);
 }

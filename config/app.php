@@ -161,9 +161,7 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        // Yangqi\Htmldom\HtmldomServiceProvider::class,
-        YOzaz\LaravelSwiftmailer\ServiceProvider::class,
-        // RobbieP\CloudConvertLaravel\CloudConvertLaravelServiceProvider::class,  
+        Ignited\LaravelOmnipay\LaravelOmnipayServiceProvider::class,
     ],
 
     /*
@@ -219,9 +217,8 @@ return [
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
-        'Htmldom'   => Yangqi\Htmldom\Htmldom::class,
-        'Mail'      =>  YOzaz\LaravelSwiftmailer\Facade::class,
-        'PDF'       => Barryvdh\DomPDF\Facade::class
+        'PDF'       => Barryvdh\DomPDF\Facade::class,
+        'Omnipay'   => Ignited\LaravelOmnipay\Facades\OmnipayFacade::class,
     ],
 
 ];
