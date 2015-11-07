@@ -24,7 +24,7 @@ class AddQtyColumnInvoiceDetailsTable extends Migration
      */
     public function down()
     {
-         Schema::table('template_markets', function($table) {
+        Schema::table('template_markets', function($table) {
             $table->dropColumn('qty');
         });
     }

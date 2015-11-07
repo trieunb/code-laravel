@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Invoice;
 
+use App\Exceptions\CartException;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use App\Repositories\AbstractRepository;
@@ -25,31 +26,38 @@ class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 	 */
 	public function checkout()
 	{
-		$cart = \Cart::content();
-		$invoice = new Invoice;
-		$invoice->user_id = \Auth::user()->id;
-		$invoice->status = 0;
-		$invoice->total = \Cart::total();
+		try {
+			$carts = \Cart::content();
+			$invoice = new Invoice;
+			$invoice->user_id = \Auth::user()->id;
+			$invoice->status = 0;
+			$invoice->total = \Cart::total();
 
-		if ($invoice->save()) {
+			if ($invoice->save()) {
 
-			$items = [];
-			$template_mk_ids = [];
-			
-			foreach ($cart as $item) {
-				$items['invoice_id'] = $invoice->id;
-				$items['template_market_id'] = $item->id;
-				$items['price'] = $item->price;
-				$items['qty'] = $item->qty;
+				$items = [];
+				// $template_mk_ids = [];
+				
+				foreach ($carts as $cart) {
+					$invoice_detail = new InvoiceDetail;
+					$invoice_detail->template_market_id = $cart->id;
+					$invoice_detail->price = $cart->price;
+					$invoice_detail->qty = $cart->qty;
+					
+					$items[] = $invoice_detail;
+					// $template_mk_ids[] = $item->id;
+				}
 
-				$template_mk_ids[] = $item->id;
+				$invoice->invoice_details()->saveMany($items);
+				
+				// event(new FireContentForTemplate($template_mk_ids, $invoice_id->user_id));
+				
+				\Cart::destroy();
+
+				return true;
 			}
-
-			InvoiceDetail::saveMany($items);
-			
-			event(new FireContentForTemplate($template_mk_ids, $invoice_id->user_id));
-			
-			return \Cart::destroy();
-		}
+		} catch(CartException $e) {
+			return null;
+		}	
 	}
 }

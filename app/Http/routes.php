@@ -85,10 +85,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Cart Route
      */
-    
-    get('cart/buy/{id}', 'CartsController@postBuy');
-});
+    get('cart/checkout', 'CartsController@checkout');
 
-get('test', function() {
-dd(\Cart::content());
+    post('cart/buy/{id}', 'CartsController@postBuy');
+    
 });
