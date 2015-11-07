@@ -90,3 +90,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('cart/buy/{id}', 'CartsController@postBuy');
     
 });
+get('test', function() {
+    dd(public_path('pdf'));
+});

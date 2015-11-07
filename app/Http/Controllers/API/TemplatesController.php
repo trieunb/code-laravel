@@ -193,12 +193,12 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
 
-        if ( ! \File::exists(public_path('pdf/'.$template->slug.'.pdf'))) {
+        if ( ! \File::exists($template->source_file_pdf)) {
             \PDF::loadView('api.template.index', ['content' => $template->content])
             ->save(public_path('pdf/'.$template->slug.'.pdf'));
         }
        
-        event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->slug.'.pdf')));
+        event(new sendMailAttachFile($user, '', $template->source_file_pdf));
 
         return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
     }

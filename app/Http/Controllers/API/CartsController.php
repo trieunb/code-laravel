@@ -46,10 +46,16 @@ class CartsController extends Controller
 
     public function postBuy($template_mk_id, Request $request)
     {
+        if (\Session::has('cart')) return;
+
     	$template_mk = $this->template_mk->getDetailTemplateMarket($template_mk_id);
         try {
-            \Cart::add($template_mk_id, $template_mk->title, 1, $template_mk->price);
-            
+            // \Cart::add($template_mk_id, $template_mk->title, 1, $template_mk->price);
+            \Session::set('cart', [
+                'template_market_id' => $template_mk_id,
+                'qty' => 1,
+                'price' => $template_mk->price
+            ]);
             return response()->json(['status_code' => 200, 'status' => true, 'message' => 'Add to Cart successfully']);
         }catch (ShoppingcartInvalidItemException $e) {
             return response()->json(['status_code' => 400, 'staus' => false, 'message' => 'Error when add to Cart']);

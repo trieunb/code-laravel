@@ -161,7 +161,6 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        Ignited\LaravelOmnipay\LaravelOmnipayServiceProvider::class,
     ],
 
     /*
@@ -218,7 +217,6 @@ return [
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF'       => Barryvdh\DomPDF\Facade::class,
-        'Omnipay'   => Ignited\LaravelOmnipay\Facades\OmnipayFacade::class,
     ],
 
 ];

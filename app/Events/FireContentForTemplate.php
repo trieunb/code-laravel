@@ -12,7 +12,7 @@ class FireContentForTemplate extends Event
 {
     use SerializesModels;
 
-    private $template_mk_ids;
+    private $template_mk_id;
     private $user_id;
 
     /**
@@ -20,28 +20,25 @@ class FireContentForTemplate extends Event
      *
      * @return void
      */
-    public function __construct(array $template_mk_ids, $user_id)
+    public function __construct($template_mk_id, $user_id)
     {
-        $this->template_mk_ids = $template_mk_ids;
+        $this->template_mk_id = $template_mk_id;
         $this->user_id = $user_id;
     }
 
     public function saveTemplates(TemplateMarketInterface $template_mk ,
         TemplateInterface $template)
     {
-        $template_mk = $template_mk->getDataWhereIn('id', $this->template_mk_ids);
-        $data = [];
+        $template_mk = $template_mk->getById($this->template_mk_id);
+        $data = [
+            'content' => $template_mk->content,
+            'image'   => $template_mk->image,
+            'title'   => $template_mk->title,
+            'type'    => 0,
+            'source_file_pdf' => $template_mk->source_file_pdf
+        ];
 
-        foreach ($template_mk as $value) {
-            $data[] = [
-                'user_id' => $this->user_id,
-                'content' => $value->content,
-                'image'   => $value->image,
-                'title'   => $value->title
-            ];
-        }
-
-        $template->createTemplateFromMarket($data);
+        $template->saveOneRecord($data, $this->user_id);
     }
 
     /**

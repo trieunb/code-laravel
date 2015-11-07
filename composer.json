@@ -22,7 +22,7 @@
         "predis/predis": "^1.0",
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "swiftmailer/swiftmailer": "~5.4",
-        "ignited/laravel-omnipay": "2.1.*"
+        "braintree/braintree_php" : "3.6.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

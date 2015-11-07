@@ -32,7 +32,7 @@ class Template extends Model
         parent::boot();
 
         static::creating(function($post) {
-            $post->slug = str_slug($post->title);
+            /*$post->slug = str_slug($post->title);
 
             $latestSlug = static::whereRaw("slug RLIKE '^{$post->slug}(-[0-9]*)?$'")
                 ->latest('id')
@@ -42,7 +42,7 @@ class Template extends Model
                 $pieces = explode('-', $latestSlug);
                 $number = intval(end($pieces));
                 $post->slug .= '-'. ($number + 1);
-            }
+            }*/
         });
     }
 
@@ -70,5 +70,22 @@ class Template extends Model
         }
         // $this->insert($user_templates);
         $this->saveMany($user_templates);
+    }
+
+    public static function makeSlug($template)
+    {
+        $template->slug = str_slug($template->title);
+
+        $latestSlug = static::whereRaw("slug RLIKE '^{$template->slug}(-[0-9]*)?$'")
+            ->latest('id')
+            ->pluck('slug');
+
+        if ($latestSlug) {
+            $pieces = explode('-', $latestSlug);
+            $number = intval(end($pieces));
+            $template->slug .= '-'. ($number + 1);
+        }
+
+        $template->source_file_pdf = asset('pdf/'.$template->slug.'.pdf');
     }
 }
