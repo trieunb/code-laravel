@@ -3,7 +3,23 @@
 @section('title')
 Create Template
 @endsection
-
+@section('style')
+<style type="text/css">
+	#content_editor {
+		width: 21cm;
+		margin: 0 auto;
+	}
+	.container{
+		width: 100%;
+	}
+	#myPanel{
+		z-index: 9999;
+	}
+	@page{
+		size: A4;
+	}
+</style>
+@endsection
 @section('content')
 
 <div class="container">

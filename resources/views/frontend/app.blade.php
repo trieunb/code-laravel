@@ -59,6 +59,7 @@
     </nav>
 </header>
 <main>
+    @yield('style');
     @yield('content')
 
 </main>

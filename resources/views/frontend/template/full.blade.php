@@ -8,9 +8,24 @@
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
 </head>
+<style type="text/css">
+	#editor {
+		width: 21cm;
+		margin: 0 auto;
+	}
+	.container{
+		width: 100%;
+	}
+	#myPanel{
+		z-index: 9999;
+	}
+	@page{
+		size: A4;
+	}
+</style>
 <body>
 	<div id="myPanel" style="width: 525px;"></div>
-	<div id="editor" contenteditable="true" >{!! $content !!}</div>    
+	<div id="editor" contenteditable="true" style="with:100px!important;" >{!! $content !!}</div>    
 	<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
 	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
 	<script src="{{  asset('js/nicEdit.js') }}"></script>
@@ -40,6 +55,7 @@
 
 		bkLib.onDomLoaded(function() {
           	var myNicEditor = new nicEditor();
+          	// new nicEditor({externalCSS : 'asset(css/style.css)'});
           	myNicEditor.setPanel('myPanel');
           	myNicEditor.addInstance('editor');
 	     });
@@ -86,7 +102,6 @@
 		    //footStyle.bottom = (document.body.offsetHeight - footTop) + 'px';
 		  }
 		}
-
 	</script>
 </body>
 </html>
