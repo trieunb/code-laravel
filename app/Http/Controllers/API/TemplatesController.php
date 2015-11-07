@@ -122,11 +122,20 @@ class TemplatesController extends Controller
         $age = $this->user->GetAge($dob);
 
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
-
+        $template = $this->template->createTemplateBasic($user_info->id, $content);
+        
+        if ( !$template) {
+            return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
+        }
+        
+        $render = event(new RenderImageAfterCreateTemplate($template->id, $template->content, $template->slug));
+        if ( !$render) {
+            return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when render pdf']);
+        }
         return response()->json([
                 "status_code" => 200,
                 "status" => true,
-                "data" => $this->template->createTemplateBasic($user_info->id, $content)
+                "data" => $template
             ]);
     }
 
@@ -184,12 +193,11 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
 
-        if ( !\File::exists(public_path('pdf/'.$template->slug.'.pdf'))) {
-             \PDF::loadView('api.template.index', ['content' => $template->content])
+        if ( ! \File::exists(public_path('pdf/'.$template->slug.'.pdf'))) {
+            \PDF::loadView('api.template.index', ['content' => $template->content])
             ->save(public_path('pdf/'.$template->slug.'.pdf'));
         }
        
-        \Log::info('request email');
         event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->slug.'.pdf')));
 
         return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
@@ -199,7 +207,7 @@ class TemplatesController extends Controller
     {
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
-        // return view()->make('api.template.index', compact('content'));
+       
         return response()->json([
             'status_code' => 200,
             'status' => true,

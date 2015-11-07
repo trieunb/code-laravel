@@ -31,7 +31,7 @@ class Template extends Model
     {
         parent::boot();
 
-        static::saving(function($post) {
+        static::creating(function($post) {
             $post->slug = str_slug($post->title);
 
             $latestSlug = static::whereRaw("slug RLIKE '^{$post->slug}(-[0-9]*)?$'")
@@ -63,15 +63,12 @@ class Template extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_templates[] = [
                 'user_id' => $user_id,
-                'cat_id' => $user_id,
                 'title' => $value['title'],
                 'content' => $value['content'],
                 'image' => $value['image'],
-                'price' => $value['price'],
-                'status' => $value['status'],
-                'type' => $value['type'],
             ];
         }
-        $this->insert($user_templates);
+        // $this->insert($user_templates);
+        $this->saveMany($user_templates);
     }
 }

@@ -66,7 +66,7 @@ class RenderImageAfterCreateTemplate extends Event
     private function createImage()
     {
         $img = new \Imagick();
-        $img->readImage(public_path('pdf/tmp.pdf[0]'));
+        $img->readImage(public_path('pdf/'.$this->filename.'.pdf[0]'));
         $img->setImageFormat('jpg');
         $img->setSize(200, 200);
         $img->writeImage(public_path('images/template/'.$this->filename.'.jpg'));
