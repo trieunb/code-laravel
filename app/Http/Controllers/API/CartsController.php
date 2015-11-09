@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Repositories\Invoice\InvoiceInterface;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateInterface;
+use Braintree\Customer;
 use Gloudemans\Shoppingcart\Exceptions\ShoppingcartInvalidItemException;
 use Illuminate\Http\Request;
 
@@ -60,7 +61,7 @@ class CartsController extends Controller
             ? response()->json([
                 'status_code' => 200,
                 'client_token' => BrainTreeSKD::getClientToken($user), 
-                'invoice_id' => $result
+                'invoice_id' => intval($result)
             ])
             : response()->json(['status_code' => 400, 'message' => 'Error when create invoice']);
     }
@@ -68,11 +69,11 @@ class CartsController extends Controller
     public function checkout($invoice_id, Request $request)
     {
         try {
-
+            \Log::info('cartAPI', $request->all());
             $data = [
                 'amount' => $this->invoice->getById($invoice_id)->total,
                 'paymentMethodNonce' => $request->get('paymentMethodNonce'),
-                'customerId' => Auth::user()->id,
+                'customerId' => \Auth::user()->id,
             ];
 
             $result = BrainTreeSKD::transaction($data);

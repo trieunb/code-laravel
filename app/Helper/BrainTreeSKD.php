@@ -7,14 +7,12 @@ use Braintree\Transaction;
 
 class BrainTreeSKD
 {
-	public static function getClientToken($user, $customerId = null)
+	public static function getClientToken($user)
 	{
 
 		$obj = new static;
 
-		if ($customerId == null) {
-			$customerId = $obj->createCustomer($user);
-		}
+		$customerId = $obj->findOrCreateCustomer($user);
 
 		if ( !$customerId) return false;
 		
@@ -26,20 +24,28 @@ class BrainTreeSKD
 	 * @param  mixed $user 
 	 * @return int|false       
 	 */
-	private function createCustomer($user)
+	private function findOrCreateCustomer($user)
 	{
-		$result = Customer::create([
-			'firstName' => $user->firstname,
-			'lastName' => $user->lastName,
-			'email' => $user->email,
-			'phone'	=> $user->mobile_phone,			
-		]);
+		$customer = Customer::find($user->id);
+		
 
-		if ( ! $result->success) {
-			return false;
+		if ( !$customer) {
+			$result = Customer::create([
+				'id' => \Auth::user()->id,
+				'firstName' => $user->firstname,
+				'lastName' => $user->lastName,
+				'email' => $user->email,
+				'phone'	=> $user->mobile_phone,			
+			]);
+			
+			if ( ! $result->success) {
+				return false;
+			}
+
+			return $result->customer->id;
 		}
-
-		return $result->customer->id;
+		
+		return $customer->id;
 	}
 
 	public static function transaction(array $data)
@@ -50,7 +56,6 @@ class BrainTreeSKD
 		$result =  Transaction::sale([
 			'customerId' => $data['customerId'],
 			'amount' => $data['amount'],
-			'merchantAccountId' => env('BRAINTREE_MERCHARTID'),
 			'paymentMethodNonce' => $data['paymentMethodNonce'],
 		]);
 

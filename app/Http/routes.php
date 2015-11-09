@@ -3,6 +3,8 @@
 
 use App\Helper\BainTreeSKD;
 use Barryvdh\DomPDF\PDF;
+use Braintree\Customer;
+use Braintree\MerchantAccount;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\IOFactory;
@@ -94,4 +96,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('cart/checkout/{id}', 'CartsController@checkout');
 
     
+});
+get('/test', function() {
+    
+    dd(Customer::find('1'));
 });

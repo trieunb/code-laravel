@@ -10,7 +10,6 @@ use App\Repositories\Invoice\InvoiceInterface;
 
 class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 {
-	private $currency = 1.42533592;
 	/**
 	 * App\Models\Invoice
 	 * @var Model
@@ -34,7 +33,7 @@ class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 			$invoice = new Invoice;
 			$invoice->user_id = \Auth::user()->id;
 			$invoice->status = 'pending';
-			$invoice->total = $data['amount'] * $this->currency;
+			$invoice->total = $data['amount'];
 			$result = $invoice->save();
 			
 			if ($result) {
@@ -42,10 +41,10 @@ class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 				$invoice_details->invoice_id = $invoice->id;
 				$invoice_details->template_market_id = $data['template_mk_id'];
 
-				return $invoice_details->save();
+				return $invoice_details->save() ? $invoice->id : false;
 			}
 
-			return $invoice->id;
+			return false;
 		} catch(CartException $e) {
 			return false;
 		}	
@@ -63,7 +62,7 @@ class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 		$invoice->paid_at = \Carbon\Carbon::now();
 
 		$result =  $invoice->save();
-
+		
 		if ($result) {
 			event(new FireContentForTemplate(
 				$invoice->invoice_details->template_market_id,
