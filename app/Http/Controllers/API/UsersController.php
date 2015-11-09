@@ -109,11 +109,11 @@ class UsersController extends Controller
 		Objective_Rule $objective_rule,
 		Reference_Rule $reference_rule
 	) {
+		\Log::info('test API', $request->all());
 		$user = \JWTAuth::toUser($request->get('token'));
 		if ($user->id != $id) {
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
-		Log::info('test api', $request->all());
 		if ( !$request->only(['user', 'user_educations', 'user_work_histories', 'user_skills', 
 			'objectives', 'references'])) {
 			return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Not crendential']);

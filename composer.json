@@ -12,7 +12,6 @@
         "guzzle/guzzle": "3.9.*",
         "laracasts/generators": "1.*",
         "tymon/jwt-auth": "0.5.*",
-        "laravel/cashier": "~5.0",
         "barryvdh/laravel-ide-helper": "2.0.6",
         "barryvdh/laravel-debugbar": "2.0.6",
         "oriceon/oauth-5-laravel": "dev-master",

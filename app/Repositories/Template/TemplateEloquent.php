@@ -59,15 +59,17 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     public function saveOneRecord($data, $user_id)
     {
         $dataPrepareSave = isset($data[0]) ? isset($data) : $data;
-        $user_template = isset($dataPrepareSave['id']) ? $this->getById($dataPrepareSave['id']) : new Template;
-        if (!isset($dataPrepareSave['id']) || $dataPrepareSave['id'] == null) $user_template->user_id = $user_id;
+        $template = isset($dataPrepareSave['id']) ? $this->getById($dataPrepareSave['id']) : new Template;
+        if (!isset($dataPrepareSave['id']) || $dataPrepareSave['id'] == null) $template->user_id = $user_id;
 
-        $user_template->title = $dataPrepareSave['title'];
-        $user_template->content = $dataPrepareSave['content'];
-        $user_template->image = $dataPrepareSave['image'];
-        $user_template->type = $dataPrepareSave['type'];
+        $template->title = $dataPrepareSave['title'];
+        $template->content = $dataPrepareSave['content'];
+        $template->image = $dataPrepareSave['image'];
+        $template->type = $dataPrepareSave['type'];
+        $template->source_file_pdf = $dataPrepareSave['source_file_pdf'];
+        Template::makeSlug($template, false);
 
-        return $user_template->save();
+        return $template->save();
     }
 
      /**
@@ -103,7 +105,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             ? preg_replace('/\t|\n+/', '', $request->get('content'))
             : '<div contenteditable="true></div>';
         $template->type = $request->get('type');
-
+        Template::makeSlug($template, false);
         return $template->save() ? $template : null;
     }
 
@@ -150,4 +152,5 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
        
         return $template->delete();
     }
+
 }

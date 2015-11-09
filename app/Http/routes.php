@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Helper\BainTreeSKD;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -62,6 +63,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Template Route
      */
     get('template', 'TemplatesController@getAllTemplate');
+    get('template/test/{id}', 'TemplatesController@test');
     get('template/detail/{id}', 'TemplatesController@getDetailTemplate');
     get('template/create', 'TemplatesController@create');
     get('template/view/{id}', 'TemplatesController@view');
@@ -86,11 +88,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Cart Route
      */
-    get('cart/checkout', 'CartsController@checkout');
-
-    post('cart/buy/{id}', 'CartsController@postBuy');
+    get('cart/checkout/{id}', 'CartsController@checkout');
     
-});
-get('test', function() {
-    dd(public_path('pdf'));
+    post('cart/createpayment', 'CartsController@createPayment');
+    post('cart/buy/{id}', 'CartsController@postBuy');
+
+    
 });

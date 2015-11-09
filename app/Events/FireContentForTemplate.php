@@ -37,7 +37,6 @@ class FireContentForTemplate extends Event
             'type'    => 0,
             'source_file_pdf' => $template_mk->source_file_pdf
         ];
-
         $template->saveOneRecord($data, $this->user_id);
     }
 
