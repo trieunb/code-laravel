@@ -46,14 +46,6 @@ class CartsController extends Controller
         $this->invoice = $invoice;
     }
 
-    public function checkout($id, Request $request)
-    {
-        return $this->invoice->checkout($id)
-            ? response()->json(['status_code' => '200', 'message' => 'Checkout Cart successfully'])
-            : response()->json(['status_code' => 400, 'message' => 'Error when checkout Cart']);
-        
-    }
-
     public function createPayment(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -73,7 +65,7 @@ class CartsController extends Controller
             : response()->json(['status_code' => 400, 'message' => 'Error when create invoice']);
     }
 
-    public function paid($invoice_id, Request $request)
+    public function checkout($invoice_id, Request $request)
     {
         try {
 

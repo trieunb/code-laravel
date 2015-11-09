@@ -88,10 +88,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Cart Route
      */
-    get('cart/checkout/{id}', 'CartsController@checkout');
+
     
     post('cart/createpayment', 'CartsController@createPayment');
-    post('cart/buy/{id}', 'CartsController@postBuy');
+    post('cart/checkout/{id}', 'CartsController@checkout');
 
     
 });
