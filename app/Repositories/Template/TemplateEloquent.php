@@ -16,8 +16,8 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * Fields for update data
      * @var $field_work_save
      */
-    protected $field_work_save = ['user_id', 'cat_id', 'title', 'content',
-    'image', 'type', 'status'];
+    protected $field_work_save = ['user_id', 'title', 'content',
+    'image', 'type'];
 
 	public function __construct(Template $template)
 	{
@@ -58,18 +58,18 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      */
     public function saveOneRecord($data, $user_id)
     {
-        $dataPrepareSave = $data[0];
-        $user_template = $dataPrepareSave['id'] ? $this->getById($dataPrepareSave['id']) : new UserEducation;
-        if ($dataPrepareSave['id'] == null) $user_template->user_id = $user_id;
+        $dataPrepareSave = isset($data[0]) ? isset($data) : $data;
+        $template = isset($dataPrepareSave['id']) ? $this->getById($dataPrepareSave['id']) : new Template;
+        if (!isset($dataPrepareSave['id']) || $dataPrepareSave['id'] == null) $template->user_id = $user_id;
 
-        $user_template->cat_id = $dataPrepareSave['cat_id'];
-        $user_template->title = $dataPrepareSave['title'];
-        $user_template->content = $dataPrepareSave['content'];
-        $user_template->image = $dataPrepareSave['image'];
-        $user_template->type = $dataPrepareSave['type'];
-        $user_template->status = $dataPrepareSave['status'];
+        $template->title = $dataPrepareSave['title'];
+        $template->content = $dataPrepareSave['content'];
+        $template->image = $dataPrepareSave['image'];
+        $template->type = $dataPrepareSave['type'];
+        $template->source_file_pdf = $dataPrepareSave['source_file_pdf'];
+        Template::makeSlug($template, false);
 
-        return $user_template->save();
+        return $template->save();
     }
 
      /**
@@ -105,7 +105,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             ? preg_replace('/\t|\n+/', '', $request->get('content'))
             : '<div contenteditable="true></div>';
         $template->type = $request->get('type');
-
+        Template::makeSlug($template, false);
         return $template->save() ? $template : null;
     }
 
@@ -138,7 +138,9 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             $template->user_id = $user_id;
             $template->title = "Basic Template";
             $template->type = 1;
+            Template::makeSlug($template);
         }
+
         $template->content = $content;
         
         return $template->save() ? $template : null;
@@ -151,14 +153,4 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         return $template->delete();
     }
 
-    /**
-     * Create Template after buy market place
-     * @param  int $user_id 
-     * @param  array $data    
-     * @return mixed          
-     */
-    public function createTemplateFromMarket($data)
-    {
-        $this->model->saveMany($data);
-    }
 }

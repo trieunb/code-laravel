@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', true),
+    'debug' => env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -146,6 +146,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Repositories\RepositoryServiceProvider::class,
+        App\Providers\BraintreeServiceProvider::class,
          /**
          * Vendor Service Providers
          */
@@ -154,14 +155,12 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Laracasts\Generators\GeneratorsServiceProvider::class,
-        Laravel\Cashier\CashierServiceProvider::class,
         // Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         App\CustomVendor\Providers\JWTAuthServiceProvider::class,
         Artdarek\OAuth\OAuthServiceProvider::class,
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        Ignited\LaravelOmnipay\LaravelOmnipayServiceProvider::class,
     ],
 
     /*
@@ -218,7 +217,6 @@ return [
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF'       => Barryvdh\DomPDF\Facade::class,
-        'Omnipay'   => Ignited\LaravelOmnipay\Facades\OmnipayFacade::class,
     ],
 
 ];

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helper\BrainTreeSKD;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\Invoice\InvoiceInterface;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateInterface;
+use Braintree\Customer;
 use Gloudemans\Shoppingcart\Exceptions\ShoppingcartInvalidItemException;
 use Illuminate\Http\Request;
 
@@ -39,27 +41,52 @@ class CartsController extends Controller
         TemplateInterface $template, InvoiceInterface $invoice)
     {
     	$this->middleware('jwt.auth');
+        
 		$this->template = $template;
         $this->template_mk = $template_mk;
         $this->invoice = $invoice;
     }
 
-    public function postBuy($template_mk_id, Request $request)
+    public function createPayment(Request $request)
     {
-    	$template_mk = $this->template_mk->getDetailTemplateMarket($template_mk_id);
-        try {
-            \Cart::add($template_mk_id, $template_mk->title, 1, $template_mk->price);
-            
-            return response()->json(['status_code' => 200, 'status' => true, 'message' => 'Add to Cart successfully']);
-        }catch (ShoppingcartInvalidItemException $e) {
-            return response()->json(['status_code' => 400, 'staus' => false, 'message' => 'Error when add to Cart']);
-        }  
+        $user = \JWTAuth::toUser($request->get('token'));
+        $data = [
+            'amount' => $request->get('amount'),
+            'template_mk_id' => $request->get('template_mk_id')
+        ];
+
+        $result = $this->invoice->checkout($data);
+        
+        return $result
+            ? response()->json([
+                'status_code' => 200,
+                'client_token' => BrainTreeSKD::getClientToken($user), 
+                'invoice_id' => intval($result)
+            ])
+            : response()->json(['status_code' => 400, 'message' => 'Error when create invoice']);
     }
 
-    public function checkout(Request $request)
+    public function checkout($invoice_id, Request $request)
     {
-        return $this->invoice->checkout()
-            ? response()->json(['status_code' => '200', 'message' => 'Checkout Cart successfully'])
-            : response()->json(['status_code' => 400, 'message' => 'Error when checkout Cart']);
+        try {
+            $data = [
+                'amount' => $this->invoice->getById($invoice_id)->total,
+                'paymentMethodNonce' => $request->get('paymentMethodNonce'),
+                'customerId' => \Auth::user()->id,
+            ];
+
+            $result = BrainTreeSKD::transaction($data);
+            
+            if ( !$result) {
+                return response()->json(['status_code' => 400, 'message' => 'Transaction failed']);
+            }    
+
+           return $this->invoice->paid($invoice_id)
+                    ? response()->json(['status_code' => 200, 'message' => 'Paid invoice successfully'])
+                   : response()->json(['status_code' => 400, 'message' => 'Paid invoice faild']); 
+            
+        } catch(PaymentMethodException $e) {
+            return response()->json(['status_code' => 400, 'message' => $e->getMessage()]);
+        }        
     }
 }

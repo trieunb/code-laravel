@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Invoice;
 
+use App\Events\FireContentForTemplate;
 use App\Exceptions\CartException;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
@@ -24,40 +25,51 @@ class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 	 * Checkout Cart
 	 * @return mixed       
 	 */
-	public function checkout()
+	public function checkout(array $data)
 	{
 		try {
-			$carts = \Cart::content();
+			//$cart = \Session::get('cart');
+
 			$invoice = new Invoice;
 			$invoice->user_id = \Auth::user()->id;
-			$invoice->status = 0;
-			$invoice->total = \Cart::total();
+			$invoice->status = 'pending';
+			$invoice->total = $data['amount'];
+			$result = $invoice->save();
+			
+			if ($result) {
+				$invoice_details  = new InvoiceDetail;
+				$invoice_details->invoice_id = $invoice->id;
+				$invoice_details->template_market_id = $data['template_mk_id'];
 
-			if ($invoice->save()) {
-
-				$items = [];
-				// $template_mk_ids = [];
-				
-				foreach ($carts as $cart) {
-					$invoice_detail = new InvoiceDetail;
-					$invoice_detail->template_market_id = $cart->id;
-					$invoice_detail->price = $cart->price;
-					$invoice_detail->qty = $cart->qty;
-					
-					$items[] = $invoice_detail;
-					// $template_mk_ids[] = $item->id;
-				}
-
-				$invoice->invoice_details()->saveMany($items);
-				
-				// event(new FireContentForTemplate($template_mk_ids, $invoice_id->user_id));
-				
-				\Cart::destroy();
-
-				return true;
+				return $invoice_details->save() ? $invoice->id : false;
 			}
+
+			return false;
 		} catch(CartException $e) {
-			return null;
+			return false;
 		}	
+	}
+
+	/**
+	 * Paid invoice
+	 * @param  int $invoice_id 
+	 * @return bool     
+	 */
+	public function paid($invoice_id)
+	{
+		$invoice = $this->getById($invoice_id);
+		$invoice->status = 'paid';
+		$invoice->paid_at = \Carbon\Carbon::now();
+
+		$result =  $invoice->save();
+		
+		if ($result) {
+			event(new FireContentForTemplate(
+				$invoice->invoice_details->template_market_id,
+			 	$invoice->user_id)
+			);
+		}
+
+		return $result;
 	}
 }

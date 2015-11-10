@@ -7,6 +7,10 @@ use App\Repositories\TemplateMarket\TemplateMarketInterface;
 
 class TemplateMarketEloquent extends AbstractRepository implements TemplateMarketInterface
 {
+    /**
+     * TemplateMarket 
+     * @var $model
+     */
 	protected $model;
 
 	public function __construct(TemplateMarket $template_market)
@@ -14,6 +18,10 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
 		$this->model = $template_market;
 	}
 
+    /**
+     * Get all template in market place
+     * @return mixed 
+     */
     public function getAllTemplateMarket()
     {
         return $this->getDataWhereClause('status', '=', 1);
@@ -25,5 +33,6 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
 
         return $template_mk->status == 1 ? $template_mk : null;
     }
+
 
 }

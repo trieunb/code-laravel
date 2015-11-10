@@ -14,10 +14,10 @@ class Invoice extends Model
     protected $table = 'invoices';
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function invoice_details()
     {
-    	return $this->hasMany(InvoiceDetail::class);
+    	return $this->hasOne(InvoiceDetail::class);
     }
 }

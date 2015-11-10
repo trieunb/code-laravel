@@ -90,8 +90,9 @@ class RenderImageAfterCreateTemplate extends Event
         $template = $template->getById($this->template_id);
         $template->image = [
             'origin' => asset('images/template/'.$this->filename.'.jpg'),
-            'thumb' =>asset('public/thumb/'.$this->filename.'.jpg')
+            'thumb' =>asset('thumb/template/'.$this->filename.'.jpg')
         ];
+        $template->source_file_pdf = asset('pdf/'.$this->filename.'.pdf');
         
         return $template->save();
     }
