@@ -1,16 +1,5 @@
 <?php
 
-
-use App\Helper\BainTreeSKD;
-use Barryvdh\DomPDF\PDF;
-use Braintree\Customer;
-use Braintree\MerchantAccount;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\TemplateProcessor;
-use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -22,6 +11,7 @@ use RobbieP\CloudConvertLaravel\Facades\CloudConvert;
 |
 */
 Route::pattern('id', '[0-9]+');
+
 get('/', function() {
     return view('welcome');
 });
@@ -86,18 +76,13 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/all-template', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
-
+    get('martket/view/{id}', 'MarketPlacesController@view');
+    
     /**
      * Cart Route
      */
 
-    
     post('cart/createpayment', 'CartsController@createPayment');
     post('cart/checkout/{id}', 'CartsController@checkout');
 
-    
-});
-get('/test', function() {
-    
-    dd(Customer::find('1'));
 });

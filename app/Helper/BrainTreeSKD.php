@@ -4,6 +4,7 @@ namespace App\Helper;
 use Braintree\ClientToken;
 use Braintree\Customer;
 use Braintree\Transaction;
+use Braintree\Exception\NotFound;
 
 class BrainTreeSKD
 {
@@ -26,10 +27,11 @@ class BrainTreeSKD
 	 */
 	private function findOrCreateCustomer($user)
 	{
-		$customer = Customer::find($user->id);
-		
+		try {
+			$customer = Customer::find($user->id);
 
-		if ( !$customer) {
+			return $customer->id;
+		} catch(NotFound $e) {
 			$result = Customer::create([
 				'id' => \Auth::user()->id,
 				'firstName' => $user->firstname,
@@ -44,8 +46,6 @@ class BrainTreeSKD
 
 			return $result->customer->id;
 		}
-		
-		return $customer->id;
 	}
 
 	public static function transaction(array $data)

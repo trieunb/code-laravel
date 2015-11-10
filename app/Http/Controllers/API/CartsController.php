@@ -56,7 +56,7 @@ class CartsController extends Controller
         ];
 
         $result = $this->invoice->checkout($data);
-
+        
         return $result
             ? response()->json([
                 'status_code' => 200,
@@ -69,7 +69,6 @@ class CartsController extends Controller
     public function checkout($invoice_id, Request $request)
     {
         try {
-            \Log::info('cartAPI', $request->all());
             $data = [
                 'amount' => $this->invoice->getById($invoice_id)->total,
                 'paymentMethodNonce' => $request->get('paymentMethodNonce'),

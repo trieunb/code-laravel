@@ -209,7 +209,7 @@ class TemplatesController extends Controller
     {
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
-       
+
         return response()->json([
             'status_code' => 200,
             'status' => true,
