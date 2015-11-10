@@ -32,7 +32,7 @@ class MarketPlacesController extends Controller
             'status_code' => 200,
             'status' => true,
             'data' => $this->template_market->getAllTemplateMarket()
-        ]);
+        ], 200, [], JSON_NUMERIC_CHECK);
     }
 
     public function getDetailTemplateMarket(Request $request, $template_id)
@@ -41,7 +41,9 @@ class MarketPlacesController extends Controller
         $template_market = $this->template_market->getDetailTemplateMarket($template_id);
         
         return $template_market
-            ? response()->json(['status_code' => 200, 'status' => true, 'data' => $template_market])
+            ? response()->json([
+                'status_code' => 200, 'status' => true, 'data' => $template_market
+            ], 200, [], JSON_NUMERIC_CHECK)
             : response()->json(['status_code' => 404, 'status' => false, 'message' => 'Page not found']);
     }
 

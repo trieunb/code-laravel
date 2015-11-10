@@ -160,7 +160,6 @@ return [
         Artdarek\OAuth\OAuthServiceProvider::class,
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
     ],
 
     /*
@@ -215,7 +214,6 @@ return [
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
-        'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF'       => Barryvdh\DomPDF\Facade::class,
     ],
 
