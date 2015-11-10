@@ -40,8 +40,9 @@ class ConvertFile extends Job implements SelfHandling, ShouldQueue
         if (array_key_exists('erros', $this->data))
             return;
         $data = $this->convert->getJobAfterConvert($this->data);
-        if ( !is_array($data)) return response()->json(['status_code' => 401, 'status' => false, 'message' => 'Not credentials']);
 
+        if ( !is_array($data) || $data['status'] == 'failed') return response()->json(['status_code' => 401, 'status' => false, 'message' => 'Not credentials']);
+        var_dump($data);
         if ($data['status'] != 'successful' && !array_key_exists('erros', $this->data)) {
             //$this->release(1);
             app('Illuminate\Contracts\Bus\Dispatcher')->dispatch(new ConvertFile($this->convert, $this->data, $this->nameZipFile));

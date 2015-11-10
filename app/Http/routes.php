@@ -1,7 +1,5 @@
 <?php
 
-use PhpOffice\PhpWord\IOFactory;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,58 +12,41 @@ use PhpOffice\PhpWord\IOFactory;
 */
 Route::pattern('id', '[0-9]+');
 
-Route::get('/', function () {
-    \Auth::loginUsingId(2);
-    // \Auth::logout();
-      return view('welcome');
+get('/', function() {
+    return view('welcome');
 });
-
-
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin|member'], function() {
     get('/', 'DashBoardsController@index');
 });
 
 
 Route::group(['namespace' => 'Frontend'], function() {
-    get('/template/{id}', ['uses' => 'TemplatesController@detail']);
-    get('/template/convert', ['uses' => 'TemplatesController@convert']);
+    /**
+     * Template Route
+     */
+    get('template/create', ['as' => 'frontend.template.get.create', 'uses' => 'TemplatesController@create']);
+    get('template/{id}', ['uses' => 'TemplatesController@detail']);
+    get('template/convert', ['uses' => 'TemplatesController@convert']);
+
+    post('template/create', ['as' => 'frontend.template.post.create', 'uses' => 'TemplatesController@postCreate']);
 });
 
 Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
+    /**
+     * Authenticate Route
+     */
+    get('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticatesController@getLogin']);
+    get('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticatesController@getRegister']);
 
-    /*Route::controller('auth', 'AuthenticateController', [
-      'getLogin' => 'auth.login',
-      'getRegister'   => 'auth.register',
-      'postLogin' => 'auth.login',
-      'postLoginWithLinkedin' => 'auth.linkedin',
-    ]);*/
-    get('auth/login', [
-      'as' => 'auth.login', 
-      'uses' => 'AuthenticateController@getLogin'
-    ]);
-    get('auth/register', [
-      'as' => 'auth.register', 
-      'uses' => 'AuthenticateController@getRegister'
-    ]);
-    post('auth/register', [
-      'as' => 'auth.register', 
-      'uses' => 'AuthenticateController@postRegister'
-    ]);
-    post('auth/login', [
-      'as' => 'auth.login', 
-      'uses' => 'AuthenticateController@postLogin'
-    ]);
-    post('auth/reset-password', ['uses' => 'AuthenticateController@postResetPassword']);
-    Route::any('auth/login-with-linkedin', 
-      ['as' => 'auth.linkedin', 
-      'uses' => 'AuthenticateController@postLoginWithLinkedin']);
+    post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticatesController@postRegister']);
+    post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticatesController@postLogin']);
+    post('auth/reset-password', ['uses' => 'AuthenticatesController@postResetPassword']);
+    Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticatesController@postLoginWithLinkedin']);
 
     /**
      * User Route
      */
-
     get('/user/profile', 'UsersController@getProfile');
-
 
     post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('/user/upload', ['uses' => 'UsersController@uploadImage']);
@@ -73,15 +54,35 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Template Route
      */
-    
-    get('template', ['uses' => 'TemplateController@getTemplates']);
-    get('template/market', ['uses' => 'TemplateController@getAllTemplatesFromMarket']);
-    get('template/{id}', ['uses' => 'TemplateController@getDetailTemplate']);
-    post('template', ['uses' => 'TemplateController@postTemplates']);
+    get('template', 'TemplatesController@getAllTemplate');
+    get('template/test/{id}', 'TemplatesController@test');
+    get('template/detail/{id}', 'TemplatesController@getDetailTemplate');
+    get('template/create', 'TemplatesController@create');
+    get('template/view/{id}', 'TemplatesController@view');
+    get('template/edit/{id}', 'TemplatesController@edit');
+    get('template/edit/view/{id}', 'TemplatesController@editView');
+    get('template/{id}/attach', 'TemplatesController@attach');
+    get('template/view-template/{id}', 'TemplatesController@renderUserInfoToTemplate');
 
+    post('template/preview', 'TemplatesController@updateBasicTemplate');
+    post('template/basic', 'TemplatesController@postBasicTemplate');
+    post('template', 'TemplatesController@postTemplates');
+    post('template/edit/{id}', 'TemplatesController@postEdit');
+    post('template/create', 'TemplatesController@postCreate');
+    post('template/delete/{id}', 'TemplatesController@postDeleteTemplate');
+    
     /**
      * Market Route
      */
-    get('market/all-template', ['uses' => 'MarketPlaceController@getAllTemplateMarket']);
-    get('market/detail-template/{id}', ['uses' => 'MarketPlaceController@getDetailTemplateMarket']);
+    get('market/all-template', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/detail-template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
+    get('martket/view/{id}', 'MarketPlacesController@view');
+    
+    /**
+     * Cart Route
+     */
+
+    post('cart/createpayment', 'CartsController@createPayment');
+    post('cart/checkout/{id}', 'CartsController@checkout');
+
 });

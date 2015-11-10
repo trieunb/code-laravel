@@ -31,6 +31,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->lastname = $data['lastname'];
 		if (isset($data['email']))
 			$user->email = $data['email'];
+        if (isset($data['status']))
+            $user->status = $data['status'];
 		if (isset($data['link_profile']))
 			$user->link_profile = $data['link_profile'];
 		if (isset($data['infomation']))
@@ -152,10 +154,15 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     }
     
-	public function getTemplateFromUser($user_id) {
+    /**
+	 * Get template for user id
+	 * @param  int $id
+	 * @return mixed
+	 */
+	public function getTemplateFromUser($id) {
 		return $this->model
             ->with(['templates'])
-            ->findOrFail($user_id);
+            ->findOrFail($id);
 	}
 
     /**
@@ -181,4 +188,16 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 		return $user->save() ? $user->avatar : '';
 	}
+    
+    function GetAge($dob) 
+    { 
+            $dob=explode("-",$dob); 
+            $curMonth = date("m");
+            $curDay = date("j");
+            $curYear = date("Y");
+            $age = $curYear - $dob[0]; 
+            if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])) 
+                    $age--; 
+            return $age; 
+    }
 }

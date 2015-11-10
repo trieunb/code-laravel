@@ -20,17 +20,14 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use Laravel\Cashier\Billable;
-use Laravel\Cashier\Contracts\Billable as BillableContract;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class User extends Model implements AuthenticatableContract,                                    
                                     CanResetPasswordContract,
-                                    HasRoleAndPermissionContract,
-                                    BillableContract
+                                    HasRoleAndPermissionContract
 {
-    use Authenticatable, CanResetPassword, HasRoleAndPermission, Billable;
+    use Authenticatable, CanResetPassword, HasRoleAndPermission;
 
     /**
      * The database table used by the model.
@@ -49,6 +46,7 @@ class User extends Model implements AuthenticatableContract,
         'firstname',
         'lastname',
         'email',
+        'status',
         'link_profile',
         'infomation',
         'dob',

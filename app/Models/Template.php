@@ -12,13 +12,41 @@ class Template extends Model
 
     use UpdateColumnWithClauseTrait;
 
+    /**
+     * Table name
+     * @var $table
+     */
     protected $table = "templates";
     
-    protected $fillable = [
-        'user_id',
-        'source',
-        'source_convert'
+    protected $casts = [
+    	'image' => 'json'
     ];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+    */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($post) {
+            /*$post->slug = str_slug($post->title);
+
+            $latestSlug = static::whereRaw("slug RLIKE '^{$post->slug}(-[0-9]*)?$'")
+                ->latest('id')
+                ->pluck('slug');
+
+            if ($latestSlug) {
+                $pieces = explode('-', $latestSlug);
+                $number = intval(end($pieces));
+                $post->slug .= '-'. ($number + 1);
+            }*/
+        });
+    }
+
+
     /**
      * Teamplate belongs to user.
      *
@@ -35,10 +63,30 @@ class Template extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_templates[] = [
                 'user_id' => $user_id,
-                'source' => $value['source'],
-                'source_convert' => $value['source_convert']
+                'title' => $value['title'],
+                'content' => $value['content'],
+                'image' => $value['image'],
             ];
         }
-        $this->insert($user_templates);
+        // $this->insert($user_templates);
+        $this->saveMany($user_templates);
+    }
+
+    public static function makeSlug($template, $generatePDF = true)
+    {
+        $template->slug = str_slug($template->title);
+
+        $latestSlug = static::whereRaw("slug RLIKE '^{$template->slug}(-[0-9]*)?$'")
+            ->latest('id')
+            ->pluck('slug');
+
+        if ($latestSlug) {
+            $pieces = explode('-', $latestSlug);
+            $number = intval(end($pieces));
+            $template->slug .= '-'. ($number + 1);
+        }
+        
+        if ($generatePDF)
+            $template->source_file_pdf = asset('pdf/'.$template->slug.'.pdf');
     }
 }
