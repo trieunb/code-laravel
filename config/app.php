@@ -146,7 +146,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Repositories\RepositoryServiceProvider::class,
-        App\Providers\BraintreeServiceProvider::class,
+        // App\Providers\BraintreeServiceProvider::class,
          /**
          * Vendor Service Providers
          */
