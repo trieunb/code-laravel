@@ -12,7 +12,6 @@
         "guzzle/guzzle": "3.9.*",
         "laracasts/generators": "1.*",
         "tymon/jwt-auth": "0.5.*",
-        "laravel/cashier": "~5.0",
         "barryvdh/laravel-ide-helper": "2.0.6",
         "barryvdh/laravel-debugbar": "2.0.6",
         "oriceon/oauth-5-laravel": "dev-master",
@@ -22,7 +21,7 @@
         "predis/predis": "^1.0",
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "swiftmailer/swiftmailer": "~5.4",
-        "ignited/laravel-omnipay": "2.1.*"
+        "braintree/braintree_php" : "3.6.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

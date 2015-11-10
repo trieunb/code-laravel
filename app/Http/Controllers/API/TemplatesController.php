@@ -197,13 +197,15 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
+        $index = strpos($template->source_file_pdf, 'pdf/');
+        $sourcePDF = public_path(substr($template->source_file_pdf, $index));
 
-        if ( ! \File::exists(public_path('pdf/'.$template->slug.'.pdf'))) {
+        if ( ! \File::exists($sourcePDF)) {
             \PDF::loadView('api.template.index', ['content' => $template->content])
             ->save(public_path('pdf/'.$template->slug.'.pdf'));
         }
-       
-        event(new sendMailAttachFile($user, '', public_path('pdf/'.$template->slug.'.pdf')));
+      
+        event(new sendMailAttachFile($user, '', $sourcePDF));
 
         return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
     }
@@ -212,7 +214,7 @@ class TemplatesController extends Controller
     {
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
-       
+
         return response()->json([
             'status_code' => 200,
             'status' => true,
@@ -220,5 +222,11 @@ class TemplatesController extends Controller
         ]);
     }
 
+    public function test($id, Request $request)
+    {
+        $user = \JWTAuth::toUser($request->get('token'));
+        $content = $this->template->getDetailTemplate($id, $user->id)->content;
 
+        return view('api.template.create', compact('content'));
+    }
 }
