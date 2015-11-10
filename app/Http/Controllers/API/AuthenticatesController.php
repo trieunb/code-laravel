@@ -137,7 +137,7 @@ class AuthenticatesController extends Controller
         ], 401);
     }
 
-    public function postResetPassword(Request $request)
+    public function postForgetPassword(Request $request)
     {
         $email = $request->get('email');
         $user = $this->user->getFirstDataWhereClause('email', '=', $email);
@@ -154,7 +154,7 @@ class AuthenticatesController extends Controller
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
-                'password' => $password
+                'message' => "Success! check your email to reset your password"
             ]);
         }
 
@@ -164,6 +164,20 @@ class AuthenticatesController extends Controller
             'message' => 'Invalid email'
         ], 403);
         
+    }
+
+    public function postChangePassword(Request $request)
+    {
+        $user = \JWTAuth::toUser('token');
+        $password = $request->get('password');
+        if ( $user ) {
+            $this->user->update(['password' => Hash::make($password)], $user->id);
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'message' => "Success! Password Change Requested"
+            ]);
+        }
     }
 
     function randomPassword($length) {

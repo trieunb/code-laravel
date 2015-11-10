@@ -161,7 +161,7 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        Ignited\LaravelOmnipay\LaravelOmnipayServiceProvider::class,
+        // Ignited\LaravelOmnipay\LaravelOmnipayServiceProvider::class,
     ],
 
     /*
