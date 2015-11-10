@@ -98,7 +98,7 @@ class UsersController extends Controller
 		
 		return response()->json([
 			'status_code' => 200, 'status' => true, 'data' => $this->user->getProfile($user->id)
-		], 200, [], JSON_NUMERIC_CHECK);
+		]);
 	}
 
 	public function postProfile($id, Request $request, 

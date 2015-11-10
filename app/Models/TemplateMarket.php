@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 class TemplateMarket extends Model
 {
     protected $casts = [
-        'image' => 'json'
+        'image' => 'json',
+        'id' => 'int',
+        'cat_id' => 'int',
+        'price' => 'double',
+        'status' => 'int',
     ];
 	/**
 	 *

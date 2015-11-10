@@ -35,7 +35,7 @@ class TemplatesController extends Controller
             'status_code' => 200,
             'status' => true,
             'data' => $this->user->getTemplateFromUser($user->id)->templates
-        ], 200, [], JSON_NUMERIC_CHECK); 
+        ]); 
     }
 
     public function postTemplates(Request $request)
@@ -72,7 +72,7 @@ class TemplatesController extends Controller
             'status_code' => 200,
             'status' => true,
             'data' => $this->template->getDetailTemplate($id, $user->id)
-        ], 200, [], JSON_NUMERIC_CHECK);
+        ]);
     }
 
     public function edit(Request $request, $id)
@@ -87,7 +87,7 @@ class TemplatesController extends Controller
                 'title' => $template->title,
                 'content' => $template->content
             ]
-        ], 200, [], JSON_NUMERIC_CHECK);
+        ]);
     }
 
     public function editView($id, Request $request)
@@ -133,10 +133,10 @@ class TemplatesController extends Controller
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when render pdf']);
         }
         return response()->json([
-                "status_code" => 200,
-                "status" => true,
-                "data" => $template
-            ], 200, [], JSON_NUMERIC_CHECK);
+            "status_code" => 200,
+            "status" => true,
+            "data" => $template
+        ]);
     }
 
     public function updateBasicTemplate(Request $request)

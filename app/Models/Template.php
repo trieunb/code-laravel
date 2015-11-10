@@ -19,7 +19,10 @@ class Template extends Model
     protected $table = "templates";
     
     protected $casts = [
-    	'image' => 'json'
+    	'image' => 'json',
+        'id' => 'int',
+        'user_id' => 'int',
+        'type' => 'int'
     ];
 
     /**
