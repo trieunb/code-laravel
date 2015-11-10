@@ -185,8 +185,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	{
 		$user = $this->getById($user_id);
 		$user->avatar = User::uploadAvatar($file);
-
-		return $user->save() ? $user->avatar : '';
+		$image = [ 
+			'origin' => asset($user->avatar['origin']),
+			'thumb' => asset($user->avatar['thumb'])
+		];
+		
+		return $user->save() ? $image : '';
 	}
     
     function GetAge($dob) 

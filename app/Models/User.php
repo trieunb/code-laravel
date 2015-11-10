@@ -196,8 +196,8 @@ class User extends Model implements AuthenticatableContract,
         }
 
         return [
-            'origin' => asset($avatar->path.'origin/'.$name), 
-            'thumb' => asset($avatar->path.'thumb/'.$name)
+            'origin' => $avatar->path.'origin/'.$name, 
+            'thumb' => $avatar->path.'thumb/'.$name
         ];
     }
 }
