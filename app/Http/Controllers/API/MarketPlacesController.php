@@ -41,7 +41,9 @@ class MarketPlacesController extends Controller
         $template_market = $this->template_market->getDetailTemplateMarket($template_id);
         
         return $template_market
-            ? response()->json(['status_code' => 200, 'status' => true, 'data' => $template_market])
+            ? response()->json([
+                'status_code' => 200, 'status' => true, 'data' => $template_market
+            ])
             : response()->json(['status_code' => 404, 'status' => false, 'message' => 'Page not found']);
     }
 
