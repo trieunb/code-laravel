@@ -136,7 +136,7 @@ class TemplatesController extends Controller
                 "status_code" => 200,
                 "status" => true,
                 "data" => $template
-            ]);
+            ], 200, [], JSON_NUMERIC_CHECK);
     }
 
     public function updateBasicTemplate(Request $request)
@@ -217,11 +217,4 @@ class TemplatesController extends Controller
         ]);
     }
 
-    public function test($id, Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $content = $this->template->getDetailTemplate($id, $user->id)->content;
-
-        return view('api.template.create', compact('content'));
-    }
 }
