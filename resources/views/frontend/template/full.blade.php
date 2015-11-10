@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
 </head>
 <style type="text/css">
+	body{
+		/*width: 21cm;*/
+	}
 	#editor {
 		width: 21cm;
 		margin: 0 auto;
@@ -24,7 +27,7 @@
 	}
 </style>
 <body>
-	<div id="myPanel" style="width: 525px;"></div>
+	<div id="myPanel" style=""></div>
 	<div id="editor" contenteditable="true" style="with:100px!important;" >{!! $content !!}</div>    
 	<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
 	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}

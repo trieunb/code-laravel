@@ -40,7 +40,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticatesController@postRegister']);
     post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticatesController@postLogin']);
-    post('auth/reset-password', ['uses' => 'AuthenticatesController@postResetPassword']);
+    post('auth/forget-password', ['uses' => 'AuthenticatesController@postForgetPassword']);
+    post('auth/change-password', ['uses' => 'AuthenticatesController@postChangePassword']);
     Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticatesController@postLoginWithLinkedin']);
 
     /**

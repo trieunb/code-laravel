@@ -67,12 +67,17 @@ class TemplatesController extends Controller
     public function getDetailTemplate(Request $request, $id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-      
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => $this->template->getDetailTemplate($id, $user->id)
-        ]);
+        $template = Template::where('id', '=', $id)->first();
+
+        return $template 
+            ? response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'data' => $this->template->getDetailTemplate($id, $user->id)])
+            : response()->json([
+                'status_code' => 404,
+                'status' => false,
+                'message' => 'page not found'],404);
     }
 
     public function edit(Request $request, $id)
