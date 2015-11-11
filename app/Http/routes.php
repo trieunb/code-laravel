@@ -79,8 +79,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Market Route
      */
-    get('market/all-template', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
-    get('market/detail-template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
+    get('market', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
     
     /**

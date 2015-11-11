@@ -31,8 +31,9 @@
 	        	if (typeof(anchorNode.tagName) === 'undefined' || anchorNode.tagName == '') {
 
 	        		var content = window.getSelection().getRangeAt(0).cloneContents();
-	        		str.replace(/e/, '<div>b</div>');
-	        		$(this).html(str);
+	        		str.replace(/e+/g, 'bb');
+
+	        		console.log(str);
 	        		//console.log(anchorNode.parentNode);
 	        		//$(anchorNode.parentNode).html('<div>hqh333q</div>');
 	        	}else {
