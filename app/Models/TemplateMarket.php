@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TemplateMarket extends Model
 {
+    use SoftDeletes;
+    
     protected $casts = [
         'image' => 'json',
         'id' => 'int',

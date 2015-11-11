@@ -15,8 +15,12 @@ Route::pattern('id', '[0-9]+');
 get('/', function() {
     return view('welcome');
 });
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin|member'], function() {
-    get('/', 'DashBoardsController@index');
+//, 'middleware' => 'role:admin|member'
+get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
+post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
+    get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
+    get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
 });
 
 
@@ -76,7 +80,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/all-template', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
     get('market/detail-template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
-    get('martket/view/{id}', 'MarketPlacesController@view');
+    get('market/view/{id}', 'MarketPlacesController@view');
     
     /**
      * Cart Route
