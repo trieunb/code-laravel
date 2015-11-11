@@ -13,6 +13,7 @@
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/dataTables.bootstrap.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/dataTables.responsive.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/sb-admin-2.css')}}">
+        @yield('style')
     </head>
     <body>
         <div id="wrapper">
@@ -85,7 +86,6 @@
             <!-- /#page-wrapper -->
 
         </div>
-        @yield('script')
         <!-- jQuery -->
         <script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
         <!-- Bootstrap JavaScript -->
@@ -94,5 +94,6 @@
         <script src="{{  asset('assets/js/jquery.dataTables.js') }}"></script>
         <script src="{{  asset('assets/js/dataTables.bootstrap.js') }}"></script>
         <script src="{{  asset('assets/js/sb-admin-2.js') }}"></script>
+        @yield('script')
     </body>
 </html>
