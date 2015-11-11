@@ -21,6 +21,7 @@ post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsControlle
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
+    get('/create', ['as' => 'admin.create', 'uses' => 'DashBoardsController@createTemplate']);
 });
 
 

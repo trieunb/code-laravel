@@ -45,4 +45,9 @@ class DashBoardsController extends Controller
         Auth::logout();
         return redirect('admin/login');
     }
+
+    public function createTemplate(Request $request)
+    {
+        return view('admin.create_template');
+    }
 } 

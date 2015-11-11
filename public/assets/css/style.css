@@ -20,3 +20,6 @@
 .register input.form-control {
   border-radius: 0px;
 }
+.form-group input {
+  border-radius: 0;
+}
