@@ -15,6 +15,7 @@ class AddMultiColumnForTemplatesMarketTable extends Migration
         Schema::table('template_markets', function($table) {
             $table->text('description')->nullable();
             $table->string('version', 20);
+            $table->integer('clone_id');
             $table->softDeletes();
         });
     }

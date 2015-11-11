@@ -15,7 +15,7 @@ class AddMultiColumnForTemplatesTable extends Migration
         Schema::table('templates', function($table) {
             $table->text('description')->nullable();
             $table->string('version', 20);
-            $table->integer('clone_id', 20)->nullable();
+            $table->json('clone')->nullable();
             $table->softDeletes();
         });
     }
