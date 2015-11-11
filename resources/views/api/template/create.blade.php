@@ -25,13 +25,16 @@
 	});*/
 	$(document).ready(function() {
 		$('div#content_editor').mouseup(function() {
-	        if (getSelectedText() != '' && getSelectedText() != ' ') {
+	        if (getSelectedText() != '' ) {
 	        	var str = $(this).html();
 	        	var anchorNode = window.getSelection().anchorNode;
 	        	if (typeof(anchorNode.tagName) === 'undefined' || anchorNode.tagName == '') {
 
-	        		console.log($(anchorNode.parentNode).html());
-	        		$(anchorNode.parentNode).html('<div>hqh333q</div>');
+	        		var content = window.getSelection().getRangeAt(0).cloneContents();
+	        		str.replace(/e/, '<div>b</div>');
+	        		$(this).html(str);
+	        		//console.log(anchorNode.parentNode);
+	        		//$(anchorNode.parentNode).html('<div>hqh333q</div>');
 	        	}else {
 	        		// $(anchorNode).prepend('<div>hqh333q</div>');
 	        	}
@@ -57,10 +60,9 @@
 
     function getSelectedText() {
         if (window.getSelection) {
-
+        	
             return window.getSelection().toString();
         } else if (document.selection) {
-        	console.log(document.selection.createRange().text);
             return document.selection.createRange().text;
         }
         return '';
