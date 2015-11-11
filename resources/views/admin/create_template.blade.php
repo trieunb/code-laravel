@@ -12,7 +12,7 @@
                 <input type="text" class="form-control" id="price" placeholder="Price">
             </div>
             <div class="form-group">
-                <textarea name="editor1"></textarea>
+                <textarea name="editor"></textarea>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Create</button>
@@ -22,14 +22,11 @@
 </div>
 @endsection
 @section('script')
-<script src="//cdn.ckeditor.com/4.5.4/full/ckeditor.js"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 <script>
-    CKEDITOR.editorConfig = function( config ) {
-        config.extraPlugins = '{{ asset('plugins/image') }}';
-    };
-    CKEDITOR.plugins.addExternal( 'image', '{{ asset('plugins/image') }}', 'plugin.js' );
-    CKEDITOR.replace( 'editor1', {
-        extraPlugins: 'image'
-    } );
+    CKEDITOR.replace('editor', {
+        filebrowserBrowseUrl: '/browser/browse.php',
+        filebrowserUploadUrl: '/uploader/upload.php'
+    });
 </script>
 @endsection
