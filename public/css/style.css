@@ -673,4 +673,6 @@ p.full-name {
 #ex1Slider .slider-selection {
   background: #BABABA;
 }
-
+.form-group input {
+  border-radius: 0!important;
+}
