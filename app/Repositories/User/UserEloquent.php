@@ -70,9 +70,16 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function getProfile($user_id)
 	{
-		return $this->model
+		$data = $this->model
 			->with(['user_educations', 'user_work_histories', 'user_skills', 'references', 'objectives'])
 			->findOrFail($user_id);
+
+		$data->avatar = [
+			'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
+			'thumb' => $data['avatar']['thumb'] == null ?: asset($data['avatar']['thumb'])
+		];
+		
+		return $data;
 	}
 
 	/**

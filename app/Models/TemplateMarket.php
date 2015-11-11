@@ -34,4 +34,19 @@ class TemplateMarket extends Model
     {
     	return $this->belongsTo(User::class);
     }
+
+    public static function makeSlug($template)
+    {
+        $template->slug = str_slug($template->title);
+
+        $latestSlug = static::whereRaw("slug RLIKE '^{$template->slug}(-[0-9]*)?$'")
+            ->latest('id')
+            ->pluck('slug');
+
+        if ($latestSlug) {
+            $pieces = explode('-', $latestSlug);
+            $number = intval(end($pieces));
+            $template->slug .= '-'. ($number + 1);
+        }
+    }
 }

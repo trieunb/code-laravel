@@ -204,4 +204,5 @@ class User extends Model implements AuthenticatableContract,
             'thumb' => $avatar->path.'thumb/'.$name
         ];
     }
+
 }
