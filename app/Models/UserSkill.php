@@ -11,6 +11,12 @@ class UserSkill extends Model
 {
     use UpdateColumnWithClauseTrait;
 
+    protected $casts = [
+        'id' => 'int',
+        'user_id' => 'int',
+        'skill_test' => 'int',
+        'skill_test_point' => 'int',
+    ];
 	/**
 	 * Table name
 	 * @var string

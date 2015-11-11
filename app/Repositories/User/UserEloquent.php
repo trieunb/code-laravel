@@ -185,6 +185,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	{
 		$user = $this->getById($user_id);
 		$user->avatar = User::uploadAvatar($file);
+
 		$image = [ 
 			'origin' => asset($user->avatar['origin']),
 			'thumb' => asset($user->avatar['thumb'])
@@ -195,13 +196,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
     
     function GetAge($dob) 
     { 
-            $dob=explode("-",$dob); 
-            $curMonth = date("m");
-            $curDay = date("j");
-            $curYear = date("Y");
-            $age = $curYear - $dob[0]; 
-            if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])) 
-                    $age--; 
-            return $age; 
+        $dob=explode("-",$dob); 
+        $curMonth = date("m");
+        $curDay = date("j");
+        $curYear = date("Y");
+        $age = $curYear - $dob[0]; 
+        if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])) 
+                $age--; 
+        return $age; 
     }
 }
