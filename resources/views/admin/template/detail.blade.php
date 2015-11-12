@@ -2,52 +2,53 @@
 
 
 @section('page-header')
-Template
+Detail Template
 @stop
 
 @section('content')
 <div class="row">
     <div class="col-lg-12">
         <div id="message"></div>
-        <form action="{{ route('admin.template.post.create') }}" id="create-form" method="POST">
+        <form action="{{ route('admin.template.post.edit') }}" id="create-form" method="POST">
             {!! csrf_field() !!}
+            <input type="hidden" id="template_id" name="id" value="{{ $template->id }}" placeholder="">
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+                <input type="text" class="form-control" name="title" value="{{ $template->title }}" disabled id="title" placeholder="Title">
             </div>
             <div class="form-group">
                 <label for="cat_id">Category</label>
-                <select name="cat_id" id="cat_id" class="form-control" >
+                <select disabled name="cat_id" id="cat_id" class="form-control" >
                     <option value="">Select</option>
                     <option value="1">Category</option>
                 </select>
+
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" placeholder="Price">
+                <input type="text" class="form-control" value="{{ $template->price }}" id="price" disabled placeholder="Price">
             </div>
 
             <div class="form-group">
-                <textarea id="content" name="content"></textarea> 
+                <textarea id="content" name="content" disabled>{{ $template->content }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" class="form-control" id="description" placeholder="Description">
+                <input disabled type="text" class="form-control" value="{{ $template->description }}" id="description" placeholder="Description">
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
-                <input name="version" type="text" class="form-control" id="version" placeholder="Version">
+                <input disabled name="version" type="text" value="{{ $template->version }}" class="form-control" id="version" placeholder="Version">
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                <select name="status" id="status" class="form-control" >
+                <select disabled name="status" id="status" class="form-control" >
                     <option value="">Select</option>
                     <option value="1">Hidden</option>
                     <option value="2">Publish</option>
                 </select>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Create</button>
                 <a href="{{ route('admin.dashboard') }}" class="btn btn-default">Go to back</a>
             </div>
         </form>
@@ -70,8 +71,11 @@ Template
                     type: 'GET',
                     data: {
                         title: function() {
-                            return $( "#title" ).val();
-                          }
+                            return $("#title" ).val();
+                        },
+                        id : function(){
+                            return $('#template_id').val();   
+                        }
                     }   
                 }
             },
@@ -107,10 +111,12 @@ Template
         },
         submitHandler : function(form) {
             var content = CKEDITOR.instances.content.getData();
+
             $.ajax({
                 url: $('#create-form').attr('action'),
                 type: 'POST',
                 data: {
+                    id : $('#template_id').val(),
                     title : $('#title').val(),
                     price : $('#price').val(),
                     content : content,

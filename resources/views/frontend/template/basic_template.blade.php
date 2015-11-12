@@ -2,7 +2,7 @@
     <div class="row">
         <div class="image-avatar" 
             style="position: relative;
-            overflow: hidden;max-height:400;">
+            overflow: hidden;max-height:400;" contenteditable="true">
                 <img style="width:100%;" id="image" 
                     src="{{($template->avatar) 
                     ? asset($template->avatar['origin']) 
@@ -22,14 +22,14 @@
             style="background: #9b8578;
             color: white;
             font-weight:600;
-            text-align:center;">
+            text-align:center;" contenteditable="true">
             <span>{{$template->address}}</span><br>
                     <span>{{($template->city)
                     ? $template->city . ', ' . $template->state
                     : null}}</span><br>
             <span>Tell: {{$template->mobile_phone}}</span>
         </div>
-        <div class="content-box">
+        <div class="content-box" contenteditable="true">
             <div class="header-title" 
             style="color: red;
             font-weight:600;
@@ -54,7 +54,7 @@
                 </ul>
             </div>
         </div>
-        <div class="content-box">
+        <div class="content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -83,7 +83,7 @@
             @endforeach
             </div>
         </div>
-        <div class="content-box">
+        <div class="content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -108,7 +108,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="content-box">
+        <div class="content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -137,7 +137,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="content-box">
+        <div class="content-box" contenteditable="true">
             <div class="header-title"
             style="color: red;
             font-weight:600;
@@ -162,7 +162,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="content-box">
+        <div class="content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;

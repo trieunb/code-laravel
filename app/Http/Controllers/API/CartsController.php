@@ -69,6 +69,7 @@ class CartsController extends Controller
     public function checkout($invoice_id, Request $request)
     {
         try {
+            \Log::info('testAPI', $request->all());
             $data = [
                 'amount' => $this->invoice->getById($invoice_id)->total,
                 'paymentMethodNonce' => $request->get('paymentMethodNonce'),

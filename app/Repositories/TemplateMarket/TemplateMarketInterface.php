@@ -26,5 +26,5 @@ interface TemplateMarketInterface extends Repository
 	 * @param  mixed $user_id 
 	 * @return bool          
 	 */
-	public function createTemplateByManage($request, $user_id);
+	public function createOrUpdateTemplateByManage($request, $user_id);
 }

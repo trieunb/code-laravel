@@ -40,9 +40,13 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      * @param  string $title 
      * @return bool        
      */
-    public function checkExistsTitle($title)
+    public function checkExistsTitle($title, $id = null)
     {
-        return $this->model->whereTitle($title)->exists();
+        $queryBuilder = $this->model->whereTitle($title);
+        
+        return $id == null
+            ? $queryBuilder->exists()
+            : $queryBuilder->where('id', '!=' , $id)->exists();
     }
 
     /**
@@ -51,9 +55,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      * @param  int $user_id 
      * @return bool          
      */
-    public function createTemplateByManage($request, $user_id)
+    public function createOrUpdateTemplateByManage($request, $user_id)
     {
-        $template = new TemplateMarket;
+        $template = $request->has('id') ? $this->getById($request->get('id')) : new TemplateMarket;
         $template->title = $request->get('title');
         $template->user_id = $user_id;
         $template->cat_id = $request->get('cat_id');
