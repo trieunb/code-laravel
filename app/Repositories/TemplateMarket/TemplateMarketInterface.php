@@ -27,4 +27,9 @@ interface TemplateMarketInterface extends Repository
 	 * @return bool          
 	 */
 	public function createTemplateByManage($request, $user_id);
+
+	/**
+	 * Admin get all templte from market
+	 */
+	public function getAllTemplateByManager();
 }

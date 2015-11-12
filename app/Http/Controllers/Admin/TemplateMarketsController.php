@@ -37,4 +37,10 @@ class TemplateMarketsController extends Controller
     {
     	return $this->template_market->checkExistsTitle($request->get('title')) ? 'false' : 'true';
     }
+
+    public function getAllTemplates(Request $request)
+    {
+        $templates_market = $this->template_market->getAllTemplateByManager();
+        return view('admin.template.list_templates', compact('templates_market'));
+    }
 }

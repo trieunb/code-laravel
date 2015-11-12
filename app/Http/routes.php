@@ -29,7 +29,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => ['cs
      */
     get('template/create', ['as' => 'admin.template.get.create', 'uses' => 'TemplateMarketsController@create']);
     get('template/check', ['as' => 'admin.template.check', 'uses' => 'TemplateMarketsController@checkTitle']);
-    
+    get('template/all', ['as' => 'admin.template.get.all', 'uses' => 'TemplateMarketsController@getAllTemplates']);
+
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     
 
