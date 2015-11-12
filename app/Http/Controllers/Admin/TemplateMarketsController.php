@@ -28,14 +28,36 @@ class TemplateMarketsController extends Controller
 
     public function postCreate(TemplateFormRequest $request)
     {
-        return $this->template_market->createTemplateByManage($request, \Auth::user()->id)
+        return $this->template_market->createOrUpdateTemplateByManage($request, \Auth::user()->id)
+            ? response()->json(['status' => true])
+            : response()->json(['status' => false]);
+    }
+
+    public function edit($id)
+    {
+    	$template = $this->template_market->getById($id);
+
+    	return view('admin.template.edit', compact('template'));
+    }
+
+    public function postEdit(TemplateFormRequest $request)
+    {
+        return $this->template_market->createOrUpdateTemplateByManage($request, \Auth::user()->id)
+
             ? response()->json(['status' => true])
             : response()->json(['status' => false]);
     }
 
     public function checkTitle(Request $request)
     {
-    	return $this->template_market->checkExistsTitle($request->get('title')) ? 'false' : 'true';
+    	return $this->template_market->checkExistsTitle($request->get('title'), $request->get('id')) ? 'false' : 'true';
+    }
+
+    public function detail($id)
+    {
+        $template = $this->template_market->getById($id);
+        
+        return view('admin.template.detail', compact('template'));
     }
 
     public function getAllTemplates(Request $request)

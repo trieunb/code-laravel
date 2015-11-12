@@ -164,9 +164,9 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->user_id = $data['user_id'];
         $template->title = $data['title'];
         $template->content = $data['content'];
-        $template->image = $data['image'];
+        $template->image = $data['image'] != null && $data['image'] != '' ? $data['image']: ['origin' => '', 'thumb' => ''];
         $template->type = 0;
-        $template->source_file_pdf = $data['source_file_pdf'];
+        $template->source_file_pdf = $data['source_file_pdf'] != null ? $data['source_file_pdf']: '';
         $template->version = $data['version'];
         $template->clone = $data['clone'];
         Template::makeSlug($template, false);

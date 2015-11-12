@@ -29,9 +29,15 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => ['cs
      */
     get('template/create', ['as' => 'admin.template.get.create', 'uses' => 'TemplateMarketsController@create']);
     get('template/check', ['as' => 'admin.template.check', 'uses' => 'TemplateMarketsController@checkTitle']);
+<<<<<<< HEAD
     get('template/all', ['as' => 'admin.template.get.all', 'uses' => 'TemplateMarketsController@getAllTemplates']);
+=======
+    get('template/edit/{id}', ['as' => 'admin.template.get.edit', 'uses' => 'TemplateMarketsController@edit']);
+    get('template/detail/{id}', ['as' => 'admin.template.get.detail', 'uses' => 'TemplateMarketsController@detail']);
+>>>>>>> c3c733457398d384995ddf6b015057d25591dc71
 
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
+    post('template/edit', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
     
 
 });
