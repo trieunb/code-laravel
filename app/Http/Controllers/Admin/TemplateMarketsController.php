@@ -60,15 +60,16 @@ class TemplateMarketsController extends Controller
         return view('admin.template.detail', compact('template'));
     }
 
-    public function getAllTemplates(Request $request)
+    public function index(Request $request)
     {
         $templates_market = $this->template_market->getAll();
         return view('admin.template.index', compact('templates_market'));
     }
 
-    public function deleteTemplate(Request $request, $id)
+    public function delete(Request $request, $id)
     {
         $this->template_market->delete($id);
         return redirect()->back();
+
     }
 }

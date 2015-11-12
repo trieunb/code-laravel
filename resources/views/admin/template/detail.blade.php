@@ -49,7 +49,7 @@ Detail Template
                 </select>
             </div>
             <div class="form-group">
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-default">Go to back</a>
+                <a href="{{ route('admin.template.get.index') }}" class="btn btn-default">Go to back</a>
             </div>
         </form>
     </div>
