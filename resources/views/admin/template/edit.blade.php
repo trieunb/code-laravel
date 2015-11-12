@@ -50,7 +50,7 @@ Edit Template
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Edit</button>
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-default">Go to back</a>
+                <a href="{{ route('admin.template.get.index') }}" class="btn btn-default">Go to back</a>
             </div>
         </form>
     </div>
