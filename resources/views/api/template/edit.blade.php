@@ -28,7 +28,7 @@
 </style>
 <body>
 	<div id="myPanel" style=""></div>
-	<div id="editor" contenteditable="true" style="with:100px!important;" >{!! $content !!}</div>    
+	<div id="editor" contenteditable="true">{!! $content !!}</div>    
 	<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
 	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
 	<script src="{{  asset('js/nicEdit.js') }}"></script>
@@ -100,9 +100,6 @@
 		      headStyle.position = 'absolute';
 		    } 
 		    headStyle.top = window.pageYOffset + 'px';
-		    // window.innerHeight wrong
-		    //var footTop = window.pageYOffset + window.innerHeight - foot.offsetHeight;
-		    //footStyle.bottom = (document.body.offsetHeight - footTop) + 'px';
 		  }
 		}
 	</script>

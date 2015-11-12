@@ -24,7 +24,7 @@ class AddSlugColumnForTemplateMarketsTable extends Migration
      */
     public function down()
     {
-        Schema::table('invoices', function($table) {
+        Schema::table('template_markets', function($table) {
             $table->dropColumn('slug');
         });
     }

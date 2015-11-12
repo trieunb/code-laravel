@@ -94,15 +94,15 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getDetailTemplate($id, $user->id);
-        $content = $template->content;
+        $content = array_get($template->content, $request->get('section'));
 
-        return view()->make('frontend.template.full', compact('content'));
+        return view()->make('api.template.edit', compact('content'));
     }
 
     public function postEdit($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $result = $this->template->editTemplate($id, $user->id, $request->get('content'));
+        $result = $this->template->editTemplate($id, $user->id, $request);
         
         if (!$result) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
