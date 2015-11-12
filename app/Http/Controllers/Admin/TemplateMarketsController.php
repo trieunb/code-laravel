@@ -62,7 +62,7 @@ class TemplateMarketsController extends Controller
 
     public function getAllTemplates(Request $request)
     {
-        $templates_market = $this->template_market->getAllTemplateByManager();
+        $templates_market = $this->template_market->getAll();
         return view('admin.template.list_templates', compact('templates_market'));
     }
 }

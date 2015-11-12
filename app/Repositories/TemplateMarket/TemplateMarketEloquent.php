@@ -76,9 +76,4 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         
         return false;
     }
-
-    public function getAllTemplateByManager()
-    {
-        return $this->getAll();
-    }
 }
