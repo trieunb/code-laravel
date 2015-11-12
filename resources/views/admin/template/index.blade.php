@@ -1,6 +1,4 @@
 @extends('admin.layout')
-
-
 @section('page-header')
 List Templates
 @stop
@@ -27,7 +25,10 @@ List Templates
                     <td class="">{{ $temp_market->status }}</td>
                     <td class="center">{{ $temp_market->version }}</td>
                     <td class="center"><img class="thumbnail" src="{{ asset($temp_market->image['origin']) }}"></td>
-                    <td class="center"><a href="">Edit</a>/<a href="">Delete</a></td>
+                    <td class="center">
+                        <a href="">Edit</a>/
+                        <a href="{{route('admin.template.delete', $temp_market->id)}}" onclick="return confirm('Are You Sure delete this template?')">Delete</a>
+                    </td>
                 </tr>
                 @endforeach
                 </tbody>

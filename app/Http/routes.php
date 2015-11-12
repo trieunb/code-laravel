@@ -32,6 +32,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => ['cs
     get('template/all', ['as' => 'admin.template.get.all', 'uses' => 'TemplateMarketsController@getAllTemplates']);
     get('template/edit/{id}', ['as' => 'admin.template.get.edit', 'uses' => 'TemplateMarketsController@edit']);
     get('template/detail/{id}', ['as' => 'admin.template.get.detail', 'uses' => 'TemplateMarketsController@detail']);
+    get('template/delete/{id}', ['as' => 'admin.template.delete', 'uses' => 'TemplateMarketsController@deleteTemplate']);
 
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);

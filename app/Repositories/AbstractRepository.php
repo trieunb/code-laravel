@@ -32,7 +32,7 @@ abstract class AbstractRepository
 	 */
 	public function delete($id)
 	{
-		return $this->model->getById($id)->delete();
+		return $this->model->FindOrfail($id)->delete();
 	}
 
 	/**
