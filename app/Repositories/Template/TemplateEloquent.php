@@ -106,6 +106,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             : '<div contenteditable="true></div>';
         $template->type = $request->get('type');
         Template::makeSlug($template, false);
+        
         return $template->save() ? $template : null;
     }
 
@@ -113,13 +114,13 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * Edit template
      * @param  int $id      primary key
      * @param  int $user_id   
-     * @param  string $content 
+     * @param  mixed $request 
      * @return mixed          
      */
-    public function editTemplate($id, $user_id, $content)
+    public function editTemplate($id, $user_id, $request)
     {
         $template = $this->getDetailTemplate($id, $user_id);
-        $template->content = $content;
+        $template->content[$request->get('section')] = $request->get('content');
 
         return $template->save() ? $template : null;
     }

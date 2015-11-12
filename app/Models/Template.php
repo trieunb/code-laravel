@@ -20,6 +20,7 @@ class Template extends Model
     protected $table = "templates";
     
     protected $casts = [
+        'content' => 'json',
     	'image' => 'json',
         'clone' => 'json',
         'id' => 'int',
