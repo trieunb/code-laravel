@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\TemplateMarket;
 
+use App\Events\RenderFileWhenCreateTemplateMarket;
 use App\Models\TemplateMarket;
 use App\Repositories\AbstractRepository;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
@@ -34,5 +35,45 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         return $template_mk->status == 1 ? $template_mk : null;
     }
 
+    /**
+     * Check title exists
+     * @param  string $title 
+     * @return bool        
+     */
+    public function checkExistsTitle($title, $id = null)
+    {
+        $queryBuilder = $this->model->whereTitle($title);
+        
+        return $id == null
+            ? $queryBuilder->exists()
+            : $queryBuilder->where('id', '!=' , $id)->exists();
+    }
 
+    /**
+     * Admin create template for market place
+     * @param  mixed $request 
+     * @param  int $user_id 
+     * @return bool          
+     */
+    public function createOrUpdateTemplateByManage($request, $user_id)
+    {
+        $template = $request->has('id') ? $this->getById($request->get('id')) : new TemplateMarket;
+        $template->title = $request->get('title');
+        $template->user_id = $user_id;
+        $template->cat_id = $request->get('cat_id');
+        $template->content = $request->get('content');
+        $template->price = $request->get('price');
+        $template->description = $request->get('description');
+        $template->version = $request->get('version');
+        $template->status = $request->get('status');
+
+        TemplateMarket::makeSlug($template);
+        $result = $template->save();
+
+        if ($result) {
+            return event(new RenderFileWhenCreateTemplateMarket($template->slug, $template->content, $template->id));
+        }
+        
+        return false;
+    }
 }

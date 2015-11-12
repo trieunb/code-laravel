@@ -13,7 +13,7 @@ class AddSourceFilePdfTemplateMarketTable extends Migration
     public function up()
     {
         Schema::table('template_markets', function($table) {
-            $table->string('source_file_pdf')->after('image');
+            $table->string('source_file_pdf')->after('image')->nullable();
         });
     }
 

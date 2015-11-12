@@ -50,8 +50,7 @@ class RenderImageAfterCreateTemplate extends Event
             ->save(public_path('pdf/'.$this->filename.'.pdf'));
         
             $this->createImage();
-
-            // \File::delete(public_path().'/pdf/tmp.pdf');
+            // convertPDFToIMG($this->filename);
 
             return $this->saveImage($template);
         } catch (\Exception $e) {
@@ -79,7 +78,7 @@ class RenderImageAfterCreateTemplate extends Event
      * @param  TemplateInterface $template 
      * @return mixed           
      */
-    private function saveImage($template)
+    private function saveImage($templateInterface)
     {
          $resize = \Image::make(public_path('images/template/'.$this->filename.'.jpg'))
             ->resize(200,150)
@@ -87,7 +86,7 @@ class RenderImageAfterCreateTemplate extends Event
         
         if (!$resize) return null;
 
-        $template = $template->getById($this->template_id);
+        $template = $templateInterface->getById($this->template_id);
         $template->image = [
             'origin' => asset('images/template/'.$this->filename.'.jpg'),
             'thumb' =>asset('thumb/template/'.$this->filename.'.jpg')

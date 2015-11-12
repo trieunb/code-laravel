@@ -16,6 +16,10 @@ class Reference extends Model
 	 */
     protected $table = 'references';
 
+    protected $casts = [
+        'id' => 'int',
+        'user_id' => 'int'
+    ];
      /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

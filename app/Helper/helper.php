@@ -1,9 +1,8 @@
 <?php
 
 if ( !function_exists('show_selected_option')) {
-    function show_selected_option($categories, $selected_id = 0, $class = '', $dataAtrribute = null) {
+    function show_selected_option($categories, $selected_id = 0, $class = 'form-control', $dataAtrribute = null) {
         $html = '';
-
         if (count($categories)) return $html;
         $html = $class != '' ? '<select class="'.$class.'">' : '<select>';
         foreach ($categories as $category) {
@@ -34,5 +33,27 @@ if (!function_exists('replace_url_img')) {
         }
 
         return $string;
+    }
+}
+
+if (!function_exists('convertPDFToIMG')) {
+    /**
+     * Convert file PDF to IMG
+     * @param  string  $filename 
+     * @param  integer $width    
+     * @param  integer $height   
+     * @return void            
+     */
+    function convertPDFToIMG($filename, $width = 200, $height = 200) {
+        $imageFile = str_random(20).uniqid();
+        $img = new \Imagick();
+        $img->readImage(public_path('pdf/'.$filename.'.pdf[0]'));
+        $img->setImageFormat('jpg');
+        $img->setSize($width, $height);
+        $img->writeImage(public_path('images/template/'.$imageFile.'.jpg'));
+        $img->clear();
+        $img->destroy();
+
+        return $imageFile;
     }
 }

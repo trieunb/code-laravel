@@ -10,6 +10,10 @@ class UserWorkHistory extends Model
 {
     use UpdateColumnWithClauseTrait;
     
+    protected $casts = [
+        'id' => 'int',
+        'user_id' => 'int',
+    ];
 
 	/**
 	 * Table name

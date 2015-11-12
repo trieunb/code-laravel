@@ -153,4 +153,24 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         return $template->delete();
     }
 
+     /**
+     * Create template from market place
+     * @param  array $data 
+     * @return bool       
+     */
+    public function createTemplateFromMarket(array $data)
+    {
+        $template = new Template;
+        $template->user_id = $data['user_id'];
+        $template->title = $data['title'];
+        $template->content = $data['content'];
+        $template->image = $data['image'] != null && $data['image'] != '' ? $data['image']: ['origin' => '', 'thumb' => ''];
+        $template->type = 0;
+        $template->source_file_pdf = $data['source_file_pdf'] != null ? $data['source_file_pdf']: '';
+        $template->version = $data['version'];
+        $template->clone = $data['clone'];
+        Template::makeSlug($template, false);
+
+        return $template->save();
+    }
 }
