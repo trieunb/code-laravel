@@ -33,6 +33,13 @@ class TemplateMarketsController extends Controller
             : response()->json(['status' => false]);
     }
 
+    public function edit()
+    {
+    	$template = $this->template_market->getById($id);
+
+    	return view('admin.template.edit', compact('template'));
+    }
+
     public function checkTitle(Request $request)
     {
     	return $this->template_market->checkExistsTitle($request->get('title')) ? 'false' : 'true';
