@@ -29,7 +29,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => ['cs
      */
     get('template/create', ['as' => 'admin.template.get.create', 'uses' => 'TemplateMarketsController@create']);
     get('template/check', ['as' => 'admin.template.check', 'uses' => 'TemplateMarketsController@checkTitle']);
-    get('template', ['as' => 'admin.template.get.all', 'uses' => 'TemplateMarketsController@index']);
+    get('template', ['as' => 'admin.template.get.index', 'uses' => 'TemplateMarketsController@index']);
     get('template/edit/{id}', ['as' => 'admin.template.get.edit', 'uses' => 'TemplateMarketsController@edit']);
     get('template/detail/{id}', ['as' => 'admin.template.get.detail', 'uses' => 'TemplateMarketsController@detail']);
 

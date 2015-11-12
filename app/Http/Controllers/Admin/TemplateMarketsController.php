@@ -63,7 +63,7 @@ class TemplateMarketsController extends Controller
     public function index(Request $request)
     {
         $templates_market = $this->template_market->getAll();
-        
-        return view('admin.template.list_templates', compact('templates_market'));
+
+        return view('admin.template.index', compact('templates_market'));
     }
 }
