@@ -63,6 +63,9 @@
                                     <li>
                                         <a href="{{ route('admin.template.get.create') }}">Create Template</a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('admin.template.get.all') }}">Templates</a>
+                                    </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
                             </li>

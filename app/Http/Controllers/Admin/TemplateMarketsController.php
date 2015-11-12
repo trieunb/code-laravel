@@ -59,4 +59,10 @@ class TemplateMarketsController extends Controller
         
         return view('admin.template.detail', compact('template'));
     }
+
+    public function getAllTemplates(Request $request)
+    {
+        $templates_market = $this->template_market->getAllTemplateByManager();
+        return view('admin.template.list_templates', compact('templates_market'));
+    }
 }
