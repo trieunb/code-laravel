@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\UpdateColumnWithClauseTrait;
 
 class Template extends Model
 {
 
-    use UpdateColumnWithClauseTrait;
+    use UpdateColumnWithClauseTrait, SoftDeletes;
 
     /**
      * Table name
@@ -19,33 +20,12 @@ class Template extends Model
     protected $table = "templates";
     
     protected $casts = [
-    	'image' => 'json'
+    	'image' => 'json',
+        'clone' => 'json',
+        'id' => 'int',
+        'user_id' => 'int',
+        'type' => 'int'
     ];
-
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-    */
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function($post) {
-            /*$post->slug = str_slug($post->title);
-
-            $latestSlug = static::whereRaw("slug RLIKE '^{$post->slug}(-[0-9]*)?$'")
-                ->latest('id')
-                ->pluck('slug');
-
-            if ($latestSlug) {
-                $pieces = explode('-', $latestSlug);
-                $number = intval(end($pieces));
-                $post->slug .= '-'. ($number + 1);
-            }*/
-        });
-    }
-
 
     /**
      * Teamplate belongs to user.

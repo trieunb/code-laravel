@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSourceFilePdfTemplateMarketTable extends Migration
+class AddMultiColumnForTemplatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,11 @@ class AddSourceFilePdfTemplateMarketTable extends Migration
      */
     public function up()
     {
-        Schema::table('template_markets', function($table) {
-            $table->string('source_file_pdf')->after('image')->nullable();
+        Schema::table('templates', function($table) {
+            $table->text('description')->nullable();
+            $table->string('version', 20);
+            $table->json('clone')->nullable();
+            $table->softDeletes();
         });
     }
 
@@ -24,8 +27,6 @@ class AddSourceFilePdfTemplateMarketTable extends Migration
      */
     public function down()
     {
-         Schema::table('template_markets', function($table) {
-            $table->dropColumn('source_file_pdf');
-        });
+        Schema::drop('templates');
     }
 }

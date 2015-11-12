@@ -36,3 +36,25 @@ if (!function_exists('replace_url_img')) {
         return $string;
     }
 }
+
+if (!function_exists('convertPDFToIMG')) {
+    /**
+     * Convert file PDF to IMG
+     * @param  string  $filename 
+     * @param  integer $width    
+     * @param  integer $height   
+     * @return void            
+     */
+    function convertPDFToIMG($filename, $width = 200, $height = 200) {
+        $imageFile = str_random(20).uniqid();
+        $img = new \Imagick();
+        $img->readImage(public_path('pdf/'.$filename.'.pdf[0]'));
+        $img->setImageFormat('jpg');
+        $img->setSize($width, $height);
+        $img->writeImage(public_path('images/template/'.$imageFile.'.jpg'));
+        $img->clear();
+        $img->destroy();
+
+        return $imageFile;
+    }
+}

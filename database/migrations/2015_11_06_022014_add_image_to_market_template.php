@@ -13,7 +13,7 @@ class AddImageToMarketTemplate extends Migration
     public function up()
     {
         Schema::table('template_markets', function($table) {
-            $table->string('image')->after('status')->nullable();
+            $table->json('image')->after('status')->nullable();
         });
     }
 

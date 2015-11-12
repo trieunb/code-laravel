@@ -70,7 +70,11 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $casts = [
         'soft_skill' => 'json',
-        'avatar' => 'json'
+        'avatar' => 'json',
+        'id' => 'int',
+        'linkedin_id' => 'int',
+        'dob' => 'int',
+        'gender' => 'int'
     ];
     /**
      * The attributes excluded from the model's JSON form.
@@ -196,8 +200,9 @@ class User extends Model implements AuthenticatableContract,
         }
 
         return [
-            'origin' => asset($avatar->path.'origin/'.$name), 
-            'thumb' => asset($avatar->path.'thumb/'.$name)
+            'origin' => $avatar->path.'origin/'.$name, 
+            'thumb' => $avatar->path.'thumb/'.$name
         ];
     }
+
 }

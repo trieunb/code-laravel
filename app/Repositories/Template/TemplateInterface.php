@@ -58,4 +58,10 @@ interface TemplateInterface extends Repository
      */
     public function deleteTemplate($id, $temp_id);
 
+    /**
+     * Create template from market place
+     * @param  array $data 
+     * @return bool       
+     */
+    public function createTemplateFromMarket(array $data);
 }

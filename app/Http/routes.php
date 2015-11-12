@@ -18,10 +18,21 @@ get('/', function() {
 //, 'middleware' => 'role:admin|member'
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
+
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => ['csrf', 'auth']], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
-    get('/create', ['as' => 'admin.create', 'uses' => 'DashBoardsController@createTemplate']);
+    
+
+    /**
+     * Template Route
+     */
+    get('template/create', ['as' => 'admin.template.get.create', 'uses' => 'TemplateMarketsController@create']);
+    get('template/check', ['as' => 'admin.template.check', 'uses' => 'TemplateMarketsController@checkTitle']);
+    
+    post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
+    
+
 });
 
 
@@ -79,9 +90,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Market Route
      */
-    get('market/all-template', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
-    get('market/detail-template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
-    get('martket/view/{id}', 'MarketPlacesController@view');
+    get('market', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
+    get('market/view/{id}', 'MarketPlacesController@view');
     
     /**
      * Cart Route

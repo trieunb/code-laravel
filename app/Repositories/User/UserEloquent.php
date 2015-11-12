@@ -70,9 +70,16 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function getProfile($user_id)
 	{
-		return $this->model
+		$data = $this->model
 			->with(['user_educations', 'user_work_histories', 'user_skills', 'references', 'objectives'])
 			->findOrFail($user_id);
+
+		$data->avatar = [
+			'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
+			'thumb' => $data['avatar']['thumb'] == null ?: asset($data['avatar']['thumb'])
+		];
+		
+		return $data;
 	}
 
 	/**
@@ -186,18 +193,23 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		$user = $this->getById($user_id);
 		$user->avatar = User::uploadAvatar($file);
 
-		return $user->save() ? $user->avatar : '';
+		$image = [ 
+			'origin' => asset($user->avatar['origin']),
+			'thumb' => asset($user->avatar['thumb'])
+		];
+		
+		return $user->save() ? $image : '';
 	}
     
     function GetAge($dob) 
     { 
-            $dob=explode("-",$dob); 
-            $curMonth = date("m");
-            $curDay = date("j");
-            $curYear = date("Y");
-            $age = $curYear - $dob[0]; 
-            if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])) 
-                    $age--; 
-            return $age; 
+        $dob=explode("-",$dob); 
+        $curMonth = date("m");
+        $curDay = date("j");
+        $curYear = date("Y");
+        $age = $curYear - $dob[0]; 
+        if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])) 
+                $age--; 
+        return $age; 
     }
 }
