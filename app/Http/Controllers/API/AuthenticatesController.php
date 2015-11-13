@@ -110,8 +110,8 @@ class AuthenticatesController extends Controller
     public function postLoginWithLinkedin(Request $request)
     {
         $user_linkedin = $request->get('user_info');
-        $payload = JWTFactory::make($user_linkedin);
-        $token = JWTAuth::encode($payload);
+        $payload = \JWTFactory::make(json_decode($user_linkedin));
+        $token = \JWTAuth::encode($payload);
         if (! is_null($user_linkedin)) {
             $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $user_linkedin['linkedin_id']);
             if (empty($user)) {
