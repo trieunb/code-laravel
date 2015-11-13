@@ -28,7 +28,37 @@ class TemplateMarketsController extends Controller
 
     public function postCreate(TemplateFormRequest $request)
     {
-        return $this->template_market->createOrUpdateTemplateByManage($request, \Auth::user()->id)
+        
+        /*$html = new \Htmldom();
+        $html->load($request->get('content'));
+        $contentProfile = '';
+        $str = $request->get('content');
+        foreach ($html->find('div.profile') as $key => $e) {
+           
+            if ($key != 0) {
+                $contentProfile .= '<br>'.$e->innertext;
+                $content = str_replace($e->outertext, '', $str);
+                $str = $content;
+            }
+           
+        }
+         
+        foreach ($html->find('div.profile') as $k => $e) {
+            if ($k == 0) {
+                $contentProfile = $e->innertext.$contentProfile;
+                $outerCurrent = $e->outertext;
+                $e->{'contentediable'} = 'true';
+                $outer = str_replace($outerCurrent, $e->outertext, $str);
+                $content = str_replace($e->innertext, $contentProfile, $outer);
+            }
+        }*/
+        $sections = ['div.profile', 'div.education', 'div.work',
+            'div.objective', 'div.reference', 'div.skill',
+        ];
+        $result = createSection($request->get('content'), $sections);
+        // $content = createSection($content, 'div.education');
+
+        return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
             ? response()->json(['status' => true])
             : response()->json(['status' => false]);
     }
@@ -42,7 +72,12 @@ class TemplateMarketsController extends Controller
 
     public function postEdit(TemplateFormRequest $request)
     {
-        return $this->template_market->createOrUpdateTemplateByManage($request, \Auth::user()->id)
+        $sections = ['div.profile', 'div.education', 'div.work',
+            'div.objective', 'div.reference', 'div.skill',
+        ];
+        $data = createSection($request->get('content'), $sections);
+        
+        return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
 
             ? response()->json(['status' => true])
             : response()->json(['status' => false]);

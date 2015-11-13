@@ -26,7 +26,7 @@ class Template extends Model
         'id' => 'int',
         'user_id' => 'int',
         'type' => 'int',
-        'content' => 'json'
+        'section' => 'json'
     ];
 
     /**

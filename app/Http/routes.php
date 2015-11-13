@@ -82,7 +82,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/create', 'TemplatesController@create');
     get('template/view/{id}', 'TemplatesController@view');
     get('template/edit/{id}', 'TemplatesController@edit');
-    get('template/edit/view/{id}', 'TemplatesController@editView');
+    get('template/edit/{section}/{id}', 'TemplatesController@editView');
     get('template/{id}/attach', 'TemplatesController@attach');
     get('template/view-template/{id}', 'TemplatesController@renderUserInfoToTemplate');
 

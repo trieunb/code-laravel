@@ -90,11 +90,11 @@ class TemplatesController extends Controller
         ]);
     }
 
-    public function editView($id, Request $request)
+    public function editView($section, $id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getDetailTemplate($id, $user->id);
-        $content = array_get($template->content, $request->get('section'));
+        $content = array_get($template->section, $section);
 
         return view()->make('api.template.edit', compact('content'));
     }

@@ -57,3 +57,51 @@ if (!function_exists('convertPDFToIMG')) {
         return $imageFile;
     }
 }
+
+if (!function_exists('createSection')) {
+    function createSection($htmlString, &$sections) {
+        $result = [];
+        $html = new \Htmldom();
+        $html->load($htmlString);
+        $contentProfile = '';
+        $str = $htmlString;
+        $content = '';
+        if (count($sections) > 0) {
+            foreach ($sections as $index => $section) {
+                $class = explode('.', $section);
+                $class = end($class);
+                foreach ($html->find($section) as $key => $e) {
+                    if ($key != 0) {
+                        $contentProfile .= '<br>'.$e->innertext;
+
+                        $content = str_replace($e->outertext, '', $str);
+                        $str = $content;
+                    }
+                   
+                }
+                 
+                foreach ($html->find($section) as $k => $e) {
+                    if ($k == 0) {
+                        $contentProfile = $e->innertext.$contentProfile;
+                        $outerCurrent = $e->outertext;
+                        $e->{'contentediable'} = 'true';
+                        $outer = str_replace($outerCurrent, $e->outertext, $str);
+                      
+                        $content = str_replace($e->outertext,"<div class='{$class}'>".$contentProfile ."</div>", $outer);
+                        
+                        $result[$class] = "<div class='{$class}'>".$contentProfile ."</div>";
+                        $result['content'] = $content;
+                       
+                    }
+                }
+                unset($sections[$index]);
+
+                if (count($sections) > 0) 
+                    $result = array_merge($result, createSection($content, $sections));
+            }
+
+        }
+
+        return $result;
+    }
+}

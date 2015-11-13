@@ -676,3 +676,7 @@ p.full-name {
 .form-group input {
   border-radius: 0!important;
 }
+#dataTables-example img {
+  width: 200px;
+  height: 200px;
+}
