@@ -123,7 +123,7 @@ class TemplatesController extends Controller
 
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
         $template = $this->template->createTemplateBasic($user_info->id, $content);
-        
+
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }

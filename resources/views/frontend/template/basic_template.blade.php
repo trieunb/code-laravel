@@ -4,9 +4,9 @@
             style="position: relative;
             overflow: hidden;max-height:400;" contenteditable="true">
                 <img style="width:100%;" id="image" 
-                    src="{{($template->avatar) 
+                    src="{{ ($template->avatar) 
                     ? asset($template->avatar['origin']) 
-                    : asset('images/avatar.jpg')}}">
+                    : asset('images/avatar.jpg') }}">
             <div class="text-info" 
                 style="position: absolute;
                 bottom: 30px;
@@ -29,7 +29,7 @@
                     : null}}</span><br>
             <span>Tell: {{$template->mobile_phone}}</span>
         </div>
-        <div class="content-box" contenteditable="true">
+        <div class="introduct content-box" contenteditable="true">
             <div class="header-title" 
             style="color: red;
             font-weight:600;

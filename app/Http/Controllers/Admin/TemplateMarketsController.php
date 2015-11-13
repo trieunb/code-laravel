@@ -72,4 +72,9 @@ class TemplateMarketsController extends Controller
         return redirect()->back();
 
     }
+
+    public function changeStatus(Request $request, $status)
+    {
+        
+    }
 }

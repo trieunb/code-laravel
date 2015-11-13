@@ -22,7 +22,13 @@ List Templates
                 <tr class="gradeA odd" role="row">
                     <td class="sorting_1">{{ $temp_market->title }}</td>
                     <td>{{ $temp_market->price }}</td>
-                    <td class="">{{ $temp_market->status }}</td>
+                    <td class="">
+                        <select class="form-control" id="status">
+                            <option>Active</option>
+                            <option>Pending</option>
+                            <option>Block</option>
+                        </select>
+                    </td>
                     <td class="center">{{ $temp_market->version }}</td>
                     <td class="center"><img class="thumbnail" src="{{ asset($temp_market->image['origin']) }}"></td>
                     <td class="center">
