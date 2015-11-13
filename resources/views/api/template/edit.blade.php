@@ -27,8 +27,11 @@
 	}
 </style>
 <body>
-	<div id="myPanel" style=""></div>
-	<div id="editor" contenteditable="true">{!! $content !!}</div>    
+	<!-- <div id="myPanel" style=""></div> -->
+	<div class="container" contenteditable="true">
+		
+			{!! $content !!}		
+	</div>    
 	<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
 	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
 	<script src="{{  asset('js/nicEdit.js') }}"></script>

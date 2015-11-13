@@ -53,8 +53,8 @@ class RenderFileWhenCreateTemplateMarket extends Event
 
         $template = $TemplateMarketInterface->getById($this->template_id);
         $template->image = [
-            'origin' => asset('images/template/'.$filename.'.jpg'),
-            'thumb' =>asset('thumb/template/'.$filename.'.jpg')
+            'origin' => 'images/template/'.$filename.'.jpg',
+            'thumb' => 'thumb/template/'.$filename.'.jpg'
         ];
         $template->source_file_pdf = asset('pdf/'.$this->slug.'.pdf');
         
