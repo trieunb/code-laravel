@@ -24,7 +24,8 @@ class Template extends Model
         'clone' => 'json',
         'id' => 'int',
         'user_id' => 'int',
-        'type' => 'int'
+        'type' => 'int',
+        'content' => 'json'
     ];
 
     /**
