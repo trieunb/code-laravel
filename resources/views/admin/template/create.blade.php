@@ -63,7 +63,7 @@ Template
     var isBusy = false;
     $('form').validate({
         rules: {
-            /*title : {
+            title : {
                 required: true,
                 remote : {
                     url: '{{ route("admin.template.check") }}',
@@ -83,12 +83,12 @@ Template
             },
             status : {
                 required : true
-            }*/
+            }
         },
         messages : {
-           /* title: {
+            title: {
                 remote : 'Title exists, please change title'
-            }*/
+            }
         },
         highlight: function(element) {
             $(element).closest('.form-group').addClass('has-error');
