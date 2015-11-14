@@ -49,7 +49,11 @@ List Templates
                         {!! Form::close() !!}
                         </td>
                         <td class="center">{{ $temp_market->version }}</td>
-                        <td class="center"><img class="thumbnail" src="{{ asset($temp_market->image['origin']) }}"></td>
+                        <td class="center"><img class="thumbnail" src="
+                            {{ ($temp_market->avatar) 
+                            ? asset($temp_market->avatar['origin']) 
+                            : asset('images/template.jpg') }}">
+                        </td>
                         <td class="center">
                             <a href="">Edit</a>/
                             <a href="{{route('admin.template.delete', $temp_market->id)}}" onclick="return confirm('Are You Sure delete this template?')">Delete</a>
