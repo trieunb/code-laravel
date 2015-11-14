@@ -36,7 +36,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => ['cs
 
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
-    post('template/status', ['as' => 'admin.status', 'uses' => 'TemplateMarketsController@changeStatus']);
+    post('template/status/{id}', ['as' => 'admin.status', 'uses' => 'TemplateMarketsController@changeStatus']);
 
 
 });

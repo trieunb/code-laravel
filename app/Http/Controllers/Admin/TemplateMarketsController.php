@@ -108,14 +108,12 @@ class TemplateMarketsController extends Controller
 
     }
 
-    public function changeStatus(Request $request)
+    public function changeStatus(Request $request, $id)
     {
-        $status = $request->input('status');
-        if ($request->ajax()) {
-            return response()->json([
-                'status' => $status,
-                'message' => "ok"
-            ]);
-        }
+            $data = [
+                'status' => $request->input('status')
+            ];
+            $this->template_market->update($data, $id);
+            return redirect()->back();
     }
 }
