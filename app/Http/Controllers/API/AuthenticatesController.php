@@ -92,6 +92,10 @@ class AuthenticatesController extends Controller
         try {
             $rules->validate($request->all());
             $this->user->registerUser($request, $token);
+            
+            $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
+            $token = JWTAuth::fromUser($user);
+            $this->user->update(['token' => $token], $user->id);
 
             return response()->json([
                     'status_code' => 200,
