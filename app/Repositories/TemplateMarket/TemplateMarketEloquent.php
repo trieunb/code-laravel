@@ -52,16 +52,19 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     /**
      * Admin create template for market place
      * @param  mixed $request 
+     * @param  array $data 
      * @param  int $user_id 
      * @return bool          
      */
-    public function createOrUpdateTemplateByManage($request, $user_id)
+    public function createOrUpdateTemplateByManage($request, $data, $user_id)
     {
         $template = $request->has('id') ? $this->getById($request->get('id')) : new TemplateMarket;
         $template->title = $request->get('title');
         $template->user_id = $user_id;
         $template->cat_id = $request->get('cat_id');
-        $template->content = $request->get('content');
+        $template->content = $data['content'];
+        unset($data['content']);
+        $template->section = $data;
         $template->price = $request->get('price');
         $template->description = $request->get('description');
         $template->version = $request->get('version');

@@ -23,10 +23,11 @@ interface TemplateMarketInterface extends Repository
 	/**
 	 * Admin create template for market place
 	 * @param  mixed $request 
+	 * @param  array $data 
 	 * @param  mixed $user_id 
 	 * @return bool          
 	 */
 
-	public function createOrUpdateTemplateByManage($request, $user_id);
+	public function createOrUpdateTemplateByManage($request, $data, $user_id);
 
 }

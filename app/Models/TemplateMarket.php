@@ -13,6 +13,7 @@ class TemplateMarket extends Model
     
     protected $casts = [
         'image' => 'json',
+        'section' => 'json',
         'id' => 'int',
         'cat_id' => 'int',
         'price' => 'double',

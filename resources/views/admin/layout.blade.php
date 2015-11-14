@@ -9,11 +9,13 @@
         <!-- Bootstrap CSS -->
         <link href="{{  asset('css/bootstrap.css') }}" rel="stylesheet">
         <link href="{{  asset('css/font-awesome.min.css') }}" rel="stylesheet">
+        
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/style.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/metisMenu.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/dataTables.bootstrap.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/dataTables.responsive.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/sb-admin-2.css')}}">
+        <link href="{{  asset('css/style.css') }}" rel="stylesheet">
         @yield('style')
     </head>
     <body>

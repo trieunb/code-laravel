@@ -107,6 +107,7 @@ Template
         },
         submitHandler : function(form) {
             var content = CKEDITOR.instances.content.getData();
+            content = content.replace(/\t|\n+/g, '');
             $.ajax({
                 url: $('#create-form').attr('action'),
                 type: 'POST',

@@ -38,6 +38,7 @@ class FireContentForTemplate extends Event
         $data = [
             'user_id' => $this->user_id,
             'content' => $template_mk->content,
+            'section' => $template_mk->section,
             'image'   => $template_mk->image,
             'title'   => $template_mk->title,
             'type'    => 0,
