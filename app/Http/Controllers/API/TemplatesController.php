@@ -75,6 +75,13 @@ class TemplatesController extends Controller
         ]);
     }
 
+    public function getSections($id)
+    {
+        $sections = $this->template->getById($id)->section;
+
+        return view('template.api.section', compact('sections'));
+    }
+
     public function edit(Request $request, $id)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -118,10 +125,11 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $dob = date("Y-m-d", $user_info->dob);
-        $age = $this->user->GetAge($dob);
+        $age = \Carbon\Carbon::createFromFormat("Y-m-d H:i:s", $user_info->dob)->age;
+
 
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
+
         
         $section = [
             'profile' => $this->template->createSection('.profile', $content),
@@ -133,6 +141,7 @@ class TemplatesController extends Controller
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
+
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }
@@ -224,6 +233,15 @@ class TemplatesController extends Controller
             'status' => true,
             'data' => ['id' => $id,'title' => $template->title,'content' => $content]
         ]);
+    }
+
+    public function menu($id)
+    {
+        $template = $this->template->getDetailTemplate($id, \Auth::user()->id);
+
+        $section = createSectionData($template);
+
+        return view('api.template.section', compact('section'));
     }
 
 }

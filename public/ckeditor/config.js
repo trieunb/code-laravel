@@ -42,5 +42,5 @@ CKEDITOR.editorConfig = function( config ) {
             {'name': 'Group 1'},
             {'name': 'Another name', 'value': 'h1', 'label': 'Good looking'},
         ];
-    config.format_section = 'profile;education;reference;objective;skill;work';
+    config.format_section = 'profile';
 };
