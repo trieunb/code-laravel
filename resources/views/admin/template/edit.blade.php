@@ -9,7 +9,7 @@ Edit Template
 <div class="row">
     <div class="col-lg-12">
         <div id="message"></div>
-        <form action="{{ route('admin.template.post.edit') }}" id="create-form" method="POST">
+        <form action="{{ route('admin.template.post.edit', $template->id) }}" id="create-form" method="POST">
             {!! csrf_field() !!}
             <input type="hidden" id="template_id" name="id" value="{{ $template->id }}" placeholder="">
             <div class="form-group">
@@ -42,11 +42,7 @@ Edit Template
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                <select name="status" id="status" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1">Hidden</option>
-                    <option value="2">Publish</option>
-                </select>
+                {!! Form::select('status', [2 => 'Pending', '1'=> 'Active', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Edit</button>
@@ -61,7 +57,9 @@ Edit Template
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script>
-    CKEDITOR.replace('content');
+    CKEDITOR.replace('content', {
+        format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name'
+    });
     var isBusy = false;
     $('form').validate({
         rules: {

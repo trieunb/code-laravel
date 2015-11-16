@@ -70,14 +70,14 @@ class TemplateMarketsController extends Controller
     	return view('admin.template.edit', compact('template'));
     }
 
-    public function postEdit(TemplateFormRequest $request)
+    public function postEdit(TemplateFormRequest $request, $id)
     {
         $sections = ['div.profile', 'div.education', 'div.work',
             'div.objective', 'div.reference', 'div.skill',
         ];
         $data = createSection($request->get('content'), $sections);
         
-        return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
+        return $this->template_market->createOrUpdateTemplateByManage($request, $data, \Auth::user()->id)
 
             ? response()->json(['status' => true])
             : response()->json(['status' => false]);
