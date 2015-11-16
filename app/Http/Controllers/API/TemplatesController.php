@@ -125,7 +125,7 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $age = Carbon::createFromFormat("Y-m-d", date('Y-m-d', $user_info->dob))->age;
+        $age = Carbon::createFromFormat("Y-m-d H:i:s", $user_info->dob)->age;
 
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
         
