@@ -47,7 +47,7 @@
                           <h4>Pages</h4>
                           <p>Choose the element you want to edit</p>
                         </div>
-                        {!! createSectionMenu($section) !!}
+                        {!! createSectionMenu($section, $token) !!}
                         
                       </div>
 

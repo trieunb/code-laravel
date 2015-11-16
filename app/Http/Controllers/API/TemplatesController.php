@@ -97,7 +97,7 @@ class TemplatesController extends Controller
         ]);
     }
 
-    public function editView($section, $id, Request $request)
+    public function editView($id, $section, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getDetailTemplate($id, $user->id);
@@ -235,13 +235,13 @@ class TemplatesController extends Controller
         ]);
     }
 
-    public function menu($id)
+    public function menu($id, Request $request)
     {
         $template = $this->template->getDetailTemplate($id, \Auth::user()->id);
-
+        $token = $request->get('token');
         $section = createSectionData($template);
 
-        return view('api.template.section', compact('section'));
+        return view('api.template.section', compact('section', 'token'));
     }
 
 }

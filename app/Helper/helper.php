@@ -107,7 +107,7 @@ if (!function_exists('createSection')) {
 }
 if (!function_exists('createSectionData')) {
     function createSectionData($template) {
-        $section = [];
+        $section = ['template_id' => $template->id];
         foreach ($template->section as $k => $v) {
 
             switch ($k) {
@@ -117,33 +117,31 @@ if (!function_exists('createSectionData')) {
                     $section['contact']['name'] = 'Name';
                     break;
                 case 'address':
-                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['display'] = 'Contact Information';
                     $section['contact']['address'] = 'Address';
                     break;
                 case 'photo':
-                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['display'] = 'Contact Information';
                     $section['contact']['photo'] = 'Photos';
                     break;
                 case 'email':
-                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['display'] = 'Contact Information';
                     $section['contact']['email'] = 'Email Address';
                     break;
                 case 'profile_website':
-                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['display'] = 'Contact Information';
                     $section['contact']['profile_website'] = 'My Profile Website';
                     break;
                 case 'linkedin':
-                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['display'] = 'Contact Information';
                     $section['contact']['linkedin'] = 'My LinkedIn Profile';
                     break;
                 case 'phone':
-                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['display'] = 'Contact Information';
                     $section['contact']['phone'] = 'Phone Number';
                     break;
                 default:
-                   $section['contact']['display'] = 'Contact Information';
-                   $section[$k] = ucfirst($k);
-
+                    $section[$k] = ucfirst($k);
                     break;
             }
         }
@@ -154,7 +152,7 @@ if (!function_exists('createSectionData')) {
 
 
 if (!function_exists('createSectionMenu')) {
-    function createSectionMenu(array $data) {
+    function createSectionMenu(array $data, $token) {
         $html = '<ul class="list list-unstyled">';
         foreach ($data as $section => $value) {
             if (is_array($value)) {
@@ -164,7 +162,7 @@ if (!function_exists('createSectionMenu')) {
                         $html .= $v .'<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a>';
                         $html .= '<div class="dropdown-menu" aria-labelledby="dLabel"><ul class="list list-unstyled">';
                     }else {
-                        $html .= '<li><a>'.$v.'</a></li>';
+                        $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$k."?token={$token}'>{$v}</a></li>";
 
                         if (strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
                             $html .= '</ul></div>';
@@ -175,10 +173,15 @@ if (!function_exists('createSectionMenu')) {
                 $html .= '</li>';
 
             } else {
-                $html .= '<li><a>'.$value.'</a></li>';
+                    if ($section != 'template_id') {
+                        $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";    
+                    }
+                    
             }
         }
 
-        return $html .= '</ul>';
+        $html .= '</ul>';
+
+        return $html;
     }
 }   
