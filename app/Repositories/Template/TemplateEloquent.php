@@ -175,15 +175,4 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
         return $template->save();
     }
-
-    /**
-     * Create section from template basic
-     */
-    public function createSection($section, $content)
-    {
-        $html = new \Htmldom($content);
-        foreach ($html->find($section) as $value) {
-            return (string) $value;
-        }
-    }
 }

@@ -65,10 +65,4 @@ interface TemplateInterface extends Repository
      */
     public function createTemplateFromMarket(array $data);
 
-    /**
-     * Create section from template
-     * @pram $section, $content
-     * return string
-     */
-    public function createSection($section, $content);
 }

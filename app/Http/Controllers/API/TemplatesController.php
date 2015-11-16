@@ -125,19 +125,17 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $age = \Carbon\Carbon::createFromFormat("Y-m-d H:i:s", $user_info->dob)->age;
-
+        $age = Carbon::createFromFormat("Y-m-d", date('Y-m-d', $user_info->dob))->age;
 
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
-
         
         $section = [
-            'profile' => $this->template->createSection('.profile', $content),
-            'education' => $this->template->createSection('.education', $content),
-            'skill' => $this->template->createSection('.skill', $content),
-            'history' => $this->template->createSection('.history', $content),
-            'references' => $this->template->createSection('.references', $content),
-            'objectvie' => $this->template->createSection('.objectvie', $content),
+            'profile' => createSectionBasic('.profile', $content),
+            'education' => createSectionBasic('.education', $content),
+            'skill' => createSectionBasic('.skill', $content),
+            'history' => createSectionBasic('.history', $content),
+            'references' => createSectionBasic('.references', $content),
+            'objectvie' => createSectionBasic('.objectvie', $content),
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
