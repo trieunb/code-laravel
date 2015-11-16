@@ -131,7 +131,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * @param  string $content 
      * @return mixed          
      */
-    public function createTemplateBasic($user_id, $content)
+    public function createTemplateBasic($user_id, $section, $content)
     {
         $template = Template::where('type', '=', 1)->first();
         if ( ! $template) {
@@ -143,6 +143,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         }
 
         $template->content = $content;
+        $template->section = $section;
         
         return $template->save() ? $template : null;
     }
@@ -173,5 +174,16 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         Template::makeSlug($template, false);
 
         return $template->save();
+    }
+
+    /**
+     * Create section from template basic
+     */
+    public function createSection($section, $content)
+    {
+        $html = new \Htmldom($content);
+        foreach ($html->find($section) as $value) {
+            return (string) $value;
+        }
     }
 }

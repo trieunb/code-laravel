@@ -48,7 +48,7 @@ interface TemplateInterface extends Repository
      * @param  string $content 
      * @return mixed          
      */
-    public function createTemplateBasic($user_id, $content);
+    public function createTemplateBasic($user_id, $section, $content);
 
     /**
      * delete template
@@ -64,4 +64,11 @@ interface TemplateInterface extends Repository
      * @return bool       
      */
     public function createTemplateFromMarket(array $data);
+
+    /**
+     * Create section from template
+     * @pram $section, $content
+     * return string
+     */
+    public function createSection($section, $content);
 }
