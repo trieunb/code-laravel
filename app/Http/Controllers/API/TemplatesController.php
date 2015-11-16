@@ -132,7 +132,7 @@ class TemplatesController extends Controller
         $section = [
             'photo' => createSectionBasic('.image-avatar', $content),
             'address' => createSectionBasic('.address', $content),
-            'info' => createSectionBasic('.info', $content),
+            'name' => createSectionBasic('.info', $content),
             'education' => createSectionBasic('.education', $content),
             'personal_test' => createSectionBasic('.personal_test', $content),
             'work' => createSectionBasic('.work', $content),
