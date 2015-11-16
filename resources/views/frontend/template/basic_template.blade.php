@@ -1,5 +1,6 @@
 <div class="container">
     <div class="row">
+        <div class="profile">
         <div class="image-avatar" 
             style="position: relative;
             overflow: hidden;max-height:400;" contenteditable="true">
@@ -54,7 +55,8 @@
                 </ul>
             </div>
         </div>
-        <div class="content-box" contenteditable="true">
+        </div>
+        <div class="education content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -83,7 +85,7 @@
             @endforeach
             </div>
         </div>
-        <div class="content-box" contenteditable="true">
+        <div class="skill content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -108,7 +110,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="content-box" contenteditable="true">
+        <div class="history content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -137,7 +139,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="content-box" contenteditable="true">
+        <div class="references content-box" contenteditable="true">
             <div class="header-title"
             style="color: red;
             font-weight:600;
@@ -162,7 +164,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="content-box" contenteditable="true">
+        <div class="objectvie content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
