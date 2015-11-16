@@ -23,8 +23,8 @@ List Templates
                     <td class="sorting_1">{{ $temp_market->title }}</td>
                     <td>{{ $temp_market->price }}</td>
                     <td class="">
-                    {!! Form::open(['route' => ['admin.status'], 'id' => 'changeStatus']) !!}
-                        {!! Form::select('status', 2 => 'Pending', '1'=> 'Active', 0 => 'Block',] , null, [ 'class' =>  'form-control', 'id' => 'status'])!!}
+                    {!! Form::open(['route' => 'admin.status', 'id' => 'changeStatus']) !!}
+                        {!! Form::select('status', [2 => 'Pending', '1'=> 'Active', 0 => 'Block',] , null, [ 'class' =>  'form-control', 'id' => 'status'])!!}
                     {!! Form::close() !!}
                     </td>
                     <td class="center">{{ $temp_market->version }}</td>

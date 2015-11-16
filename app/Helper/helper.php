@@ -105,3 +105,80 @@ if (!function_exists('createSection')) {
         return $result;
     }
 }
+if (!function_exists('createSectionData')) {
+    function createSectionData($template) {
+        $section = [];
+        foreach ($template->section as $k => $v) {
+
+            switch ($k) {
+
+                case 'name':
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['name'] = 'Name';
+                    break;
+                case 'address':
+                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['address'] = 'Address';
+                    break;
+                case 'photo':
+                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['photo'] = 'Photos';
+                    break;
+                case 'email':
+                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['email'] = 'Email Address';
+                    break;
+                case 'profile_website':
+                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['profile_website'] = 'My Profile Website';
+                    break;
+                case 'linkedin':
+                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['linkedin'] = 'My LinkedIn Profile';
+                    break;
+                case 'phone':
+                   $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['phone'] = 'Phone Number';
+                    break;
+                default:
+                   $section['contact']['display'] = 'Contact Information';
+                   $section[$k] = ucfirst($k);
+
+                    break;
+            }
+        }
+
+        return $section;
+    }
+}
+
+
+if (!function_exists('createSectionMenu')) {
+    function createSectionMenu(array $data) {
+        $html = '<ul class="list list-unstyled">';
+        foreach ($data as $section => $value) {
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    if ($k == 'display') {
+                        $html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">';
+                        $html .= $v .'<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a>';
+                        $html .= '<div class="dropdown-menu" aria-labelledby="dLabel"><ul class="list list-unstyled">';
+                    }else {
+                        $html .= '<li><a>'.$v.'</a></li>';
+
+                        if (strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
+                            $html .= '</ul></div>';
+                        }
+                    }
+                }
+                
+                $html .= '</li>';
+
+            } else {
+                $html .= '<li><a>'.$value.'</a></li>';
+            }
+        }
+
+        return $html .= '</ul>';
+    }
+}   

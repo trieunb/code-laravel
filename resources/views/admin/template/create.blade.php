@@ -59,7 +59,16 @@ Template
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script>
-    CKEDITOR.replace('content');
+   /* CKEDITOR.replace('content', {
+        config.format_section = 'div;Name;Address;Phone;Email;ProfileWebsite;LinkedInProfile;References;Objectives;OtherActivities;WorkExperiences;Educations;Photos';
+
+    });*/
+$(function() {
+    
+    CKEDITOR.replace( 'content', {
+
+     format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name'
+    } );
     var isBusy = false;
     $('form').validate({
         rules: {
@@ -131,5 +140,8 @@ Template
             });
         }
     });
+});
+
+
 </script>
 @endsection

@@ -64,7 +64,7 @@ CKEDITOR.plugins.add( 'section', {
 
 				var style = styles[ value ],
 					elementPath = editor.elementPath();
-
+				console.log(editor.elementPath());
 				editor[ style.checkActive( elementPath, editor ) ? 'removeStyle' : 'applyStyle' ]( style );
 
 				// Save the undo snapshot after all changes are affected. (#4899)
@@ -165,47 +165,17 @@ CKEDITOR.config.format_div = { element: 'div' };
  */
 CKEDITOR.config.format_pre = { element: 'pre' };
 
-/**
- * The style definition to be used to apply the `Address` format.
- *
- *		config.format_address = { element: 'address', attributes: { 'class': 'styledAddress' } };
- *
- * @cfg {Object} [format_address={ element: 'address' }]
- * @member CKEDITOR.config
- */
-CKEDITOR.config.format_address = { element: 'address' };
-
-/**
- * The style definition to be used to apply the `Heading 1` format.
- *
- *		config.format_h1 = { element: 'h1', attributes: { 'class': 'contentTitle1' } };
- *
- * @cfg {Object} [format_h1={ element: 'h1' }]
- * @member CKEDITOR.config
- */
-CKEDITOR.config.format_profile = { element: 'div', attributes: { 'class': 'profile' } };
-CKEDITOR.config.format_reference = { element: 'div', attributes: { 'class': 'reference' } };
-CKEDITOR.config.format_objective = { element: 'div', attributes: { 'class': 'objective' } };
-CKEDITOR.config.format_skill= { element: 'div', attributes: { 'class': 'skill' } };
-CKEDITOR.config.format_work= { element: 'div', attributes: { 'class': 'work' } };
-
-/**
- * The style definition to be used to apply the `Heading 2` format.
- *
- *		config.format_h2 = { element: 'h2', attributes: { 'class': 'contentTitle2' } };
- *
- * @cfg {Object} [format_h2={ element: 'h2' }]
- * @member CKEDITOR.config
- */
-CKEDITOR.config.format_education = { element: 'div', attributes: { 'class': 'education' } };
-
-/**
- * The style definition to be used to apply the `Heading 3` format.
- *
- *		config.format_h3 = { element: 'h3', attributes: { 'class': 'contentTitle3' } };
- *
- * @cfg {Object} [format_h3={ element: 'h3' }]
- * @member CKEDITOR.config
- */
-CKEDITOR.config.format_h3 = { element: 'h3' };
-
+CKEDITOR.config.format_Name = { element: 'div', attributes: { 'class': 'name', 'data-parentId': 1 } };
+CKEDITOR.config.format_Address = { element: 'div', attributes: { 'class': 'address', 'data-parentId': 1 } };
+CKEDITOR.config.format_PhoneNumber = { element: 'div', attributes: { 'class': 'phone', 'data-parentId': 1 } };
+CKEDITOR.config.format_Email = { element: 'div', attributes: { 'class': 'email', 'data-parentId': 1 } };
+CKEDITOR.config.format_MyProfileWebsite = { element: 'div', attributes: { 'class': 'profile_website', 'data-parentId': 1 } };
+CKEDITOR.config.format_MyLinkedInProfile = { element: 'div', attributes: { 'class': 'linkedin', 'data-parentId': 1 } };
+CKEDITOR.config.format_References = { element: 'div', attributes: { 'class': 'reference' } };
+CKEDITOR.config.format_Objectives = { element: 'div', attributes: { 'class': 'objective' } };
+CKEDITOR.config.format_OtherActivities= { element: 'div', attributes: { 'class': 'activitie' } };
+CKEDITOR.config.format_WorkExperience= { element: 'div', attributes: { 'class': 'work' } };
+CKEDITOR.config.format_Educations= { element: 'div', attributes: { 'class': 'education' } };
+CKEDITOR.config.format_Photos= { element: 'div', attributes: { 'class': 'photo' } };
+CKEDITOR.config.format_PersonalityTest= { element: 'div', attributes: { 'class': 'personal_test' } };
+CKEDITOR.config.format_KeyQuanlifications= { element: 'div', attributes: { 'class': 'key_quanlification' } };

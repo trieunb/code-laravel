@@ -80,7 +80,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      */
     public function getDetailTemplate($id, $user_id)
     {
-        return $this->model->where('user_id', '=', $user_id)->findOrFail($id);
+        return $this->model->whereUserId($user_id)->findOrFail($id);
 
     }
 

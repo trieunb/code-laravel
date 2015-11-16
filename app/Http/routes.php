@@ -85,6 +85,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/edit/{section}/{id}', 'TemplatesController@editView');
     get('template/{id}/attach', 'TemplatesController@attach');
     get('template/view-template/{id}', 'TemplatesController@renderUserInfoToTemplate');
+    get('template/{id}/section', 'TemplatesController@getSections');
+    get('template/menu/{id}', 'TemplatesController@menu');
 
     post('template/preview', 'TemplatesController@updateBasicTemplate');
     post('template/basic', 'TemplatesController@postBasicTemplate');
@@ -107,4 +109,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('cart/createpayment', 'CartsController@createPayment');
     post('cart/checkout/{id}', 'CartsController@checkout');
 
+    /**
+     * Section Route
+     */
+    
+    get('section/names', ['as' => 'api.section.get.names', 'uses' => 'SectionsController@getNames']);
+    
 });
