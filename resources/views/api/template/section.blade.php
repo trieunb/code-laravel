@@ -36,8 +36,8 @@
               </div>
               <div class="control">
 
-              <ul class="list-unstyled list-inline">
-                    <li >
+              <ul class="list-unstyled list-inline" >
+                    <li id="fix-iphone">
                       <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="circle dropdown">
                         <i class="fa fa-list-alt"></i>
                       </a>

@@ -105,6 +105,41 @@ if (!function_exists('createSection')) {
         return $result;
     }
 }
+
+if (!function_exists('editSection')) {
+    function editSection($section, $content, $str) {
+        $html = new \Htmldom();
+        $html->load($str);
+
+        $html_request = new \Htmldom;
+        $html_request->load($content);
+
+        $currentSectionString = '';
+
+        foreach ($html->find('div.'.$section) as $element) {
+           $currentSectionString = $element->outertext;
+        }
+        $replace = '<div class="'.$section.'">';
+
+        foreach ($html_request->find('div.'.$section) as $key => $element) {
+
+            $replace .= $key == count($html_request->find('div.'.$section)) - 1 
+                ? $element->innertext
+                : $element->innertext.'<br>';
+
+        }
+
+        $replace .= '</div>';
+        
+        return [
+            'content' => str_replace($currentSectionString, $replace, $str),
+            'section' => $replace
+        ];
+
+
+    }
+}
+
 if (!function_exists('createSectionData')) {
     function createSectionData($template) {
         $section = ['template_id' => $template->id];
@@ -144,6 +179,10 @@ if (!function_exists('createSectionData')) {
                     $section[$k] = ucfirst($k);
                     break;
             }
+        }
+
+        if (isset($section['contact'])) {
+            ksort($section);
         }
 
         return $section;

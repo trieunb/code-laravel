@@ -91,7 +91,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('template/preview', 'TemplatesController@updateBasicTemplate');
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', 'TemplatesController@postTemplates');
-    post('template/edit/{id}', 'TemplatesController@postEdit');
+    post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
     post('template/delete/{id}', 'TemplatesController@postDeleteTemplate');
     

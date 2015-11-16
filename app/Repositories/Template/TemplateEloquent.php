@@ -114,13 +114,17 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * Edit template
      * @param  int $id      primary key
      * @param  int $user_id   
+     * @param  string $section   
      * @param  mixed $request 
      * @return mixed          
      */
-    public function editTemplate($id, $user_id, $request)
+    public function editTemplate($id, $user_id, $section, $request)
     {
         $template = $this->getDetailTemplate($id, $user_id);
-        $template->content[$request->get('section')] = $request->get('content');
+        $sec = $template->section;
+        $data = editSection($section, $request->get('content'), $template->content);
+        $template->content = $data['content'];
+        $template->section = array_set($sec, $section, $data['section']);
 
         return $template->save() ? $template : null;
     }
@@ -171,6 +175,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->source_file_pdf = $data['source_file_pdf'] != null ? $data['source_file_pdf']: '';
         $template->version = $data['version'];
         $template->clone = $data['clone'];
+        $template->section = $data['section'];
         Template::makeSlug($template, false);
 
         return $template->save();

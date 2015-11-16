@@ -106,10 +106,10 @@ class TemplatesController extends Controller
         return view()->make('api.template.edit', compact('content'));
     }
 
-    public function postEdit($id, Request $request)
+    public function postEdit($id, $section, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $result = $this->template->editTemplate($id, $user->id, $request);
+        $result = $this->template->editTemplate($id, $user->id, $section, $request);
         
         if (!$result) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
@@ -228,11 +228,12 @@ class TemplatesController extends Controller
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
 
-        return response()->json([
+        return view('api.template.view', compact('content'));
+        /*return response()->json([
             'status_code' => 200,
             'status' => true,
             'data' => ['id' => $id,'title' => $template->title,'content' => $content]
-        ]);
+        ]);*/
     }
 
     public function menu($id, Request $request)

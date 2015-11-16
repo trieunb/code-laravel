@@ -9,6 +9,12 @@ $(document).ready(function(){
     //         return false;
     //     });
     // });
+    $('#fix-iphone').trigger('click.bs.dropdown');
+  /*  $('#fix-iphone').click(function() {
+      if (!$(this).hasClass('open')) {
+       $('#fix-iphone div.dropdown-menu').show();
+     } else $('#fix-iphone div.dropdown-menu').hide();
+    });*/
     $('.dropdown-menu .dropdown').click(function(event)
     {
       event.preventDefault();
