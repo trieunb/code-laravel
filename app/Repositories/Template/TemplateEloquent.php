@@ -134,7 +134,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     public function createTemplateBasic($user_id, $section, $content)
     {
         $template = Template::where('type', '=', 1)->first();
-        if ( ! $template) {
+        if ($template) {
             $template = new Template();
             $template->user_id = $user_id;
             $template->title = "Basic Template";

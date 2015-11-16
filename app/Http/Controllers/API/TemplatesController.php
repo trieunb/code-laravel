@@ -130,11 +130,13 @@ class TemplatesController extends Controller
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
         
         $section = [
-            'profile' => createSectionBasic('.profile', $content),
+            'photo' => createSectionBasic('.image-avatar', $content),
+            'address' => createSectionBasic('.address', $content),
+            'info' => createSectionBasic('.info', $content),
             'education' => createSectionBasic('.education', $content),
-            'skill' => createSectionBasic('.skill', $content),
-            'history' => createSectionBasic('.history', $content),
-            'references' => createSectionBasic('.references', $content),
+            'personal_test' => createSectionBasic('.personal_test', $content),
+            'work' => createSectionBasic('.work', $content),
+            'reference' => createSectionBasic('.reference', $content),
             'objectvie' => createSectionBasic('.objectvie', $content),
         ];
 

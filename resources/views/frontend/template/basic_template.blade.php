@@ -4,7 +4,7 @@
         <div class="image-avatar" 
             style="position: relative;
             overflow: hidden;max-height:400;" contenteditable="true">
-                <img style="width:100%;" id="image" 
+                <img style="width:100%;" class="photo" 
                     src="{{ ($template->avatar) 
                     ? asset($template->avatar['origin']) 
                     : asset('images/avatar.jpg') }}">
@@ -19,7 +19,7 @@
                     <span>{{$template->email}}</span>
             </div>
         </div>
-        <div class="info text-center" 
+        <div class="address text-center" 
             style="background: #9b8578;
             color: white;
             font-weight:600;
@@ -30,7 +30,7 @@
                     : null}}</span><br>
             <span>Tell: {{$template->mobile_phone}}</span>
         </div>
-        <div class="introduct content-box" contenteditable="true">
+        <div class="info content-box" contenteditable="true">
             <div class="header-title" 
             style="color: red;
             font-weight:600;
@@ -85,7 +85,7 @@
             @endforeach
             </div>
         </div>
-        <div class="skill content-box" contenteditable="true">
+        <div class="personal_test content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -110,7 +110,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="history content-box" contenteditable="true">
+        <div class="work content-box" contenteditable="true">
             <div class="header-title"
                 style="color: red;
                 font-weight:600;
@@ -139,7 +139,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="references content-box" contenteditable="true">
+        <div class="reference content-box" contenteditable="true">
             <div class="header-title"
             style="color: red;
             font-weight:600;
