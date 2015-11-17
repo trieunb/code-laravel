@@ -95,7 +95,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
-            'soft_skill' => config('soft-skill.question'),
+            'soft_skill' => \Setting::get('questions'),
             'token' => $token,
         ];
 
@@ -118,7 +118,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'avatar' => $data['avatar'],
             'country' => $data['country'],
             'link_profile' => $data['link_profile'],
-            'soft_skill' => config('soft-skill.question'),
+            'soft_skill' => \Setting::get('questions'),
             'token' => $token
         ]);
 	}
@@ -157,8 +157,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
         if (isset($data['country']))
             $user->country = $data['country'];
         $user->token = $token;
-        return $user->save();
 
+        return $user->save();
     }
     
     /**
@@ -178,8 +178,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function getAlltemplatesFromMarketPlace($user_id)
     {
         return $this->model
-                ->with(['template_markets'])
-                ->findOrFail($user_id);
+            ->with(['template_markets'])
+            ->findOrFail($user_id);
     }
 
 	/**
