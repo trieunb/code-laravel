@@ -73,8 +73,7 @@ class User extends Model implements AuthenticatableContract,
         'avatar' => 'json',
         'id' => 'int',
         'linkedin_id' => 'int',
-        'gender' => 'int',
-        'status' => 'int'
+        'gender' => 'int'
     ];
     /**
      * The attributes excluded from the model's JSON form.

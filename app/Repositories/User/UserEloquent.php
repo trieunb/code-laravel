@@ -78,7 +78,15 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
 			'thumb' => $data['avatar']['thumb'] == null ?: asset($data['avatar']['thumb'])
 		];
+		$status = null;
+		foreach (\Setting::get('user_status') as $k => $v) {
+			if ($v['id'] == $data->status)
+				$status = $v;
+		}
 		
+
+		$data->status = $data->status != 0 && $data->status != null ? $status : null;
+
 		return $data;
 	}
 
@@ -213,7 +221,16 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	{
 		$user = $this->getById($id);
 		$user->status = $status;
+		$result = $user->save();
 		
-		return $user->save();
+		if ($result) {
+			$status = null;
+			foreach (\Setting::get('user_status') as $k => $v) {
+				if ($v['id'] == $user->status)
+					$status = $v;
+			}
+		}
+		
+		return $user->save() ? $status : null;
 	}
 }

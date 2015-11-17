@@ -6,8 +6,8 @@
 		{"question" : "text question", "value" : 1}
 	],
 	"user_status" : [
-		{"id" : 1, "status" : "On Notice Period"},
-        {"id" : 2, "status" : "Actively Exploring"},
-        {"id" : 3, "status" : "Not Working"}
+		{"id" : 1, "value" : "On Notice Period"},
+        {"id" : 2, "value" : "Actively Exploring"},
+        {"id" : 3, "value" : "Not Working"}
 	]
 }

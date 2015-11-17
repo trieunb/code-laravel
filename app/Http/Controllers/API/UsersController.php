@@ -243,17 +243,22 @@ class UsersController extends Controller
 
 		return response()->json([
 			'status_code' => 200,
-			'status' => true,
-			'data' => \Setting::get('user_status')
+			'data' => \Setting::get('user_status')	
 		]);
 	}
 
 	public function postStatus(Request $request)
 	{
-		$user = \JWTAuth::toUser($request->get('token'));
-		
-		return $this->user->editStatus($user->id, $request->get('status'))
-			? response()->json(['status_code' => 200,  'data' => $request->get('status')])
-			: response()->json(['status_code' => 400]); 
+		\Log::info('test Status', $request->all());
+		try {
+			$user = \JWTAuth::toUser($request->get('token'));
+			$result = $this->user->editStatus($user->id, $request->get('status'));
+			
+			return $result
+				? response()->json(['status_code' => 200,  'data' => $result])
+				: response()->json(['status_code' => 400]); 
+		} catch (\Exception $e) {
+			return response()->json(['status_code' => 400]);
+		}
 	}
 }
