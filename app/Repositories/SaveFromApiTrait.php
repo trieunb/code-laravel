@@ -23,11 +23,11 @@ trait SaveFromApiTrait
 		}
 
 		if ( count($ids) > 0) {
-			$idsPrepareDelete = $this->idsPrepareDelete($ids);
+			$idsPrepareDelete = $this->getIdsPrepareDelete($ids, $user_id);
 
 			$this->delete($idsPrepareDelete);
 
-			$dataPrepareForUpdate = $this->dataPrepareUpdate($data, $ids);
+			$dataPrepareForUpdate = $this->getDataPrepareUpdate($data, $ids);
 
 			$this->update($dataPrepareForUpdate, $user_id, $ids);
 		}
@@ -82,7 +82,7 @@ trait SaveFromApiTrait
 	 * @param  array  $ids 
 	 * @return array      
 	 */
-	private function idsPrepareDelete(array $ids)
+	private function getIdsPrepareDelete(array $ids, $user_id)
 	{
 		$objects = $this->getDataWhereClause('user_id', '=', $user_id);
 		$idsPrepareDelete = [];
@@ -101,7 +101,7 @@ trait SaveFromApiTrait
 	 * @param  array  $ids  
 	 * @return mixed       
 	 */
-	private function dataPrepareUpdate($data, array $ids)
+	private function getDataPrepareUpdate($data, array $ids)
 	{
 		$dataPrepareForUpdate = [];
 
