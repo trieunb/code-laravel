@@ -16,7 +16,7 @@ $(document).ready(function(){
        $('#fix-iphone > div.dropdown-menu').show();
      } else $('#fix-iphone > div.dropdown-menu').hide();
     });
-// $('#fix-iphone').trigger('click.bs.dropdown');
+
     $('.dropdown-menu .dropdown').click(function(event)
     {
       event.preventDefault();

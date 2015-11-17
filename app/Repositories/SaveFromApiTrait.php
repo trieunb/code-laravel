@@ -30,7 +30,7 @@ trait SaveFromApiTrait
 					$idsPrepareDelete[] = $object->id;
 			}
 
-			$this->model->whereIn('id', $idsPrepareDelete)->delete();
+			$this->deleteMultiRecords($idsPrepareDelete);
 
 			$dataPrepareForUpdate = [];
 			foreach ($ids as $id) {
