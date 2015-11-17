@@ -46,6 +46,23 @@ abstract class AbstractRepository
 	}
 	
 	/**
+	 * @param array $data
+	 * @param $id
+	 * @return mixed
+	 */
+	public function update(array $data, $id) {
+        return $this->model->where('id', '=', $id)->update($data);
+    }
+ 	/**
+ 	 * @param array $data
+ 	 * @return mixed
+ 	 */
+ 	public function create(array $data)
+ 	{
+ 		return $this->model->create($data);
+ 	}
+
+	/**
 	 * Eager Loading
 	 * @param  array  $relationship [relationship]
 	 */

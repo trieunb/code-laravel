@@ -25,14 +25,14 @@ trait SaveFromApiTrait
 		if ( count($ids) > 0) {
 			$idsPrepareDelete = $this->getIdsPrepareDelete($ids, $user_id);
 
-			$this->delete($idsPrepareDelete);
+			$this->deleteOneOrMutilRecord($idsPrepareDelete);
 
 			$dataPrepareForUpdate = $this->getDataPrepareUpdate($data, $ids);
 
-			$this->update($dataPrepareForUpdate, $user_id, $ids);
+			$this->updateOneOrMultiRecord($dataPrepareForUpdate, $user_id, $ids);
 		}
 
-		$this->create($dataPrepareForCreate, $user_id);
+		$this->createOneOrMultiRecord($dataPrepareForCreate, $user_id);
 	}
 
 	/**
@@ -41,7 +41,7 @@ trait SaveFromApiTrait
 	 * @param  int $user_id 
 	 * @return void          
 	 */
-	private function create($data, $user_id)
+	private function createOneOrMultiRecord($data, $user_id)
 	{
 		if (count($data) == 1) 
 			$this->saveOneRecord($data, $user_id);
@@ -56,11 +56,11 @@ trait SaveFromApiTrait
 	 * @param  array $ids     
 	 * @return void          
 	 */
-	private function update($data, $user_id, $ids)
+	private function updateOneOrMultiRecord($data, $user_id, $ids)
 	{
 		if (count($data) == 1) 
 			$this->saveOneRecord($data, $user_id);
-		else 
+		else if (count($data) > 1)
 			$this->model->updateMultiRecord($data, $this->field_work_save, $ids);
 	}
 
@@ -69,11 +69,11 @@ trait SaveFromApiTrait
 	 * @param  array  $ids 
 	 * @return void      
 	 */
-	private function delete(array $ids)
+	private function deleteOneOrMutilRecord(array $ids)
 	{
 		if (count($ids) > 1) 
 			$this->deleteMultiRecords($ids);
-		else 
+		else if(count($ids) == 1)
 			$this->delete($ids[0]);
 	}
 
