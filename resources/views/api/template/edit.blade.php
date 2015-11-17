@@ -2,13 +2,15 @@
 
 @section('content')
 	<!-- <div id="myPanel" style=""></div> -->
-
-	<div id="content" contenteditable="true">
+	
+	<div id="content" class="col-md-12" contenteditable="true">
 		{!! $content !!}		
-	</div>    
-	<br>
-	<button class="btn btn-primary" id="save">Save</button>
-	<button class="btn btn-default" id="cancel">Cancel</button>
+	</div> 
+	<div class="col-md-12" id="buttons-edit">
+		<button class="col-xs-5 btn btn-primary" id="save">Save</button>
+		<button class="col-xs-5 col-xs-offset-2 btn btn-default" id="cancel">Cancel</button>	
+	</div>  
+	
 @stop
 
 @section('scripts')
