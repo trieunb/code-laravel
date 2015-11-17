@@ -9,12 +9,14 @@ $(document).ready(function(){
     //         return false;
     //     });
     // });
-    $('#fix-iphone').trigger('click.bs.dropdown');
-  /*  $('#fix-iphone').click(function() {
+    
+    $('#fix-iphone').click(function() {
       if (!$(this).hasClass('open')) {
-       $('#fix-iphone div.dropdown-menu').show();
-     } else $('#fix-iphone div.dropdown-menu').hide();
-    });*/
+        $('#fix-iphone > a').attr('aria-expanded', true);
+       $('#fix-iphone > div.dropdown-menu').show();
+     } else $('#fix-iphone > div.dropdown-menu').hide();
+    });
+// $('#fix-iphone').trigger('click.bs.dropdown');
     $('.dropdown-menu .dropdown').click(function(event)
     {
       event.preventDefault();
