@@ -27,7 +27,7 @@ class TemplatesController extends Controller
         $this->template = $template;
     }
 
-    public function getAllTemplate(Request $request)
+    public function index(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         
@@ -41,8 +41,10 @@ class TemplatesController extends Controller
     public function postTemplates(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+
         if ($request->has('templates')) {
             $data = [];
+
             foreach ($request->get('templates') as $value) {
                 $data[] = [
                     'user_id' => $user->id,
@@ -58,20 +60,21 @@ class TemplatesController extends Controller
                     'updated_at' => Carbon::now()
                 ];
             }
+
             Template::insert($data);
         }
+
         return response()->json(['status_code' => 200, 'status' => true]);
-        
     }
 
-    public function getDetailTemplate(Request $request, $id)
+    public function show($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
       
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template->getDetailTemplate($id, $user->id)
+            'data' => $this->template->forUser($id, $user->id)
         ]);
     }
 
@@ -82,15 +85,16 @@ class TemplatesController extends Controller
         return view('template.api.section', compact('sections'));
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->getDetailTemplate($id, $user->id);
+        $template = $this->template->forUser($id, $user->id);
 
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => ['id' => $id,
+            'data' => [
+                'id' => $id,
                 'title' => $template->title,
                 'content' => $template->content
             ]
@@ -100,7 +104,7 @@ class TemplatesController extends Controller
     public function editView($id, $section, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->getDetailTemplate($id, $user->id);
+        $template = $this->template->forUser($id, $user->id);
         $content = array_get($template->section, $section);
 
         return view()->make('api.template.edit', compact('content'));
@@ -160,7 +164,7 @@ class TemplatesController extends Controller
     public function updateBasicTemplate(Request $request)
     {
         $template_basic = $request->get('template_basic')['content'];
-        $template_bs = Template::where('type', '=', 1)->first();
+        $template_bs = Template::where('type', '=', 2)->first();
         $template_bs->content = $template_basic;
         $template_bs->save();
 
@@ -171,12 +175,12 @@ class TemplatesController extends Controller
             ]);
     }
 
-    public function postDeleteTemplate(Request $request, $temp_id)
+    public function postDelete($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $template = Template::where('id', $temp_id)->first();
+        $template = $this->template->getById($id);
         
-        if (!$template) {
+        if ( !$template) {
             return response()->json([
                 'status_code' => 404,
                 'status' => false,
@@ -184,7 +188,7 @@ class TemplatesController extends Controller
             ]);
         }
         
-        return $this->template->deleteTemplate($user->id, $temp_id)
+        return $this->template->deleteTemplate($id, $user->id)
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Delete template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when delete Template']);
     }
@@ -238,7 +242,7 @@ class TemplatesController extends Controller
 
     public function menu($id, Request $request)
     {
-        $template = $this->template->getDetailTemplate($id, \Auth::user()->id);
+        $template = $this->template->forUser($id, \Auth::user()->id);
         $token = $request->get('token');
         $section = createSectionData($template);
 

@@ -20,9 +20,9 @@ interface TemplateInterface extends Repository
      * @param  int $user_id 
      * @return mixed          
      */
-    public function getDetailTemplate($id, $user_id);
+    public function forUser($id, $user_id);
 
-    public function getBasicTemplate($user_id);
+    //public function getBasicTemplate($user_id);
 
     /**
      * Create template
@@ -52,12 +52,13 @@ interface TemplateInterface extends Repository
     public function createTemplateBasic($user_id, $section, $content);
 
     /**
-     * delete template
-     * @param  int $user_id, $template_id 
+     * Delete template
+     * @param  int $id
+     * @param  int $user_id
      * @param  string $content 
      * @return mixed          
      */
-    public function deleteTemplate($id, $temp_id);
+    public function deleteTemplate($id, $user_id);
 
     /**
      * Create template from market place

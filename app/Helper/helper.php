@@ -59,6 +59,12 @@ if (!function_exists('convertPDFToIMG')) {
 }
 
 if (!function_exists('createSection')) {
+    /**
+     * Create section for market place
+     * @param  string $htmlString String HTML
+     * @param  array &$sections  
+     * @return array 
+     */
     function createSection($htmlString, &$sections) {
         $result = [];
         $html = new \Htmldom();
@@ -107,6 +113,13 @@ if (!function_exists('createSection')) {
 }
 
 if (!function_exists('editSection')) {
+    /**
+     * Edit section for template resume
+     * @param  string $section Name section
+     * @param  string $content String HTML for edit
+     * @param  string $str     String HTML current
+     * @return array          
+     */
     function editSection($section, $content, $str) {
         $html = new \Htmldom();
         $html->load($str);
@@ -135,12 +148,15 @@ if (!function_exists('editSection')) {
             'content' => str_replace($currentSectionString, $replace, $str),
             'section' => $replace
         ];
-
-
     }
 }
 
 if (!function_exists('createSectionData')) {
+    /**
+     * Create section data for show menu
+     * @param  mixed $template Template Collection
+     * @return array           
+     */
     function createSectionData($template) {
         $section = ['template_id' => $template->id];
         foreach ($template->section as $k => $v) {
@@ -191,6 +207,12 @@ if (!function_exists('createSectionData')) {
 
 
 if (!function_exists('createSectionMenu')) {
+    /**
+     * Create html menu
+     * @param  array  $data  
+     * @param  string $token Token of User
+     * @return string        HTML menu
+     */
     function createSectionMenu(array $data, $token) {
         $html = '<ul class="list list-unstyled">';
         foreach ($data as $section => $value) {
@@ -212,16 +234,13 @@ if (!function_exists('createSectionMenu')) {
                 $html .= '</li>';
 
             } else {
-                    if ($section != 'template_id') {
-                        $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";    
-                    }
-                    
+                if ($section != 'template_id') {
+                    $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";    
+                }
             }
         }
-
-        $html .= '</ul>';
-
-        return $html;
+        
+        return $html .= '</ul>';
     }
 }
 

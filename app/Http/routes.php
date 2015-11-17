@@ -77,8 +77,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Template Route
      */
-    get('template', 'TemplatesController@getAllTemplate');
-    get('template/detail/{id}', 'TemplatesController@getDetailTemplate');
+    get('template', 'TemplatesController@index');
+    get('template/detail/{id}', 'TemplatesController@show');
     get('template/create', 'TemplatesController@create');
     get('template/view/{id}', 'TemplatesController@view');
     get('template/edit/{id}', 'TemplatesController@edit');
@@ -93,7 +93,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('template', 'TemplatesController@postTemplates');
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
-    post('template/delete/{id}', 'TemplatesController@postDeleteTemplate');
+    post('template/delete/{id}', 'TemplatesController@postDelete');
     
     /**
      * Market Route
