@@ -96,6 +96,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
             'soft_skill' => \Setting::get('questions'),
+            'status' => \Setting::get('user_status'),
             'token' => $token,
         ];
 
@@ -119,6 +120,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'country' => $data['country'],
             'link_profile' => $data['link_profile'],
             'soft_skill' => \Setting::get('questions'),
+            'status' => \Setting::get('user_status'),
             'token' => $token
         ]);
 	}
@@ -199,5 +201,19 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		];
 		
 		return $user->save() ? $image : '';
+	}
+
+	/**
+	 * Edit Status
+	 * @param  int $id     
+	 * @param  int $status 
+	 * @return bool         
+	 */
+	public function editStatus($id, $status)
+	{
+		$user = $this->getById($id);
+		$user->status = $status;
+		
+		return $user->save();
 	}
 }

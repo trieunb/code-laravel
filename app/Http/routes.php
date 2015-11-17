@@ -69,10 +69,12 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * User Route
      */
-    get('/user/profile', 'UsersController@getProfile');
+    get('user/profile', 'UsersController@getProfile');
+    get('user/status', 'UsersController@getStatus');
 
-    post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
-    post('/user/upload', ['uses' => 'UsersController@uploadImage']);
+    post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
+    post('user/upload', ['uses' => 'UsersController@uploadImage']);
+    post('user/status', 'UsersController@postStatus');
 
     /**
      * Template Route

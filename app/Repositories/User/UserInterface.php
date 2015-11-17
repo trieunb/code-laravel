@@ -55,4 +55,12 @@ interface UserInterface extends Repository
 	 * @return mixed          
 	 */
 	public function uploadImage($file, $user_id);
+
+	/**
+	 * Edit Status
+	 * @param  int $id     
+	 * @param  int $status 
+	 * @return bool         
+	 */
+	public function editStatus($id, $status);
 }
