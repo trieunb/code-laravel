@@ -91,6 +91,7 @@ class AuthenticatesController extends Controller
        
         try {
             $rules->validate($request->all());
+
             $this->user->registerUser($request, $token);
             
             $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
@@ -146,8 +147,7 @@ class AuthenticatesController extends Controller
         $user = $this->user->getFirstDataWhereClause('email', '=', $email);
 
         if (!is_null($user)) {
-            $password = $this->randomPassword(8);
-            $this->user->update(['password' => Hash::make($password)], $user->id);
+            $this->user->update(['password' => Hash::make(str_random(8))], $user->id);
 
             \Mail::send('emails.forgetPassword', ['pass' => $password], function($m) use ($user) {
                 $m->to($user->email, $user->firstname . ' ' . $user->lastname)
@@ -183,14 +183,4 @@ class AuthenticatesController extends Controller
         }
     }
 
-    function randomPassword($length) {
-        $str = "";
-        $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-        $max = count($characters) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $rand = mt_rand(0, $max);
-            $str .= $characters[$rand];
-        }
-        return $str;
-    }
 }

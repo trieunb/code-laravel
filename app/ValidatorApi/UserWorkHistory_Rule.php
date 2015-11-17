@@ -8,6 +8,7 @@ class UserWorkHistory_Rule extends AbstractValidator
 	{
 		return [
 			'company' => 'required|min:3',
+			'sub_title' => 'required',
             'start' => 'required',
             'end' => 'required',
             'job_title' => 'required|min:3',
