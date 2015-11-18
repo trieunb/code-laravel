@@ -78,15 +78,14 @@ if (!function_exists('createSection')) {
             foreach ($sections as $index => $section) {
                 $class = explode('.', $section);
                 $class = end($class);
+                
                 foreach ($html->find($section) as $key => $e) {
                     if ($key != 0) {
                         $contentProfile .= '<br>'.$e->innertext;
 
                         $content = str_replace($e->outertext, '', $str);
                         $str = $content;
-
                     }
-                   
                 }
 
                 foreach ($html->find($section) as $k => $e) {
@@ -96,9 +95,9 @@ if (!function_exists('createSection')) {
                         // $e->{'contentediable'} = 'true';
                         // $outer = str_replace($outerCurrent, $e->outertext, $str);
                     
-                        $content = str_replace($e->outertext,"<div contentediable='true' class='{$class}'>".$contentProfile ."</div>", $str);
+                        $content = str_replace($e->outertext,"<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>", $str);
                          
-                        $tmp[$class] = "<div contentediable='true' class='{$class}'>".$contentProfile ."</div>";
+                        $tmp[$class] = "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>";
                         $tmp['content'] = $content;
                          
                     }
@@ -116,10 +115,8 @@ if (!function_exists('createSection')) {
                     }
                 }
             }
-
-
         }
-         dd($result);
+       
         return $result;
     }
 }

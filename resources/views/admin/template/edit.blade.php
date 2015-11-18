@@ -28,9 +28,8 @@ Edit Template
                 <label for="price">Price</label>
                 <input type="text" class="form-control" value="{{ $template->price }}" id="price" placeholder="Price">
             </div>
-
             <div class="form-group">
-                <textarea id="content" name="content">{{ $template->content }}</textarea> 
+                <textarea id="content" name="content">{{ $template->present()->contentPresent }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
