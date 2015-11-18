@@ -28,7 +28,6 @@ class TemplateMarketsController extends Controller
 
     public function postCreate(TemplateFormRequest $request)
     {
-        
         /*$html = new \Htmldom();
         $html->load($request->get('content'));
         $contentProfile = '';
@@ -52,8 +51,11 @@ class TemplateMarketsController extends Controller
                 $content = str_replace($e->innertext, $contentProfile, $outer);
             }
         }*/
-        $sections = ['div.profile', 'div.education', 'div.work',
-            'div.objective', 'div.reference', 'div.skill',
+        $sections = ['div.name', 'div.address', 'div.phone',
+            'div.email', 'div.profile_website', 'div.linkedin',
+            'div.reference', 'div.objective', 'div.activitie',
+            'div.work', 'div.education', 'div.photo', 'div.personal_test',
+            'div.key_quanlification', 'div.availability'
         ];
         $result = createSection($request->get('content'), $sections);
         // $content = createSection($content, 'div.education');
@@ -66,14 +68,16 @@ class TemplateMarketsController extends Controller
     public function edit($id)
     {
     	$template = $this->template_market->getById($id);
-
     	return view('admin.template.edit', compact('template'));
     }
 
     public function postEdit(TemplateFormRequest $request, $id)
     {
-        $sections = ['div.profile', 'div.education', 'div.work',
-            'div.objective', 'div.reference', 'div.skill',
+        $sections = ['div.name', 'div.address', 'div.phone',
+            'div.email', 'div.profile_website', 'div.linkedin',
+            'div.reference', 'div.objective', 'div.activitie',
+            'div.work', 'div.education', 'div.photo', 'div.personal_test',
+            'div.key_quanlification', 'div.availability'
         ];
         $data = createSection($request->get('content'), $sections);
         

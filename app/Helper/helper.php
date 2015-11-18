@@ -63,19 +63,22 @@ if (!function_exists('createSection')) {
      * Create section for market place
      * @param  string $htmlString String HTML
      * @param  array &$sections  
+     * @param  array $result  
      * @return array 
      */
-    function createSection($htmlString, &$sections) {
-        $result = [];
+    function createSection($htmlString, &$sections, &$result = []) {
+        $tmp = [];
         $html = new \Htmldom();
         $html->load($htmlString);
         $contentProfile = '';
         $str = $htmlString;
         $content = '';
+        
         if (count($sections) > 0) {
             foreach ($sections as $index => $section) {
                 $class = explode('.', $section);
                 $class = end($class);
+                
                 foreach ($html->find($section) as $key => $e) {
                     if ($key != 0) {
                         $contentProfile .= '<br>'.$e->innertext;
@@ -83,31 +86,37 @@ if (!function_exists('createSection')) {
                         $content = str_replace($e->outertext, '', $str);
                         $str = $content;
                     }
-                   
                 }
-                 
+
                 foreach ($html->find($section) as $k => $e) {
                     if ($k == 0) {
                         $contentProfile = $e->innertext.$contentProfile;
                         $outerCurrent = $e->outertext;
-                        $e->{'contentediable'} = 'true';
-                        $outer = str_replace($outerCurrent, $e->outertext, $str);
-                      
-                        $content = str_replace($e->outertext,"<div class='{$class}'>".$contentProfile ."</div>", $outer);
-                        
-                        $result[$class] = "<div class='{$class}'>".$contentProfile ."</div>";
-                        $result['content'] = $content;
-                       
+                        // $e->{'contentediable'} = 'true';
+                        // $outer = str_replace($outerCurrent, $e->outertext, $str);
+                    
+                        $content = str_replace($e->outertext,"<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>", $str);
+                         
+                        $tmp[$class] = "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>";
+                        $tmp['content'] = $content;
+                         
                     }
                 }
+
                 unset($sections[$index]);
-
-                if (count($sections) > 0) 
-                    $result = array_merge($result, createSection($content, $sections));
+                  
+                if (count($sections) > 0) {
+                   
+                    if (count($tmp) > 0) {
+                        $result = array_merge($result, $tmp);
+                        
+                        $tmp = createSection($content, $sections, $result);
+                        
+                    }
+                }
             }
-
         }
-
+       
         return $result;
     }
 }
@@ -215,17 +224,19 @@ if (!function_exists('createSectionMenu')) {
      */
     function createSectionMenu(array $data, $token) {
         $html = '<ul class="list list-unstyled">';
+        $i = 0;
         foreach ($data as $section => $value) {
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
+                    $i++;
                     if ($k == 'display') {
                         $html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">';
                         $html .= $v .'<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a>';
                         $html .= '<div class="dropdown-menu" aria-labelledby="dLabel"><ul class="list list-unstyled">';
                     }else {
-                        $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$k."?token={$token}'>{$v}</a></li>";
+                        $html .= "<li><a href=''>{$v}</a></li>";
 
-                        if (strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
+                        if (count($value) - 1 == $i && strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
                             $html .= '</ul></div>';
                         }
                     }
@@ -235,7 +246,7 @@ if (!function_exists('createSectionMenu')) {
 
             } else {
                 if ($section != 'template_id') {
-                    $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";    
+                    $html .= "<li><a>{$value}</a></li>";    
                 }
             }
         }

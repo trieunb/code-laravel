@@ -43,4 +43,5 @@ CKEDITOR.editorConfig = function( config ) {
             {'name': 'Another name', 'value': 'h1', 'label': 'Good looking'},
         ];
     config.format_section = 'profile';
+    config.allowedContent = true;
 };
