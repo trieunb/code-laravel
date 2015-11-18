@@ -234,7 +234,7 @@ if (!function_exists('createSectionMenu')) {
                         $html .= $v .'<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a>';
                         $html .= '<div class="dropdown-menu" aria-labelledby="dLabel"><ul class="list list-unstyled">';
                     }else {
-                        $html .= "<li><a href=''>{$v}</a></li>";
+                         $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$k."?token={$token}'>{$v}</a></li>";
 
                         if (count($value) - 1 == $i && strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
                             $html .= '</ul></div>';
@@ -246,7 +246,7 @@ if (!function_exists('createSectionMenu')) {
 
             } else {
                 if ($section != 'template_id') {
-                    $html .= "<li><a>{$value}</a></li>";    
+                    $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";   
                 }
             }
         }
