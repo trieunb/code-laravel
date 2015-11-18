@@ -1,34 +1,45 @@
 <div class="container">
     <div class="row">
-        <div class="profile">
-        <div class="image-avatar" style="position: relative; overflow: hidden;max-height:400;" contenteditable="true">
-            <img style="width:100%;" class="photo" 
+        <div class='image-avatar' style="position: relative; overflow: hidden;max-height:400;">
+            <div class="photo">
+            <img style="width:100%;" 
             src="{{ ($template->avatar) 
             ? asset($template->avatar['origin']) 
             : asset('images/avatar.jpg') }}">
+            </div>
             <div class="text-info" 
             style="position: absolute;
             bottom: 30px;
             width: 100%;
             text-align:center;">
-            <p style="font-size:30px;">{{$template->firstname . ' ' . $template->lastname}}</p>
-            <span>{{$template->link_profile}}</span>
+            <div class="name">
+                <p style="font-size:30px;">{{$template->firstname . ' ' . $template->lastname}}</p>
+            </div>
+            <div class="profile_website">
+                <span>{{$template->link_profile}}</span>
+            </div>
             <br>
-            <span>{{$template->email}}</span>
+            <div class="email">
+                <span>{{$template->email}}</span>
+            </div>
         </div>
     </div>
-    <div class="address text-center" 
+    <div class="text-center" 
     style="background: #9b8578;
     color: white;
     font-weight:600;
-    text-align:center;" contenteditable="true">
+    text-align:center;">
+    <div class="address">
     <span>{{$template->address}}</span><br>
     <span>{{($template->city)
         ? $template->city . ', ' . $template->state
-        : null}}</span><br>
+        : null}}</span>
+    </div><br>
+    <div class="phone">
         <span>Tell: {{$template->mobile_phone}}</span>
     </div>
-    <div class="info content-box" contenteditable="true">
+    </div>
+    <div class='info content-box'>
         <div class="header-title" 
         style="color: red;
         font-weight:600;
@@ -45,7 +56,13 @@
             <label style="font-weight:600">Age: </label>{{$age}}
         </li>
         <li>
-            <label style="font-weight:600">Gender: </label>{{$template->gender ? 'Male' : 'Female'}}
+            <?php
+                $gender = '';
+                if ($template->gender == 0) $gender = 'Male';
+                if ($template->gender == 1) $gender = 'Female';
+                if ($template->gender == 2) $gender = 'Other';
+            ?>
+            <label style="font-weight:600">Gender: </label>{{ $gender }}
         </li>
         <li>
             <label style="font-weight:600">Info: </label>{{$template->infomation}}
@@ -53,8 +70,7 @@
     </ul>
 </div>
 </div>
-</div>
-<div class="education content-box" contenteditable="true">
+<div class='education content-box'>
     <div class="header-title"
     style="color: red;
     font-weight:600;
@@ -83,7 +99,7 @@ border-bottom: 3px solid #D8D8D8;">
 @endforeach
 </div>
 </div>
-<div class="personal_test content-box" contenteditable="true">
+<div class='personal_test content-box'>
     <div class="header-title"
     style="color: red;
     font-weight:600;
@@ -108,7 +124,7 @@ border-bottom: 3px solid #D8D8D8;">
 @endforeach
 </div>
 </div>
-<div class="work content-box" contenteditable="true">
+<div class='work content-box'>
     <div class="header-title"
     style="color: red;
     font-weight:600;
@@ -137,7 +153,7 @@ border-bottom: 3px solid #D8D8D8;">
 @endforeach
 </div>
 </div>
-<div class="reference content-box" contenteditable="true">
+<div class='reference content-box'>
     <div class="header-title"
     style="color: red;
     font-weight:600;
@@ -162,7 +178,7 @@ border-bottom: 3px solid #D8D8D8;">
 @endforeach
 </div>
 </div>
-<div class="objectvie content-box" contenteditable="true">
+<div class='objectvie content-box'>
     <div class="header-title"
     style="color: red;
     font-weight:600;
@@ -185,6 +201,25 @@ border-bottom: 3px solid #D8D8D8;">
 </ul>
 <hr>
 @endforeach
+</div>
+</div>
+<div class='key_quanlification content-box'>
+        <div class="header-title" 
+        style="color: red;
+        font-weight:600;
+        padding:15px;">
+        <span>Job Status</span>
+    </div>
+    <div class="box" 
+    style="background: #f3f3f3;
+    padding: 15px;
+    border-top: 3px solid #D8D8D8;
+    border-bottom: 3px solid #D8D8D8;">
+    <ul style="list-style:none">
+        <li>
+            {{$template->status['value']}}
+        </li>
+    </ul>
 </div>
 </div>
 </div>

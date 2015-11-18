@@ -134,17 +134,22 @@ class TemplatesController extends Controller
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
         
         $section = [
-            'photo' => createSectionBasic('.image-avatar', $content),
-            'address' => createSectionBasic('.address', $content),
-            'name' => createSectionBasic('.info', $content),
-            'education' => createSectionBasic('.education', $content),
-            'personal_test' => createSectionBasic('.personal_test', $content),
-            'work' => createSectionBasic('.work', $content),
-            'reference' => createSectionBasic('.reference', $content),
-            'objectvie' => createSectionBasic('.objectvie', $content),
+            'Name' => createSectionBasic('.name', $content),
+            'Address' => createSectionBasic('.address', $content),
+            'Email Address' => createSectionBasic('.email', $content),
+            'Phonte Number' => createSectionBasic('.phone', $content),
+            'My Profile Website' => createSectionBasic('.profile_website', $content),
+            'Education' => createSectionBasic('.education', $content),
+            'Personality Test' => createSectionBasic('.personal_test', $content),
+            'Work' => createSectionBasic('.work', $content),
+            'Reference' => createSectionBasic('.reference', $content),
+            'Objectvie' => createSectionBasic('.objectvie', $content),
+            'Photos' => createSectionBasic('.photo', $content),
+            'Job status' => createSectionBasic('.key_quanlification', $content)
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
+        return $template->content;
 
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
