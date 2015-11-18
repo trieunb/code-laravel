@@ -93,12 +93,12 @@ if (!function_exists('createSection')) {
                     if ($k == 0) {
                         $contentProfile = $e->innertext.$contentProfile;
                         $outerCurrent = $e->outertext;
-                        $e->{'contentediable'} = 'true';
-                        $outer = str_replace($outerCurrent, $e->outertext, $str);
-      
-                        $content = str_replace($e->outertext,"<div class='{$class}'>".$contentProfile ."</div>", $outer);
+                        // $e->{'contentediable'} = 'true';
+                        // $outer = str_replace($outerCurrent, $e->outertext, $str);
+                    
+                        $content = str_replace($e->outertext,"<div contentediable='true' class='{$class}'>".$contentProfile ."</div>", $str);
                          
-                        $tmp[$class] = "<div class='{$class}'>".$contentProfile ."</div>";
+                        $tmp[$class] = "<div contentediable='true' class='{$class}'>".$contentProfile ."</div>";
                         $tmp['content'] = $content;
                          
                     }
@@ -119,7 +119,7 @@ if (!function_exists('createSection')) {
 
 
         }
-
+         dd($result);
         return $result;
     }
 }
