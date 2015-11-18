@@ -4,13 +4,16 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\User;
+use Laracasts\Presenter\PresentableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TemplateMarket extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, PresentableTrait;
     
+    protected $presenter = 'App\Presenter\TemplateMarketPresenter';
+
     protected $casts = [
         'image' => 'json',
         'section' => 'json',

@@ -56,7 +56,7 @@ class RenderFileWhenCreateTemplateMarket extends Event
             'origin' => 'images/template/'.$filename.'.jpg',
             'thumb' => 'thumb/template/'.$filename.'.jpg'
         ];
-        $template->source_file_pdf = asset('pdf/'.$this->slug.'.pdf');
+        $template->source_file_pdf = 'pdf/'.$this->slug.'.pdf';
         
         return $template->save();
     }

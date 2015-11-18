@@ -219,8 +219,9 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
-        $index = strpos($template->source_file_pdf, 'pdf/');
-        $sourcePDF = public_path(substr($template->source_file_pdf, $index));
+        // $index = strpos($template->source_file_pdf, 'pdf/');
+        // $sourcePDF = public_path(substr($template->source_file_pdf, $index));
+        $sourcePDF = public_path($template->source_file_pdf);
 
         if ( ! \File::exists($sourcePDF)) {
             \PDF::loadView('api.template.index', ['content' => $template->content])
