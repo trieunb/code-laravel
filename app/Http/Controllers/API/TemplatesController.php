@@ -136,9 +136,9 @@ class TemplatesController extends Controller
         $section = [
             'Name' => createSectionBasic('.name', $content),
             'Address' => createSectionBasic('.address', $content),
-            'Email Address' => createSectionBasic('.email', $content),
-            'Phonte Number' => createSectionBasic('.phone', $content),
-            'My Profile Website' => createSectionBasic('.profile_website', $content),
+            // 'Email Address' => createSectionBasic('.email', $content),
+            // 'Phonte Number' => createSectionBasic('.phone', $content),
+            // 'My Profile Website' => createSectionBasic('.profile_website', $content),
             'Education' => createSectionBasic('.education', $content),
             'Personality Test' => createSectionBasic('.personal_test', $content),
             'Work' => createSectionBasic('.work', $content),
@@ -149,7 +149,6 @@ class TemplatesController extends Controller
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
-        return $template->content;
 
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
