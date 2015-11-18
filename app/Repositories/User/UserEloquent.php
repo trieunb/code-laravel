@@ -218,9 +218,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function editStatus($id, $status)
 	{
-		if ( !in_array($status, [1, 2, 3]))
+		if ( !in_array((int)$status, [1, 2, 3]))
 			return null;
-		
+
 		$user = $this->getById($id);
 		$user->status = $status;
 		$result = $user->save();
