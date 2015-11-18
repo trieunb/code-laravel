@@ -69,31 +69,33 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * User Route
      */
-    get('/user/profile', 'UsersController@getProfile');
+    get('user/profile', 'UsersController@getProfile');
+    get('user/status', 'UsersController@getStatus');
 
-    post('/user/{id}/profile', ['uses' => 'UsersController@postProfile']);
-    post('/user/upload', ['uses' => 'UsersController@uploadImage']);
+    post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
+    post('user/upload', ['uses' => 'UsersController@uploadImage']);
+    post('user/status', 'UsersController@postStatus');
 
     /**
      * Template Route
      */
-    get('template', 'TemplatesController@getAllTemplate');
-    get('template/detail/{id}', 'TemplatesController@getDetailTemplate');
+    get('template', 'TemplatesController@index');
+    get('template/detail/{id}', 'TemplatesController@show');
     get('template/create', 'TemplatesController@create');
     get('template/view/{id}', 'TemplatesController@view');
     get('template/edit/{id}', 'TemplatesController@edit');
-    get('template/edit/{section}/{id}', 'TemplatesController@editView');
+    get('template/edit/{id}/{section}', ['as' => 'api.template.edit.section', 'uses' => 'TemplatesController@editView']);
     get('template/{id}/attach', 'TemplatesController@attach');
     get('template/view-template/{id}', 'TemplatesController@renderUserInfoToTemplate');
     get('template/{id}/section', 'TemplatesController@getSections');
-    get('template/menu/{id}', 'TemplatesController@menu');
+    get('template/menu/{id}', ['as' => 'api.template.get.menu', 'uses' => 'TemplatesController@menu']);
 
     post('template/preview', 'TemplatesController@updateBasicTemplate');
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', 'TemplatesController@postTemplates');
-    post('template/edit/{id}', 'TemplatesController@postEdit');
+    post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
-    post('template/delete/{id}', 'TemplatesController@postDeleteTemplate');
+    post('template/delete/{id}', 'TemplatesController@postDelete');
     
     /**
      * Market Route

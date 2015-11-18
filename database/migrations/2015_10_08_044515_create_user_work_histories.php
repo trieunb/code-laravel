@@ -16,6 +16,7 @@ class CreateUserWorkHistories extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('company', 200);
+            $table->string('sub_title', 255);
             $table->string('start', 50);
             $table->string('end', 50);
             $table->string('job_title', 45);

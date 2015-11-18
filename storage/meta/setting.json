@@ -1,0 +1,13 @@
+{
+	"questions" : [
+		{"question" : "text question", "value" : 1}, 
+		{"question" : "text question", "value" : 1}, 
+		{"question" : "text question", "value" : 1}, 
+		{"question" : "text question", "value" : 1}
+	],
+	"user_status" : [
+		{"id" : 1, "value" : "On Notice Period"},
+        {"id" : 2, "value" : "Actively Exploring"},
+        {"id" : 3, "value" : "Not Working"}
+	]
+}

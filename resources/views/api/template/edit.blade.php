@@ -1,41 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	
-	<title>Edit</title>
-	<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}">
-</head>
-<style type="text/css">
-	body{
-		/*width: 21cm;*/
-	}
-	#editor {
-		width: 21cm;
-		margin: 0 auto;
-	}
-	.container{
-		width: 100%;
-	}
-	#myPanel{
-		z-index: 9999;
-	}
-	@page{
-		size: A4;
-	}
-</style>
-<body>
+@extends('api.app')
+
+@section('content')
 	<!-- <div id="myPanel" style=""></div> -->
-	<div class="container" contenteditable="true">
-		
-			{!! $content !!}		
-	</div>    
+	
+	<div id="content" class="col-md-12" contenteditable="true">
+		{!! $content !!}		
+	</div> 
+	<div class="col-md-12" id="buttons-edit">
+		<button class="col-xs-5 btn btn-primary" id="save">Save</button>
+		<button class="col-xs-5 col-xs-offset-2 btn btn-default" id="cancel">Cancel</button>	
+	</div>  
+	
+@stop
+
+@section('scripts')
 	<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
 	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
 	<script src="{{  asset('js/nicEdit.js') }}"></script>
 	<script>
+	$(document).ready(function() {
+		$('#save').click(function(e) {
+			e.preventDefault();
+			var url = window.location.href;
+			var token = url.split('=');
+			var content = $('#content').html();
+			content = content.replace(/\t|\n+/g, '');
+			$.ajax({
+				url: window.location.href,
+				data: {
+					token : token,
+					content: content
+				},
+				type: 'POST',
+				success : function(result) {
+					if (result.status == true) {
+						alert('Edit content successfully');
+					}
+				}
+			});
+		});
+	});
 	/*	CKEDITOR.inline('editor',{
             on: {
                 instanceReady: function() {
@@ -59,7 +63,7 @@
         
         CKEDITOR.instances.editor.setData("{!! $content !!}");*/
 
-		bkLib.onDomLoaded(function() {
+		/*bkLib.onDomLoaded(function() {
           	var myNicEditor = new nicEditor();
           	// new nicEditor({externalCSS : 'asset(css/style.css)'});
           	myNicEditor.setPanel('myPanel');
@@ -104,7 +108,6 @@
 		    } 
 		    headStyle.top = window.pageYOffset + 'px';
 		  }
-		}
+		}*/
 	</script>
-</body>
-</html>
+@stop

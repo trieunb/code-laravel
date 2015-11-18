@@ -72,22 +72,22 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         return $template->save();
     }
 
-     /**
+    /**
      * Get template for user
      * @param  int $id      
      * @param  int $user_id 
      * @return mixed          
      */
-    public function getDetailTemplate($id, $user_id)
+    public function forUser($id, $user_id)
     {
         return $this->model->whereUserId($user_id)->findOrFail($id);
 
     }
 
-    public function getBasicTemplate($user_id)
+   /* public function getBasicTemplate($user_id)
     {
         return $this->getById($user_id);
-    }
+    }*/
 
      /**
      * Create template
@@ -110,17 +110,21 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         return $template->save() ? $template : null;
     }
 
-      /**
+    /**
      * Edit template
      * @param  int $id      primary key
      * @param  int $user_id   
+     * @param  string $section   
      * @param  mixed $request 
      * @return mixed          
      */
-    public function editTemplate($id, $user_id, $request)
+    public function editTemplate($id, $user_id, $section, $request)
     {
-        $template = $this->getDetailTemplate($id, $user_id);
-        $template->content[$request->get('section')] = $request->get('content');
+        $template = $this->forUser($id, $user_id);
+        $sec = $template->section;
+        $data = editSection($section, $request->get('content'), $template->content);
+        $template->content = $data['content'];
+        $template->section = array_set($sec, $section, $data['section']);
 
         return $template->save() ? $template : null;
     }
@@ -133,12 +137,15 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      */
     public function createTemplateBasic($user_id, $section, $content)
     {
-        $template = Template::where('user_id', '=', $user_id)->first();
+        $template = $this->model->whereUserId($user_id)
+            ->whereType(2)
+            ->first();
+
         if ( ! $template) {
             $template = new Template();
             $template->user_id = $user_id;
             $template->title = "Basic Template";
-            $template->type = 1;
+            $template->type = 2;
             Template::makeSlug($template);
         }
 
@@ -148,9 +155,16 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         return $template->save() ? $template : null;
     }
 
-    public function deleteTemplate($id, $temp_id)
+    /**
+     * Delete template
+     * @param  int $id
+     * @param  int $user_id
+     * @param  string $content 
+     * @return mixed          
+     */
+    public function deleteTemplate($id, $user_id)
     {
-        $template = $this->model->where('user_id', $id)->findOrFail($temp_id);
+        $template = $this->forUser($id, $user_id);
        
         return $template->delete();
     }
@@ -171,6 +185,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->source_file_pdf = $data['source_file_pdf'] != null ? $data['source_file_pdf']: '';
         $template->version = $data['version'];
         $template->clone = $data['clone'];
+        $template->section = $data['section'];
         Template::makeSlug($template, false);
 
         return $template->save();

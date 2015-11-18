@@ -78,7 +78,15 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
 			'thumb' => $data['avatar']['thumb'] == null ?: asset($data['avatar']['thumb'])
 		];
+		$status = null;
+		foreach (\Setting::get('user_status') as $k => $v) {
+			if ($v['id'] == $data->status)
+				$status = $v;
+		}
 		
+
+		$data->status = $data->status != 0 && $data->status != null ? $status : null;
+
 		return $data;
 	}
 
@@ -95,7 +103,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
-            'soft_skill' => config('soft-skill.question'),
+            'soft_skill' => \Setting::get('questions'),
+            'status' => \Setting::get('user_status'),
             'token' => $token,
         ];
 
@@ -118,7 +127,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'avatar' => $data['avatar'],
             'country' => $data['country'],
             'link_profile' => $data['link_profile'],
-            'soft_skill' => config('soft-skill.question'),
+            'soft_skill' => \Setting::get('questions'),
+            'status' => \Setting::get('user_status'),
             'token' => $token
         ]);
 	}
@@ -157,8 +167,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
         if (isset($data['country']))
             $user->country = $data['country'];
         $user->token = $token;
-        return $user->save();
 
+        return $user->save();
     }
     
     /**
@@ -178,8 +188,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function getAlltemplatesFromMarketPlace($user_id)
     {
         return $this->model
-                ->with(['template_markets'])
-                ->findOrFail($user_id);
+            ->with(['template_markets'])
+            ->findOrFail($user_id);
     }
 
 	/**
@@ -200,16 +210,27 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		
 		return $user->save() ? $image : '';
 	}
-    
-    function GetAge($dob) 
-    { 
-        $dob=explode("-",$dob); 
-        $curMonth = date("m");
-        $curDay = date("j");
-        $curYear = date("Y");
-        $age = $curYear - $dob[0]; 
-        if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])) 
-                $age--; 
-        return $age; 
-    }
+
+	/**
+	 * Edit Status
+	 * @param  int $id     
+	 * @param  int $status 
+	 * @return bool         
+	 */
+	public function editStatus($id, $status)
+	{
+		$user = $this->getById($id);
+		$user->status = $status;
+		$result = $user->save();
+		
+		if ($result) {
+			$status = null;
+			foreach (\Setting::get('user_status') as $k => $v) {
+				if ($v['id'] == $user->status)
+					$status = $v;
+			}
+		}
+		
+		return $user->save() ? $status : null;
+	}
 }
