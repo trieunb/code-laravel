@@ -71,8 +71,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function getProfile($user_id)
 	{
 		$data = $this->model
-			->with(['user_educations', 'user_work_histories', 'user_skills', 'references', 'objectives'])
-			->findOrFail($user_id);
+			->with(['user_educations', 'user_work_histories',
+			 	'user_skills', 'references', 'objectives', 'qualifications'
+		 	])->findOrFail($user_id);
 
 		$data->avatar = [
 			'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
@@ -104,7 +105,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
             'soft_skill' => \Setting::get('questions'),
-            'status' => \Setting::get('user_status'),
             'token' => $token,
         ];
 
@@ -128,7 +128,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'country' => $data['country'],
             'link_profile' => $data['link_profile'],
             'soft_skill' => \Setting::get('questions'),
-            'status' => \Setting::get('user_status'),
             'token' => $token
         ]);
 	}
@@ -219,6 +218,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function editStatus($id, $status)
 	{
+		if ( !in_array((int)$status, [1, 2, 3]))
+			return null;
+
 		$user = $this->getById($id);
 		$user->status = $status;
 		$result = $user->save();

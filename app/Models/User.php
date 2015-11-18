@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\Objective;
+use App\Models\Qualification;
 use App\Models\Reference;
 use App\Models\Role;
 use App\Models\Template;
@@ -169,6 +170,16 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->hasMany(Reference::class);
     }
+
+     /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function qualifications()
+    {
+        return $this->hasMany(Qualification::class);
+    }
+
     /**
      * Rename Image after upload 
      * @param  mixed $request 

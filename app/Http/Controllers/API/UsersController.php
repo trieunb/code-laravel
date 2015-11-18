@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
 use App\Repositories\Objective\ObjectiveInterface;
+use App\Repositories\Qualification\QualificationInterface;
 use App\Repositories\Reference\ReferenceInterface;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateInterface;
@@ -14,6 +15,7 @@ use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
 use App\ValidatorApi\Objective_Rule;
+use App\ValidatorApi\Qualification_Rule;
 use App\ValidatorApi\Reference_Rule;
 use App\ValidatorApi\UserEducation_Rule;
 use App\ValidatorApi\UserSkill_Rule;
@@ -30,46 +32,53 @@ class UsersController extends Controller
 {
 	/**
 	 * UserInterface
-	 * @var [type]
+	 * @var $user
 	 */
 	protected $user;
 
 	/**
 	 * UserEducationInterface
-	 * @var [type]
+	 * @var $user_education
 	 */
 	protected $user_education;
 
 	/**
 	 * UserWorkHistoryInterface
-	 * @var [type]
+	 * @var $user_work_history
 	 */
 	protected $user_work_history;
 	
 	/**
 	 * UserSkillInterface
-	 * @var [type]
+	 * @var $user_skill
 	 */
 	protected $user_skill;
 
 	/**
 	 * TemplateInterface
-	 * @var [type]
+	 * @var $template
 	 */
 	protected $template;
 	
+	/**
+	 * TemplateMarketInterface
+	 * @var $template_market
+	 */
 	protected $template_market;
+
 	/**
 	 * ObjectiveInterface
-	 * @var [type]
+	 * @var $objective
 	 */
 	protected $objective;
 
 	/**
 	 * ReferenceInterface
-	 * @var [type]
+	 * @var $reference
 	 */
 	protected $reference;
+
+	private $qualification;
 
 	public function __construct(UserInterface $user, 
 		UserEducationInterface $user_education,
@@ -78,7 +87,8 @@ class UsersController extends Controller
 		TemplateInterface $template,
 		ObjectiveInterface $objective,
 		ReferenceInterface $reference,
-		TemplateMarketInterface $template_market
+		TemplateMarketInterface $template_market,
+		QualificationInterface $qualification
 	) {
 		$this->middleware('jwt.auth');
 
@@ -90,6 +100,7 @@ class UsersController extends Controller
 		$this->objective = $objective;
 		$this->reference = $reference;
 		$this->template_market = $template_market;
+		$this->qualification = $qualification;
 	}
 
 	public function getProfile(Request $request)
@@ -107,7 +118,8 @@ class UsersController extends Controller
 		UserEducation_Rule $user_education_rule,
 		UserSkill_Rule $user_skill_rule,
 		Objective_Rule $objective_rule,
-		Reference_Rule $reference_rule
+		Reference_Rule $reference_rule,
+		Qualification_Rule $qualification_rule
 	) {
 		\Log::info('test API', $request->all());
 		$user = \JWTAuth::toUser($request->get('token'));
@@ -204,7 +216,23 @@ class UsersController extends Controller
 
 				$this->reference->saveFromApi($request->get('references'), $id);
 			} catch(ValidatorAPiException $e) {
-				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
+				return response()->json(['status_code' => 422, 'status' => false, 'message' => $e->getErrors()], 422);
+			}
+		}
+
+		if ($request->has('qualifications')) {
+			try {
+				if (count($request->get('qualifications')) > 0) {
+					foreach ($request->get('qualifications') as $qualification) {
+						$qualification_rule->validate($qualification);
+					}
+				} else {
+					$qualification_rule->validate($request->get('qualifications')[0]);
+				}
+
+				$this->qualification->saveFromApi($request->get('qualifications'), $id);
+			} catch (ValidatorAPiException $e) {
+				return response()->json(['status_code' => 422, 'message' => $e->getErrors()]);
 			}
 		}
 		
