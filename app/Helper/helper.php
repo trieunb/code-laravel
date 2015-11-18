@@ -72,6 +72,7 @@ if (!function_exists('createSection')) {
         $contentProfile = '';
         $str = $htmlString;
         $content = '';
+        
         if (count($sections) > 0) {
             foreach ($sections as $index => $section) {
                 $class = explode('.', $section);
@@ -81,18 +82,19 @@ if (!function_exists('createSection')) {
                         $contentProfile .= '<br>'.$e->innertext;
 
                         $content = str_replace($e->outertext, '', $str);
+                        var_dump($str, $e->outertext, $contentProfile);
                         $str = $content;
                     }
                    
                 }
-                 
+
                 foreach ($html->find($section) as $k => $e) {
                     if ($k == 0) {
                         $contentProfile = $e->innertext.$contentProfile;
                         $outerCurrent = $e->outertext;
                         $e->{'contentediable'} = 'true';
                         $outer = str_replace($outerCurrent, $e->outertext, $str);
-                      
+                        var_dump($htmlString);
                         $content = str_replace($e->outertext,"<div class='{$class}'>".$contentProfile ."</div>", $outer);
                         
                         $result[$class] = "<div class='{$class}'>".$contentProfile ."</div>";
@@ -100,14 +102,19 @@ if (!function_exists('createSection')) {
                        
                     }
                 }
-                unset($sections[$index]);
 
-                if (count($sections) > 0) 
-                    $result = array_merge($result, createSection($content, $sections));
+                unset($sections[$index]);
+                  
+                if (count($sections) > 0) {
+
+                    $result = count($result) > 0
+                        ? array_merge($result, createSection($content, $sections))
+                        : array_merge($result, createSection($htmlString, $sections));
+                }
             }
 
         }
-
+       
         return $result;
     }
 }
@@ -215,17 +222,19 @@ if (!function_exists('createSectionMenu')) {
      */
     function createSectionMenu(array $data, $token) {
         $html = '<ul class="list list-unstyled">';
+        $i = 0;
         foreach ($data as $section => $value) {
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
+                    $i++;
                     if ($k == 'display') {
                         $html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">';
                         $html .= $v .'<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a>';
                         $html .= '<div class="dropdown-menu" aria-labelledby="dLabel"><ul class="list list-unstyled">';
                     }else {
-                        $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$k."?token={$token}'>{$v}</a></li>";
+                        $html .= "<li><a href=''>{$v}</a></li>";
 
-                        if (strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
+                        if (count($value) - 1 == $i && strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
                             $html .= '</ul></div>';
                         }
                     }
@@ -235,7 +244,7 @@ if (!function_exists('createSectionMenu')) {
 
             } else {
                 if ($section != 'template_id') {
-                    $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";    
+                    $html .= "<li><a>{$value}</a></li>";    
                 }
             }
         }
