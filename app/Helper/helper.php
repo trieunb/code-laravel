@@ -229,6 +229,11 @@ if (!function_exists('createSectionMenu')) {
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
                     $i++;
+                    if (strpos($v, '_') !== FALSE) {
+                        $tmp = explode('_', $v);
+
+                        $v = ucfirst($tmp[0]). ' ' .ucfirst($tmp[1]);
+                    }
                     if ($k == 'display') {
                         $html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">';
                         $html .= $v .'<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a>';
@@ -246,6 +251,11 @@ if (!function_exists('createSectionMenu')) {
 
             } else {
                 if ($section != 'template_id') {
+                    if (strpos($value, '_') !== FALSE) {
+                        $tmp = explode('_', $value);
+
+                        $value = ucfirst($tmp[0]). ' ' .ucfirst($tmp[1]);
+                    }
                     $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";   
                 }
             }
