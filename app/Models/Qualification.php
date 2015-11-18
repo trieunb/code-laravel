@@ -21,6 +21,10 @@ class Qualification extends Model
      */
     protected $fillable = ['content'];
 
+    protected $casts = [
+    	'id' => 'int',
+    	'user_id' => 'int'
+	];
     public function user()
     {
     	return $this->belongsTo(User::class);
