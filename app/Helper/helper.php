@@ -63,10 +63,11 @@ if (!function_exists('createSection')) {
      * Create section for market place
      * @param  string $htmlString String HTML
      * @param  array &$sections  
+     * @param  array $result  
      * @return array 
      */
-    function createSection($htmlString, &$sections) {
-        $result = [];
+    function createSection($htmlString, &$sections, &$result = []) {
+        $tmp = [];
         $html = new \Htmldom();
         $html->load($htmlString);
         $contentProfile = '';
@@ -82,8 +83,8 @@ if (!function_exists('createSection')) {
                         $contentProfile .= '<br>'.$e->innertext;
 
                         $content = str_replace($e->outertext, '', $str);
-                        var_dump($str, $e->outertext, $contentProfile);
                         $str = $content;
+
                     }
                    
                 }
@@ -94,27 +95,31 @@ if (!function_exists('createSection')) {
                         $outerCurrent = $e->outertext;
                         $e->{'contentediable'} = 'true';
                         $outer = str_replace($outerCurrent, $e->outertext, $str);
-                        var_dump($htmlString);
+      
                         $content = str_replace($e->outertext,"<div class='{$class}'>".$contentProfile ."</div>", $outer);
-                        
-                        $result[$class] = "<div class='{$class}'>".$contentProfile ."</div>";
-                        $result['content'] = $content;
-                       
+                         
+                        $tmp[$class] = "<div class='{$class}'>".$contentProfile ."</div>";
+                        $tmp['content'] = $content;
+                         
                     }
                 }
 
                 unset($sections[$index]);
                   
                 if (count($sections) > 0) {
-
-                    $result = count($result) > 0
-                        ? array_merge($result, createSection($content, $sections))
-                        : array_merge($result, createSection($htmlString, $sections));
+                   
+                    if (count($tmp) > 0) {
+                        $result = array_merge($result, $tmp);
+                        
+                        $tmp = createSection($content, $sections, $result);
+                        
+                    }
                 }
             }
 
+
         }
-       
+
         return $result;
     }
 }
