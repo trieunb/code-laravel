@@ -34,11 +34,11 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->guest()) {
+        if ( ! $this->auth->user()->isAdmin()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest('admin/login');
+                return redirect()->guest('admin/login')->withErrors(['message' => 'Wrong email or password.']);
             }
         }
 
