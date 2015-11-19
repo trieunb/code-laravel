@@ -55,10 +55,9 @@ class TemplateMarketsController extends Controller
             'div.email', 'div.profile_website', 'div.linkedin',
             'div.reference', 'div.objective', 'div.activitie',
             'div.work', 'div.education', 'div.photo', 'div.personal_test',
-            'div.key_quanlification', 'div.availability'
+            'div.key_quanlification', 'div.availability', 'div.infomation'
         ];
         $result = createSection($request->get('content'), $sections);
-        // $content = createSection($content, 'div.education');
 
         return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
             ? response()->json(['status' => true])
@@ -77,7 +76,7 @@ class TemplateMarketsController extends Controller
             'div.email', 'div.profile_website', 'div.linkedin',
             'div.reference', 'div.objective', 'div.activitie',
             'div.work', 'div.education', 'div.photo', 'div.personal_test',
-            'div.key_quanlification', 'div.availability'
+            'div.key_quanlification', 'div.availability', 'div.infomation'
         ];
         $data = createSection($request->get('content'), $sections);
         

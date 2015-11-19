@@ -132,15 +132,16 @@ if (!function_exists('editSection')) {
     function editSection($section, $content, $str) {
         $html = new \Htmldom();
         $html->load($str);
-
+        $str =  preg_replace('/\t|\n+/', '', $str);
         $html_request = new \Htmldom;
         $html_request->load($content);
 
         $currentSectionString = '';
 
-        foreach ($html->find('div.'.$section) as $element) {
-           $currentSectionString = $element->outertext;
-        }
+        // foreach ($html->find('div.'.$section) as $element) {
+        //    $currentSectionString = $element->outertext;
+        // }
+
         $replace = '<div class="'.$section.'">';
 
         foreach ($html_request->find('div.'.$section) as $key => $element) {
@@ -152,13 +153,18 @@ if (!function_exists('editSection')) {
         }
 
         $replace .= '</div>';
-        
+
+        foreach ($html->find('div.'.$section) as $element) {
+           $element->outertext = $replace;
+        }
+
         return [
-            'content' => str_replace($currentSectionString, $replace, $str),
+            'content' => $html->save(),
             'section' => $replace
         ];
     }
 }
+
 
 if (!function_exists('createSectionData')) {
     /**

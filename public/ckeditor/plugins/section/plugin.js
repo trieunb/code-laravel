@@ -166,6 +166,7 @@ CKEDITOR.config.format_div = { element: 'div' };
 CKEDITOR.config.format_pre = { element: 'pre' };
 
 CKEDITOR.config.format_Name = { element: 'div', attributes: { 'class': 'name', 'data-parentId': 1 } };
+CKEDITOR.config.format_PersonalInfomation = { element: 'div', attributes: { 'class': 'infomation'} };
 CKEDITOR.config.format_Address = { element: 'div', attributes: { 'class': 'address', 'data-parentId': 1 } };
 CKEDITOR.config.format_PhoneNumber = { element: 'div', attributes: { 'class': 'phone', 'data-parentId': 1 } };
 CKEDITOR.config.format_Email = { element: 'div', attributes: { 'class': 'email', 'data-parentId': 1 } };
