@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use App\Models\User;
 
 class Authenticate
 {
@@ -34,11 +35,11 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
+        if ( ! $this->auth->guest()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest('admin/login')->withErrors(['message' => 'Wrong email or password.']);
+                return redirect()->guest('admin/login');
             }
         }
 

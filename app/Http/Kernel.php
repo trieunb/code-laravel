@@ -34,5 +34,7 @@ class Kernel extends HttpKernel
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'role' => \Bican\Roles\Middleware\VerifyRole::class,
         'csrf' => \App\Http\Middleware\VerifyCsrfToken::class,
+        'permission' => \Bican\Roles\Middleware\VerifyPermission::class,
+        'level' => \Bican\Roles\Middleware\VerifyLevel::class,
     ];
 }
