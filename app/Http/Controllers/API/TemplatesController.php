@@ -130,7 +130,6 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
         $age = Carbon::createFromFormat("Y-m-d H:i:s", $user_info->dob)->age;
-
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
         
         $section = [
@@ -144,11 +143,11 @@ class TemplatesController extends Controller
             'work' => createSectionBasic('.work', $content),
             'reference' => createSectionBasic('.reference', $content),
             'objectvie' => createSectionBasic('.objectvie', $content),
+            'key_qualification' => createSectionBasic('.key_qualification', $content),
             'photo' => createSectionBasic('.photo', $content),
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
-
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }

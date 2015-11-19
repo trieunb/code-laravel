@@ -11,7 +11,9 @@
             style="position: absolute;
             bottom: 30px;
             width: 100%;
-            text-align:center;">
+            text-align:center; 
+            font-weight:bold; 
+            color: #FFFFFF">
             <div class="name">
                 <p style="font-size:30px;">{{$template->firstname . ' ' . $template->lastname}}</p>
             </div>
@@ -203,7 +205,28 @@ border-bottom: 3px solid #D8D8D8;">
 @endforeach
 </div>
 </div>
-<div class='key_quanlification content-box'>
+<div class='key_qualification content-box'>
+    <div class="header-title"
+    style="color: red;
+    font-weight:600;
+    padding:15px;">
+    <span>Qualifications</span>
+</div>
+<div class="box"
+style="background: #f3f3f3;
+padding: 15px;
+border-top: 3px solid #D8D8D8;
+border-bottom: 3px solid #D8D8D8;">
+@foreach ($template->qualifications as $qua)
+<ul style="list-style-type:disc;">
+    <li>
+        {{$qua['content']}}
+    </li>
+</ul>
+@endforeach
+</div>
+</div>
+<div class='job_status content-box'>
         <div class="header-title" 
         style="color: red;
         font-weight:600;
