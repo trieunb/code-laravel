@@ -214,5 +214,27 @@ class User extends Model implements AuthenticatableContract,
             'thumb' => $avatar->path.'thumb/'.$name
         ];
     }
+    /**
+     * A user can have many roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role');
+    }
+
+    public function isAdmin()
+    {
+        foreach ($this->roles()->get() as $role)
+        {
+            if ($role->name == 'Admin')
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
