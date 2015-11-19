@@ -36,8 +36,8 @@ class Objective extends Model
                 'user_id' => $user_id,
                 'title' => $value['title'],
                 'content' => $value['content'],
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
             ];
         }
 
