@@ -67,7 +67,7 @@ $(function() {
     
     CKEDITOR.replace( 'content', {
 
-     format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name;Availability'
+     format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name;Availability;PersonalInfomation'
     } );
     var isBusy = false;
     $('form').validate({

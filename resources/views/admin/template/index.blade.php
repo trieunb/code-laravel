@@ -32,8 +32,8 @@ List Templates
                                 </td>
                                 <td class="center">{{ $temp_market->version }}</td>
                                 <td class="center"><img class="thumbnail" src="
-                                    {{ ($temp_market->avatar) 
-                                    ? asset($temp_market->avatar['origin']) 
+                                    {{ ($temp_market->image) 
+                                    ? asset($temp_market->image['origin']) 
                                     : asset('images/template.jpg') }}">
                                 </td>
                                 <td class="center">

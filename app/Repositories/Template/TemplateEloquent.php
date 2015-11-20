@@ -123,6 +123,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template = $this->forUser($id, $user_id);
         $sec = $template->section;
         $data = editSection($section, $request->get('content'), $template->content);
+
         $template->content = $data['content'];
         $template->section = array_set($sec, $section, $data['section']);
 
