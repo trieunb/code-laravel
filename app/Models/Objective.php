@@ -10,6 +10,10 @@ class Objective extends Model
 {
 	use UpdateColumnWithClauseTrait;
 
+    protected $casts = [
+        'id' => 'int',
+        'user_id' => 'int'
+    ];
 	/**
 	 * Table name
 	 * @var string
@@ -32,8 +36,8 @@ class Objective extends Model
                 'user_id' => $user_id,
                 'title' => $value['title'],
                 'content' => $value['content'],
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
             ];
         }
 

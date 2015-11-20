@@ -16,8 +16,8 @@ class CreateMarketsTable extends Migration
             $table->increments('id');
             $table->integer('cat_id')->index();
             $table->integer('user_id');
-            $table->string('name');
-            $table->text('template');
+            $table->string('title');
+            $table->text('content');
             $table->decimal('price');
             $table->timestamps();
         });

@@ -72,22 +72,22 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         return $template->save();
     }
 
-     /**
+    /**
      * Get template for user
      * @param  int $id      
      * @param  int $user_id 
      * @return mixed          
      */
-    public function getDetailTemplate($id, $user_id)
+    public function forUser($id, $user_id)
     {
-        return $this->model->where('user_id', '=', $user_id)->findOrFail($id);
+        return $this->model->whereUserId($user_id)->findOrFail($id);
 
     }
 
-    public function getBasicTemplate($user_id)
+   /* public function getBasicTemplate($user_id)
     {
         return $this->getById($user_id);
-    }
+    }*/
 
      /**
      * Create template
@@ -106,20 +106,26 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             : '<div contenteditable="true></div>';
         $template->type = $request->get('type');
         Template::makeSlug($template, false);
+        
         return $template->save() ? $template : null;
     }
 
-      /**
+    /**
      * Edit template
      * @param  int $id      primary key
      * @param  int $user_id   
-     * @param  string $content 
+     * @param  string $section   
+     * @param  mixed $request 
      * @return mixed          
      */
-    public function editTemplate($id, $user_id, $content)
+    public function editTemplate($id, $user_id, $section, $request)
     {
-        $template = $this->getDetailTemplate($id, $user_id);
-        $template->content = $content;
+        $template = $this->forUser($id, $user_id);
+        $sec = $template->section;
+        $data = editSection($section, $request->get('content'), $template->content);
+
+        $template->content = $data['content'];
+        $template->section = array_set($sec, $section, $data['section']);
 
         return $template->save() ? $template : null;
     }
@@ -130,27 +136,59 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * @param  string $content 
      * @return mixed          
      */
-    public function createTemplateBasic($user_id, $content)
+    public function createTemplateBasic($user_id, $section, $content)
     {
-        $template = Template::where('type', '=', 1)->first();
+        $template = $this->model->whereUserId($user_id)
+            ->whereType(2)
+            ->first();
+
         if ( ! $template) {
             $template = new Template();
             $template->user_id = $user_id;
             $template->title = "Basic Template";
-            $template->type = 1;
+            $template->type = 2;
             Template::makeSlug($template);
         }
 
         $template->content = $content;
+        $template->section = $section;
         
         return $template->save() ? $template : null;
     }
 
-    public function deleteTemplate($id, $temp_id)
+    /**
+     * Delete template
+     * @param  int $id
+     * @param  int $user_id
+     * @param  string $content 
+     * @return mixed          
+     */
+    public function deleteTemplate($id, $user_id)
     {
-        $template = $this->model->where('user_id', $id)->findOrFail($temp_id);
+        $template = $this->forUser($id, $user_id);
        
         return $template->delete();
     }
 
+     /**
+     * Create template from market place
+     * @param  array $data 
+     * @return bool       
+     */
+    public function createTemplateFromMarket(array $data)
+    {
+        $template = new Template;
+        $template->user_id = $data['user_id'];
+        $template->title = $data['title'];
+        $template->content = $data['content'];
+        $template->image = $data['image'] != null && $data['image'] != '' ? $data['image']: ['origin' => '', 'thumb' => ''];
+        $template->type = 0;
+        $template->source_file_pdf = $data['source_file_pdf'] != null ? $data['source_file_pdf']: '';
+        $template->version = $data['version'];
+        $template->clone = $data['clone'];
+        $template->section = $data['section'];
+        Template::makeSlug($template, false);
+
+        return $template->save();
+    }
 }

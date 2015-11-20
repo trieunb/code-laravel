@@ -13,4 +13,21 @@ interface TemplateMarketInterface extends Repository
     
 	public function getDetailTemplateMarket($template_id);
 
+	/**
+	 * Check title exists
+	 * @param  string $title 
+	 * @return bool        
+	 */
+	public function checkExistsTitle($title);
+
+	/**
+	 * Admin create template for market place
+	 * @param  mixed $request 
+	 * @param  array $data 
+	 * @param  mixed $user_id 
+	 * @return bool          
+	 */
+
+	public function createOrUpdateTemplateByManage($request, $data, $user_id);
+
 }

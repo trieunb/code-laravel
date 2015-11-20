@@ -91,7 +91,12 @@ class AuthenticatesController extends Controller
        
         try {
             $rules->validate($request->all());
+
             $this->user->registerUser($request, $token);
+            
+            $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
+            $token = JWTAuth::fromUser($user);
+            $this->user->update(['token' => $token], $user->id);
 
             return response()->json([
                     'status_code' => 200,
@@ -110,14 +115,13 @@ class AuthenticatesController extends Controller
     public function postLoginWithLinkedin(Request $request)
     {
         $user_linkedin = $request->get('user_info');
-        $payload = JWTFactory::make($user_linkedin);
-        $token = JWTAuth::encode($payload);
         if (! is_null($user_linkedin)) {
             $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $user_linkedin['linkedin_id']);
             if (empty($user)) {
-                $user = $this->user->createUserFromOAuth($user_linkedin, $token);
+                $user = $this->user->createUserFromOAuth($user_linkedin, $token = null);
             } else {
                 $user = $this->user->getById($user->id);
+                $token = \JWTAuth::fromUser($user);
                 $this->user->updateUserFromOauth($user_linkedin, $token, $user->id);
             }
             Auth::login($user);
@@ -143,8 +147,7 @@ class AuthenticatesController extends Controller
         $user = $this->user->getFirstDataWhereClause('email', '=', $email);
 
         if (!is_null($user)) {
-            $password = $this->randomPassword(8);
-            $this->user->update(['password' => Hash::make($password)], $user->id);
+            $this->user->update(['password' => Hash::make(str_random(8))], $user->id);
 
             \Mail::send('emails.forgetPassword', ['pass' => $password], function($m) use ($user) {
                 $m->to($user->email, $user->firstname . ' ' . $user->lastname)
@@ -180,14 +183,4 @@ class AuthenticatesController extends Controller
         }
     }
 
-    function randomPassword($length) {
-        $str = "";
-        $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-        $max = count($characters) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $rand = mt_rand(0, $max);
-            $str .= $characters[$rand];
-        }
-        return $str;
-    }
 }

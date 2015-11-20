@@ -10,16 +10,20 @@ use Validator;
 
 class DashBoardsController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('csrf');
+        // $this->middleware('role:admin');
+    }
 
 	public function index(Request $request)
 	{
-		return view('admin.dashboard');
+		return view('admin.dashboard.index');
 	}
 
     public function getLogin()
     {
-        return view('admin.login');
+        return view('admin.auth.login');
     }
 
     public function postLogin(Request $request)
@@ -43,6 +47,7 @@ class DashBoardsController extends Controller
     public function getLogout(Request $request)
     {
         Auth::logout();
+
         return redirect('admin/login');
     }
 } 

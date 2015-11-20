@@ -30,14 +30,24 @@ class FireContentForTemplate extends Event
         TemplateInterface $template)
     {
         $template_mk = $template_mk->getById($this->template_mk_id);
+        $clone = [
+            'clone_by' => $template_mk->clone_id != null ? 'templates' : 'template_markets',
+            'clone_id' => $template_mk->clone_id != null ?: $this->template_mk_id
+        ];
+
         $data = [
+            'user_id' => $this->user_id,
             'content' => $template_mk->content,
+            'section' => $template_mk->section,
             'image'   => $template_mk->image,
             'title'   => $template_mk->title,
             'type'    => 0,
-            'source_file_pdf' => $template_mk->source_file_pdf
+            'source_file_pdf' => $template_mk->source_file_pdf,
+            'clone' => $clone,
+            'version' => $template_mk->version
         ];
-        $template->saveOneRecord($data, $this->user_id);
+
+        $template->createTemplateFromMarket($data);
     }
 
     /**

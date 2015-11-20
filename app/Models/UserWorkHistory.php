@@ -10,6 +10,10 @@ class UserWorkHistory extends Model
 {
     use UpdateColumnWithClauseTrait;
     
+    protected $casts = [
+        'id' => 'int',
+        'user_id' => 'int',
+    ];
 
 	/**
 	 * Table name
@@ -32,13 +36,14 @@ class UserWorkHistory extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_work_histories[] = [
                 'company' => $value['company'],
+                'user_id' => $user_id,
                 'sub_title' => $value['sub_title'],
                 'start' => $value['start'],
                 'end' => $value['end'],
                 'job_title' => $value['job_title'],
                 'job_description' => $value['job_description'],
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
             ];
         }
 

@@ -13,7 +13,7 @@ class AddStatusColumnUserTable extends Migration
     public function up()
     {
         Schema::table('users', function($table) {
-            $table->string('status', 100)->after('email');
+            $table->string('status', 2)->nullable()->default(0)->after('email');
         });
     }
 
@@ -26,7 +26,6 @@ class AddStatusColumnUserTable extends Migration
     {
         Schema::table('users', function ($table) {
             $table->dropColumn('status');
-
         });
     }
 }

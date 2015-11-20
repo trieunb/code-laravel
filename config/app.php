@@ -160,6 +160,8 @@ return [
         Artdarek\OAuth\OAuthServiceProvider::class,
         Bican\Roles\RolesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Yangqi\Htmldom\HtmldomServiceProvider::class,
+        Thetispro\Setting\SettingServiceProvider::class,
     ],
 
     /*
@@ -215,6 +217,8 @@ return [
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'PDF'       => Barryvdh\DomPDF\Facade::class,
+        'Htmldom'   => Yangqi\Htmldom\Htmldom::class,
+        'Setting'   => Thetispro\Setting\Facades\Setting::class,
     ],
 
 ];

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\Objective;
+use App\Models\Qualification;
 use App\Models\Reference;
 use App\Models\Role;
 use App\Models\Template;
@@ -70,7 +71,10 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $casts = [
         'soft_skill' => 'json',
-        'avatar' => 'json'
+        'avatar' => 'json',
+        'id' => 'int',
+        'linkedin_id' => 'int',
+        'gender' => 'int'
     ];
     /**
      * The attributes excluded from the model's JSON form.
@@ -166,6 +170,16 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->hasMany(Reference::class);
     }
+
+     /**
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function qualifications()
+    {
+        return $this->hasMany(Qualification::class);
+    }
+
     /**
      * Rename Image after upload 
      * @param  mixed $request 
@@ -199,5 +213,14 @@ class User extends Model implements AuthenticatableContract,
             'origin' => $avatar->path.'origin/'.$name, 
             'thumb' => $avatar->path.'thumb/'.$name
         ];
+    }
+    /**
+     * A user can have many roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role');
     }
 }

@@ -4,8 +4,10 @@ namespace App\Repositories;
 use App\Models\Category;
 use App\Models\Invoice;
 use App\Models\Objective;
+use App\Models\Qualification;
 use App\Models\Reference;
 use App\Models\Role;
+use App\Models\Section;
 use App\Models\Template;
 use App\Models\TemplateMarket;
 use App\Models\User;
@@ -18,10 +20,14 @@ use App\Repositories\Invoice\InvoiceEloquent;
 use App\Repositories\Invoice\InvoiceInterface;
 use App\Repositories\Objective\ObjectiveEloquent;
 use App\Repositories\Objective\ObjectiveInterface;
+use App\Repositories\Qualification\QualificationEloquent;
+use App\Repositories\Qualification\QualificationInterface;
 use App\Repositories\Reference\ReferenceEloquent;
 use App\Repositories\Reference\ReferenceInterface;
 use App\Repositories\Role\RoleEloquent;
 use App\Repositories\Role\RoleInterface;
+use App\Repositories\Section\SectionEloquent;
+use App\Repositories\Section\SectionInterface;
 use App\Repositories\TemplateMarket\TemplateMarketEloquent;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateEloquent;
@@ -87,6 +93,14 @@ class RepositoryServiceProvider extends ServiceProvider
 
 		$this->app->bind(InvoiceInterface::class, function() {
 			return new InvoiceEloquent(new Invoice);
+		});
+
+		$this->app->bind(SectionInterface::class, function() {
+			return new SectionEloquent(new Section);
+		});
+
+		$this->app->bind(QualificationInterface::class, function() {
+			return new QualificationEloquent(new Qualification);
 		});
 	}
 }

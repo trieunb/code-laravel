@@ -673,4 +673,21 @@ p.full-name {
 #ex1Slider .slider-selection {
   background: #BABABA;
 }
+.form-group input {
+  border-radius: 0!important;
+}
+#dataTables-example img {
+  width: 200px;
+  height: 200px;
+}
+#buttons-edit{
+  margin-top: 30px;
+}
+#buttons-edit button {
+  position: fixed;
+  bottom: 10px;
+}
 
+#buttons-edit button:last-child {
+  right: 20px;
+}

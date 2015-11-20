@@ -32,7 +32,7 @@ abstract class AbstractRepository
 	 */
 	public function delete($id)
 	{
-		return $this->model->getById($id)->delete();
+		return $this->getById($id)->delete();
 	}
 
 	/**
@@ -44,6 +44,7 @@ abstract class AbstractRepository
 	{
 		return $this->model->whereIn('id', $ids)->delete();
 	}
+	
 	/**
 	 * @param array $data
 	 * @param $id
@@ -60,6 +61,7 @@ abstract class AbstractRepository
  	{
  		return $this->model->create($data);
  	}
+
 	/**
 	 * Eager Loading
 	 * @param  array  $relationship [relationship]

@@ -27,7 +27,7 @@ class TemplatesController extends Controller
         $this->template = $template;
     }
 
-    public function getAllTemplate(Request $request)
+    public function index(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         
@@ -41,8 +41,10 @@ class TemplatesController extends Controller
     public function postTemplates(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+
         if ($request->has('templates')) {
             $data = [];
+
             foreach ($request->get('templates') as $value) {
                 $data[] = [
                     'user_id' => $user->id,
@@ -58,51 +60,60 @@ class TemplatesController extends Controller
                     'updated_at' => Carbon::now()
                 ];
             }
+
             Template::insert($data);
         }
+
         return response()->json(['status_code' => 200, 'status' => true]);
-        
     }
 
-    public function getDetailTemplate(Request $request, $id)
+    public function show($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
       
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template->getDetailTemplate($id, $user->id)
+            'data' => $this->template->forUser($id, $user->id)
         ]);
     }
 
-    public function edit(Request $request, $id)
+    public function getSections($id)
+    {
+        $sections = $this->template->getById($id)->section;
+
+        return view('template.api.section', compact('sections'));
+    }
+
+    public function edit($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->getDetailTemplate($id, $user->id);
+        $template = $this->template->forUser($id, $user->id);
 
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => ['id' => $id,
+            'data' => [
+                'id' => $id,
                 'title' => $template->title,
                 'content' => $template->content
             ]
         ]);
     }
 
-    public function editView($id, Request $request)
+    public function editView($id, $section, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->getDetailTemplate($id, $user->id);
-        $content = $template->content;
+        $template = $this->template->forUser($id, $user->id);
+        $content = array_get($template->section, $section);
 
-        return view()->make('frontend.template.full', compact('content'));
+        return view()->make('api.template.edit', compact('content'));
     }
 
-    public function postEdit($id, Request $request)
+    public function postEdit($id, $section, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $result = $this->template->editTemplate($id, $user->id, $request->get('content'));
+        $result = $this->template->editTemplate($id, $user->id, $section, $request);
         
         if (!$result) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
@@ -118,12 +129,25 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $dob = date("Y-m-d", $user_info->dob);
-        $age = $this->user->GetAge($dob);
-
+        $age = Carbon::createFromFormat("Y-m-d H:i:s", $user_info->dob)->age;
         $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
-        $template = $this->template->createTemplateBasic($user_info->id, $content);
         
+        $section = [
+            'name' => createSectionBasic('.name', $content),
+            'address' => createSectionBasic('.address', $content),
+            'email' => createSectionBasic('.email', $content),
+            'phone' => createSectionBasic('.phone', $content),
+            'profile_website' => createSectionBasic('.profile_website', $content),
+            'education' => createSectionBasic('.education', $content),
+            'personal_test' => createSectionBasic('.personal_test', $content),
+            'work' => createSectionBasic('.work', $content),
+            'reference' => createSectionBasic('.reference', $content),
+            'objectvie' => createSectionBasic('.objectvie', $content),
+            'key_qualification' => createSectionBasic('.key_qualification', $content),
+            'photo' => createSectionBasic('.photo', $content),
+        ];
+
+        $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }
@@ -142,7 +166,7 @@ class TemplatesController extends Controller
     public function updateBasicTemplate(Request $request)
     {
         $template_basic = $request->get('template_basic')['content'];
-        $template_bs = Template::where('type', '=', 1)->first();
+        $template_bs = Template::where('type', '=', 2)->first();
         $template_bs->content = $template_basic;
         $template_bs->save();
 
@@ -153,12 +177,12 @@ class TemplatesController extends Controller
             ]);
     }
 
-    public function postDeleteTemplate(Request $request, $temp_id)
+    public function postDelete($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        $template = Template::where('id', $temp_id)->first();
+        $template = $this->template->getById($id);
         
-        if (!$template) {
+        if ( !$template) {
             return response()->json([
                 'status_code' => 404,
                 'status' => false,
@@ -166,7 +190,7 @@ class TemplatesController extends Controller
             ]);
         }
         
-        return $this->template->deleteTemplate($user->id, $temp_id)
+        return $this->template->deleteTemplate($id, $user->id)
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Delete template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when delete Template']);
     }
@@ -192,8 +216,9 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
-        $index = strpos($template->source_file_pdf, 'pdf/');
-        $sourcePDF = public_path(substr($template->source_file_pdf, $index));
+        // $index = strpos($template->source_file_pdf, 'pdf/');
+        // $sourcePDF = public_path(substr($template->source_file_pdf, $index));
+        $sourcePDF = public_path($template->source_file_pdf);
 
         if ( ! \File::exists($sourcePDF)) {
             \PDF::loadView('api.template.index', ['content' => $template->content])
@@ -210,11 +235,21 @@ class TemplatesController extends Controller
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
 
-        return response()->json([
+        return view('api.template.view', compact('content'));
+        /*return response()->json([
             'status_code' => 200,
             'status' => true,
             'data' => ['id' => $id,'title' => $template->title,'content' => $content]
-        ]);
+        ]);*/
+    }
+
+    public function menu($id, Request $request)
+    {
+        $template = $this->template->forUser($id, \Auth::user()->id);
+        $token = $request->get('token');
+        $section = createSectionData($template);
+
+        return view('api.template.section', compact('section', 'token'));
     }
 
 }
