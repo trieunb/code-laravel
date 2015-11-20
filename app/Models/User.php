@@ -223,18 +223,4 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->belongsToMany('App\Models\Role');
     }
-
-    public function isAdmin()
-    {
-        foreach ($this->roles()->get() as $role)
-        {
-            if ($role->name == 'Admin')
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 }
