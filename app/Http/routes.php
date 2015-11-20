@@ -19,7 +19,7 @@ get('/', function() {
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => ['csrf', 'auth']], function() {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'role:admin'], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
     
