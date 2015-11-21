@@ -19,8 +19,8 @@ return [
 	'consumers' => [
 
 		'Facebook' => [
-			'client_id'     => '',
-			'client_secret' => '',
+			'client_id'     => '1671697466387668',
+			'client_secret' => '16338b2038ccf218bcd9dfcbec95e6d0',
 			'scope'         => [],
 		],
 		'Linkedin' => [
