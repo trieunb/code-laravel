@@ -4,6 +4,7 @@ namespace App\Repositories\User;
 use App\Models\User;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
+use Carbon\Carbon;
 
 
 
@@ -235,28 +236,71 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		
 		return $user->save() ? $status : null;
 	}
+    /**
+     * Remove photo
+     * @param  int $id 
+     * @return bool     
+     */
+    public function removePhoto($id)
+    {
+        $user = $this->getById($id);
 
-	/**
-	 * Remove photo
-	 * @param  int $id 
-	 * @return bool     
-	 */
-	public function removePhoto($id)
-	{
-		$user = $this->getById($id);
+        try {
+            \File::delete(public_path($user->avatar['origin']));
+            \File::delete(public_path($user->avatar['thumb']));
+            $user->avatar = ['origin' => null, 'thumb' => null];
 
-		try {
-			if ($user->avatar['origin'] != '' && $user->avatar['origin'] != null) {
-				\File::delete(public_path($user->avatar['origin']));
-				\File::delete(public_path($user->avatar['thumb']));
-				$user->avatar = ['origin' => null, 'thumb' => null];
+            return $user->save();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+    public function createProfileFb($data, $token)
+    {
+        $user =  new User();
+        $avatar = [
+            'origin' => $data['picture']['data']['url'],
+            'thumb' => $data['picture']['data']['url']
+        ];
+        $user->facebook_id = $data['id'];
+        $user->firstname = $data['first_name'];
+        $user->lastname = $data['last_name'];
+        $user->email = $data['email'];
+        $user->link_profile = $data['link'];
+        $user->gender = $data['gender'];
+        $user->avatar = $avatar;
+        $user->soft_skill = \Setting::get('questions');
+        $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
+        
+        return $user->save();
+    }
+    public function createOrUpdateProfileFb($data, $token, $id)
+    {
+        $user = $id ? $this->getById($id) : new User;
 
-				return $user->save();	
-			}
-			
-			return false;
-		} catch (\Exception $e) {
-			return false;
-		}
-	}
+        $avatar = [
+            'origin' => $data['picture']['data']['url'],
+            'thumb' => $data['picture']['data']['url']
+        ];
+
+        if (isset($data['id']))
+            $user->facebook_id = $data['id'];
+        if (isset($data['first_name']))
+            $user->firstname = $data['first_name'];
+        if (isset($data['last_name']))
+            $user->lastname = $data['last_name'];
+        if (isset($data['email']))
+            $user->email = $data['email'];
+        if (isset($data['link']))
+            $user->link_profile = $data['link'];
+        if (isset($data['gender']))
+            $user->gender = $data['gender'];
+        if (isset($data['picture']))
+            $user->avatar = $avatar;
+        $user->soft_skill = \Setting::get('questions');
+        if (isset($data['birthday']))
+            $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
+        
+        return $user->save();
+    }
 }
