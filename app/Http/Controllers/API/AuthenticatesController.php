@@ -145,22 +145,16 @@ class AuthenticatesController extends Controller
     public function loginWithFacebook(Request $request)
     {
         $token = $request->get('token');
-        $url = "https://graph.facebook.com/me?access_token=".$token;
+        $url = "https://graph.facebook.com/me?fields=picture,id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
         $response = file_get_contents($url);
         $response = json_decode($response, true);
-        
+
         $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         if ( ! $user) {
-            $user = new User();
-            $user->facebook_id = $response['id'];
-            $user->firstname = $response['first_name'];
-            $user->lastname = $response['last_name'];
-            $user->email = $response['email'];
-            $user->link_profile = $response['link'];
-            $user->link_profile = $response['link'];
-            $user->gender = $response['gender'];
-            $user->dob = $response['birthday'];
-            $user->save();
+            $this->user->createOrUpdateProfileFb($response, $token, $id = null);
+            $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
+        } else {
+            $this->user->createOrUpdateProfileFb($response, $token, $user->id);
         }
         
         Auth::login($user);
