@@ -63,4 +63,11 @@ interface UserInterface extends Repository
 	 * @return bool         
 	 */
 	public function editStatus($id, $status);
+
+	/**
+	 * Remove photo
+	 * @param  int $id 
+	 * @return bool     
+	 */
+	public function removePhoto($id);
 }

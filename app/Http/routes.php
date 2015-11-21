@@ -72,6 +72,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('user/profile', 'UsersController@getProfile');
     get('user/status', 'UsersController@getStatus');
+    get('user/removephoto/{id}', 'UsersController@removePhoto');
 
     post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('user/upload', ['uses' => 'UsersController@uploadImage']);

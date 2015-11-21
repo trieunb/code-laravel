@@ -235,4 +235,28 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		
 		return $user->save() ? $status : null;
 	}
+
+	/**
+	 * Remove photo
+	 * @param  int $id 
+	 * @return bool     
+	 */
+	public function removePhoto($id)
+	{
+		$user = $this->getById($id);
+
+		try {
+			if ($user->avatar['origin'] != '' && $user->avatar['origin'] != null) {
+				\File::delete(public_path($user->avatar['origin']));
+				\File::delete(public_path($user->avatar['thumb']));
+				$user->avatar = ['origin' => null, 'thumb' => null];
+
+				return $user->save();	
+			}
+			
+			return false;
+		} catch (\Exception $e) {
+			return false;
+		}
+	}
 }
