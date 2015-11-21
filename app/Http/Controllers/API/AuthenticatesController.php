@@ -16,6 +16,7 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
 use JWTFactory;
+use App\Models\User;
 
 class AuthenticatesController extends Controller
 {
@@ -139,6 +140,37 @@ class AuthenticatesController extends Controller
             'status' => false,
             'message' => 'could not create token'
         ], 401);
+    }
+
+    public function loginWithFacebook(Request $request)
+    {
+        $token = $request->get('token');
+        $url = "https://graph.facebook.com/me?access_token=".$token;
+        $response = file_get_contents($url);
+        $response = json_decode($response, true);
+        
+        $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
+        if ( ! $user) {
+            $user = new User();
+            $user->facebook_id = $response['id'];
+            $user->firstname = $response['first_name'];
+            $user->lastname = $response['last_name'];
+            $user->email = $response['email'];
+            $user->link_profile = $response['link'];
+            $user->link_profile = $response['link'];
+            $user->gender = $response['gender'];
+            $user->dob = $response['birthday'];
+            $user->save();
+        }
+        
+        Auth::login($user);
+        $token = \JWTAuth::fromUser($user);
+        $this->user->update(['token' => $token], $user->id);
+        return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'token' => $token
+            ]);
     }
 
     public function postForgetPassword(Request $request)

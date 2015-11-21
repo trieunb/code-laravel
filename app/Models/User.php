@@ -44,6 +44,7 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $fillable = [
         'linkedin_id',
+        'facebook_id',
         'firstname',
         'lastname',
         'email',
