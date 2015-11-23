@@ -81,12 +81,12 @@
     </div>
     <div class="container">
       <div class="row wrapper detail">
-        <div class="fw w_bg">
-          <span>Push template here</span>
+        <div id="content" class="fw w_bg" contenteditable="true">
+        {!! $template->content !!}
         </div>
       </div>
       <div class="fw text-center">
-        <button class="btn-trans fill edit">
+        <button class="btn-trans fill edit" id="edit-template">
           END EDIT MODE
         </button>
       </div>
@@ -96,5 +96,29 @@
 
   <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#edit-template').click(function(e) {
+        e.preventDefault();
+        var url = window.location.href;
+        var token = url.split('=');
+        var content = $('#content').html();
+        content = content.replace(/\t|\n+/g, '');
+        $.ajax({
+          url: window.location.href,
+          data: {
+            token : token,
+            content: content
+          },
+          type: 'POST',
+          success : function(result) {
+            if (result.status == true) {
+              alert('Edit template successfully');
+            }
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
