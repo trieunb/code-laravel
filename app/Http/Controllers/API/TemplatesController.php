@@ -129,22 +129,24 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $age = Carbon::createFromFormat("Y-m-d H:i:s", $user_info->dob)->age;
-        $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
-        
+        $age = Carbon::createFromFormat("Y-m-d", $user_info->dob)->age;
+        $content = view('frontend.template.basic_template', ['user_info' => $user_info, 'age' => $age])->render();
+
         $section = [
+            'reference' => createSectionBasic('.reference', $content),
             'name' => createSectionBasic('.name', $content),
             'address' => createSectionBasic('.address', $content),
             'email' => createSectionBasic('.email', $content),
             'phone' => createSectionBasic('.phone', $content),
+            'activitie' => createSectionBasic('.activitie', $content),
             'profile_website' => createSectionBasic('.profile_website', $content),
             'education' => createSectionBasic('.education', $content),
             'personal_test' => createSectionBasic('.personal_test', $content),
             'work' => createSectionBasic('.work', $content),
-            'reference' => createSectionBasic('.reference', $content),
             'objectvie' => createSectionBasic('.objectvie', $content),
             'key_qualification' => createSectionBasic('.key_qualification', $content),
             'photo' => createSectionBasic('.photo', $content),
+            'availability' => createSectionBasic('.availability', $content),
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
@@ -161,20 +163,6 @@ class TemplatesController extends Controller
             "status" => true,
             "data" => $template
         ]);
-    }
-
-    public function updateBasicTemplate(Request $request)
-    {
-        $template_basic = $request->get('template_basic')['content'];
-        $template_bs = Template::where('type', '=', 2)->first();
-        $template_bs->content = $template_basic;
-        $template_bs->save();
-
-        return response()->json([
-                "status_code" => 200,
-                "status" => true,
-                "message" => "updated successfully"
-            ]);
     }
 
     public function postDelete($id, Request $request)
@@ -249,7 +237,20 @@ class TemplatesController extends Controller
         $token = $request->get('token');
         $section = createSectionData($template);
 
-        return view('api.template.section', compact('section', 'token'));
+        return view('api.template.section', compact('section', 'token', 'template'));
+    }
+
+    public function updateFullTemplate(Request $request, $id)
+    {
+        
+        $template = $this->template->forUser($id, \Auth::user()->id);
+        $sections = createClassSection();
+        $result = createSection($request->get('content'), $sections);
+        $template->content = $request->get('content');
+        unset($result['content']);
+        $template->section = $result;
+        $template->save();
+        return response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully']);
     }
 
 }
