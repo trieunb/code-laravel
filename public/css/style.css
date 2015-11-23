@@ -691,3 +691,9 @@ p.full-name {
 #buttons-edit button:last-child {
   right: 20px;
 }
+#loading {
+  display: none;
+  position: fixed;
+  z-index: 99999999;
+  background: #dedede;
+}

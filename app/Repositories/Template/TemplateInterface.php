@@ -67,4 +67,12 @@ interface TemplateInterface extends Repository
      */
     public function createTemplateFromMarket(array $data);
 
+    /**
+     * Apply data into infomation section
+     * @param  Template $template 
+     * @param  string $section 
+     * @param  array $data     
+     * @return bool           
+     */
+    public function applyForInfo($template, $section, $data);
 }

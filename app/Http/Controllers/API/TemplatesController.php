@@ -103,18 +103,31 @@ class TemplatesController extends Controller
 
     public function editView($id, $section, Request $request)
     {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $template = $this->template->forUser($id, $user->id);
+        $user_id = \JWTAuth::toUser($request->get('token'))->id;
+        $template = $this->template->forUser($id, $user_id);
         $content = array_get($template->section, $section);
+        $status = null;
+        $setting = [];
+        foreach (\Setting::get('user_status') as $k => $v) {
+            if ($v['id'] == $template->user->status)
+                $status = $v;
+            $setting[$v['id']] = $v['value'];
+        }
+        
+      
+        $template->user->status = $template->user->status != 0 && $template->user->status != null ? $status : null;
 
-        return view()->make('api.template.edit', compact('content'));
+        return view()->make('api.template.edit', compact('content', 'section', 
+            'user_id', 'template', 'setting')
+        );
     }
 
     public function postEdit($id, $section, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+
         $result = $this->template->editTemplate($id, $user->id, $section, $request);
-        
+
         if (!$result) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
         
@@ -142,7 +155,7 @@ class TemplatesController extends Controller
             'personal_test' => createSectionBasic('.personal_test', $content),
             'work' => createSectionBasic('.work', $content),
             'reference' => createSectionBasic('.reference', $content),
-            'objectvie' => createSectionBasic('.objectvie', $content),
+            'objective' => createSectionBasic('.objective', $content),
             'key_qualification' => createSectionBasic('.key_qualification', $content),
             'photo' => createSectionBasic('.photo', $content),
         ];
@@ -205,8 +218,6 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $result = $this->template->createTemplate($user->id, $request);
 
-        // $template = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->title));
-
         return $result
             ? response()->json(['status_code' => 200, 'status' => true, 'data' => $result])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error occurred when create template']);
@@ -216,8 +227,6 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
-        // $index = strpos($template->source_file_pdf, 'pdf/');
-        // $sourcePDF = public_path(substr($template->source_file_pdf, $index));
         $sourcePDF = public_path($template->source_file_pdf);
 
         if ( ! \File::exists($sourcePDF)) {
@@ -236,11 +245,6 @@ class TemplatesController extends Controller
         $content = str_replace('contenteditable="true"', '', $template->content);
 
         return view('api.template.view', compact('content'));
-        /*return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => ['id' => $id,'title' => $template->title,'content' => $content]
-        ]);*/
     }
 
     public function menu($id, Request $request)
@@ -252,4 +256,46 @@ class TemplatesController extends Controller
         return view('api.template.section', compact('section', 'token'));
     }
 
+    public function apply($id, $section, Request $request)
+    {
+        try {
+            $template = $this->template->forUser($id, \Auth::user()->id);
+            $token = $request->get('token');
+            $data = null;
+            $personalInfomation = [
+                'address', 'email', 'infomation'
+            ];
+
+            if (in_array($section, $personalInfomation)) {
+                $data = \App\Models\User::findOrFail(\Auth::user()->id)->pluck($section);
+            } else if ($section == 'name') {
+                $data = \App\Models\User::findOrFail(\Auth::user()->id)->present()->name;
+            } else if ($section == 'linkedin' || $section == 'profile_website') {
+                $data =  \App\Models\User::findOrFail(\Auth::user()->id)->link_profile;
+            } else if ($section == 'phone') {
+                $data = \App\Models\User::findOrFail(\Auth::user()->id)->mobile_phone;
+            } else if ($section == 'photo') {
+                $data = \App\Models\User::findOrFail(\Auth::user()->id)->avatar;
+            } else if ($section == 'availability') {
+                foreach (\Setting::get('user_status') as $status) {
+                    if ($status['id'] == \App\Models\User::findOrFail(\Auth::user()->id)->status) {
+                        $data = $status['value'];        
+                    }
+                }
+            }
+            if ( is_string($data)) {
+                $result = apply_data_for_section_infomation($section, $data, $template->content); 
+            } else  {
+                $result = apply_data_for_other($section, $template->content);
+            }
+            dd($result);
+            $response = $this->template->applyForInfo($template, $section, $result);
+
+            return $response
+                ? response()->json(['status_code' => 200, 'data' => $response])
+                : response()->json(['status_code' => 400]);
+        } catch (\Exception $e) {
+            return response()->json(['status_code' => 400]);
+        }
+    }
 }

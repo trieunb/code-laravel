@@ -91,6 +91,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/view-template/{id}', 'TemplatesController@renderUserInfoToTemplate');
     get('template/{id}/section', 'TemplatesController@getSections');
     get('template/menu/{id}', ['as' => 'api.template.get.menu', 'uses' => 'TemplatesController@menu']);
+    get('template/apply/{id}/{section}', ['as' => 'api.template.get.profile.section', 'uses' => 'TemplatesController@apply']);
 
     post('template/preview', 'TemplatesController@updateBasicTemplate');
     post('template/basic', 'TemplatesController@postBasicTemplate');

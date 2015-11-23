@@ -84,12 +84,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
     }
 
-   /* public function getBasicTemplate($user_id)
-    {
-        return $this->getById($user_id);
-    }*/
-
-     /**
+    /**
      * Create template
      * @param  int $user_id  
      * @param  mixed $request
@@ -122,7 +117,25 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     {
         $template = $this->forUser($id, $user_id);
         $sec = $template->section;
-        $data = editSection($section, $request->get('content'), $template->content);
+        $tmp = '';
+        if ($section == 'availability') {
+
+            foreach (\Setting::get('user_status') as $status) {
+                if ($status['id'] == $request->get('content'))
+                    $tmp = '<div class="availability"><p style="font-weight:600">'.$status['value'].'</p></div>';
+            }
+
+            $user = \App\Models\User::find($user_id);
+            $user->status = $request->get('content');
+
+            if ($user->save()) {
+                $data = editSection($section, $tmp, $template->content);
+            }
+
+            return null;
+        } else {
+            $data = editSection($section, $request->get('content'), $template->content);
+        }
 
         $template->content = $data['content'];
         $template->section = array_set($sec, $section, $data['section']);
@@ -190,5 +203,22 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         Template::makeSlug($template, false);
 
         return $template->save();
+    }
+
+     /**
+     * Apply data into infomation section
+     * @param  Template $template 
+     * @param  string $section 
+     * @param  array $data     
+     * @return bool           
+     */
+    public function applyForInfo($template, $section, $data)
+    {
+        $template->content = $data['content'];
+        $sec = $template->section;
+
+        $template->section = array_set($sec, $section, $data['section']);
+
+        return $template->save() ? $data['section'] : false;
     }
 }

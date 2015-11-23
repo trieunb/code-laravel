@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Laracasts\Presenter\PresentableTrait;
 use App\Models\Category;
 use App\Models\Objective;
 use App\Models\Qualification;
@@ -28,7 +29,8 @@ class User extends Model implements AuthenticatableContract,
                                     CanResetPasswordContract,
                                     HasRoleAndPermissionContract
 {
-    use Authenticatable, CanResetPassword, HasRoleAndPermission;
+    use Authenticatable, CanResetPassword, HasRoleAndPermission,
+        PresentableTrait;
 
     /**
      * The database table used by the model.
@@ -36,6 +38,8 @@ class User extends Model implements AuthenticatableContract,
      * @var string
      */
     protected $table = 'users';
+
+    protected $presenter = 'App\Presenter\UserPresenter';
 
     /**
      * The attributes that are mass assignable.
