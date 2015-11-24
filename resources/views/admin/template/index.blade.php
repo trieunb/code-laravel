@@ -27,7 +27,7 @@ List Templates
                                 <td>{{ $temp_market->price }}</td>
                                 <td class="">
                                 {!! Form::open(['route' => ['admin.status', $temp_market->id],'id' => 'changeStatus']) !!}
-                                    {!! Form::select('status', [2 => 'Pending', '1'=> 'Active', 0 => 'Block',] , $temp_market->status, [ 'class' =>  'form-control', 'id' => 'status', 'onchange' => 'this.form.submit()'])!!}
+                                    {!! Form::select('status', [2 => 'Pending', 1=> 'Publish', 0 => 'Block',] , $temp_market->status, [ 'class' =>  'form-control', 'id' => 'status', 'onchange' => 'this.form.submit()'])!!}
                                 {!! Form::close() !!}
                                 </td>
                                 <td class="center">{{ $temp_market->version }}</td>

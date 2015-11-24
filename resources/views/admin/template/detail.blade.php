@@ -10,7 +10,6 @@ Detail Template
     <div class="col-lg-12">
         <div id="message"></div>
         <form action="{{ route('admin.template.post.edit') }}" id="create-form" method="POST">
-            {!! csrf_field() !!}
             <input type="hidden" id="template_id" name="id" value="{{ $template->id }}" placeholder="">
             <div class="form-group">
                 <label for="title">Title</label>
@@ -44,7 +43,8 @@ Detail Template
                 <label for="status">Status</label>
                 <select disabled name="status" id="status" class="form-control" >
                     <option value="">Select</option>
-                    <option value="1">Hidden</option>
+                    <option value="0">Block</option>
+                    <option value="1">Pending</option>
                     <option value="2">Publish</option>
                 </select>
             </div>
