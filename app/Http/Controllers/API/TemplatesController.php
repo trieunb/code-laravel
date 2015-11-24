@@ -223,7 +223,7 @@ class TemplatesController extends Controller
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
 
-        return view('api.template.view', compact('content'));
+        return view('api.template.view', compact('content','template'));
         /*return response()->json([
             'status_code' => 200,
             'status' => true,
