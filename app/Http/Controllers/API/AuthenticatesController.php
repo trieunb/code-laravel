@@ -123,6 +123,8 @@ class AuthenticatesController extends Controller
             $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
             if ( !$linkedin ) {
                 $user = $this->user->createUserFromOAuth($response, $token);
+            } else {
+                $user = $linkedin;
             }
         } else {
             $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
@@ -151,6 +153,8 @@ class AuthenticatesController extends Controller
             $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
             if ( !$facebook ) {
                 $user = $this->user->createUserFacebook($response, $token);
+            } else {
+                $user = $facebook;
             }
         } else {
             $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);

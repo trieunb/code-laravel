@@ -41,7 +41,7 @@ Edit Template
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                {!! Form::select('status', [2 => 'Pending', '1'=> 'Active', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
+                {!! Form::select('status', [2 => 'Pending', 1=> 'Publish', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Edit</button>
