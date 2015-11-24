@@ -145,11 +145,9 @@ if (!function_exists('editSection')) {
         $replace = '<div class="'.$section.'">';
 
         foreach ($html_request->find('div.'.$section) as $key => $element) {
-
             $replace .= $key == count($html_request->find('div.'.$section)) - 1 
-            ? $element->innertext
-            : $element->innertext.'<br>';
-
+                ? $element->innertext
+                : $element->innertext.'<br>';
         }
 
         $replace .= '</div>';
@@ -158,10 +156,10 @@ if (!function_exists('editSection')) {
            $element->outertext = $replace;
        }
 
-       return [
-       'content' => $html->save(),
-       'section' => $replace
-       ];
+        return [
+           'content' => $html->save(),
+           'section' => $replace
+        ];
    }
 }
 
@@ -288,6 +286,7 @@ if (!function_exists('createSectionBasic')) {
         }
     }
 }   
+
 if (!function_exists('apply_data_for_section_infomation')) {
     function apply_data_for_section_infomation($section, $replace, $str) {
         $html = new \Htmldom($str);
@@ -297,18 +296,22 @@ if (!function_exists('apply_data_for_section_infomation')) {
             return ['section' => '', 'content' => $str];
 
         foreach ($html->find('div.'.$section) as $value) {
-            $search = trim(strip_tags($value->outertext));
-            $current = $value->innertext;
-            $value->innertext = str_replace($search, $replace, strip_tags($value->innertext));
+            // $search = trim($value->outertext);
+            // $current = $value->innertext;
+            // $value->innertext = str_replace($current, $replace, strip_tags($value->innertext));
+
+            $value->innertext = $section != 'photo'
+                ? '<span>'.$replace.'</span>'
+                : '<img src="'.asset($replace).'" width="100%">';
             $tmp = $value->innertext;
 
         }   
 
-        $str = str_replace($current, $replace, $str);
+        // $str = str_replace($current, $replace, $str);
 
         return [
             'section' => '<div class="'.$section.'" contenteditable="true">'.$tmp.'</div>',
-            'content' => preg_replace('/\n/', '', $str)
+            'content' => preg_replace('/\n/', '', $html->save())
         ];;
     }
 }
@@ -321,6 +324,7 @@ if (!function_exists('apply_data_for_other')) {
 
         switch ($section) {
             case 'reference':
+                $tmp .= '<h3 style="font-weight:600">References</h3>';
                 foreach (\App\Models\Reference::whereUserId(\Auth::user()->id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->reference.'</li>';
@@ -329,13 +333,13 @@ if (!function_exists('apply_data_for_other')) {
 
                 }
 
-                foreach ($html->find('div.'.$section.' ul') as $element) {
-                    $element->outertext = $tmp;
+                foreach ($html->find('div.'.$section) as $element) {
+                    $element->innertext = $tmp;
                 }
 
                 break;
             case 'objective':
-    
+                $tmp .= '<h3 style="font-weight:600">Objectives</h3>';
                 foreach (\App\Models\Objective::whereUserId(\Auth::user()->id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->title.'</li>';
@@ -343,13 +347,13 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';                   
                 }
                 
-                foreach ($html->find('div.'.$section.' ul') as $element) {
-                    $element->outertext = $tmp;
+                foreach ($html->find('div.'.$section) as $element) {
+                    $element->innertext = $tmp;
                 }
 
                 break;
             case 'work':
-
+                $tmp .= '<h3 style="font-weight:600">Works</h3>';
                 foreach (\App\Models\UserWorkHistory::whereUserId(\Auth::user()->id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->job_title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
@@ -359,12 +363,12 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';                 
                 }
                 
-                foreach ($html->find('div.'.$section.' div.box') as $element) {
+                foreach ($html->find('div.'.$section) as $element) {
                     $element->innertext = $tmp;
                 }
                 break;
             case 'education':
-       
+                $tmp .= '<h3 style="font-weight:600">Education</h3>'; 
                 foreach (\App\Models\UserEducation::whereUserId(\Auth::user()->id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
@@ -374,26 +378,26 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li>'.$v->result.'</li>';   
                     $tmp .= '</ul>';                 
                 }
-                dd($html->find('div.education div.box'));
-                foreach ($html->find('div.'.$section.' div.box') as $element) {
+
+                foreach ($html->find('div.'.$section) as $element) {
                     $element->innertext = $tmp;
                 }
                 break;
             case 'key_quanlification':
-
+                $tmp .= '<h3 style="font-weight:600">Qualifications</h3>'; 
                 $tmp .= '<ul style="list-style:none">';
 
                 foreach (\App\Models\Qualification::whereUserId(\Auth::user()->id)->get() as $v) {
                     $tmp .= '<li>'.$v->content.'</li>';           
                 }
                 $tmp .= '</ul>';  
-                foreach ($html->find('div.'.$section.' ul') as $element) {
-                    $element->outertext = $tmp;
+                foreach ($html->find('div.'.$section) as $element) {
+                    $element->innertext = $tmp;
                 }
 
                 break;
             case 'personal_test':
-
+                $tmp .= '<h3 style="font-weight:600">Skills</h3>'; 
                 foreach (\App\Models\UserSkill::whereUserId(\Auth::user()->id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li><label style="font-weight:600">Name: </label>'.$v->skill_name.'</li>';
@@ -401,7 +405,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';  
                 }
                 
-                foreach ($html->find('div.'.$section.' ul') as $element) {
+                foreach ($html->find('div.'.$section) as $element) {
                     $element->outertext = $tmp;
                 }
 
@@ -417,3 +421,16 @@ if (!function_exists('apply_data_for_other')) {
         ];
     }
 }
+
+if (!function_exists('createClassSection')) {
+    function createClassSection()
+    {
+        return $section = ['div.name', 'div.address', 'div.phone',
+            'div.email', 'div.profile_website', 'div.linkedin',
+            'div.reference', 'div.objective', 'div.activitie',
+            'div.work', 'div.education', 'div.photo', 'div.personal_test',
+            'div.key_quanlification', 'div.availability', 'div.infomation'
+        ];
+    }
+}
+

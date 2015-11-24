@@ -11,7 +11,7 @@
 				<input type="file" id="file" style="display: none;">
 			  	@if ($section != 'availability')
 		  			{!! $content !!}
-	  			@else 
+	  			@else
 	  				{!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
 			  	@endif
 			  			
@@ -20,7 +20,7 @@
 	</div>
 	<div class="col-md-12" id="buttons-edit">
 		<button class="col-xs-4 btn btn-primary" id="save">Save</button>
-		<button class="col-xs-4 btn btn-primary" id="apply">Apply into Profile</button>
+		<button class="col-xs-4 btn btn-primary" id="apply">Apply from profile</button>
 	</div>  
 
 @stop
@@ -55,23 +55,40 @@
 				var form = $('#upload')[0];
 				var file = $('#file').prop('files')[0];
 				var data = new FormData(data);
-				data.append('token', token);
+				data.append('token', token[1]);
 				data.append('avatar', file);
+				$.ajax({
+					url: " {{ route('api.template.post.edit.photo', $template->id) }}",
+					type: 'POST',
+					cache: false,
+					contentType: false,
+					processData: false,
+					data : data,
+					success: function(result) {
+						if (result.status_code == 200) {
+							$('img').attr('src', result.data)	;
+						}
+						
+						$("#loading").hide();
+					}
+				}).always(function() {
+					isBusy = false;
+				});
+			} else {
+				$.ajax({
+					url: url,
+					data: {
+						token : token[1],
+						content: content
+					},
+					type: 'POST',
+					success : function(result) {
+						$("#loading").hide();
+					}
+				}).always(function() {
+					isBusy = false;
+				});
 			}
-			$.ajax({
-				url: window.location.href,
-				data: {
-					token : token[1],
-					content: content
-				},
-				type: 'POST',
-				success : function(result) {
-
-					$("#loading").hide();
-				}
-			}).always(function() {
-				isBusy = false;
-			});
 		});
 		$('#apply').click(function(e) {
 			e.preventDefault();

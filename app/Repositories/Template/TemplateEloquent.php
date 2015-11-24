@@ -122,7 +122,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
             foreach (\Setting::get('user_status') as $status) {
                 if ($status['id'] == $request->get('content'))
-                    $tmp = '<div class="availability"><p style="font-weight:600">'.$status['value'].'</p></div>';
+                    $tmp = '<div class="availability" contenteditable="true"><p style="font-weight:600">'.$status['value'].'</p></div>';
             }
 
             $user = \App\Models\User::find($user_id);
@@ -141,6 +141,24 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->section = array_set($sec, $section, $data['section']);
 
         return $template->save() ? $template : null;
+    }
+
+    public function editPhoto($id, $user_id, $file)
+    {
+        $user = \App\Models\User::find($user_id);
+        $user->avatar = \App\Models\User::uploadAvatar($file);
+
+        if ( !$user->save()) return;
+        $template = $this->getById($id);
+        $data = editSection('photo', 
+            '<div class="photo" contenteditable="true"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
+            $template->content);
+        $sec = $template->section;
+        
+        $template->content = $data['content'];
+        $template->section = array_set($sec, 'photo', $data['section']);
+
+        return $template->save() ? ['avatar' => $user->avatar['origin'], 'template' => $template ]: null;
     }
 
     /**
@@ -219,6 +237,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
         $template->section = array_set($sec, $section, $data['section']);
 
-        return $template->save() ? $data['section'] : false;
+        return $template->save() ? ['section' => $data['section'], 'template' => $template] : false;
     }
 }

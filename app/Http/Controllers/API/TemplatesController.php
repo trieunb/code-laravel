@@ -134,30 +134,57 @@ class TemplatesController extends Controller
         $render = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->slug));
         
         return $render
-            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
-            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when render file']);
+            ? response()->json(['status_code' => 200, 'message' => 'Edit template successfully'])
+            : response()->json(['status_code' => 400, 'message' => 'Error when render file']);
+    }
+
+    public function editPhoto($id, Request $request)
+    {
+        if ( !$request->hasFile('avatar')) 
+            return response()->json(['status_code' => '400']);
+        
+        $validator = \Validator::make($request->all(), ['avatar' => 'image']);
+
+        if ($validator->fails()) {
+            return response()->json(['status_code' => 422]);
+        }
+
+        $response = $this->template->editPhoto($id, \Auth::user()->id, $request->file('avatar'));
+        
+        if ( !$response) 
+            return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
+
+        event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content, $response['template']->slug));
+        
+        return $response
+            ? response()->json(['status_code' => 200, 'data' => asset($response['avatar'])])
+            : response()->json(['status_code' => 400]);
     }
 
     public function postBasicTemplate(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $age = Carbon::createFromFormat("Y-m-d H:i:s", $user_info->dob)->age;
-        $content = view('frontend.template.basic_template', ['template' => $user_info, 'age' => $age])->render();
-        
+        $age = Carbon::createFromFormat("Y-m-d", $user_info->dob)->age;
+        $content = view('frontend.template.basic_template', ['user_info' => $user_info, 'age' => $age])->render();
+
         $section = [
+            'reference' => createSectionBasic('.reference', $content),
             'name' => createSectionBasic('.name', $content),
             'address' => createSectionBasic('.address', $content),
             'email' => createSectionBasic('.email', $content),
             'phone' => createSectionBasic('.phone', $content),
+            'activitie' => createSectionBasic('.activitie', $content),
             'profile_website' => createSectionBasic('.profile_website', $content),
             'education' => createSectionBasic('.education', $content),
             'personal_test' => createSectionBasic('.personal_test', $content),
             'work' => createSectionBasic('.work', $content),
+
             'reference' => createSectionBasic('.reference', $content),
             'objective' => createSectionBasic('.objective', $content),
             'key_qualification' => createSectionBasic('.key_qualification', $content),
             'photo' => createSectionBasic('.photo', $content),
+            'availability' => createSectionBasic('.availability', $content),
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
@@ -174,20 +201,6 @@ class TemplatesController extends Controller
             "status" => true,
             "data" => $template
         ]);
-    }
-
-    public function updateBasicTemplate(Request $request)
-    {
-        $template_basic = $request->get('template_basic')['content'];
-        $template_bs = Template::where('type', '=', 2)->first();
-        $template_bs->content = $template_basic;
-        $template_bs->save();
-
-        return response()->json([
-                "status_code" => 200,
-                "status" => true,
-                "message" => "updated successfully"
-            ]);
     }
 
     public function postDelete($id, Request $request)
@@ -253,7 +266,20 @@ class TemplatesController extends Controller
         $token = $request->get('token');
         $section = createSectionData($template);
 
-        return view('api.template.section', compact('section', 'token'));
+        return view('api.template.section', compact('section', 'token', 'template'));
+    }
+
+    public function updateFullTemplate(Request $request, $id)
+    {
+        
+        $template = $this->template->forUser($id, \Auth::user()->id);
+        $sections = createClassSection();
+        $result = createSection($request->get('content'), $sections);
+        $template->content = $request->get('content');
+        unset($result['content']);
+        $template->section = $result;
+        $template->save();
+        return response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully']);
     }
 
     public function apply($id, $section, Request $request)
@@ -288,11 +314,13 @@ class TemplatesController extends Controller
             } else  {
                 $result = apply_data_for_other($section, $template->content);
             }
-            dd($result);
-            $response = $this->template->applyForInfo($template, $section, $result);
 
+            $response = $this->template->applyForInfo($template, $section, $result);
+            
+            event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content, $response['template']->slug));
+            
             return $response
-                ? response()->json(['status_code' => 200, 'data' => $response])
+                ? response()->json(['status_code' => 200, 'data' => $response['section']])
                 : response()->json(['status_code' => 400]);
         } catch (\Exception $e) {
             return response()->json(['status_code' => 400]);
