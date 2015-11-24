@@ -269,7 +269,7 @@ class TemplatesController extends Controller
         return view('api.template.section', compact('section', 'token', 'template'));
     }
 
-    public function updateFullTemplate(Request $request, $id)
+    public function editFullTemplate(Request $request, $id)
     {
         
         $template = $this->template->forUser($id, \Auth::user()->id);
