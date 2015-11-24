@@ -52,6 +52,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->home_phone = $data['home_phone'];
 		if (isset($data['city']))
 			$user->city = $data['city'];
+		if (isset($data['location']))
+			$user->location = $data['location'];
 		if (isset($data['state']))
 			$user->state = $data['state'];
 		if (isset($data['country']))
@@ -129,6 +131,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'country' => $data['country'],
             'link_profile' => $data['link_profile'],
             'soft_skill' => \Setting::get('questions'),
+            'location' => ['long' => null, 'last' => null],
             'token' => $token
         ]);
 	}
@@ -156,6 +159,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->address = $data['address'];
         if (isset($data['soft_skill']))
             $user->soft_skill = $data['soft_skill'];
+        if (isset($data['location']))
+            $user->location = $data['location'];
         if (isset($data['mobile_phone']))
             $user->mobile_phone = $data['mobile_phone'];
         if (isset($data['home_phone']))
@@ -269,6 +274,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $user->link_profile = $data['link'];
         $user->gender = $data['gender'];
         $user->avatar = $avatar;
+        $user->location = ['long' => null, 'last' => null];
         $user->soft_skill = \Setting::get('questions');
         $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
         
@@ -297,6 +303,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->gender = $data['gender'];
         if (isset($data['picture']))
             $user->avatar = $avatar;
+        $user->location = !$id ? ['long' => null, 'last' => null] : !isset($data['location'])?: $data['location'];
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
