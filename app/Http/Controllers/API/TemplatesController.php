@@ -301,7 +301,7 @@ class TemplatesController extends Controller
             } else if ($section == 'phone') {
                 $data = \App\Models\User::findOrFail(\Auth::user()->id)->mobile_phone;
             } else if ($section == 'photo') {
-                $data = \App\Models\User::findOrFail(\Auth::user()->id)->avatar;
+                $data = \App\Models\User::findOrFail(\Auth::user()->id)->avatar['origin'];
             } else if ($section == 'availability') {
                 foreach (\Setting::get('user_status') as $status) {
                     if ($status['id'] == \App\Models\User::findOrFail(\Auth::user()->id)->status) {
@@ -309,6 +309,7 @@ class TemplatesController extends Controller
                     }
                 }
             }
+
             if ( is_string($data)) {
                 $result = apply_data_for_section_infomation($section, $data, $template->content); 
             } else  {

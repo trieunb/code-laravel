@@ -154,7 +154,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             '<div class="photo" contenteditable="true"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
             $template->content);
         $sec = $template->section;
-        
+
         $template->content = $data['content'];
         $template->section = array_set($sec, 'photo', $data['section']);
 
@@ -170,7 +170,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     public function createTemplateBasic($user_id, $section, $content)
     {
         $template = $this->model->whereUserId($user_id)
-            ->whereType(2)
+            ->whereType('2')
             ->first();
 
         if ( ! $template) {
