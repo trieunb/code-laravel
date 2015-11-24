@@ -257,7 +257,7 @@ class TemplatesController extends Controller
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
 
-        return view('api.template.view', compact('content'));
+        return view('api.template.view', compact('content','template'));
     }
 
     public function menu($id, Request $request)

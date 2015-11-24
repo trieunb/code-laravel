@@ -77,7 +77,7 @@ interface UserInterface extends Repository
 	 * @param  string $token 
 	 * @return mixed        
 	 */
-	public function createProfileFb($data, $token);
+	public function createUserFacebook($data, $token);
 
 	/**
 	 * update User get inforation to facebook
@@ -85,5 +85,5 @@ interface UserInterface extends Repository
 	 * @param  string $token 
 	 * @return mixed        
 	 */
-	public function createOrUpdateProfileFb($data, $token, $id);
+	public function updateUserFacebook($data, $token, $id);
 }
