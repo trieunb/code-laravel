@@ -74,7 +74,6 @@ class User extends Model implements AuthenticatableContract,
         'soft_skill' => 'json',
         'avatar' => 'json',
         'id' => 'int',
-        'linkedin_id' => 'int',
         'gender' => 'int'
     ];
     /**

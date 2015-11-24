@@ -113,47 +113,50 @@ class AuthenticatesController extends Controller
         }
     }
 
-    public function postLoginWithLinkedin(Request $request)
+    public function loginWithLinkedin(Request $request)
     {
-        $user_linkedin = $request->get('user_info');
-        if (! is_null($user_linkedin)) {
-            $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $user_linkedin['linkedin_id']);
-            if (empty($user)) {
-                $user = $this->user->createUserFromOAuth($user_linkedin, $token = null);
-            } else {
-                $user = $this->user->getById($user->id);
-                $token = \JWTAuth::fromUser($user);
-                $this->user->updateUserFromOauth($user_linkedin, $token, $user->id);
+        $token = $request->get('token');
+        $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-url,picture-urls::(original),location,public-profile-url,email-address)?oauth2_access_token=".$token."&format=json";
+        $response = json_decode(file_get_contents($url), true);
+        $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
+        if ( ! $user) {
+            $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
+            if ( !$linkedin ) {
+                $user = $this->user->createUserFromOAuth($response, $token);
             }
-            Auth::login($user);
-            $token = \JWTAuth::fromUser($user);
-            $this->user->update(['token' => $token], $user->id);
-            return response()->json([
+        } else {
+            $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
+            if ( !$linkedin ) {
+                $this->user->updateUserFromOauth($response, $token, $user->id);
+            }
+        }
+        
+        Auth::login($user);
+        $token = \JWTAuth::fromUser($user);
+        $this->user->update(['token' => $token], $user->id);
+        return response()->json([
                 'status_code' => 200,
                 'status' => true,
-                'token' => $token,
+                'token' => $token
             ]);
-        }
-
-        return response()->json([
-            'status_code' => 401,
-            'status' => false,
-            'message' => 'could not create token'
-        ], 401);
     }
 
     public function loginWithFacebook(Request $request)
     {
         $token = $request->get('token');
         $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
-        $response = file_get_contents($url);
-        $response = json_decode($response, true);
-        $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
+        $response = json_decode(file_get_contents($url), true);
+        $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
         if ( ! $user) {
-            $this->user->createOrUpdateProfileFb($response, $token, $id = null);
-            $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
+            $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
+            if ( !$facebook ) {
+                $user = $this->user->createUserFacebook($response, $token);
+            }
         } else {
-            $this->user->createOrUpdateProfileFb($response, $token, $user->id);
+            $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
+            if ( !$facebook ) {
+                $this->user->updateUserFacebook($response, $token, $user->id);
+            }
         }
         
         Auth::login($user);
