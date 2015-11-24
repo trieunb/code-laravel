@@ -92,13 +92,13 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/{id}/section', 'TemplatesController@getSections');
     get('template/menu/{id}', ['as' => 'api.template.get.menu', 'uses' => 'TemplatesController@menu']);
 
-    post('template/preview', 'TemplatesController@updateBasicTemplate');
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template', 'TemplatesController@postTemplates');
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
     post('template/delete/{id}', 'TemplatesController@postDelete');
-    post('template/menu/{id}', ['as'=> 'update.template','uses' => 'TemplatesController@updateFullTemplate']);
+    post('template/menu/{id}', ['as'=> 'menu.edit.template','uses' => 'TemplatesController@editFullTemplate']);
+    post('template/view/{id}', ['as'=> 'view.edit.template','uses' => 'TemplatesController@editFullTemplate']);
     
     /**
      * Market Route

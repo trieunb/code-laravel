@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class='image-avatar' style="position: relative; overflow: hidden;max-height:400;">
-            <div class="photo">
+            <div class="photo" style="height:400px">
             <img style="width:100%;" 
             src="{{ ($user_info->avatar) 
             ? asset($user_info->avatar['origin']) 
