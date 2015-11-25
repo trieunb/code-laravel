@@ -63,10 +63,10 @@ class AuthenticatesController extends Controller
 
             if (! $token) {
                 return response()->json([
-                    'status_code' => 500,
+                    'status_code' => 401,
                     'status' => false,
                     'message' => 'invalid credentials'
-                ], 500);
+                ], 401);
             }
 
             $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
@@ -79,10 +79,10 @@ class AuthenticatesController extends Controller
             ]);
         } catch (JWTException $e) {
             return response()->json([
-                'status_code' => 500,
+                'status_code' => 401,
                 'status' => false,
                 'message' => 'could not create token'
-            ], 500);
+            ], 401);
         }
     }
 
@@ -106,10 +106,10 @@ class AuthenticatesController extends Controller
                 ]);
         } catch(ValidatorAPiException $e) {
             return response()->json([
-                'status_code' => 500,
+                'status_code' => 401,
                 'status' => false,
                 'message' => $e->getErrors()
-            ], 500);
+            ], 401);
         }
     }
 
@@ -181,7 +181,7 @@ class AuthenticatesController extends Controller
         if (!is_null($user)) {
             $this->user->update(['password' => Hash::make(str_random(8))], $user->id);
 
-            \Mail::send('emails.forgetPassword', ['pass' => $password], function($m) use ($user) {
+            \Mail::send('emails.forgetPassword', ['pass' => str_random(8)], function($m) use ($user) {
                 $m->to($user->email, $user->firstname . ' ' . $user->lastname)
                   ->subject('Welcome');
             });
