@@ -279,7 +279,10 @@ class TemplatesController extends Controller
         unset($result['content']);
         $template->section = $result;
         $template->save();
-        return response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully']);
+        $render = event(new RenderImageAfterCreateTemplate($template->id, $template->content, $template->slug));
+        return $render 
+            ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
+            : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
 
     public function apply($id, $section, Request $request)
