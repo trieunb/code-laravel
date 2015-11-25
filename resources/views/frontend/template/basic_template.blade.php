@@ -47,7 +47,7 @@
         style="color: red;
         font-weight:600;
         padding:15px;">
-            <span>Infomation</span>
+            <span>Personal Infomation</span>
         </div>
         <div class="box" 
             style="background: #f3f3f3;
@@ -78,7 +78,7 @@
             style="color: red;
             font-weight:600;
             padding:15px;">
-            <span>Education</span>
+            <span>Educations</span>
         </div>
         <div class="box"
             style="background: #f3f3f3;
@@ -186,7 +186,7 @@
             style="color: red;
             font-weight:600;
             padding:15px;">
-            <span>Objective</span>
+            <span>Objectives</span>
         </div>
         <div class="box"
             style="background: #f3f3f3;
