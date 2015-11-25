@@ -98,9 +98,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
     post('template/delete/{id}', 'TemplatesController@postDelete');
-    post('template/menu/{id}', ['as'=> 'update.template','uses' => 'TemplatesController@updateFullTemplate']);
+    post('template/menu/{id}', ['as'=> 'edit.template','uses' => 'TemplatesController@editFullTemplate']);
     post('template/{id}/edit/photo', ['as' => 'api.template.post.edit.photo', 'uses' => 'TemplatesController@editPhoto']);
-
+    post('template/view/{id}', ['as'=> 'edit.template','uses' => 'TemplatesController@editFullTemplate']);
 
     /**
      * Market Route
