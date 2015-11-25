@@ -177,44 +177,44 @@ if (!function_exists('createSectionData')) {
             switch ($k) {
 
                 case 'name':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['name'] = 'Name';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['name'] = 'Name';
+                    break;
                 case 'address':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['address'] = 'Address';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['address'] = 'Address';
+                    break;
                 case 'photo':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['photo'] = 'Photos';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['photo'] = 'Photos';
+                    break;
                 case 'email':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['email'] = 'Email Address';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['email'] = 'Email Address';
+                    break;
                 case 'profile_website':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['profile_website'] = 'My Profile Website';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['profile_website'] = 'My Profile Website';
+                    break;
                 case 'linkedin':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['linkedin'] = 'My LinkedIn Profile';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['linkedin'] = 'My LinkedIn Profile';
+                    break;
                 case 'phone':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['phone'] = 'Phone Number';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['phone'] = 'Phone Number';
+                    break;
                 case 'availability':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['availability'] = 'Availability';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['availability'] = 'Availability';
+                    break;
                 case 'infomation':
-                $section['contact']['display'] = 'Contact Information';
-                $section['contact']['infomation'] = 'Personal Infomation';
-                break;
+                    $section['contact']['display'] = 'Contact Information';
+                    $section['contact']['infomation'] = 'Personal Infomation';
+                    break;
                 default:
-                $section[$k] = ucfirst($k);
-                break;
+                    $section[$k] = ucfirst($k);
+                    break;
             }
         }
 
@@ -317,6 +317,12 @@ if (!function_exists('apply_data_for_section_infomation')) {
 }
 
 if (!function_exists('apply_data_for_other')) {
+    /**
+     * Get data apply section
+     * @param  [type] $section [description]
+     * @param  [type] $str     [description]
+     * @return [type]          [description]
+     */
     function apply_data_for_other($section, $str) {
         $html = new \Htmldom($str);
         $result = [];
@@ -423,9 +429,13 @@ if (!function_exists('apply_data_for_other')) {
 }
 
 if (!function_exists('createClassSection')) {
+    /**
+     * create class for section
+     * @return [] 
+     */
     function createClassSection()
     {
-        return $section = ['div.name', 'div.address', 'div.phone',
+        return ['div.name', 'div.address', 'div.phone',
             'div.email', 'div.profile_website', 'div.linkedin',
             'div.reference', 'div.objective', 'div.activitie',
             'div.work', 'div.education', 'div.photo', 'div.personal_test',

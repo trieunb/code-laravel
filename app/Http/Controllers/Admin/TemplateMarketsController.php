@@ -28,12 +28,7 @@ class TemplateMarketsController extends Controller
 
     public function postCreate(TemplateFormRequest $request)
     {
-        $sections = ['div.name', 'div.address', 'div.phone',
-            'div.email', 'div.profile_website', 'div.linkedin',
-            'div.reference', 'div.objective', 'div.activitie',
-            'div.work', 'div.education', 'div.photo', 'div.personal_test',
-            'div.key_quanlification', 'div.availability', 'div.infomation'
-        ];
+        $sections = createClassSection();
         $result = createSection($request->get('content'), $sections);
 
         return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
@@ -50,12 +45,7 @@ class TemplateMarketsController extends Controller
 
     public function postEdit(TemplateFormRequest $request, $id)
     {
-        $sections = ['div.name', 'div.address', 'div.phone',
-            'div.email', 'div.profile_website', 'div.linkedin',
-            'div.reference', 'div.objective', 'div.activitie',
-            'div.work', 'div.education', 'div.photo', 'div.personal_test',
-            'div.key_quanlification', 'div.availability', 'div.infomation'
-        ];
+        $sections = createClassSection();
         $data = createSection($request->get('content'), $sections);
         
         return $this->template_market->createOrUpdateTemplateByManage($request, $data, \Auth::user()->id)
