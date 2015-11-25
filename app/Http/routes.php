@@ -94,7 +94,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/apply/{id}/{section}', ['as' => 'api.template.get.profile.section', 'uses' => 'TemplatesController@apply']);
 
     post('template/basic', 'TemplatesController@postBasicTemplate');
-    post('template', 'TemplatesController@postTemplates');
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
     post('template/delete/{id}', 'TemplatesController@postDelete');

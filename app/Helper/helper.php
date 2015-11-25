@@ -278,6 +278,12 @@ if (!function_exists('createSectionMenu')) {
 }
 
 if (!function_exists('createSectionBasic')) {
+    /**
+     * Create section for template basic
+     * @param  string $section 
+     * @param  string $content 
+     * @return string          
+     */
     function createSectionBasic($section, $content)
     {
         $html = new \Htmldom($content);
@@ -288,6 +294,13 @@ if (!function_exists('createSectionBasic')) {
 }   
 
 if (!function_exists('apply_data_for_section_infomation')) {
+    /**
+     * Apply data for sections personal infomation
+     * @param  string $section 
+     * @param  string $replace 
+     * @param  string $str     
+     * @return []          
+     */
     function apply_data_for_section_infomation($section, $replace, $str) {
         $html = new \Htmldom($str);
         $result = [];

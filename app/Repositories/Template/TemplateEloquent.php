@@ -257,4 +257,25 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             ? ['section' => $section == 'availability' ? $template->user->status : $data['section'], 'template' => $template] 
             : false;
     }
+
+    /**
+     * Edit full screen template
+     * @param  int $id      
+     * @param  int $user_id 
+     * @param  mixed $request 
+     * @return bool          
+     */
+    public function editFullScreenTempalte($id, $user_id, $request)
+    {
+        $template = $this->forUser($id, $user_id);
+        $sections = createClassSection();
+        $result = createSection($request->get('content'), $sections);
+        $template->content = $request->get('content');
+        unset($result['content']);
+        $template->section = $result;
+        
+        return $template->save()
+            ? event(new RenderImageAfterCreateTemplate($template->id, $template->content, $template->slug))
+            : null;
+    }
 }

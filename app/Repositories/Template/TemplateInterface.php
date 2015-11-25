@@ -75,4 +75,13 @@ interface TemplateInterface extends Repository
      * @return bool           
      */
     public function applyForInfo($template, $section, $data);
+
+    /**
+     * Edit full screen template
+     * @param  int $id      
+     * @param  int $user_id 
+     * @param  mixed $request 
+     * @return bool          
+     */
+    public function editFullScreenTempalte($id, $user_id, $request);
 }

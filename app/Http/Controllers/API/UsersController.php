@@ -123,9 +123,11 @@ class UsersController extends Controller
 	) {
 		\Log::info('test API', $request->all());
 		$user = \JWTAuth::toUser($request->get('token'));
+
 		if ($user->id != $id) {
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
+
 		if ( !$request->only(['user', 'user_educations', 'user_work_histories', 'user_skills', 
 			'objectives', 'references'])) {
 			return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Not crendential']);
@@ -283,7 +285,6 @@ class UsersController extends Controller
 
 	public function postStatus(Request $request)
 	{
-		\Log::info('test Status', $request->all());
 		try {
 			$user = \JWTAuth::toUser($request->get('token'));
 			$result = $this->user->editStatus($user->id, $request->get('status'));

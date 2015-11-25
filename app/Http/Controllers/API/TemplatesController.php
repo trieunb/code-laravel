@@ -7,7 +7,6 @@ use App\Events\sendMailAttachFile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Template;
-use App\Models\User;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateInterface;
 use App\Repositories\User\UserInterface;
@@ -37,35 +36,6 @@ class TemplatesController extends Controller
             'status' => true,
             'data' => $this->user->getTemplateFromUser($user->id)->templates
         ]); 
-    }
-
-    public function postTemplates(Request $request)
-    {
-        $user = \JWTAuth::toUser($request->get('token'));
-
-        if ($request->has('templates')) {
-            $data = [];
-
-            foreach ($request->get('templates') as $value) {
-                $data[] = [
-                    'user_id' => $user->id,
-                    'cat_id' => $value['cat_id'],
-                    'title' => $value['title'],
-                    'slug' => str_slug($value['title']),
-                    'content' => $value['content'],
-                    'image' => $value['image'],
-                    'price' => $value['price'],
-                    'status' => $value['status'],
-                    'type' => $value['type'],
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ];
-            }
-
-            Template::insert($data);
-        }
-
-        return response()->json(['status_code' => 200, 'status' => true]);
     }
 
     public function show($id, Request $request)
@@ -109,6 +79,7 @@ class TemplatesController extends Controller
         $content = array_get($template->section, $section);
         $status = null;
         $setting = [];
+
         foreach (\Setting::get('user_status') as $k => $v) {
             if ($v['id'] == $template->user->status)
                 $status = $v;
@@ -190,6 +161,7 @@ class TemplatesController extends Controller
         ];
 
         $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
+        
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }
@@ -273,16 +245,7 @@ class TemplatesController extends Controller
 
     public function editFullTemplate(Request $request, $id)
     {
-        
-        $template = $this->template->forUser($id, \Auth::user()->id);
-        $sections = createClassSection();
-        $result = createSection($request->get('content'), $sections);
-        $template->content = $request->get('content');
-        unset($result['content']);
-        $template->section = $result;
-        $template->save();
-        $render = event(new RenderImageAfterCreateTemplate($template->id, $template->content, $template->slug));
-        return $render 
+        return $this->template->editFullScreenTempalte($id, \Auth::user()->id, $request) 
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
@@ -298,18 +261,18 @@ class TemplatesController extends Controller
             ];
 
             if (in_array($section, $personalInfomation)) {
-                $data = User::findOrFail(\Auth::user()->id)->pluck($section);
+                $data = $this->user->getById(\Auth::user()->id)->pluck($section);
             } else if ($section == 'name') {
-                $data = User::findOrFail(\Auth::user()->id)->present()->name;
+                $data = $this->user->getById(\Auth::user()->id)->present()->name;
             } else if ($section == 'linkedin' || $section == 'profile_website') {
-                $data =  User::findOrFail(\Auth::user()->id)->link_profile;
+                $data =  $this->user->getById(\Auth::user()->id)->link_profile;
             } else if ($section == 'phone') {
-                $data = User::findOrFail(\Auth::user()->id)->mobile_phone;
+                $data = $this->user->getById(\Auth::user()->id)->mobile_phone;
             } else if ($section == 'photo') {
-                $data = User::findOrFail(\Auth::user()->id)->avatar['origin'];
+                $data = $this->user->getById(\Auth::user()->id)->avatar['origin'];
             } else if ($section == 'availability') {
                 foreach (\Setting::get('user_status') as $status) {
-                    if ($status['id'] == \App\Models\User::findOrFail(\Auth::user()->id)->status) {    
+                    if ($status['id'] == $this->user->getById(\Auth::user()->id)->status) {    
                         $data =  $template->type == 2 
                             ? '<div class="availability content-box" contenteditable="true">'
                                 .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
@@ -321,15 +284,17 @@ class TemplatesController extends Controller
                 }
             }
 
-            if ( is_string($data)) {
-                $result = apply_data_for_section_infomation($section, $data, $template->content); 
-            } else  {
-                $result = apply_data_for_other($section, $template->content);
-            }
+            $result = is_string($data)
+                ? apply_data_for_section_infomation($section, $data, $template->content)
+                :apply_data_for_other($section, $template->content);
 
             $response = $this->template->applyForInfo($template, $section, $result);
             
-            event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content, $response['template']->slug));
+            event(new RenderImageAfterCreateTemplate(
+                $response['template']->id,
+                $response['template']->content, 
+                $response['template']->slug)
+            );
             
             return $response
                 ? response()->json(['status_code' => 200, 'data' => $response['section']])

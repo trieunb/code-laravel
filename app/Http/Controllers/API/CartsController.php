@@ -59,10 +59,10 @@ class CartsController extends Controller
         
         return $result
             ? response()->json([
-                'status_code' => 200,
-                'client_token' => BrainTreeSKD::getClientToken($user), 
-                'invoice_id' => $result
-            ], 200, [], JSON_NUMERIC_CHECK)
+                    'status_code' => 200,
+                    'client_token' => BrainTreeSKD::getClientToken($user), 
+                    'invoice_id' => $result
+                ], 200, [], JSON_NUMERIC_CHECK)
             : response()->json(['status_code' => 400, 'message' => 'Error when create invoice']);
     }
 
