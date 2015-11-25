@@ -39,6 +39,7 @@ class AuthenticatesController extends Controller
     public function index()
     {
         $users = $this->user->getAll();
+
         return $users;
     }
 
@@ -119,28 +120,23 @@ class AuthenticatesController extends Controller
         $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-url,picture-urls::(original),location,public-profile-url,email-address)?oauth2_access_token=".$token."&format=json";
         $response = json_decode(file_get_contents($url), true);
         $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
+        $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
+        
         if ( ! $user) {
-            $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
-            if ( !$linkedin ) {
-                $user = $this->user->createUserFromOAuth($response, $token);
-            } else {
-                $user = $linkedin;
-            }
-        } else {
-            $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
-            if ( !$linkedin ) {
-                $this->user->updateUserFromOauth($response, $token, $user->id);
-            }
+            $user = $linkedin ? $linkedin :  $this->user->createUserFromOAuth($response, $token);
+        } else if ( !$linkedin ) {
+            $this->user->updateUserFromOauth($response, $token, $user->id);
         }
         
         Auth::login($user);
         $token = \JWTAuth::fromUser($user);
         $this->user->update(['token' => $token], $user->id);
+
         return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'token' => $token
-            ]);
+            'status_code' => 200,
+            'status' => true,
+            'token' => $token
+        ]);
     }
 
     public function loginWithFacebook(Request $request)
@@ -149,28 +145,24 @@ class AuthenticatesController extends Controller
         $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
         $response = json_decode(file_get_contents($url), true);
         $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
+        $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
+
         if ( ! $user) {
-            $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
-            if ( !$facebook ) {
-                $user = $this->user->createUserFacebook($response, $token);
-            } else {
-                $user = $facebook;
-            }
-        } else {
-            $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
-            if ( !$facebook ) {
-                $this->user->updateUserFacebook($response, $token, $user->id);
-            }
+            $user = $facebook ? $facebook : $this->user->createUserFacebook($response, $token);
+        } else if ( !$facebook ) {
+            $this->user->updateUserFacebook($response, $token, $user->id);
+            
         }
         
         Auth::login($user);
         $token = \JWTAuth::fromUser($user);
         $this->user->update(['token' => $token], $user->id);
+
         return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'token' => $token
-            ]);
+            'status_code' => 200,
+            'status' => true,
+            'token' => $token
+        ]);
     }
 
     public function postForgetPassword(Request $request)
@@ -199,15 +191,16 @@ class AuthenticatesController extends Controller
             'status' => false,
             'message' => 'Invalid email'
         ], 403);
-        
     }
 
     public function postChangePassword(Request $request)
     {
         $user = \JWTAuth::toUser('token');
         $password = $request->get('password');
+
         if ( $user ) {
             $this->user->update(['password' => Hash::make($password)], $user->id);
+            
             return response()->json([
                 'status_code' => 200,
                 'status' => true,

@@ -103,7 +103,11 @@
 				success: function(result) {
 					$("#loading").hide();
 					if (result.status_code == 200) {
-						$('#content').html(result.data);
+						if ($('#content select').length == 1) {
+							$('#content select option[value = '+result.data+']').attr('selected');
+
+							console.log(result.data);
+						} else $('#content').html(result.data);
 					}
 				}
 			}).always(function() {

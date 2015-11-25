@@ -123,24 +123,32 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
             foreach (\Setting::get('user_status') as $status) {
                 if ($status['id'] == $request->get('content'))
-                    $tmp = '<div class="availability" contenteditable="true"><p style="font-weight:600">'.$status['value'].'</p></div>';
+                    $tmp = $template->type == 2 
+                        ? '<div class="availability content-box" contenteditable="true">'
+                            .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
+                            .'<span>Availability</span></div>'
+                            .'<div class="box" style="background: #f3f3f3;padding: 15px;border-top: 3px solid #D8D8D8;border-bottom: 3px solid #D8D8D8;">'
+                            .'<p>'.$status['value'].'</p></div></div>'
+                        : '<div class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';
             }
 
             $user = \App\Models\User::find($user_id);
             $user->status = $request->get('content');
 
-            if ($user->save()) {
-                $data = editSection($section, $tmp, $template->content);
+            if ( ! $user->save()) {
+                return null;    
             }
-
-            return null;
+            
+            $data = editSection($section, $tmp, $template->content);
+            
+            
         } else {
             $data = editSection($section, $request->get('content'), $template->content);
         }
 
         $template->content = $data['content'];
         $template->section = array_set($sec, $section, $data['section']);
-
+        
         return $template->save() ? $template : null;
     }
 
@@ -151,7 +159,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         if ( ! isset($template->section['photo'])) return null;
 
         $user = \App\Models\User::find($user_id);
-        
+
         if ($user->avatar['origin'] == null || $user->avatar['origin'] == '') return null;
 
         $user->avatar = \App\Models\User::uploadAvatar($file);
@@ -245,6 +253,8 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
         $template->section = array_set($sec, $section, $data['section']);
 
-        return $template->save() ? ['section' => $data['section'], 'template' => $template] : false;
+        return $template->save() 
+            ? ['section' => $section == 'availability' ? $template->user->status : $data['section'], 'template' => $template] 
+            : false;
     }
 }

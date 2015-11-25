@@ -7,6 +7,7 @@ use App\Events\sendMailAttachFile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Template;
+use App\Models\User;
 use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateInterface;
 use App\Repositories\User\UserInterface;
@@ -140,7 +141,7 @@ class TemplatesController extends Controller
 
     public function editPhoto($id, Request $request)
     {
-        
+
         if ( !$request->hasFile('avatar')) 
             return response()->json(['status_code' => '400']);
         
@@ -297,19 +298,25 @@ class TemplatesController extends Controller
             ];
 
             if (in_array($section, $personalInfomation)) {
-                $data = \App\Models\User::findOrFail(\Auth::user()->id)->pluck($section);
+                $data = User::findOrFail(\Auth::user()->id)->pluck($section);
             } else if ($section == 'name') {
-                $data = \App\Models\User::findOrFail(\Auth::user()->id)->present()->name;
+                $data = User::findOrFail(\Auth::user()->id)->present()->name;
             } else if ($section == 'linkedin' || $section == 'profile_website') {
-                $data =  \App\Models\User::findOrFail(\Auth::user()->id)->link_profile;
+                $data =  User::findOrFail(\Auth::user()->id)->link_profile;
             } else if ($section == 'phone') {
-                $data = \App\Models\User::findOrFail(\Auth::user()->id)->mobile_phone;
+                $data = User::findOrFail(\Auth::user()->id)->mobile_phone;
             } else if ($section == 'photo') {
-                $data = \App\Models\User::findOrFail(\Auth::user()->id)->avatar['origin'];
+                $data = User::findOrFail(\Auth::user()->id)->avatar['origin'];
             } else if ($section == 'availability') {
                 foreach (\Setting::get('user_status') as $status) {
-                    if ($status['id'] == \App\Models\User::findOrFail(\Auth::user()->id)->status) {
-                        $data = $status['value'];        
+                    if ($status['id'] == \App\Models\User::findOrFail(\Auth::user()->id)->status) {    
+                        $data =  $template->type == 2 
+                            ? '<div class="availability content-box" contenteditable="true">'
+                                .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
+                                .'<span>Availability</span></div>'
+                                .'<div class="box" style="background: #f3f3f3;padding: 15px;border-top: 3px solid #D8D8D8;border-bottom: 3px solid #D8D8D8;">'
+                                .'<p>'.$status['value'].'</p></div></div>'
+                            : '<div class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';        
                     }
                 }
             }
