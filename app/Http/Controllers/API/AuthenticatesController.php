@@ -179,9 +179,10 @@ class AuthenticatesController extends Controller
         $user = $this->user->getFirstDataWhereClause('email', '=', $email);
 
         if (!is_null($user)) {
-            $this->user->update(['password' => Hash::make(str_random(8))], $user->id);
+            $password = str_random(8);
+            $this->user->update(['password' => Hash::make($password)], $user->id);
 
-            \Mail::send('emails.forgetPassword', ['pass' => str_random(8)], function($m) use ($user) {
+            \Mail::send('emails.forgetPassword', ['pass' => $password], function($m) use ($user) {
                 $m->to($user->email, $user->firstname . ' ' . $user->lastname)
                   ->subject('Welcome');
             });
