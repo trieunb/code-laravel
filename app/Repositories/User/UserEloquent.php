@@ -122,14 +122,18 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function createUserFromOAuth($data, $token)
 	{
+        $avatar = [
+            'origin' => $data['pictureUrls']['values'][0],
+            'thumb' => $data['pictureUrls']['values'][0]
+        ];
 		return $this->model->create([
-            'linkedin_id' => $data['linkedin_id'],
-            'firstname' => $data['firstname'],
-            'lastname' => $data['lastname'],
-            'email' => $data['email'],
-            'avatar' => $data['avatar'],
-            'country' => $data['country'],
-            'link_profile' => $data['link_profile'],
+            'linkedin_id' => $data['id'],
+            'firstname' => $data['firstName'],
+            'lastname' => $data['lastName'],
+            'email' => $data['emailAddress'],
+            'avatar' => $avatar,
+            'country' => $data['location']['name'],
+            'link_profile' => $data['publicProfileUrl'],
             'soft_skill' => \Setting::get('questions'),
             'location' => ['long' => null, 'last' => null],
             'token' => $token
@@ -139,22 +143,29 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function updateUserFromOauth($data, $token, $id)
     {
         $user = $this->getById($id);
-        if (isset($data['firstname']))
-            $user->firstname = $data['firstname'];
-        if (isset($data['lastname']))
-            $user->lastname = $data['lastname'];
-        if (isset($data['email']))
-            $user->email = $data['email'];
+        $avatar = [
+            'origin' => $data['pictureUrls']['values'][0],
+            'thumb' => $data['pictureUrls']['values'][0]
+        ];
+
+        if (isset($data['id']))
+            $user->linkedin_id = $data['id'];
+        if (isset($data['firstName']))
+            $user->firstname = $data['firstName'];
+        if (isset($data['lastName']))
+            $user->lastname = $data['lastName'];
+        if (isset($data['emailAddress']))
+            $user->email = $data['emailAddress'];
         if (isset($data['link_profile']))
-            $user->link_profile = $data['link_profile'];
+            $user->link_profile = $data['publicProfileUrl'];
         if (isset($data['infomation']))
             $user->infomation = $data['infomation'];
         if (isset($data['dob']))
             $user->dob = $data['dob'];
         if (isset($data['gender']))
             $user->gender = $data['gender'];
-        if (isset($data['avatar']))
-            $user->avatar = $data['avatar'];
+        if (isset($data['pictureUrls']))
+            $user->avatar = $avatar;
         if (isset($data['address']))
             $user->address = $data['address'];
         if (isset($data['soft_skill']))
@@ -170,7 +181,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         if (isset($data['state']))
             $user->state = $data['state'];
         if (isset($data['country']))
-            $user->country = $data['country'];
+            $user->country = $data['location']['name'];
         $user->token = $token;
 
         return $user->save();
@@ -260,13 +271,14 @@ class UserEloquent extends AbstractRepository implements UserInterface
             return false;
         }
     }
-    public function createProfileFb($data, $token)
+
+    public function createUserFacebook($data, $token)
     {
-        $user =  new User();
         $avatar = [
             'origin' => $data['picture']['data']['url'],
             'thumb' => $data['picture']['data']['url']
         ];
+
         $user->facebook_id = $data['id'];
         $user->firstname = $data['first_name'];
         $user->lastname = $data['last_name'];
@@ -278,11 +290,23 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $user->soft_skill = \Setting::get('questions');
         $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
         
-        return $user->save();
+        return $this->model->create([
+            'facebook_id' => $data['id'],
+            'firstname' => $data['first_name'],
+            'lastname' => $data['last_name'],
+            'email' => $data['email'],
+            'link_profile' => $data['link'],
+            'gender' => $data['gender'],
+            'avatar' => $avatar,
+            'soft_skill' => \Setting::get('questions'),
+            'dob' => isset($data['birthday']) ? $birthday : false,
+            'token' => $token
+        ]);
     }
-    public function createOrUpdateProfileFb($data, $token, $id)
+
+    public function updateUserFacebook($data, $token, $id)
     {
-        $user = $id ? $this->getById($id) : new User;
+        $user = $this->getById($id);
 
         $avatar = [
             'origin' => $data['picture']['data']['url'],

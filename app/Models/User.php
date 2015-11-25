@@ -80,7 +80,6 @@ class User extends Model implements AuthenticatableContract,
         'avatar' => 'json',
         'location' => 'json',
         'id' => 'int',
-        'linkedin_id' => 'int',
         'gender' => 'int'
     ];
     /**
