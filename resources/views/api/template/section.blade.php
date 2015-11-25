@@ -95,30 +95,6 @@
   </main>
 
   <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('#edit-template').click(function(e) {
-        e.preventDefault();
-        var url = window.location.href;
-        var token = url.split('=');
-        var content = $('#content').html();
-        content = content.replace(/\t|\n+/g, '');
-        $.ajax({
-          url: window.location.href,
-          data: {
-            token : token,
-            content: content
-          },
-          type: 'POST',
-          success : function(result) {
-            if (result.status == true) {
-              alert('Edit template successfully');
-            }
-          }
-        });
-      });
-    });
-  </script>
+  <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 </body>
 </html>
