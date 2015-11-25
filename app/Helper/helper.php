@@ -412,7 +412,7 @@ if (!function_exists('apply_data_for_other')) {
                 }
                 
                 foreach ($html->find('div.'.$section) as $element) {
-                    $element->outertext = $tmp;
+                    $element->innertext = $tmp;
                 }
 
                 break;
