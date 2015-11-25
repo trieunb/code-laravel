@@ -81,7 +81,7 @@
     </div>
     <div class="container">
       <div class="row wrapper detail">
-        <div id="content" class="fw w_bg" contenteditable="true">
+        <div id="content" class="fw w_bg">
         {!! $template->content !!}
         </div>
       </div>

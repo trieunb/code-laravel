@@ -116,6 +116,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     public function editTemplate($id, $user_id, $section, $request)
     {
         $template = $this->forUser($id, $user_id);
+        if ( ! isset($template->section[$section])) return;
         $sec = $template->section;
         $tmp = '';
         if ($section == 'availability') {
@@ -145,11 +146,18 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
     public function editPhoto($id, $user_id, $file)
     {
-        $user = \App\Models\User::find($user_id);
-        $user->avatar = \App\Models\User::uploadAvatar($file);
-
-        if ( !$user->save()) return;
         $template = $this->getById($id);
+
+        if ( ! isset($template->section['photo'])) return null;
+
+        $user = \App\Models\User::find($user_id);
+        
+        if ($user->avatar['origin'] == null || $user->avatar['origin'] == '') return null;
+
+        $user->avatar = \App\Models\User::uploadAvatar($file);
+      
+        if ( !$user->save()) return;
+        
         $data = editSection('photo', 
             '<div class="photo" contenteditable="true"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
             $template->content);

@@ -172,6 +172,7 @@ if (!function_exists('createSectionData')) {
      */
     function createSectionData($template) {
         $section = ['template_id' => $template->id];
+
         foreach ($template->section as $k => $v) {
 
             switch ($k) {
@@ -184,10 +185,10 @@ if (!function_exists('createSectionData')) {
                     $section['contact']['display'] = 'Contact Information';
                     $section['contact']['address'] = 'Address';
                     break;
-                case 'photo':
+               /* case 'photo':
                     $section['contact']['display'] = 'Contact Information';
                     $section['contact']['photo'] = 'Photos';
-                    break;
+                    break;*/
                 case 'email':
                     $section['contact']['display'] = 'Contact Information';
                     $section['contact']['email'] = 'Email Address';
@@ -221,7 +222,6 @@ if (!function_exists('createSectionData')) {
         if (isset($section['contact'])) {
             ksort($section);
         }
-
         return $section;
     }
 }
@@ -253,7 +253,7 @@ if (!function_exists('createSectionMenu')) {
                     }else {
                      $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$k."?token={$token}'>{$v}</a></li>";
 
-                     if (count($value) - 1 == $i && strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
+                     if (count($value) == $i && strpos($html ,'<div class="dropdown-menu" aria-labelledby="dLabel">')) {
                         $html .= '</ul></div>';
                     }
                 }
@@ -261,20 +261,20 @@ if (!function_exists('createSectionMenu')) {
 
             $html .= '</li>';
 
-        } else {
-            if ($section != 'template_id') {
-                if (strpos($value, '_') !== FALSE) {
-                    $tmp = explode('_', $value);
+            } else {
+                if ($section != 'template_id') {
+                    if (strpos($value, '_') !== FALSE) {
+                        $tmp = explode('_', $value);
 
-                    $value = ucfirst($tmp[0]). ' ' .ucfirst($tmp[1]);
+                        $value = ucfirst($tmp[0]). ' ' .ucfirst($tmp[1]);
+                    }
+                    $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";   
                 }
-                $html .= "<li><a href='/api/template/edit/".$data['template_id']."/".$section."?token={$token}'>{$value}</a></li>";   
             }
         }
-    }
 
     return $html .= '</ul>';
-}
+    }
 }
 
 if (!function_exists('createSectionBasic')) {
@@ -326,7 +326,7 @@ if (!function_exists('apply_data_for_other')) {
     function apply_data_for_other($section, $str) {
         $html = new \Htmldom($str);
         $result = [];
-        $tmp = '<div class="'.$section.'" contenteditable="true">';
+        $tmp = '';
 
         switch ($section) {
             case 'reference':
@@ -422,7 +422,7 @@ if (!function_exists('apply_data_for_other')) {
         }
 
         return [
-            'section' => $tmp.'</div>',
+            'section' => '<div class="'.$section.'" contenteditable="true">'.$tmp.'</div>',
             'content' => $html->save()
         ];
     }

@@ -140,6 +140,7 @@ class TemplatesController extends Controller
 
     public function editPhoto($id, Request $request)
     {
+        
         if ( !$request->hasFile('avatar')) 
             return response()->json(['status_code' => '400']);
         

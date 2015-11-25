@@ -16,7 +16,11 @@ $(document).ready(function(){
        $('#fix-iphone > div.dropdown-menu').show();
      } else $('#fix-iphone > div.dropdown-menu').hide();
     });
-
+    $(document).click(function(event) {
+    if (!$(event.target).closest("#fix-iphone .dropdown-menu").length) {
+            $("#fix-iphone .dropdown-menu").hide();
+        }
+    });
     $('.dropdown-menu .dropdown').click(function(event)
     {
       event.preventDefault();
