@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow: hidden;max-height:400;">
-            <div class="photo" style="height:400px">
-            <img style="width:100%;" 
+        <div class='image-avatar' style="position: relative; overflow: hidden;max-height:200px;">
+            <div class="photo">
+            <img style="width:100%; min-height:200px" 
             src="{{ ($user_info->avatar) 
             ? asset($user_info->avatar['origin']) 
             : asset('images/avatar.jpg') }}">
@@ -132,7 +132,7 @@
             style="color: red;
             font-weight:600;
             padding:15px;">
-            <span>Work Experience</span>
+            <span>Work Exprience</span>
         </div>
         <div class="box"
             style="background: #f3f3f3;
@@ -181,7 +181,7 @@
             @endforeach
         </div>
     </div>
-    <div class='objectvie content-box'>
+    <div class='objective content-box'>
         <div class="header-title"
             style="color: red;
             font-weight:600;
@@ -206,7 +206,7 @@
             @endforeach
         </div>
     </div>
-    <div class='key_qualification content-box'>
+    <div class='key_quanlification content-box'>
         <div class="header-title"
             style="color: red;
             font-weight:600;
