@@ -282,6 +282,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $birthday = isset($data['birthday'])
             ? Carbon::parse($data['birthday'])->format('Y-m-d')
             : false;
+        $gender = '';
+        if ($data['gender'] == "male")
+            $gender = 0;
+        elseif ($data['gender'] == "female")
+            $gender = 1;
+        else
+            $gender = 2;
 
         return $this->model->create([
             'facebook_id' => $data['id'],
@@ -289,7 +296,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'lastname' => $data['last_name'],
             'email' => $data['email'],
             'link_profile' => $data['link'],
-            'gender' => $data['gender'],
+            'gender' => $gender,
             'avatar' => $avatar,
             'soft_skill' => \Setting::get('questions'),
             'dob' => $birthday,
