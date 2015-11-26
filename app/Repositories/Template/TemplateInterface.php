@@ -46,10 +46,10 @@ interface TemplateInterface extends Repository
     /**
      * Create template basic
      * @param  int $user_id 
-     * @param  string $content 
+     * @param  array $data 
      * @return mixed          
      */
-    public function createTemplateBasic($user_id, $section, $content);
+    public function createTemplateBasic($user_id, $data);
 
     /**
      * Delete template

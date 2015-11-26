@@ -141,27 +141,9 @@ class TemplatesController extends Controller
         $user_info = $this->user->getProfile($user->id);
         $age = Carbon::createFromFormat("Y-m-d", $user_info->dob)->age;
         $content = view('frontend.template.basic_template', ['user_info' => $user_info, 'age' => $age])->render();
-
-        $section = [
-            'reference' => createSectionBasic('.reference', $content),
-            'name' => createSectionBasic('.name', $content),
-            'address' => createSectionBasic('.address', $content),
-            'email' => createSectionBasic('.email', $content),
-            'phone' => createSectionBasic('.phone', $content),
-            'activitie' => createSectionBasic('.activitie', $content),
-            'profile_website' => createSectionBasic('.profile_website', $content),
-            'education' => createSectionBasic('.education', $content),
-            'personal_test' => createSectionBasic('.personal_test', $content),
-            'work' => createSectionBasic('.work', $content),
-
-            'reference' => createSectionBasic('.reference', $content),
-            'objective' => createSectionBasic('.objective', $content),
-            'key_qualification' => createSectionBasic('.key_qualification', $content),
-            'photo' => createSectionBasic('.photo', $content),
-            'availability' => createSectionBasic('.availability', $content),
-        ];
-
-        $template = $this->template->createTemplateBasic($user_info->id, $section, $content);
+        $sections = createClassSection();
+        $data = createSection($content, $sections);
+        $template = $this->template->createTemplateBasic($user_info->id, $data);
         
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);

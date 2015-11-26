@@ -180,10 +180,10 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     /**
      * Create template basic
      * @param  int $user_id 
-     * @param  string $content 
+     * @param  array $data 
      * @return mixed          
      */
-    public function createTemplateBasic($user_id, $section, $content)
+    public function createTemplateBasic($user_id, $data)
     {
         $template = $this->model->whereUserId($user_id)
             ->whereType('2')
@@ -197,8 +197,9 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             Template::makeSlug($template);
         }
 
-        $template->content = $content;
-        $template->section = $section;
+        $template->content = $data['content'];
+        unset($data['content']);
+        $template->section = $data;
         
         return $template->save() ? $template : null;
     }
