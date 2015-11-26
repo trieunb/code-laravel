@@ -30,6 +30,9 @@
 	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
 	<script src="{{  asset('js/nicEdit.js') }}"></script>
 	<script>
+	function editPhoto() {
+		
+	}
 	$(document).ready(function() {
 
 		var isBusy = false;
@@ -52,7 +55,7 @@
 			content = content.replace(/\t|\n+/g, '');
 
 			if ($('#content img').length == 1) {
-				var form = $('#upload')[0];
+			/*	var form = $('#upload')[0];
 				var file = $('#file').prop('files')[0];
 				var data = new FormData(data);
 				data.append('token', token[1]);
@@ -70,7 +73,7 @@
 						}
 						
 						$("#loading").hide();
-					}
+					}*/
 				}).always(function() {
 					isBusy = false;
 				});

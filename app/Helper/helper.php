@@ -387,7 +387,7 @@ if (!function_exists('apply_data_for_other')) {
                 }
                 break;
             case 'education':
-                $tmp .= '<h3 style="font-weight:600">Educations</h3>'; 
+                $tmp .= '<h3 style="font-weight:600">Education</h3>'; 
                 foreach (\App\Models\UserEducation::whereUserId(\Auth::user()->id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->title.'</label>';
                     $tmp .= '<ul style="list-style:none">';

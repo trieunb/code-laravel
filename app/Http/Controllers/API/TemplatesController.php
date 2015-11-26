@@ -113,7 +113,7 @@ class TemplatesController extends Controller
     public function editPhoto($id, Request $request)
     {
 
-        if ( !$request->hasFile('avatar')) 
+        if ( !$request->hasFile('photo')) 
             return response()->json(['status_code' => '400']);
         
         $validator = \Validator::make($request->all(), ['avatar' => 'image']);
@@ -122,15 +122,16 @@ class TemplatesController extends Controller
             return response()->json(['status_code' => 422]);
         }
 
-        $response = $this->template->editPhoto($id, \Auth::user()->id, $request->file('avatar'));
+        $response = $this->template->editPhoto($id, \Auth::user()->id, $request->file('photo'));
         
         if ( !$response) 
-            return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
+            return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when save file.']);
 
         event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content, $response['template']->slug));
         
         return $response
-            ? response()->json(['status_code' => 200, 'data' => asset($response['avatar'])])
+            // ? response()->json(['status_code' => 200, 'data' => asset($response['avatar'])])
+            ? redirect()->back()
             : response()->json(['status_code' => 400]);
     }
 
