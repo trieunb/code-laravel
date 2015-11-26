@@ -13,7 +13,7 @@ class Objective extends Model
     protected $casts = [
         'id' => 'int',
         'user_id' => 'int',
-        'item' => 'int'
+        'position' => 'int'
     ];
 	/**
 	 * Table name
@@ -37,7 +37,7 @@ class Objective extends Model
                 'user_id' => $user_id,
                 'title' => $value['title'],
                 'content' => $value['content'],
-                'item' => $value['item'],
+                'position' => $value['position'],
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ];

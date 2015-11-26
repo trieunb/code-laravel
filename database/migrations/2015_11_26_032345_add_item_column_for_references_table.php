@@ -13,7 +13,7 @@ class AddItemColumnForReferencesTable extends Migration
     public function up()
     {
         Schema::table('references', function($table) {
-            $table->tinyInteger('item')->after('created_at');
+            $table->tinyInteger('position')->after('created_at');
         });
     }
 
@@ -25,7 +25,7 @@ class AddItemColumnForReferencesTable extends Migration
     public function down()
     {
         Schema::table('references', function($table) {
-            $table->dropColumn('item');
+            $table->dropColumn('position');
         });
     }
 }

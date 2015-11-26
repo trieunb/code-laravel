@@ -13,7 +13,7 @@ class AddItemColumnForUserWorkHistoriesTable extends Migration
     public function up()
     {
         Schema::table('user_work_histories', function($table) {
-            $table->tinyInteger('item')->after('created_at');
+            $table->tinyInteger('position')->after('created_at');
         });
     }
 
@@ -25,7 +25,7 @@ class AddItemColumnForUserWorkHistoriesTable extends Migration
     public function down()
     {
         Schema::table('user_work_histories', function($table) {
-            $table->dropColumn('item');
+            $table->dropColumn('position');
         });
     }
 }

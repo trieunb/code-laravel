@@ -14,7 +14,7 @@ class UserEducation extends Model
     protected $casts = [
         'id' => 'int',
         'user_id' => 'int',
-        'item' => 'int'
+        'position' => 'int'
     ];
 	/**
 	 * Table name
@@ -43,7 +43,7 @@ class UserEducation extends Model
                 'end' => $value['end'],
                 'degree' => $value['degree'],
                 'result' => $value['result'],
-                'item' => $value['item'],
+                'position' => $value['position'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

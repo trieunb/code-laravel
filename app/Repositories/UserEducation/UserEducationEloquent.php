@@ -21,7 +21,7 @@ class UserEducationEloquent extends AbstractDefineMethodRepository implements Us
 	 */
 	protected $field_work_save = [
 		'school_name','title', 'start', 'end',
-		'degree', 'result', 'item'
+		'degree', 'result', 'position'
 	];
 
 	public function __construct(UserEducation $user_education)
@@ -47,7 +47,7 @@ class UserEducationEloquent extends AbstractDefineMethodRepository implements Us
 		$user_education->end = $dataPrepareSave['end'];
 		$user_education->degree = $dataPrepareSave['degree'];
 		$user_education->result = $dataPrepareSave['result'];
-		$user_education->item = $dataPrepareSave['item'];
+		$user_education->position = $dataPrepareSave['position'];
 
 		return $user_education->save();
 	}

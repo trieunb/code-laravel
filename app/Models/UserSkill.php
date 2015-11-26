@@ -16,7 +16,7 @@ class UserSkill extends Model
         'user_id' => 'int',
         'skill_test' => 'int',
         'skill_test_point' => 'int',
-        'item' => 'int'
+        'position' => 'int'
     ];
 	/**
 	 * Table name
@@ -43,7 +43,7 @@ class UserSkill extends Model
                 'skill_test' => $value['skill_test'],
                 'skill_test_point' => $value['skill_test_point'],
                 'experience' => $value['experience'],
-                'item' => $value['item'],
+                'position' => $value['position'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

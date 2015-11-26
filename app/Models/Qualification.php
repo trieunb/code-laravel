@@ -24,7 +24,7 @@ class Qualification extends Model
     protected $casts = [
     	'id' => 'int',
     	'user_id' => 'int',
-        'item' => 'int'
+        'position' => 'int'
 	];
     public function user()
     {
@@ -38,7 +38,7 @@ class Qualification extends Model
         foreach ($dataPrepareForCreate as $value) {
             $qualifications[] = new Qualification([
             	'content' => $value['content'],
-                'item' => $value['item'],
+                'position' => $value['position'],
             ]);
         }
         $user = \App\Models\User::findOrFail($user_id);

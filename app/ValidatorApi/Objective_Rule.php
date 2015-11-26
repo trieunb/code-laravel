@@ -10,7 +10,7 @@ class Objective_Rule extends AbstractValidator
 		return [
 			'title' => 'required|min:3',
 			'content' => 'required|min:3',
-			'item' => 'required'
+			'position' => 'required'
 		];
 	}
 }

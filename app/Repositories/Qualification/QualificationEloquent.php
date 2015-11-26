@@ -19,7 +19,7 @@ class QualificationEloquent extends AbstractDefineMethodRepository implements Qu
 	 * Fields for update data
 	 * @var $field_work_save
 	 */
-	protected $field_work_save = ['content', 'item'];
+	protected $field_work_save = ['content', 'position'];
 
 	public function __construct(Qualification $qualification)
 	{
@@ -40,7 +40,7 @@ class QualificationEloquent extends AbstractDefineMethodRepository implements Qu
 		if($dataPrepareSave['id'] == null) $objective->user_id = $user_id;
 
 		$objective->content = $dataPrepareSave['content'];
-		$objective->item = $dataPrepareSave['item'];
+		$objective->position = $dataPrepareSave['position'];
 
 		return $objective->save();
 	}

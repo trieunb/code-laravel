@@ -11,7 +11,7 @@ class UserEducation_Rule extends AbstractValidator
             'end' => 'required',
             'degree' => 'required|min:3',
             'result' => 'required|min:3',
-            'item' => 'required'
+            'position' => 'required'
 		];
 	}
 }

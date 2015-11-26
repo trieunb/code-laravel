@@ -9,7 +9,7 @@ class Qualification_Rule extends AbstractValidator
 	{
 		return [
 			'content' => 'required',
-			'item' => 'required'
+			'position' => 'required'
 		];
 	}
 }
