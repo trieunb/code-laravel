@@ -195,7 +195,7 @@ class AuthenticatesController extends Controller
 
     public function postChangePassword(Request $request)
     {
-        $user = \JWTAuth::toUser('token');
+        $user = \JWTAuth::toUser($request->get('token'));
         $password = $request->get('password');
 
         if ( $user ) {
