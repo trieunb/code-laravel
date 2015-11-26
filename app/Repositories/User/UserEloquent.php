@@ -74,8 +74,19 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function getProfile($user_id)
 	{
 		$data = $this->model
-			->with(['user_educations', 'user_work_histories',
-			 	'user_skills', 'references', 'objectives', 'qualifications'
+			->with(['user_educations' => function($q) {
+                return $q->orderBy('item');
+            }, 'user_work_histories' => function($q) {
+                return $q->orderBy('item');
+            }, 'user_skills' => function($q) {
+                return $q->orderBy('item');
+            }, 'references' => function($q) {
+                return $q->orderBy('item');
+            }, 'objectives' => function($q) {
+                return $q->orderBy('item');
+            }, 'qualifications' => function($q) {
+                return $q->orderBy('item');
+            }
 		 	])->findOrFail($user_id);
 
 		$data->avatar = [
@@ -108,6 +119,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
             'soft_skill' => \Setting::get('questions'),
+            'location' => ['longitude' => null, 'last' => null],
             'token' => $token,
         ];
 
@@ -135,7 +147,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'country' => $data['location']['name'],
             'link_profile' => $data['publicProfileUrl'],
             'soft_skill' => \Setting::get('questions'),
-            'location' => ['long' => null, 'last' => null],
+            'location' => ['longitude' => null, 'last' => null],
             'token' => $token
         ]);
 	}
@@ -292,6 +304,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'gender' => $data['gender'],
             'avatar' => $avatar,
             'soft_skill' => \Setting::get('questions'),
+            'location' => ['longitude' => null, 'last' => null],
             'dob' => $birthday,
             'token' => $token
         ]);
@@ -320,7 +333,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->gender = $data['gender'];
         if (isset($data['picture']))
             $user->avatar = $avatar;
-        $user->location = !$id ? ['long' => null, 'last' => null] : !isset($data['location'])?: $data['location'];
+        $user->location = !$id ? ['longitude' => null, 'last' => null] : !isset($data['location'])?: $data['location'];
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');

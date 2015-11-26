@@ -13,6 +13,7 @@ class UserWorkHistory extends Model
     protected $casts = [
         'id' => 'int',
         'user_id' => 'int',
+        'item' => 'int'
     ];
 
 	/**
@@ -42,6 +43,7 @@ class UserWorkHistory extends Model
                 'end' => $value['end'],
                 'job_title' => $value['job_title'],
                 'job_description' => $value['job_description'],
+                'item' => $value['item'],
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ];

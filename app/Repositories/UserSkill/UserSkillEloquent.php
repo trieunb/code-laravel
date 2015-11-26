@@ -20,7 +20,10 @@ class UserSkillEloquent extends AbstractDefineMethodRepository implements UserSk
 	 * Fields for update data
 	 * @var $field_work_save
 	 */
-	protected $field_work_save = ['skill_name', 'skill_test', 'skill_test_point', 'experience'];
+	protected $field_work_save = [
+		'skill_name', 'skill_test', 'skill_test_point', 
+		'experience', 'item'
+	];
 
 	public function __construct(UserSkill $user_skill)
 	{
@@ -44,6 +47,7 @@ class UserSkillEloquent extends AbstractDefineMethodRepository implements UserSk
 		$user_skill->skill_test = $dataPrepareSave['skill_test'];
 		$user_skill->skill_test_point = $dataPrepareSave['skill_test_point'];
 		$user_skill->experience = $dataPrepareSave['experience'];
+		$user_skill->item = $dataPrepareSave['item'];
 
 		return $user_skill->save();
 	}

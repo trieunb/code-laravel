@@ -19,7 +19,10 @@ class UserWorkHistoryEloquent extends AbstractDefineMethodRepository implements 
 	 * Fields for update data
 	 * @var $field_work_save
 	 */
-	protected $field_work_save = ['company', 'sub_title', 'start', 'end', 'job_title', 'job_description'];
+	protected $field_work_save = [
+		'company', 'sub_title', 'start', 'end',
+		'job_title', 'job_description', 'item'
+	];
 
 	public function __construct(UserWorkHistory $user_work_history)
 	{
@@ -45,6 +48,7 @@ class UserWorkHistoryEloquent extends AbstractDefineMethodRepository implements 
 		$user_work_history->end = $dataPrepareSave['end'];
 		$user_work_history->job_title = $dataPrepareSave['job_title'];
 		$user_work_history->job_description = $dataPrepareSave['job_description'];
+		$user_work_history->item = $dataPrepareSave['item'];
 
 		return $user_work_history->save();
 	}
