@@ -31,15 +31,15 @@
 	<script src="{{  asset('js/nicEdit.js') }}"></script>
 	<script>
 	function editPhoto() {
-		
+
 	}
 	$(document).ready(function() {
 
 		var isBusy = false;
-		$('img').click(function(e) {
+		/*$('img').click(function(e) {
 			e.preventDefault();
 			$('#file').trigger('click');
-		});
+		});*/
 		$('#save').click(function(e) {
 			
 			e.preventDefault();
@@ -73,10 +73,11 @@
 						}
 						
 						$("#loading").hide();
-					}*/
+					}
 				}).always(function() {
 					isBusy = false;
 				});
+			*/
 			} else {
 				$.ajax({
 					url: url,
