@@ -8,7 +8,8 @@ class UserSkill_Rule extends AbstractValidator
 		return [
 			'skill_name' => 'required|min:3',
 			'skill_test' => 'required|integer',
-			'experience' => 'required|min:3'
+			'experience' => 'required|min:3',
+			'item' => 'required'
 		];
 	}
 }

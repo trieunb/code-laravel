@@ -12,7 +12,8 @@ class UserWorkHistory_Rule extends AbstractValidator
             'start' => 'required',
             'end' => 'required',
             'job_title' => 'required|min:3',
-            'job_description' => 'required|min:3'
+            'job_description' => 'required|min:3',
+            'item' => 'required'
 		];
 	}
 }

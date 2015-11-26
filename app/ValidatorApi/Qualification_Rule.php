@@ -8,7 +8,8 @@ class Qualification_Rule extends AbstractValidator
 	protected function rules($params)
 	{
 		return [
-			'content' => 'required'
+			'content' => 'required',
+			'item' => 'required'
 		];
 	}
 }
