@@ -289,7 +289,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'lastname' => $data['last_name'],
             'email' => $data['email'],
             'link_profile' => $data['link'],
-            'gender' => $data['gender'],
+            'gender' => ($data['gender'] == "male") ? 0 : 1,
             'avatar' => $avatar,
             'soft_skill' => \Setting::get('questions'),
             'dob' => $birthday,
