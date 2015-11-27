@@ -147,7 +147,7 @@ class AuthenticatesController extends Controller
         $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         
         if ( !$user ) {
-            if ( isset($response['email'] ) {
+            if ( isset($response['email'] )) {
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
                 if ( ! $user) {
                     $user = $this->user->createUserFacebook($response, $token);
