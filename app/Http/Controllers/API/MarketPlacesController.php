@@ -9,10 +9,16 @@ use App\Repositories\TemplateMarket\TemplateMarketInterface;
 
 class MarketPlacesController extends Controller
 {
+    /**
+     * TemplateMarketInterface
+     * @var $template_market
+     */
     protected $template_market;
 
     public function __construct(TemplateMarketInterface $template_market)
     {
+        $this->middleware('jwt.auth');
+        
         $this->template_market = $template_market;
     }
 

@@ -28,11 +28,11 @@ class DashBoardsController extends Controller
 
     public function postLogin(Request $request)
     {
-
         $credentials = [
             'email' => $request->input('email'),
             'password' => $request->input('password')
         ];
+        
         $remember = $request->input('remember');
 
         if (Auth::attempt($credentials, $remember)) {

@@ -18,7 +18,8 @@ class Reference extends Model
 
     protected $casts = [
         'id' => 'int',
-        'user_id' => 'int'
+        'user_id' => 'int',
+        'position' => 'int'
     ];
      /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -36,6 +37,7 @@ class Reference extends Model
                 'user_id' => $user_id,
                 'reference' => $value['reference'],
                 'content' => $value['content'],
+                'position' => $value['position'],
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ];

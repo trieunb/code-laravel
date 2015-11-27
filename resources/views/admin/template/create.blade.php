@@ -42,7 +42,7 @@ Template
                 <label for="status">Status</label>
                 <select name="status" id="status" class="form-control" >
                     <option value="">Select</option>
-                    <option value="1">Hidden</option>
+                    <option value="1">Pending</option>
                     <option value="2">Publish</option>
                 </select>
             </div>

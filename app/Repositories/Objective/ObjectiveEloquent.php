@@ -20,7 +20,7 @@ class ObjectiveEloquent extends AbstractDefineMethodRepository implements Object
 	 * Fields for update data
 	 * @var $field_work_save
 	 */
-	protected $field_work_save = ['title', 'content'];
+	protected $field_work_save = ['title', 'content', 'position'];
 
 	public function __construct(Objective $objective)
 	{
@@ -42,6 +42,7 @@ class ObjectiveEloquent extends AbstractDefineMethodRepository implements Object
 
 		$objective->title = $dataPrepareSave['title'];
 		$objective->content = $dataPrepareSave['content'];
+		$objective->position = $dataPrepareSave['position'];
 
 		return $objective->save();
 	}

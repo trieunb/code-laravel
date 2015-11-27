@@ -81,12 +81,12 @@
     </div>
     <div class="container">
       <div class="row wrapper detail">
-        <div class="fw w_bg">
-          <span>Push template here</span>
+        <div id="content" class="fw w_bg">
+        {!! $template->content !!}
         </div>
       </div>
       <div class="fw text-center">
-        <button class="btn-trans fill edit">
+        <button class="btn-trans fill edit" id="edit-template">
           END EDIT MODE
         </button>
       </div>
@@ -95,6 +95,6 @@
   </main>
 
   <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
-
+  <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 </body>
 </html>

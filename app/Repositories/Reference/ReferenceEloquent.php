@@ -19,7 +19,7 @@ class ReferenceEloquent extends AbstractDefineMethodRepository implements Refere
 	 * Fields for update data
 	 * @var $field_work_save
 	 */
-	protected $field_work_save = ['reference', 'content'];
+	protected $field_work_save = ['reference', 'content', 'position'];
 
 	public function __construct(Reference $model)
 	{
@@ -41,7 +41,10 @@ class ReferenceEloquent extends AbstractDefineMethodRepository implements Refere
 
 		$reference->reference = $dataPrepareSave['reference'];
 		$reference->content = $dataPrepareSave['content'];
+		$reference->position = $dataPrepareSave['position'];
 
 		return $reference->save();
 	}
+
+
 }

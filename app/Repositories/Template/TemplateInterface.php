@@ -46,10 +46,10 @@ interface TemplateInterface extends Repository
     /**
      * Create template basic
      * @param  int $user_id 
-     * @param  string $content 
+     * @param  array $data 
      * @return mixed          
      */
-    public function createTemplateBasic($user_id, $section, $content);
+    public function createTemplateBasic($user_id, $data);
 
     /**
      * Delete template
@@ -67,4 +67,21 @@ interface TemplateInterface extends Repository
      */
     public function createTemplateFromMarket(array $data);
 
+    /**
+     * Apply data into infomation section
+     * @param  Template $template 
+     * @param  string $section 
+     * @param  array $data     
+     * @return bool           
+     */
+    public function applyForInfo($template, $section, $data);
+
+    /**
+     * Edit full screen template
+     * @param  int $id      
+     * @param  int $user_id 
+     * @param  mixed $request 
+     * @return bool          
+     */
+    public function editFullScreenTempalte($id, $user_id, $request);
 }

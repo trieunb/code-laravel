@@ -13,8 +13,8 @@ trait SaveFromApiTrait
 	{
 		$ids = [];
 		$dataPrepareForCreate = [];
-
 		foreach ($data as $value) {
+			if ( !array_key_exists('id', $value)) throw new \NotFoundFieldIdException("Not found property Id.");
 			if ($value['id'] != null && $value['id'] != '') {
 				$ids[] = $value['id'];
 			} else {
@@ -22,10 +22,12 @@ trait SaveFromApiTrait
 			}
 		}
 
-		if ( count($ids) > 0) {
-			$idsPrepareDelete = $this->getIdsPrepareDelete($ids, $user_id);
+		$idsPrepareDelete = $this->getIdsPrepareDelete($ids, $user_id);
 
-			$this->deleteOneOrMutilRecord($idsPrepareDelete);
+		$this->deleteOneOrMutilRecord($idsPrepareDelete);
+
+		if ( count($ids) > 0) {
+			
 
 			$dataPrepareForUpdate = $this->getDataPrepareUpdate($data, $ids);
 

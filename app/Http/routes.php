@@ -38,7 +38,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     post('template/edit/{id}', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
     post('template/status/{id}', ['as' => 'admin.status', 'uses' => 'TemplateMarketsController@changeStatus']);
 
-
+    /**
+     * Question Route
+     */
+    get('question', ['as' => 'admin.question.get.index', 'uses' => 'QuestionsController@index']);
 });
 
 
@@ -64,13 +67,15 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticatesController@postLogin']);
     post('auth/forget-password', ['uses' => 'AuthenticatesController@postForgetPassword']);
     post('auth/change-password', ['uses' => 'AuthenticatesController@postChangePassword']);
-    Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticatesController@postLoginWithLinkedin']);
+    Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticatesController@loginWithLinkedin']);
+    Route::any('auth/login-with-facebook', ['as' => 'auth.facebook', 'uses' => 'AuthenticatesController@loginWithFacebook']);
 
     /**
      * User Route
      */
     get('user/profile', 'UsersController@getProfile');
     get('user/status', 'UsersController@getStatus');
+    get('user/removephoto/{id}', 'UsersController@removePhoto');
 
     post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('user/upload', ['uses' => 'UsersController@uploadImage']);
@@ -89,14 +94,16 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/view-template/{id}', 'TemplatesController@renderUserInfoToTemplate');
     get('template/{id}/section', 'TemplatesController@getSections');
     get('template/menu/{id}', ['as' => 'api.template.get.menu', 'uses' => 'TemplatesController@menu']);
+    get('template/apply/{id}/{section}', ['as' => 'api.template.get.profile.section', 'uses' => 'TemplatesController@apply']);
 
-    post('template/preview', 'TemplatesController@updateBasicTemplate');
     post('template/basic', 'TemplatesController@postBasicTemplate');
-    post('template', 'TemplatesController@postTemplates');
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
     post('template/delete/{id}', 'TemplatesController@postDelete');
-    
+    post('template/menu/{id}', ['as'=> 'edit.template','uses' => 'TemplatesController@editFullTemplate']);
+    post('template/{id}/edit/photo', ['as' => 'api.template.post.edit.photo', 'uses' => 'TemplatesController@editPhoto']);
+    post('template/view/{id}', ['as'=> 'edit.template','uses' => 'TemplatesController@editFullTemplate']);
+
     /**
      * Market Route
      */
