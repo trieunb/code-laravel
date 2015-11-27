@@ -98,4 +98,9 @@ class QuestionsController extends Controller
     {
         //
     }
+
+    public function answer($id)
+    {
+        dd($this->question->answerForUser($id));
+    }
 }

@@ -90,8 +90,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		 	])->findOrFail($user_id);
 
 		$data->avatar = [
-			'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
-			'thumb' => $data['avatar']['thumb'] == null ?: asset($data['avatar']['thumb'])
+			'origin' => $data['avatar']['origin'] == null ? null: asset($data['avatar']['origin']),
+			'thumb' => $data['avatar']['thumb'] == null ? null: asset($data['avatar']['thumb'])
 		];
 		$status = null;
 		foreach (\Setting::get('user_status') as $k => $v) {
@@ -339,7 +339,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->gender = $data['gender'];
         if (isset($data['picture']))
             $user->avatar = $avatar;
-        $user->location = !$id ? null : !isset($data['location']) || $data['location'] == null ? null: $data['location'];
+        $user->location = !$id ? null : !isset($data['location']) ? null: $data['location'];
         \Log::info('teeees', $data);
         \Log::info('tesssssst', [$user->location]);
         $user->soft_skill = \Setting::get('questions');

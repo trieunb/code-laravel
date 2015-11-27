@@ -84,9 +84,6 @@
                                 </ul>
                                 <!-- /.nav-second-level -->
                             </li>
-                            <li>
-                                <a href="{{ route('admin.answer.get.index') }}"><i class="fa fa-dashboard fa-fw"></i> Answer Question Of User</a>
-                            </li>
                         </ul>
                     </div>
                     <!-- /.sidebar-collapse -->

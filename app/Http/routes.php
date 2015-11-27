@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Question;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -43,6 +46,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      */
     get('question', ['as' => 'admin.question.get.index', 'uses' => 'QuestionsController@index']);
     get('question/edit/{id}', ['as' => 'admin.question.get.edit', 'uses' => 'QuestionsController@edit']);
+    get('question/answer/{id}', ['as' => 'admin.question.get.answer', 'uses' => 'QuestionsController@answer']);
     
 });
 
@@ -133,4 +137,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('question/delete/{id}', ['as' => 'api.question.get.deleteAdmin', 'uses' => 'QuestionsController@destroy']);
 
     post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
+});
+
+get('/test', function() {
+    dd(User::find(1)->questions, User::whereHas('questions', function($q) {
+        $q->whereQuestionId(11);
+    })->get());
 });

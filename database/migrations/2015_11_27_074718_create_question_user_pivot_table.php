@@ -17,7 +17,7 @@ class CreateQuestionUserPivotTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->primary(['question_id', 'user_id']);
             $table->text('result');
-            $table->integer('point');
+            $table->integer('point')->nullable()->default(0);
         });
     }
 

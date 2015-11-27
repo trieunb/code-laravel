@@ -14,9 +14,12 @@ class Question extends Model
     protected $table = 'questions';
 
     
-
+    /**
+     * Define a many-to-many relationship.
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function users()
     {
-    	return $this->belongsToMany(User::class);
+    	return $this->belongsToMany(User::class, 'user_questions', 'user_id', 'question_id');
     }
 }
