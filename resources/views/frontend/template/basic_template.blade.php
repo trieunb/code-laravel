@@ -81,7 +81,7 @@
             style="color: red;
             font-weight:600;
             padding:15px;">
-            <span>Educations</span>
+            <span>Education</span>
         </div>
         <div class="box"
             style="background: #f3f3f3;

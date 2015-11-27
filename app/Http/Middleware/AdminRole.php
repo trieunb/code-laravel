@@ -31,13 +31,13 @@ class AdminRole
      * @param \Closure $next
      * @param int|string $role
      * @return mixed
-     * @throws \Bican\Roles\Exceptions\RoleDeniedException
      */
     public function handle($request, Closure $next, $role)
     {
         if ($this->auth->check() && $this->auth->user()->is($role)) {
             return $next($request);
         }
+        
         return redirect()->guest('admin/login');
     }
 }
