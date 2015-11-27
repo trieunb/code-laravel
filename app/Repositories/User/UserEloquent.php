@@ -134,10 +134,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function createUserFromOAuth($data, $token)
 	{
-        $avatar = [
+        $avatar = isset($data['pictureUrls']) ? [
             'origin' => $data['pictureUrls']['values'][0],
-            'thumb' => $data['pictureUrls']['values'][0]
-        ];
+            'thumb' => $data['pictureUrls']['values'][0]]
+        : null;
 		return $this->model->create([
             'linkedin_id' => $data['id'],
             'firstname' => $data['firstName'],
@@ -155,10 +155,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function updateUserFromOauth($data, $token, $id)
     {
         $user = $this->getById($id);
-        $avatar = [
+
+        $avatar = isset($data['pictureUrls']) ? [
             'origin' => $data['pictureUrls']['values'][0],
-            'thumb' => $data['pictureUrls']['values'][0]
-        ];
+            'thumb' => $data['pictureUrls']['values'][0]]
+        : null;
 
         if (isset($data['id']))
             $user->linkedin_id = $data['id'];
@@ -291,7 +292,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
         $birthday = isset($data['birthday'])
             ? Carbon::parse($data['birthday'])->format('Y-m-d')
-            : false;
+            : null;
         $gender = '';
         if ($data['gender'] == "male")
             $gender = 0;

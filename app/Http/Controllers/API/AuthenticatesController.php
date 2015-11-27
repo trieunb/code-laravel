@@ -90,7 +90,7 @@ class AuthenticatesController extends Controller
     public function postRegister(Request $request, RegisterForm_Rule $rules)
     {
         $token = JWTAuth::fromUser($request);
-       
+        
         try {
             $rules->validate($request->all());
 
@@ -117,7 +117,7 @@ class AuthenticatesController extends Controller
     public function loginWithLinkedin(Request $request)
     {
         $token = $request->get('token');
-        $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-url,picture-urls::(original),location,public-profile-url,email-address)?oauth2_access_token=".$token."&format=json";
+        $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-urls::(original),location,public-profile-url,email-address)?oauth2_access_token=".$token."&format=json";
         $response = json_decode(file_get_contents($url), true);
         $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
         $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
@@ -142,10 +142,8 @@ class AuthenticatesController extends Controller
     public function loginWithFacebook(Request $request)
     {
         $token = $request->get('token');
-        $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
+        $url = "https://graph.facebook.com/me?=picture.width(720).height(720),id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
         $response = json_decode(file_get_contents($url), true);
-
-        \Log::info('test Login facebook', $response);
 
         $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         
