@@ -13,7 +13,6 @@ trait SaveFromApiTrait
 	{
 		$ids = [];
 		$dataPrepareForCreate = [];
-		\Log::info('data', $data);
 		foreach ($data as $value) {
 			if ( !array_key_exists('id', $value)) throw new \NotFoundFieldIdException("Not found property Id.");
 			if ($value['id'] != null && $value['id'] != '') {

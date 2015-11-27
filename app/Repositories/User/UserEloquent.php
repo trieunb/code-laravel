@@ -119,7 +119,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'email' => $request->input('email'),
             'password' => \Hash::make($request->input('password')),
             'soft_skill' => \Setting::get('questions'),
-            'location' => ['longitude' => null, 'last' => null],
+            'location' => null,
             'token' => $token,
         ];
 
@@ -147,7 +147,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'country' => $data['location']['name'],
             'link_profile' => $data['publicProfileUrl'],
             'soft_skill' => \Setting::get('questions'),
-            'location' => ['longitude' => null, 'last' => null],
+            'location' => null,
             'token' => $token
         ]);
 	}
@@ -310,7 +310,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'gender' => $gender,
             'avatar' => $avatar,
             'soft_skill' => \Setting::get('questions'),
-            'location' => ['longitude' => null, 'last' => null],
+            'location' => null,
             'dob' => $birthday,
             'token' => $token
         ]);
@@ -339,7 +339,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->gender = $data['gender'];
         if (isset($data['picture']))
             $user->avatar = $avatar;
-        $user->location = !$id ? ['longitude' => null, 'last' => null] : !isset($data['location'])?: $data['location'];
+        $user->location = !$id ? null : !isset($data['location'])?: $data['location'];
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');

@@ -38,7 +38,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     post('template/edit/{id}', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
     post('template/status/{id}', ['as' => 'admin.status', 'uses' => 'TemplateMarketsController@changeStatus']);
 
-
+    /**
+     * Question Route
+     */
+    get('question', ['as' => 'admin.question.get.index', 'uses' => 'QuestionsController@index']);
 });
 
 
