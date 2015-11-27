@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Laracasts\Presenter\PresentableTrait;
 use App\Models\Category;
 use App\Models\Objective;
 use App\Models\Qualification;
+use App\Models\Question;
 use App\Models\Reference;
 use App\Models\Role;
 use App\Models\Template;
@@ -22,6 +22,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Laracasts\Presenter\PresentableTrait;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -178,12 +179,19 @@ class User extends Model implements AuthenticatableContract,
     }
 
      /**
-     * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function qualifications()
     {
         return $this->hasMany(Qualification::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function questions()
+    {
+        return $this->belongsToMany(Question::class,'user_questions', 'user_id', 'question_id')->withPivot('point', 'result');
     }
 
     /**
