@@ -221,9 +221,13 @@ class TemplatesController extends Controller
     {
         $template = $this->template->forUser($id, \Auth::user()->id);
         $token = $request->get('token');
-        $section = createSectionData($template);
+        try {
+            $section = createSectionData($template);
 
-        return view('api.template.section', compact('section', 'token', 'template'));
+            return view('api.template.section', compact('section', 'token', 'template'));   
+        } catch (SectionTemplateException $e) {
+            return response()->json(['status' => 400, 'message' => $e->getMessage()]);
+        }
     }
 
     public function editFullTemplate(Request $request, $id)
