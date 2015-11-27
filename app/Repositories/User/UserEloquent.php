@@ -75,17 +75,17 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	{
 		$data = $this->model
 			->with(['user_educations' => function($q) {
-                return $q->orderBy('position');
+                $q->orderBy('position');
             }, 'user_work_histories' => function($q) {
-                return $q->orderBy('position');
+                $q->orderBy('position');
             }, 'user_skills' => function($q) {
-                return $q->orderBy('position');
+                $q->orderBy('position');
             }, 'references' => function($q) {
-                return $q->orderBy('position');
+                $q->orderBy('position');
             }, 'objectives' => function($q) {
-                return $q->orderBy('position');
+                $q->orderBy('position');
             }, 'qualifications' => function($q) {
-                return $q->orderBy('position');
+                $q->orderBy('position');
             }
 		 	])->findOrFail($user_id);
 
@@ -205,9 +205,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 * @return mixed
 	 */
 	public function getTemplateFromUser($id) {
-		return $this->model
-            ->with(['templates'])
-            ->findOrFail($id);
+		return $this->model->with(['templates'])->findOrFail($id);
 	}
 
     /**
