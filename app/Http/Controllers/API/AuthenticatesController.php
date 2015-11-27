@@ -144,16 +144,20 @@ class AuthenticatesController extends Controller
         $token = $request->get('token');
         $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
         $response = json_decode(file_get_contents($url), true);
-        $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
-        $facebook = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
-
-        if ( ! $user) {
-            $user = $facebook ? $facebook : $this->user->createUserFacebook($response, $token);
-        } else if ( !$facebook ) {
-            $this->user->updateUserFacebook($response, $token, $user->id);
-            
-        }
+        $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         
+        if ( !$user ) {
+            if ( isset($response['email'] ) {
+                $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
+                if ( ! $user) {
+                    $user = $this->user->createUserFacebook($response, $token);
+                } else {
+                    $this->user->updateUserFacebook($response, $token, $user->id);   
+                }
+            } else {
+                $user = $this->user->createUserFacebook($response, $token);
+            }
+        }
         Auth::login($user);
         $token = \JWTAuth::fromUser($user);
         $this->user->update(['token' => $token], $user->id);

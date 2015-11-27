@@ -2,10 +2,13 @@
     <div class="row">
         <div class='image-avatar' style="position: relative; overflow: hidden;max-height:200px;">
             <div class="photo">
-            <img style="width:100%; min-height:200px" 
-            src="{{ ($user_info->avatar) 
-            ? asset($user_info->avatar['origin']) 
-            : asset('images/avatar.jpg') }}">
+            @if ( !is_null($user_info->avatar) )
+                <img style="width:100%; min-height:200px" 
+                src="{{ asset($user_info->avatar['origin']) }}">
+            @else
+                <img style="width:100%; min-height:200px" 
+                src="{{ asset('images/avatar.jpg') }}">
+            @endif
             </div>
             <div class="text-info" 
             style="position: absolute;
@@ -132,7 +135,7 @@
             style="color: red;
             font-weight:600;
             padding:15px;">
-            <span>Work Exprience</span>
+            <span>Experience</span>
         </div>
         <div class="box"
             style="background: #f3f3f3;
