@@ -304,7 +304,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'facebook_id' => $data['id'],
             'firstname' => $data['first_name'],
             'lastname' => $data['last_name'],
-            'email' => $data['email'],
+            'email' => isset($data['email']) ? $data['email'] : $data['id']."@facebook.com",
             'link_profile' => $data['link'],
             'gender' => $gender,
             'avatar' => $avatar,
