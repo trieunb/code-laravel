@@ -89,10 +89,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }
 		 	])->findOrFail($user_id);
 
-		$data->avatar = [
-			'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
-			'thumb' => $data['avatar']['thumb'] == null ?: asset($data['avatar']['thumb'])
-		];
+		// $data->avatar = [
+		// 	'origin' => $data['avatar']['origin'] == null ?: asset($data['avatar']['origin']),
+		// 	'thumb' => $data['avatar']['thumb'] == null ?: asset($data['avatar']['thumb'])
+		// ];
 		$status = null;
 		foreach (\Setting::get('user_status') as $k => $v) {
 			if ($v['id'] == $data->status)
@@ -134,10 +134,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function createUserFromOAuth($data, $token)
 	{
-        $avatar = [
+        $avatar = isset($data['pictureUrls']) ? [
             'origin' => $data['pictureUrls']['values'][0],
-            'thumb' => $data['pictureUrls']['values'][0]
-        ];
+            'thumb' => $data['pictureUrls']['values'][0]]
+        : null;
 		return $this->model->create([
             'linkedin_id' => $data['id'],
             'firstname' => $data['firstName'],
@@ -155,10 +155,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function updateUserFromOauth($data, $token, $id)
     {
         $user = $this->getById($id);
-        $avatar = [
+
+        $avatar = isset($data['pictureUrls']) ? [
             'origin' => $data['pictureUrls']['values'][0],
-            'thumb' => $data['pictureUrls']['values'][0]
-        ];
+            'thumb' => $data['pictureUrls']['values'][0]]
+        : null;
 
         if (isset($data['id']))
             $user->linkedin_id = $data['id'];
@@ -284,10 +285,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function createUserFacebook($data, $token)
     {
-        $avatar = [
+        $avatar = isset($data['picture']) ? [
             'origin' => $data['picture']['data']['url'],
             'thumb' => $data['picture']['data']['url']
-        ];
+        ] : null;
 
         $birthday = isset($data['birthday'])
             ? Carbon::parse($data['birthday'])->format('Y-m-d')
