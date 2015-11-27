@@ -18,15 +18,34 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
 		$this->model = $model;
 	}
 
-	public function index()
+	/**
+	 * Get data with DataTable
+	 * @return mixed 
+	 */
+	public function dataTable()
 	{
-		return Datatables::of($this->model->select('*'))
+		return \Datatables::of($this->model->select('*'))
             ->addColumn('action', function ($question) {
-                return '<a href="'.route('admin.question.get.edit', $question->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
-            })
-            ->addColumn('action', function ($question) {
-                return '<a href="'.route('admin.question.get.delete', $question->id).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+            	return '<div class="btn-group" role="group" aria-label="...">
+                  <a class="btn btn-primary edit" href="' .route('admin.question.get.edit', $question->id) . '" data-toggle="modal" data-target="#modal-admin"><i class="glyphicon glyphicon-edit"></i></a>
+                  <a id="delete-data" class="btn btn-danger" data-src="' . route('api.question.get.deleteAdmin', $question->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
+                </div>';
             })
             ->make(true);
+	}
+
+	/**
+	 * Edit question from Admin Area
+	 * @param  mixed $request 
+	 * @return bool          
+	 */
+	public function saveFromAdminArea($request)
+	{
+		$question = $request->has('id') && $request->get('id') != ''
+			? $this->getById($request->get('id'))
+			: new Question;
+		$question->content = $request->get('content');
+
+		return $question->save();
 	}
 }

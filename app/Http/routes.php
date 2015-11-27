@@ -43,7 +43,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      */
     get('question', ['as' => 'admin.question.get.index', 'uses' => 'QuestionsController@index']);
     get('question/edit/{id}', ['as' => 'admin.question.get.edit', 'uses' => 'QuestionsController@edit']);
-    get('question/delete/{id}', ['as' => 'admin.question.get.delete', 'uses' => 'QuestionsController@destroy']);
+    
 });
 
 
@@ -126,4 +126,11 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     
     get('section/names', ['as' => 'api.section.get.names', 'uses' => 'SectionsController@getNames']);
     
+    /**
+     * Question Route
+     */
+    get('question/datatable', ['as' => 'api.question.get.dataTable', 'uses' => 'QuestionsController@showDataTableForAdmin']);
+    get('question/delete/{id}', ['as' => 'api.question.get.deleteAdmin', 'uses' => 'QuestionsController@destroy']);
+
+    post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
 });

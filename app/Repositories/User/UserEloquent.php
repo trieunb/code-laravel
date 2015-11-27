@@ -317,6 +317,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function updateUserFacebook($data, $token, $id)
     {
+
         $user = $this->getById($id);
 
         $avatar = [
@@ -338,7 +339,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->gender = $data['gender'];
         if (isset($data['picture']))
             $user->avatar = $avatar;
-        $user->location = !$id ? null : !isset($data['location'])?: $data['location'];
+        $user->location = !$id ? null : !isset($data['location']) || $data['location'] == null ? null: $data['location'];
+        \Log::info('teeees', $data);
+        \Log::info('tesssssst', [$user->location]);
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use App\Repositories\Question\QuestionEloquent;
 use App\Repositories\Question\QuestionInterface;
 use Illuminate\Http\Request;
 
@@ -28,7 +27,7 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        return view('admin.question.index');
+        
     }
 
     /**
@@ -60,7 +59,7 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -71,9 +70,7 @@ class QuestionsController extends Controller
      */
     public function edit($id)
     {
-        $question = $this->question->getById($id);
-        
-        return view('admin.question.edit', compact('question'));
+        //
     }
 
     /**
@@ -96,6 +93,20 @@ class QuestionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->question->delete($id)
+            ? response()->json(['status' => true])
+            : response()->json(['status' => false]);
+    }
+
+    public function showDataTableForAdmin()
+    {
+        return $this->question->dataTable();
+    }
+
+    public function postEditAdmin(Request $request)
+    {
+        return $this->question->saveFromAdminArea($request)
+            ? response()->json(['status' => true])
+            : response()->json(['status' => false]);
     }
 }
