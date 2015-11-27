@@ -25,10 +25,12 @@ trait SaveFromApiTrait
 			}
 		}
 
-		if ( count($ids) > 0) {
-			$idsPrepareDelete = $this->getIdsPrepareDelete($ids, $user_id);
+		$idsPrepareDelete = $this->getIdsPrepareDelete($ids, $user_id);
 
-			$this->deleteOneOrMutilRecord($idsPrepareDelete);
+		$this->deleteOneOrMutilRecord($idsPrepareDelete);
+
+		if ( count($ids) > 0) {
+			
 
 			$dataPrepareForUpdate = $this->getDataPrepareUpdate($data, $ids);
 
