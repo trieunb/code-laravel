@@ -1,8 +1,6 @@
 <?php
 namespace App\Repositories;
 
-use App\Exceptions\NotFoundFieldIdException;
-
 trait SaveFromApiTrait
 {
 	/**
@@ -15,9 +13,9 @@ trait SaveFromApiTrait
 	{
 		$ids = [];
 		$dataPrepareForCreate = [];
-
+		\Log::info('data', $data);
 		foreach ($data as $value) {
-			if ( !isset($value['id'])) throw new NotFoundFieldIdException("Not found property Id.");
+			if ( !array_key_exists('id', $value)) throw new \NotFoundFieldIdException("Not found property Id.");
 			if ($value['id'] != null && $value['id'] != '') {
 				$ids[] = $value['id'];
 			} else {
