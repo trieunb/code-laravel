@@ -5,18 +5,30 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\Question\QuestionEloquent;
+use App\Repositories\Question\QuestionInterface;
 use Illuminate\Http\Request;
 
 class QuestionsController extends Controller
 {
     /**
+     * QuestionInterface
+     * @var $question
+     */
+    private $question;
+
+    public function __construct(QuestionInterface $question)
+    {
+        $this->question = $question;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(QuestionEloquent $question)
+    public function index()
     {
-       dd($question->index());
+       dd($this->question->getAll()->pluck());
     }
 
     /**

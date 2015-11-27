@@ -42,6 +42,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      * Question Route
      */
     get('question', ['as' => 'admin.question.get.index', 'uses' => 'QuestionsController@index']);
+    get('question/edit/{id}', ['as' => 'admin.question.get.edit', 'uses' => 'QuestionsController@edit']);
+    get('question/delete/{id}', ['as' => 'admin.question.get.delete', 'uses' => 'QuestionsController@destroy']);
 });
 
 

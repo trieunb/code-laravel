@@ -162,6 +162,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Yangqi\Htmldom\HtmldomServiceProvider::class,
         Thetispro\Setting\SettingServiceProvider::class,
+        yajra\Datatables\DatatablesServiceProvider::class,
     ],
 
     /*
@@ -219,6 +220,7 @@ return [
         'PDF'       => Barryvdh\DomPDF\Facade::class,
         'Htmldom'   => Yangqi\Htmldom\Htmldom::class,
         'Setting'   => Thetispro\Setting\Facades\Setting::class,
+        'Datatables'=> yajra\Datatables\Datatables::class,
     ],
 
 ];
