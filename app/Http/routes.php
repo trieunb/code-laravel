@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Question;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -42,6 +45,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      * Question Route
      */
     get('question', ['as' => 'admin.question.get.index', 'uses' => 'QuestionsController@index']);
+    get('question/edit/{id}', ['as' => 'admin.question.get.edit', 'uses' => 'QuestionsController@edit']);
+    get('question/answer/{id}', ['as' => 'admin.question.get.answer', 'uses' => 'QuestionsController@answer']);
+    
 });
 
 
@@ -124,4 +130,23 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     
     get('section/names', ['as' => 'api.section.get.names', 'uses' => 'SectionsController@getNames']);
     
+    /**
+     * Question Route
+     */
+    get('question/datatable', ['as' => 'api.question.get.dataTable', 'uses' => 'QuestionsController@showDataTableForAdmin']);
+    get('question/delete/{id}', ['as' => 'api.question.get.deleteAdmin', 'uses' => 'QuestionsController@destroy']);
+
+    post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
+});
+
+get('/test', function() {
+    return User::whereHas('questions', function($q) {
+        $q->whereQuestionId(11);
+    })->get();
+    dd(User::with(['questions', function($q) {
+  
+    }])->get());
+    dd(User::find(1)->questions, User::whereHas('questions', function($q) {
+        $q->whereQuestionId(11);
+    })->get());
 });

@@ -98,3 +98,9 @@ $factory->define(App\Models\Reference::class, function(Faker\Generator $faker) {
 		'content' => $faker->text
 	];
 });
+
+$factory->define(App\Models\Question::class, function(Faker\Generator $faker) {
+	return [
+		'content' => $faker->name
+	];
+});

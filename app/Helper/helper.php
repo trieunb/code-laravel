@@ -173,6 +173,9 @@ if (!function_exists('createSectionData')) {
     function createSectionData($template) {
         $section = ['template_id' => $template->id];
 
+        if ( ! is_array($template->section)) 
+            throw new \SectionTemplateException('Not found section of template');
+
         foreach ($template->section as $k => $v) {
 
             switch ($k) {

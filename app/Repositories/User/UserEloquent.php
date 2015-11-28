@@ -318,6 +318,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function updateUserFacebook($data, $token, $id)
     {
+
         $user = $this->getById($id);
 
         $avatar = [

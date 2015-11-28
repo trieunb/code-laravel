@@ -2,25 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use App\Repositories\Question\QuestionEloquent;
-use App\Repositories\Question\QuestionInterface;
 use Illuminate\Http\Request;
 
-class QuestionsController extends Controller
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+class UsersController extends Controller
 {
-    /**
-     * QuestionInterface
-     * @var $question
-     */
-    private $question;
-
-    public function __construct(QuestionInterface $question)
-    {
-        $this->question = $question;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +16,7 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        return view('admin.question.index');
+        //
     }
 
     /**
@@ -60,7 +48,7 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -71,9 +59,7 @@ class QuestionsController extends Controller
      */
     public function edit($id)
     {
-        $question = $this->question->getById($id);
-        
-        return view('admin.question.edit', compact('question'));
+        //
     }
 
     /**
@@ -97,10 +83,5 @@ class QuestionsController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function answer($id)
-    {
-        dd($this->question->answerForUser($id));
     }
 }
