@@ -134,10 +134,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function createUserFromOAuth($data, $token)
 	{
-        $avatar = [
+        $avatar = isset($data['pictureUrls']) ? [
             'origin' => $data['pictureUrls']['values'][0],
-            'thumb' => $data['pictureUrls']['values'][0]
-        ];
+            'thumb' => $data['pictureUrls']['values'][0]]
+        : null;
 		return $this->model->create([
             'linkedin_id' => $data['id'],
             'firstname' => $data['firstName'],
@@ -155,10 +155,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function updateUserFromOauth($data, $token, $id)
     {
         $user = $this->getById($id);
-        $avatar = [
+
+        $avatar = isset($data['pictureUrls']) ? [
             'origin' => $data['pictureUrls']['values'][0],
-            'thumb' => $data['pictureUrls']['values'][0]
-        ];
+            'thumb' => $data['pictureUrls']['values'][0]]
+        : null;
 
         if (isset($data['id']))
             $user->linkedin_id = $data['id'];
@@ -284,10 +285,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function createUserFacebook($data, $token)
     {
-        $avatar = [
+        $avatar = isset($data['picture']) ? [
             'origin' => $data['picture']['data']['url'],
             'thumb' => $data['picture']['data']['url']
-        ];
+        ] : null;
 
         $birthday = isset($data['birthday'])
             ? Carbon::parse($data['birthday'])->format('Y-m-d')
@@ -339,9 +340,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->gender = $data['gender'];
         if (isset($data['picture']))
             $user->avatar = $avatar;
-        $user->location = !$id ? null : !isset($data['location']) ? null: $data['location'];
-        \Log::info('teeees', $data);
-        \Log::info('tesssssst', [$user->location]);
+        $user->location = !$id ? null : !isset($data['location'])? null: $data['location'];
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
