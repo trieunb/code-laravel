@@ -354,15 +354,30 @@ class UserEloquent extends AbstractRepository implements UserInterface
      */
     public function dataTable()
     {
-        return \Datatables::of($this->model->select(['id', 'firstname', 'lastname', 'address', 'email']))
+        return \Datatables::of($this->model->select([
+            'id', 'firstname', 'lastname', 'address', 'email',
+            'created_at', 'updated_at'
+            ]))
             ->addColumn('action', function($user) {
                 return '<div class="btn-group" role="group" aria-label="...">
-                    <a class="btn btn-primary" href="'.route('api.admin.user.get.answer', $user->id).'">Answer Of User</a>
+                    <a class="btn btn-primary" href="'.route('admin.user.get.answer', $user->id).'">Answer Of User</a>
                 </div>';
             })
             ->editColumn('firstname', function($user) {
                 return $user->firstname . ' ' . $user->lastname;
             })
-            ->removeColumn('lastname');
+            ->editColumn('created_at', function($user) {
+                return $user->created_at->format('Y-m-d');
+            })
+            ->editColumn('updated_at', function($user) {
+                return $user->updated_at->format('Y-m-d');
+            })
+            ->removeColumn('lastname')
+            ->make(true);
+    }
+
+    public function answerForUser($id)
+    {
+        return $this->getById($id)->questions;
     }
 }

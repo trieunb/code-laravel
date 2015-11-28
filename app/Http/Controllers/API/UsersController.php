@@ -91,7 +91,7 @@ class UsersController extends Controller
 		TemplateMarketInterface $template_market,
 		QualificationInterface $qualification
 	) {
-		$this->middleware('jwt.auth');
+		$this->middleware('jwt.auth', ['except' => 'dataTable']);
 
 		$this->user = $user;
 		$this->user_education = $user_education;
@@ -102,6 +102,11 @@ class UsersController extends Controller
 		$this->reference = $reference;
 		$this->template_market = $template_market;
 		$this->qualification = $qualification;
+	}
+
+	public function dataTable()
+	{
+		return $this->user->dataTable();
 	}
 
 	public function getProfile(Request $request)

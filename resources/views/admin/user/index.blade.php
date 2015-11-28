@@ -4,8 +4,12 @@
 	Manage User
 @stop
 
+@section('page-header')
+	Manage User
+@stop
+
 @section('content')
-	<table class="table table-striped table-bordered table-hover" id="questions-table">
+	<table class="table table-striped table-bordered table-hover" id="users-table">
 		<thead>
 			<th>Id</th>
 			<th>Fullname</th>
@@ -19,5 +23,21 @@
 @stop
 
 @section('script')
-	
+	<script>
+		$('#users-table').DataTable({
+		        processing: true,
+		        serverSide: true,
+		        responsive: true,
+		        ajax: '{{ route("api.admin.user.get.dataTable") }}',
+		        columns: [
+		            {data: 'id', name: 'id'},
+		            {data: 'firstname', name: 'firstname'},
+		            {data: 'address', name: 'address'},
+		            {data: 'email', name: 'email'},
+		            {data: 'created_at', name: 'created_at'},
+		            {data: 'updated_at', name: 'updated_at'},
+		            {data: 'action', name: 'action', orderable: false, searchable: false}
+		        ]
+		    });
+	</script>
 @stop

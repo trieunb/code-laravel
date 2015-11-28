@@ -61,6 +61,9 @@
                                 <a href="{{URL::to('/admin')}}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                             </li>
                             <li>
+                                <a href="{{ route('admin.user.get.index') }}"><i class="fa fa-dashboard fa-fw"></i> User</a>
+                            </li>
+                            <li>
                                 <a href="#"><i class="fa fa-file-text fa-fw"></i> Market Place<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>

@@ -26,7 +26,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
     
-
+    /**
+     * User Route
+     */
+    get('user', ['as' => 'admin.user.get.index', 'uses' => 'UsersController@index']);
+    get('user/answer/{id}', ['as' => 'admin.user.get.answer', 'uses' => 'UsersController@answer']);
     /**
      * Template Route
      */
@@ -81,10 +85,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * User Route
      */
+    get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
     get('user/profile', 'UsersController@getProfile');
     get('user/status', 'UsersController@getStatus');
     get('user/removephoto/{id}', 'UsersController@removePhoto');
-    get('user/answer/{id}', ['as' => 'api.admin.user.get.answer', 'uses' => 'UsersController@answer']);
 
     post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('user/upload', ['uses' => 'UsersController@uploadImage']);
