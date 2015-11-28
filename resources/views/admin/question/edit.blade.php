@@ -25,6 +25,9 @@
      </form>
 </div>
 
+<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('js/additional-methods.min.js') }}"></script>
+
 <script>
 var isBusy = false;
 $('#form-update').validate({

@@ -57,7 +57,7 @@ Manage Question
 		    });
 
 		    var isBusy = false;
-			$(document).on('click', '#delete-data', function(e) {
+			$(document).on('click', '.delete-data', function(e) {
 				e.preventDefault();
 				
 				if (isBusy) return;
@@ -66,7 +66,7 @@ Manage Question
 				isBusy = true;
 
 				$.ajax({
-					url: $('#delete-data').data('src'),
+					url: $(this).data('src'),
 					type: 'GET',
 					success: function(result) {
 						if (result.status == true) {
@@ -74,6 +74,8 @@ Manage Question
 							questionDataTable.ajax.reload();
 						}
 					}
+				}).always(function() {
+					isBusy = false;
 				});
 			});
 		});
