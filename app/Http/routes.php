@@ -45,9 +45,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      * Question Route
      */
     get('question', ['as' => 'admin.question.get.index', 'uses' => 'QuestionsController@index']);
+    get('question/create', ['as' => 'admin.question.get.create', 'uses' => 'QuestionsController@create']);
     get('question/edit/{id}', ['as' => 'admin.question.get.edit', 'uses' => 'QuestionsController@edit']);
     get('question/answer/{id}', ['as' => 'admin.question.get.answer', 'uses' => 'QuestionsController@answer']);
     
+    post('question/create', ['as' => 'admin.question.post.create', 'uses' => 'QuestionsController@store']);
 });
 
 

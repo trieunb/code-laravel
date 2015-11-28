@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\CreateQuestionFormRequest;
 use App\Repositories\Question\QuestionEloquent;
 use App\Repositories\Question\QuestionInterface;
 use Illuminate\Http\Request;
@@ -38,18 +39,20 @@ class QuestionsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.question.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param   $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateQuestionFormRequest $request)
     {
-        //
+        return $this->question->saveFromAdminArea($request)
+            ? redirect()->route('admin.question.get.index')->with('message', 'Create Question successfully!')
+            : redirect()->back()->with('message', 'Error when create question!');
     }
 
     /**

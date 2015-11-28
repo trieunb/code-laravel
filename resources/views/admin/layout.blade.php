@@ -76,7 +76,7 @@
                                 <a href="#"><i class="fa fa-file-text fa-fw"></i> Question<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="">Create Question</a>
+                                        <a href="{{ route('admin.question.get.create') }}">Create Question</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.question.get.index') }}">View</a>
