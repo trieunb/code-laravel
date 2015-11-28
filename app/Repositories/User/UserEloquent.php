@@ -347,4 +347,22 @@ class UserEloquent extends AbstractRepository implements UserInterface
         
         return $user->save();
     }
+
+    /**
+     * Get datatable of user
+     * @return mixed 
+     */
+    public function dataTable()
+    {
+        return \Datatables::of($this->model->select(['id', 'firstname', 'lastname', 'address', 'email']))
+            ->addColumn('action', function($user) {
+                return '<div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-primary" href="'.route('api.admin.user.get.answer', $user->id).'">Answer Of User</a>
+                </div>';
+            })
+            ->editColumn('firstname', function($user) {
+                return $user->firstname . ' ' . $user->lastname;
+            })
+            ->removeColumn('lastname');
+    }
 }

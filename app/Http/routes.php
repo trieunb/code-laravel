@@ -82,6 +82,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('user/profile', 'UsersController@getProfile');
     get('user/status', 'UsersController@getStatus');
     get('user/removephoto/{id}', 'UsersController@removePhoto');
+    get('user/answer/{id}', ['as' => 'api.admin.user.get.answer', 'uses' => 'UsersController@answer']);
 
     post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('user/upload', ['uses' => 'UsersController@uploadImage']);

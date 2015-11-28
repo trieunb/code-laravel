@@ -86,4 +86,10 @@ interface UserInterface extends Repository
 	 * @return mixed        
 	 */
 	public function updateUserFacebook($data, $token, $id);
+
+	/**
+	 * Get datatable of user
+	 * @return mixed 
+	 */
+	public function dataTable();
 }

@@ -25,8 +25,6 @@
 @stop
 
 @section('script')
-	<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
-	<script src="{{ asset('js/additional-methods.min.js') }}"></script>
 	<script>
 		$(document).ready(function() {
 			$('body').on('hidden.bs.modal', '.modal', function() {
