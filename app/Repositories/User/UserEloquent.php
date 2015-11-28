@@ -340,7 +340,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->gender = $data['gender'];
         if (isset($data['picture']))
             $user->avatar = $avatar;
-        $user->location = !$id ? null : !isset($data['location'])? null: $data['location'];
+        $user->location = !$id ? null : !isset($data['location']) ? null: $data['location'];
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
