@@ -140,6 +140,12 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 });
 
 get('/test', function() {
+    return User::whereHas('questions', function($q) {
+        $q->whereQuestionId(11);
+    })->get();
+    dd(User::with(['questions', function($q) {
+  
+    }])->get());
     dd(User::find(1)->questions, User::whereHas('questions', function($q) {
         $q->whereQuestionId(11);
     })->get());
