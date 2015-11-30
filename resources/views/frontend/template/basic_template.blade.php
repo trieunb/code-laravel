@@ -3,7 +3,7 @@
         <div class='image-avatar'>
             <div class="photo" style="position: relative;">
             @if ( is_null($user_info->avatar['origin']))
-                <img style="width:100%; min-height:768px"
+                <img style="width:100%;"
                 src="{!! asset('images/No-Photo3.gif') !!}">
             @else
                 <img style="width:100%;" 
