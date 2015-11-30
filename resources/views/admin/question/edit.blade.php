@@ -17,6 +17,15 @@
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
+                  <div class="checkbox">
+                    <label>
+                      <input id="publish" type="checkbox" name="publish" @if ($question->publish == 1) checked @endif> Publish
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
                 <button typ e="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary update">Save changes</button>
             </div>
@@ -57,15 +66,17 @@ $('#form-update').validate({
 
         if (isBusy) return;
 
+        var data = {
+                token: $('input[name=_token]').val(),
+                id: $('input[name=id]').val(),
+                content: $('#content').val()
+            };
+        if (document.getElementById('publish').checked) data.publish = 'on';
         isBusy = true;
         $.ajax({
             url: $('#form-update').attr('action'),
             type: 'POST',
-            data: {
-                token: $('input[name=_token]').val(),
-                id: $('input[name=id]').val(),
-                content: $('#content').val()
-            },
+            data: data,
             success: function(result) {
                 var message = result.status == true
                     ? '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Update successfully.</strong> </div>'

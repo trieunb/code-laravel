@@ -15,7 +15,11 @@ Create Question
                 <label for="content">Content</label>
                 <input type="text" class="form-control" name="content" id="content" placeholder="Content">
             </div>
-            
+            <div class="checkbox">
+                <label>
+                  <input name="publish" type="checkbox"> Publish
+                </label>
+            </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Create</button>
                 <a href="{{ route('admin.dashboard') }}" class="btn btn-default">Go to back</a>

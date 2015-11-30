@@ -47,12 +47,10 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
 			? $this->getById($request->get('id'))
 			: new Question;
 		$question->content = $request->get('content');
+		$question->publish = $request->has('publish') ? 1 : 0;
 
 		return $question->save();
 	}
 
-	public function answerForUser($id)
-	{
-		return $this->getById($id);
-	}
+	
 }

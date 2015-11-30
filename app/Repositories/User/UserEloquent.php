@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\User;
 
+use App\Models\Question;
 use App\Models\User;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
@@ -376,8 +377,28 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ->make(true);
     }
 
+    /**
+     * Get Answers For User
+     * @param  id $id 
+     * @return Illuminate\Database\Eloquent\Collection     
+     */
     public function answerForUser($id)
     {
         return $this->getById($id)->questions;
+    }
+
+    /**
+     * Create Or Update point of Question 
+     * @param int $id   
+     * @throw \Exception
+     */
+    public function setPointForAnswer($id, $data)
+    {
+        $user = $this->getById($id);
+
+        if ( ! count($user->questions()->sync(
+            Question::prepareQuestionsForSave($data)))
+        )
+            throw new \Exception('Error when save.');
     }
 }
