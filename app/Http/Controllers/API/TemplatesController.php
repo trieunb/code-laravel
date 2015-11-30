@@ -225,7 +225,7 @@ class TemplatesController extends Controller
             $section = createSectionData($template);
 
             return view('api.template.section', compact('section', 'token', 'template'));   
-        } catch (SectionTemplateException $e) {
+        } catch (\Exception $e) {
             return response()->json(['status' => 400, 'message' => $e->getMessage()]);
         }
     }

@@ -174,7 +174,7 @@ if (!function_exists('createSectionData')) {
         $section = ['template_id' => $template->id];
 
         if ( ! is_array($template->section)) 
-            throw new \SectionTemplateException('Not found section of template');
+            return null;
 
         foreach ($template->section as $k => $v) {
 
@@ -237,9 +237,12 @@ if (!function_exists('createSectionMenu')) {
      * @param  string $token Token of User
      * @return string        HTML menu
      */
-    function createSectionMenu(array $data, $token) {
+    function createSectionMenu($data, $token) {
         $html = '<ul class="list list-unstyled">';
         $i = 0;
+
+        if ( ! is_array($data)) return $html .= '</ul>';
+
         foreach ($data as $section => $value) {
             if (is_array($value)) {
                 foreach ($value as $k => $v) {

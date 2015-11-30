@@ -32,8 +32,8 @@ class TemplateMarketsController extends Controller
         $result = createSection($request->get('content'), $sections);
 
         return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
-            ? response()->json(['status' => true])
-            : response()->json(['status' => false]);
+            ? redirect()->route('admin.template.get.index')->with('message', 'Create Template successfully!')
+            : redirect()->back()->with('message', 'Error when create template!');
     }
 
     public function edit($id)
@@ -49,9 +49,8 @@ class TemplateMarketsController extends Controller
         $data = createSection($request->get('content'), $sections);
         
         return $this->template_market->createOrUpdateTemplateByManage($request, $data, \Auth::user()->id)
-
-            ? response()->json(['status' => true])
-            : response()->json(['status' => false]);
+            ? redirect()->route('admin.template.get.index')->with('message', 'Create Template successfully!')
+            : redirect()->back()->with('message', 'Error when create template!');
     }
 
     public function checkTitle(Request $request)

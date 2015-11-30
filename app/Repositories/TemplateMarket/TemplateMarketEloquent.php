@@ -62,9 +62,16 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         $template->title = $request->get('title');
         $template->user_id = $user_id;
         $template->cat_id = $request->get('cat_id');
-        $template->content = $data['content'];
-        unset($data['content']);
-        $template->section = $data;
+
+        if (count($data) != 0) {
+            $template->content = $data['content'];
+            unset($data['content']);
+            $template->section = $data;
+        } else {
+            $template->content = $request->get('content');
+            $template->section = null;
+        }
+        
         $template->price = $request->get('price');
         $template->description = $request->get('description');
         $template->version = $request->get('version');

@@ -7,6 +7,9 @@ Edit Template
 
 @section('content')
 <div class="row">
+    @if (\Session::has('message'))
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
+    @endif
     <div class="col-lg-12">
         <div id="message"></div>
         <form action="{{ route('admin.template.post.edit', $template->id) }}" id="create-form" method="POST">
@@ -20,20 +23,20 @@ Edit Template
                 <label for="cat_id">Category</label>
                 <select name="cat_id" id="cat_id" class="form-control" >
                     <option value="">Select</option>
-                    <option value="1">Category</option>
+                    <option value="1" selected>Category</option>
                 </select>
 
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="text" class="form-control" value="{{ $template->price }}" id="price" placeholder="Price">
+                <input type="text" name="price" class="form-control" value="{{ $template->price }}" id="price" placeholder="Price">
             </div>
             <div class="form-group">
                 <textarea id="content" name="content">{{ $template->present()->contentPresent }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" class="form-control" value="{{ $template->description }}" id="description" placeholder="Description">
+                <input type="text" name="description" class="form-control" value="{{ $template->description }}" id="description" placeholder="Description">
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
@@ -41,7 +44,7 @@ Edit Template
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                {!! Form::select('status', [2 => 'Pending', 1=> 'Publish', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
+                {!! Form::select('status', [1 => 'Pending', 2=> 'Publish', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Edit</button>
@@ -106,32 +109,6 @@ Edit Template
             } else {
                 error.insertAfter(element);
             }
-        },
-        submitHandler : function(form) {
-            var content = CKEDITOR.instances.content.getData();
-
-            $.ajax({
-                url: $('#create-form').attr('action'),
-                type: 'POST',
-                data: {
-                    id : $('#template_id').val(),
-                    title : $('#title').val(),
-                    price : $('#price').val(),
-                    content : content,
-                    cat_id : $('#cat_id').val(),
-                    description : $('#description').val(),
-                    version : $('#version').val(),
-                    status : $('#status').val(),
-                    _token : $('input[name=_token]').val()
-                },
-                success : function(result) {
-                    var alert = result.status == true ? 'success' : 'danger';
-                    var message = '<div class="alert alert-'+alert+'"><button type="button" class="close" data-dismiss="alert">×</button><strong>Create template successfully</strong></div>';
-                    $('#message').html(message);
-                }
-            }).always(function() {
-                isBusy = false;
-            });
         }
     });
 </script>

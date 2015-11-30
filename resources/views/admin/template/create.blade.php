@@ -7,6 +7,9 @@ Template
 
 @section('content')
 <div class="row">
+    @if (\Session::has('message'))
+        <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
+    @endif
     <div class="col-lg-12">
         <div id="message"></div>
         <form action="{{ route('admin.template.post.create') }}" id="create-form" method="POST">
@@ -24,7 +27,7 @@ Template
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" placeholder="Price">
+                <input type="text" name="price" class="form-control" id="price" placeholder="Price">
             </div>
 
             <div class="form-group">
@@ -32,7 +35,7 @@ Template
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" class="form-control" id="description" placeholder="Description">
+                <input type="text" name="description" class="form-control" id="description" placeholder="Description">
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
@@ -113,31 +116,6 @@ $(function() {
             } else {
                 error.insertAfter(element);
             }
-        },
-        submitHandler : function(form) {
-            var content = CKEDITOR.instances.content.getData();
-            content = content.replace(/\t|\n+/g, '');
-            $.ajax({
-                url: $('#create-form').attr('action'),
-                type: 'POST',
-                data: {
-                    title : $('#title').val(),
-                    price : $('#price').val(),
-                    content : content,
-                    cat_id : $('#cat_id').val(),
-                    description : $('#description').val(),
-                    version : $('#version').val(),
-                    status : $('#status').val(),
-                    _token : $('input[name=_token]').val()
-                },
-                success : function(result) {
-                    var alert = result.status == true ? 'success' : 'danger';
-                    var message = '<div class="alert alert-'+alert+'"><button type="button" class="close" data-dismiss="alert">×</button><strong>Create template successfully</strong></div>';
-                    $('#message').html(message);
-                }
-            }).always(function() {
-                isBusy = false;
-            });
         }
     });
 });

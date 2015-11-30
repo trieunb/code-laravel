@@ -4,6 +4,9 @@ List Templates
 @stop
 @section('content')
 <div class="row">
+    @if (\Session::has('message'))
+        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
+    @endif
     <div class="col-lg-12">
         <div class="dataTable_wrapper">
             <div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
@@ -27,7 +30,7 @@ List Templates
                                 <td>{{ $temp_market->price }}</td>
                                 <td class="">
                                 {!! Form::open(['route' => ['admin.status', $temp_market->id],'id' => 'changeStatus']) !!}
-                                    {!! Form::select('status', [2 => 'Pending', 1=> 'Publish', 0 => 'Block',] , $temp_market->status, [ 'class' =>  'form-control', 'id' => 'status', 'onchange' => 'this.form.submit()'])!!}
+                                    {!! Form::select('status', [1 => 'Pending', 2 => 'Publish', 0 => 'Block',] , $temp_market->status, [ 'class' =>  'form-control', 'id' => 'status', 'onchange' => 'this.form.submit()'])!!}
                                 {!! Form::close() !!}
                                 </td>
                                 <td class="center">{{ $temp_market->version }}</td>
