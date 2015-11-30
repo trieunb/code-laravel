@@ -1,34 +1,34 @@
 <div class="container">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow: hidden;max-height:400px;">
-            <div class="photo">
+        <div class='image-avatar'>
+            <div class="photo" style="position: relative;">
             @if ( is_null($user_info->avatar['origin']))
-                <img style="width:100%; min-height:400px" 
-                src="{!! asset('images/avatar.jpg') !!}">
+                <img style="width:100%; min-height:768px"
+                src="{!! asset('images/No-Photo3.gif') !!}">
             @else
-                <img style="width:100%; min-height:400px" 
+                <img style="width:100%;" 
                 src="{!! asset($user_info->avatar['origin']) !!}">
             @endif
             </div>
             <div class="text-info" 
-            style="position: absolute;
-            bottom: 20px;
-            width: 100%;
-            text-align:center; 
-            font-weight:600; 
-            color: #FFFFFF">
-            <div class="name">
-                <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
-            </div>
-            <div class="profile_website">
-                <span>{{$user_info->link_profile}}</span>
-            </div>
-            <br>
-            <div class="email">
-                email: <span>{{$user_info->email}}</span>
+                style="position: absolute;
+                bottom: 20px;
+                width: 100%;
+                text-align:center; 
+                font-weight:600; 
+                color: #FFFFFF">
+                <div class="name">
+                    <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
+                </div>
+                <div class="profile_website">
+                    <span>{{$user_info->link_profile}}</span>
+                </div>
+                <br>
+                <div class="email">
+                    email: <span>{{$user_info->email}}</span>
+                </div>
             </div>
         </div>
-    </div>
     <div class="text-center" 
         style="background: #9b8578;
         color: white;
