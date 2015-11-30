@@ -67,7 +67,6 @@ class MarketPlacesController extends Controller
     public function view($id, Request $request)
     {
         $template = $this->template_market->getDetailTemplateMarket($id);
-
         $content = str_replace('contenteditable="true"', '', $template->content);
 
         return view('api.market.view', compact('content'));

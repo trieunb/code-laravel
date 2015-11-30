@@ -25,6 +25,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function getAllTemplateMarket()
     {
+
         return $this->getDataWhereClause('status', '=', 2);
     }
 
@@ -32,7 +33,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     {
         $template_mk = $this->model->findOrFail($template_id);
 
-        return $template_mk->status == 1 ? $template_mk : null;
+        return $template_mk->status == 2 ? $template_mk : null;
     }
 
     /**
