@@ -144,7 +144,7 @@ class TemplatesController extends Controller
         $sections = createClassSection();
         $data = createSection($content, $sections);
         $template = $this->template->createTemplateBasic($user_info->id, $data);
-        return $template->content;die();
+        
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }
