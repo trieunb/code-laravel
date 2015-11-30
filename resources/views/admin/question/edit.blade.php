@@ -32,7 +32,10 @@
 var isBusy = false;
 $('#form-update').validate({
     rules: {
-        content: {required :true}
+        content: {
+            required: true,
+            minlength: 6
+        }
     },
     highlight: function(element) {
         $(element).closest('.form-group').addClass('has-error');
