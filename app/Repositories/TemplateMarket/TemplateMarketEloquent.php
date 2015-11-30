@@ -25,7 +25,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function getAllTemplateMarket()
     {
-        return $this->getDataWhereClause('status', '=', 1);
+        return $this->getDataWhereClause('status', '=', 2);
     }
 
     public function getDetailTemplateMarket($template_id)
