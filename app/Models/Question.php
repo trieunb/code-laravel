@@ -15,6 +15,9 @@ class Question extends Model
 	 */
     protected $table = 'questions';
 
+    protected $casts = [
+        'id' => 'int'
+    ];
     
     /**
      * Define a many-to-many relationship.
