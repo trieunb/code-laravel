@@ -4,7 +4,7 @@
             <div class="photo" style="position: relative;">
             @if ( is_null($user_info->avatar['origin']))
                 <img style="width:100%;"
-                src="{!! asset('images/No-Photo3.gif') !!}">
+                src="{!! asset('images/avatar.jpg') !!}">
             @else
                 <img style="width:100%;" 
                 src="{!! asset($user_info->avatar['origin']) !!}">
@@ -12,11 +12,19 @@
             </div>
             <div class="text-info" 
                 style="position: absolute;
-                bottom: 20px;
+                bottom: 0px;
                 width: 100%;
                 text-align:center; 
                 font-weight:600; 
-                color: #FFFFFF">
+                color: #FFFFFF;
+                background-color: black;
+                opacity: 0.2;
+                height:100%">
+                <div class="info-basic" 
+                    style="position: absolute;
+                    text-align: center;
+                    bottom: 10px;
+                    width: 100%;">
                 <div class="name">
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
                 </div>
@@ -26,6 +34,7 @@
                 <br>
                 <div class="email">
                     email: <span>{{$user_info->email}}</span>
+                </div>
                 </div>
             </div>
         </div>
