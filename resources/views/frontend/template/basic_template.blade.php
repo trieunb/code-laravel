@@ -1,18 +1,18 @@
 <div class="container">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow: hidden;max-height:200px;">
+        <div class='image-avatar' style="position: relative; overflow: hidden;max-height:400px;">
             <div class="photo">
             @if ( is_null($user_info->avatar['origin']))
-                <img style="width:100%; min-height:200px" 
+                <img style="width:100%; min-height:400px" 
                 src="{!! asset('images/avatar.jpg') !!}">
             @else
-                <img style="width:100%; min-height:200px" 
+                <img style="width:100%; min-height:400px" 
                 src="{!! asset($user_info->avatar['origin']) !!}">
             @endif
             </div>
             <div class="text-info" 
             style="position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             width: 100%;
             text-align:center; 
             font-weight:600; 
@@ -25,7 +25,7 @@
             </div>
             <br>
             <div class="email">
-                <span>{{$user_info->email}}</span>
+                email: <span>{{$user_info->email}}</span>
             </div>
         </div>
     </div>
