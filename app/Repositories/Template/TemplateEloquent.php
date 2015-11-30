@@ -6,7 +6,6 @@ use App\Models\Template;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
 use App\Repositories\Template\TemplateInterface;
-use App\Events\RenderImageAfterCreateTemplate;
 
 class TemplateEloquent extends AbstractDefineMethodRepository implements TemplateInterface
 {
