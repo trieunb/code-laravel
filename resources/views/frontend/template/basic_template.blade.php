@@ -1,14 +1,14 @@
 <div class="container">
     <div class="row">
-        <div class='image-avatar'>
-            <div class="photo" style="position: relative; overflow:hidden; height:100%">
-            @if ( is_null($user_info->avatar['origin']))
-                <img style="width:100%; height:100%"
-                src="{!! asset('images/avatar.jpg') !!}">
-            @else
-                <img style="width:100%; height:100%" 
-                src="{!! asset($user_info->avatar['origin']) !!}">
-            @endif
+        <div class='image-avatar' style="position: relative; overflow:hidden; height:70%">
+            <div class="photo" >
+                @if ( is_null($user_info->avatar['origin']))
+                    <img style="width:100%; height:70%"
+                    src="{!! asset('images/avatar.jpg') !!}">
+                @else
+                    <img style="width:100%; height:70%" 
+                    src="{!! asset($user_info->avatar['origin']) !!}">
+                @endif
             </div>
             <div class="text-info" 
                 style="position: absolute;
@@ -25,7 +25,7 @@
                     text-align: center;
                     bottom: 10px;
                     width: 100%;">
-                <div class="name">
+                <div class="name" >
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
                 </div>
                 <div class="profile_website">
