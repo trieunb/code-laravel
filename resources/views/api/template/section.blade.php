@@ -26,10 +26,10 @@
           <div class="col-md-6 text-right edit">
             <span>Price: Free</span>
             <button class="btn-trans semi-bold">Read more</button>
-            <button class="btn-trans semi-bold start collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Edit</button>
-            <button class="btn-trans fill semi-bold end collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">End edit</button>
+           <!--  <button class="btn-trans semi-bold start collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Edit</button>
+           <button class="btn-trans fill semi-bold end collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">End edit</button> -->
           </div>
-          <div class="fw collapse" id="collapseExample">
+          <div class="fw" id="collapseExample">
             <div class="content">
               <div class="title">
                 <h4 class="text-center text-red">You are now in edit mode!</h4>

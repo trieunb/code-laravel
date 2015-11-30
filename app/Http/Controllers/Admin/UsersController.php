@@ -2,13 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Http\Requests\UserAnswersFormRequest;
+use App\Models\Question;
+use App\Repositories\User\UserInterface;
+use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
+    /**
+     * UserInterface
+     * @var $user
+     */
+    private $user;
+
+    public function __construct(UserInterface $user)
+    {
+        $this->user = $user;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +29,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.user.index');
     }
 
     /**
@@ -83,5 +96,24 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function answer($id)
+    {
+        $answers = $this->user->answerForUser($id);
+        $user = $this->user->getById($id);
+
+        return view('admin.user.answer', compact('answers', 'user'));
+    }
+
+    public function postAnswer(UserAnswersFormRequest $request)
+    {
+        try {
+            $this->user->setPointForAnswer(\Auth::user()->id, $request->get('points'));
+
+            return redirect()->route('admin.user.get.index')->with('message', 'Save data successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('message', $e->getMessage());
+        }
     }
 }

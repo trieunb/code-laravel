@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Template;
 
+use App\Events\RenderImageAfterCreateTemplate;
 use App\Models\Template;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;

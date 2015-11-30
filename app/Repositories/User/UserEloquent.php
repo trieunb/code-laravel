@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\User;
 
+use App\Models\Question;
 use App\Models\User;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
@@ -346,5 +347,58 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
         
         return $user->save();
+    }
+
+    /**
+     * Get datatable of user
+     * @return mixed 
+     */
+    public function dataTable()
+    {
+        return \Datatables::of($this->model->select([
+            'id', 'firstname', 'lastname', 'address', 'email',
+            'created_at', 'updated_at'
+            ]))
+            ->addColumn('action', function($user) {
+                return '<div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-primary" href="'.route('admin.user.get.answer', $user->id).'">Answer Of User</a>
+                </div>';
+            })
+            ->editColumn('firstname', function($user) {
+                return $user->firstname . ' ' . $user->lastname;
+            })
+            ->editColumn('created_at', function($user) {
+                return $user->created_at->format('Y-m-d');
+            })
+            ->editColumn('updated_at', function($user) {
+                return $user->updated_at->format('Y-m-d');
+            })
+            ->removeColumn('lastname')
+            ->make(true);
+    }
+
+    /**
+     * Get Answers For User
+     * @param  id $id 
+     * @return Illuminate\Database\Eloquent\Collection     
+     */
+    public function answerForUser($id)
+    {
+        return $this->getById($id)->questions;
+    }
+
+    /**
+     * Create Or Update point of Question 
+     * @param int $id   
+     * @throw \Exception
+     */
+    public function setPointForAnswer($id, $data)
+    {
+        $user = $this->getById($id);
+
+        if ( ! count($user->questions()->sync(
+            Question::prepareQuestionsForSave($data)))
+        )
+            throw new \Exception('Error when save.');
     }
 }

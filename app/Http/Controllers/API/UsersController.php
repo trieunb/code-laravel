@@ -91,7 +91,7 @@ class UsersController extends Controller
 		TemplateMarketInterface $template_market,
 		QualificationInterface $qualification
 	) {
-		$this->middleware('jwt.auth');
+		$this->middleware('jwt.auth', ['except' => ['dataTable', 'getAnswersForAdmin']]);
 
 		$this->user = $user;
 		$this->user_education = $user_education;
@@ -102,6 +102,11 @@ class UsersController extends Controller
 		$this->reference = $reference;
 		$this->template_market = $template_market;
 		$this->qualification = $qualification;
+	}
+
+	public function dataTable()
+	{
+		return $this->user->dataTable();
 	}
 
 	public function getProfile(Request $request)
@@ -299,6 +304,28 @@ class UsersController extends Controller
 				: response()->json(['status_code' => 400]); 
 		} catch (\Exception $e) {
 			return response()->json(['status_code' => 400]);
+		}
+	}
+
+	public function getAnswersForAdmin()
+	{
+		try {
+			$answers = $this->user->answerForUser(\Auth::user()->id);
+			$points = [];
+
+			foreach ($answers as $answer) {
+				$points[] = $answer->pivot->point;
+			}
+
+			$data = [
+				'start' => $answers[0]->id,
+				'end' => $answers[count($answers) - 1]->id,
+				'points' => $points
+			];
+			
+			return response()->json(['status' => true, 'data' => $data]);
+		} catch (\Exception $e) {
+			return response()->json(['status' => false, 'message' => $e->getMessage()]);
 		}
 	}
 }

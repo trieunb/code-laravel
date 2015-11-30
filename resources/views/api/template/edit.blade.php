@@ -19,8 +19,8 @@
 		</form>
 	</div>
 	<div class="col-md-12" id="buttons-edit">
-		<button class="col-xs-4 btn btn-primary" id="save">Save</button>
-		<button class="col-xs-4 btn btn-primary" id="apply">Apply from profile</button>
+		<!-- <button class="col-xs-4 btn btn-primary" onclick="clickSave()" id="save">Save</button>
+		<button class="col-xs-5 btn btn-primary" onclick="clickApply()" id="apply">Apply from profile</button> -->
 	</div>  
 
 @stop
@@ -35,50 +35,29 @@
 	}
 	$(document).ready(function() {
 
-		var isBusy = false;
+		
+		
+	});
+	var isBusy = false;
 		/*$('img').click(function(e) {
 			e.preventDefault();
 			$('#file').trigger('click');
 		});*/
-		$('#save').click(function(e) {
-			
-			e.preventDefault();
-			if (isBusy) return;
-			isBusy = true;
-			$("#loading").show();
-			var url = window.location.href;
-			var token = url.split('=');
 
-			var content = $('#content select').length == 1 ? $('select option:selected').val()
-				: $('#content').html();
+		function clickSave() {
+			// $('#save').click(function(e) {
+				// e.preventDefault();
+				if (isBusy) return;
+				isBusy = true;
+				$("#loading").show();
+				var url = window.location.href;
+				var token = url.split('=');
 
-			content = content.replace(/\t|\n+/g, '');
+				var content = $('#content select').length == 1 ? $('select option:selected').val()
+					: $('#content').html();
 
-			if ($('#content img').length == 1) {
-			/*	var form = $('#upload')[0];
-				var file = $('#file').prop('files')[0];
-				var data = new FormData(data);
-				data.append('token', token[1]);
-				data.append('avatar', file);
-				$.ajax({
-					url: " {{ route('api.template.post.edit.photo', $template->id) }}",
-					type: 'POST',
-					cache: false,
-					contentType: false,
-					processData: false,
-					data : data,
-					success: function(result) {
-						if (result.status_code == 200) {
-							$('img').attr('src', result.data)	;
-						}
-						
-						$("#loading").hide();
-					}
-				}).always(function() {
-					isBusy = false;
-				});
-			*/
-			} else {
+				content = content.replace(/\t|\n+/g, '');
+
 				$.ajax({
 					url: url,
 					data: {
@@ -87,38 +66,47 @@
 					},
 					type: 'POST',
 					success : function(result) {
+						if (result.status_code == 200) {
+							alert('Edit content Successfully!');
+						}
 						$("#loading").hide();
 					}
 				}).always(function() {
 					isBusy = false;
 				});
-			}
-		});
-		$('#apply').click(function(e) {
-			e.preventDefault();
-			var url = window.location.href;
-			var token = url.split('=');
-			if (isBusy) return;
-			$("#loading").show();
-			isBusy = true;
-			$.ajax({
-				url : '/api/template/apply/{{ $template->id }}/{{ $section}}?token='+token[1],
-				type : 'GET',
-				success: function(result) {
-					$("#loading").hide();
-					if (result.status_code == 200) {
-						if ($('#content select').length == 1) {
-							$('#content select option[value = '+result.data+']').attr('selected');
+				
+			// });
+		}
+		function clickApply() {
+			// $('#apply').click(function(e) {
+				// e.preventDefault();
+				var url = window.location.href;
+				var token = url.split('=');
+				if (isBusy) return;
+				$("#loading").show();
+				isBusy = true;
+				$.ajax({
+					url : '/api/template/apply/{{ $template->id }}/{{ $section}}?token='+token[1],
+					type : 'GET',
+					success: function(result) {
+						$("#loading").hide();
+						if (result.status_code == 200) {
+							if ($('#content select').length == 1) {
+								$('#content select option[value = '+result.data+']').attr('selected');
 
-							console.log(result.data);
-						} else $('#content').html(result.data);
+								console.log(result.data);
+							} else $('#content').html(result.data);
+
+							alert('Apply data from Profile successfully!');
+						}
 					}
-				}
-			}).always(function() {
-				isBusy = false;
-			});
-		});
-	});
+				}).always(function() {
+					isBusy = false;
+				});
+			// });
+		}
+		// clickSave();
+		// clickApply();
 	/*	CKEDITOR.inline('editor',{
             on: {
                 instanceReady: function() {

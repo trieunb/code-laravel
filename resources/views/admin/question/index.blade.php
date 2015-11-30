@@ -32,8 +32,6 @@ Manage Question
 @stop
 
 @section('script')
-	<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
-	<script src="{{ asset('js/additional-methods.min.js') }}"></script>
 	<script>
 		$(document).ready(function() {
 			$('body').on('hidden.bs.modal', '.modal', function() {
@@ -59,7 +57,7 @@ Manage Question
 		    });
 
 		    var isBusy = false;
-			$(document).on('click', '#delete-data', function(e) {
+			$(document).on('click', '.delete-data', function(e) {
 				e.preventDefault();
 				
 				if (isBusy) return;
@@ -68,7 +66,7 @@ Manage Question
 				isBusy = true;
 
 				$.ajax({
-					url: $('#delete-data').data('src'),
+					url: $(this).data('src'),
 					type: 'GET',
 					success: function(result) {
 						if (result.status == true) {
@@ -76,6 +74,8 @@ Manage Question
 							questionDataTable.ajax.reload();
 						}
 					}
+				}).always(function() {
+					isBusy = false;
 				});
 			});
 		});
