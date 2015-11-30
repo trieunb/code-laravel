@@ -8,8 +8,10 @@
 </style>
 @endsection
 @section('content')
-    <div class="row">
-        <button type="submit" class="btn btn-primary pull-right" id="edit-template">Edit</button>
+    <div class="container">
+        <div class="row">
+            <button type="submit" class="btn btn-primary pull-right" id="edit-template">Edit</button>
+        </div>
     </div>
     <div id="content">
         {!! $content !!}

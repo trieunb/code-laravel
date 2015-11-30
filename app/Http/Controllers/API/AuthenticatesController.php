@@ -117,7 +117,7 @@ class AuthenticatesController extends Controller
     public function loginWithLinkedin(Request $request)
     {
         $token = $request->get('token');
-        $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-urls::(original),location,public-profile-url,email-address)?oauth2_access_token=".$token."&format=json";
+        $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-urls::(original),location:(name),public-profile-url,email-address,date-of-birth)?oauth2_access_token=".$token."&format=json";
         $response = json_decode(file_get_contents($url), true);
         $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
         $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);

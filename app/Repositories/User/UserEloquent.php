@@ -169,12 +169,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->lastname = $data['lastName'];
         if (isset($data['emailAddress']))
             $user->email = $data['emailAddress'];
-        if (isset($data['link_profile']))
+        if (isset($data['publicProfileUrl']))
             $user->link_profile = $data['publicProfileUrl'];
         if (isset($data['infomation']))
             $user->infomation = $data['infomation'];
-        if (isset($data['dob']))
-            $user->dob = $data['dob'];
+        if (isset($data['birthday']))
+            $user->dob = $data['birthday'];
         if (isset($data['gender']))
             $user->gender = $data['gender'];
         if (isset($data['pictureUrls']))
@@ -184,16 +184,16 @@ class UserEloquent extends AbstractRepository implements UserInterface
         if (isset($data['soft_skill']))
             $user->soft_skill = $data['soft_skill'];
         if (isset($data['location']))
-            $user->location = $data['location'];
-        if (isset($data['mobile_phone']))
-            $user->mobile_phone = $data['mobile_phone'];
+            $user->location = null;
+        if (isset($data['phone-numbers']))
+            $user->mobile_phone = $data['phone-numbers'];
         if (isset($data['home_phone']))
             $user->home_phone = $data['home_phone'];
         if (isset($data['city']))
             $user->city = $data['city'];
         if (isset($data['state']))
             $user->state = $data['state'];
-        if (isset($data['country']))
+        if (isset($data['location']))
             $user->country = $data['location']['name'];
         $user->token = $token;
 
