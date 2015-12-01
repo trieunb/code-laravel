@@ -31,7 +31,6 @@
                 <div class="profile_website">
                     <span>{{$user_info->link_profile}}</span>
                 </div>
-                <br>
                 <div class="email">
                     email: <span>{{$user_info->email}}</span>
                 </div>
