@@ -1,12 +1,12 @@
 <div class="container">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow:hidden; height:70%">
+        <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
             <div class="photo" >
                 @if ( is_null($user_info->avatar['origin']))
-                    <img style="width:100%; height:70%"
+                    <img style="width:100%; height:100%"
                     src="{!! asset('images/avatar.jpg') !!}">
                 @else
-                    <img style="width:100%; height:70%" 
+                    <img style="width:100%; height:100%" 
                     src="{!! asset($user_info->avatar['origin']) !!}">
                 @endif
             </div>
