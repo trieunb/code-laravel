@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\User\UserInterface;
 use App\ValidatorApi\RegisterForm_Rule;
+use App\ValidatorApi\ChangePass_Rule;
 use App\ValidatorApi\ValidatorAPiException;
 use Artdarek\OAuth\Facade\OAuth;
 use Auth;
@@ -17,6 +18,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
 use JWTFactory;
 use App\Models\User;
+use Crypt;
 
 class AuthenticatesController extends Controller
 {
@@ -195,24 +197,42 @@ class AuthenticatesController extends Controller
         return response()->json([
             'status_code' => 403,
             'status' => false,
-            'message' => 'Invalid email'
+            'message' => 'Email not found'
         ], 403);
     }
 
-    public function postChangePassword(Request $request)
+    public function postChangePassword(Request $request, ChangePass_Rule $rules)
     {
-        $user = \JWTAuth::toUser($request->get('token'));
-        $password = $request->get('password');
-
-        if ( $user ) {
-            $this->user->update(['password' => Hash::make($password)], $user->id);
-            
+        try {
+            $user = \JWTAuth::toUser($request->get('token'));
+            $rules->validate($request->all());
+            $old_pass = $request->get('old_pass');
+            $new_pass = $request->get('new_pass');
+            $response = User::FindOrfail($user->id);
+            if (Hash::check($old_pass, $user->password)) {
+                
+                $this->user->update(['password' => Hash::make($new_pass)], $user->id);
+                
+                return response()->json([
+                    'status_code' => 200,
+                    'status' => true,
+                    'message' => "Success! Password Change Requested"
+                ]);
+            }
             return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'message' => "Success! Password Change Requested"
-            ]);
+                'status_code' => 403,
+                'status' => false,
+                'message' => 'Password is incorrect'
+            ], 403);
+
+        } catch(ValidatorAPiException $e) {
+            return response()->json([
+                'status_code' => 401,
+                'status' => false,
+                'message' => $e->getErrors()
+            ], 401);
         }
+        
     }
 
 }

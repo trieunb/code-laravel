@@ -135,7 +135,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	 */
 	public function createUserFromOAuth($data, $token)
 	{
-        $avatar = isset($data['pictureUrls']) ? [
+        $avatar = isset($data['pictureUrls']['values']) ? [
             'origin' => $data['pictureUrls']['values'][0],
             'thumb' => $data['pictureUrls']['values'][0]]
         : null;
@@ -157,7 +157,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
     {
         $user = $this->getById($id);
 
-        $avatar = isset($data['pictureUrls']) ? [
+        $avatar = isset($data['pictureUrls']['values']) ? [
             'origin' => $data['pictureUrls']['values'][0],
             'thumb' => $data['pictureUrls']['values'][0]]
         : null;

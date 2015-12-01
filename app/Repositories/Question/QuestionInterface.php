@@ -17,4 +17,13 @@ interface QuestionInterface extends Repository
 	 * @return bool          
 	 */
 	public function saveFromAdminArea($request);
+
+	/**
+	 * Get all question with publish = 1
+	 * @param 
+	 * @return mixed 
+	 */
+	public function getQuestions();
+
+	public function saveUserAnswer($request);
 }

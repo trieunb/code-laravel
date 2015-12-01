@@ -25,9 +25,14 @@ class QuestionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        
+        $user = \JWTAuth::toUser($request->get('token'));
+        return response()->json([
+            'status_code' => 200,
+            'status' => true,
+            'data' => $this->question->getQuestions()
+        ]);
     }
 
     /**
@@ -108,5 +113,19 @@ class QuestionsController extends Controller
         return $this->question->saveFromAdminArea($request)
             ? response()->json(['status' => true])
             : response()->json(['status' => false]);
+    }
+
+    public function postAnswerOfUser(Request $request)
+    {
+        $answers = [];
+        foreach ($request as $key => $value) {
+            $answers = [
+                'question_id' => $value['id'],
+                'user_id' => \Auth::user()->id,
+                'result' => $value['result'],
+                'point' => $value['point']
+            ];
+        }
+        return $this->question->saveUserAnswer($answers);
     }
 }

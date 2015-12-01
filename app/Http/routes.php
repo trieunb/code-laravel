@@ -79,7 +79,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthenticatesController@postRegister']);
     post('auth/login', ['as' => 'auth.login', 'uses' => 'AuthenticatesController@postLogin']);
-    post('auth/forget-password', ['uses' => 'AuthenticatesController@postForgetPassword']);
+    post('auth/reset-password', ['uses' => 'AuthenticatesController@postForgetPassword']);
     post('auth/change-password', ['uses' => 'AuthenticatesController@postChangePassword']);
     Route::any('auth/login-with-linkedin', ['as' => 'auth.linkedin', 'uses' => 'AuthenticatesController@loginWithLinkedin']);
     Route::any('auth/login-with-facebook', ['as' => 'auth.facebook', 'uses' => 'AuthenticatesController@loginWithFacebook']);
@@ -145,6 +145,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('question/datatable', ['as' => 'api.question.get.dataTable', 'uses' => 'QuestionsController@showDataTableForAdmin']);
     get('question/delete/{id}', ['as' => 'api.question.get.deleteAdmin', 'uses' => 'QuestionsController@destroy']);
+    get('question/', 'QuestionsController@index');
 
     post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
 });
