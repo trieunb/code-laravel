@@ -127,7 +127,7 @@ class UsersController extends Controller
 		Reference_Rule $reference_rule,
 		Qualification_Rule $qualification_rule
 	) {
-		\Log::info('test API', $request->all());
+		\Log::info('post Profile', $request->all());
 		$user = \JWTAuth::toUser($request->get('token'));
 
 		if ($user->id != $id) {
