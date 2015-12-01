@@ -134,11 +134,6 @@ class UsersController extends Controller
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
 
-		if ( !$request->only(['user', 'user_educations', 'user_work_histories', 'user_skills', 
-			'objectives', 'references'])) {
-			return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Not crendential']);
-		}
-
 		if ($request->has('user')) {
 			try {
 				$user_rule->validate($request->get('user'), $user->id);	
@@ -149,6 +144,7 @@ class UsersController extends Controller
 		}
 
 		try {
+			
 			if ($request->has('user_educations')) {
 				try {
 					if (count($request->get('user_educations')) > 1) {
@@ -198,6 +194,7 @@ class UsersController extends Controller
 			}
 
 			if ($request->has('objectives')) {
+
 				try {
 					if (count($request->get('objectives')) > 1) {
 						foreach ($request->get('objectives') as $objective) {
