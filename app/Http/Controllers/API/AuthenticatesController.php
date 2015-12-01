@@ -208,7 +208,6 @@ class AuthenticatesController extends Controller
             $rules->validate($request->all());
             $old_pass = $request->get('old_pass');
             $new_pass = $request->get('new_pass');
-            $response = User::FindOrfail($user->id);
             if (Hash::check($old_pass, $user->password)) {
                 
                 $this->user->update(['password' => Hash::make($new_pass)], $user->id);
