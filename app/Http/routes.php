@@ -148,6 +148,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('question/', 'QuestionsController@index');
 
     post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
+    post('question/', 'QuestionsController@postAnswerOfUser');
 });
 
 get('/test', function() {
