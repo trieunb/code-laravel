@@ -34,21 +34,14 @@ class TemplatePresenter extends Presenter
                 break;
             case 'work':
             	foreach (UserWorkHistory::whereUserId($id)->get() as $key => $work) {
-            		$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Work .'.($key + 1).'
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-            		$html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-            		$html .= '<ul class="list list-unstyled">';
-            		$html .= '<li>Company:'.$work->company.'</li>';
-            		$html .= '<li>Title:'.$work->sub_title.'</li>';
-            		$html .= '<li>Start:'.$work->start.'</li>';
-            		$html .= '<li>End:'.$work->end.'</li>';
-            		$html .= '<li>Job title::'.$work->job_title.'</li>';
-            		$html .= '<li>Job description:'.$work->job_description.'</li>';
-            		$html .= '</ul>';
-            		$html .= '</div>';
-            		$html .= '</li>';
+            		$html .= '<optgroup label="Work .'.($key + 1).'">"';
+            		$html .= '<option>Company:'.$work->company.'</option>';
+            		$html .= '<option>Title:'.$work->sub_title.'</option>';
+            		$html .= '<option>Start:'.$work->start.'</option>';
+            		$html .= '<option>End:'.$work->end.'</option>';
+            		$html .= '<option>Job title::'.$work->job_title.'</option>';
+            		$html .= '<option>Job description:'.$work->job_description.'</option>';
+            		$html .= '</optgroup>';
             	}
             	
                 return $html;
@@ -56,17 +49,10 @@ class TemplatePresenter extends Presenter
                 break;
             case 'reference':
             	foreach (Reference::whereUserId($id)->get() as $key => $reference) {
-            		$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Reference .'.($key + 1).'
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-            		$html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-            		$html .= '<ul class="list list-unstyled">';
-            		$html .= '<li>Reference:'.$reference->reference.'</li>';
-            		$html .= '<li>Content::'.$reference->content.'</li>';
-            		$html .= '</ul>';
-            		$html .= '</div>';
-            		$html .= '</li>';
+            		$html .= '<optgroup label="Reference .'.($key + 1).'">"';
+            		$html .= '<option>Reference:'.$reference->reference.'</option>';
+            		$html .= '<option>Content::'.$reference->content.'</option>';
+            		$html .= '</optgroup>';
             	}
             	
                 return $html;
@@ -74,34 +60,20 @@ class TemplatePresenter extends Presenter
                 break;
             case 'key_qualification':
             	foreach (Qualification::whereUserId($id)->get() as $key => $qualification) {
-            		$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Qualification .'.($key + 1).'
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-            		$html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-            		$html .= '<ul class="list list-unstyled">';
-            		$html .= '<li>Content:'.$qualification->content.'</li>';
-            		$html .= '</ul>';
-            		$html .= '</div>';
-            		$html .= '</li>';
+            		$html .= '<optgroup label="Qualification .'.($key + 1).'">"';
+            		$html .= '<option>Content:'.$qualification->content.'</option>';
+            		$html .= '</optgroup>';
             	}
                 
                 return $html;
-                // return json_encode(['data' => ['key_qualification' => Qualification::whereUserId($id)->get()]]);
+                // return json_encode(['data' => ['key_quaoptionfication' => Quaoptionfication::whereUserId($id)->get()]]);
                 break;
             case 'objective':
             	foreach (Objective::whereUserId($id)->get() as $key => $objective) {
-            		$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Objective .'.($key + 1).'
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-            		$html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-            		$html .= '<ul class="list list-unstyled">';
-            		$html .= '<li>Title:'.$objective->title.'</li>';
-            		$html .= '<li>Content:'.$objective->content.'</li>';
-            		$html .= '</ul>';
-            		$html .= '</div>';
-            		$html .= '</li>';
+            		$html .= '<optgroup label="Objective .'.($key + 1).'">"';
+            		$html .= '<option>Title:'.$objective->title.'</option>';
+            		$html .= '<option>Content:'.$objective->content.'</option>';
+            		$html .= '</optgroup>';
             	}
                 
                 return $html;
@@ -109,35 +81,21 @@ class TemplatePresenter extends Presenter
                 // return json_encode(['data' => ['objective' => Objective::whereUserId($id)->get()]]);
                 break;
             case 'name': 
-            	$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Name
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-                $html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-        		$html .= '<ul class="list list-unstyled">';
-                $html .= '<li>'.User::findOrFail($id)->present()->name().'</li>';
-                $html .= '</ul>';
-        		$html .= '</div>';
-        		$html .= '</li>';
+            	$html .= '<optgroup label="Name">';
+                $html .= '<option>'.User::findOrFail($id)->present()->name().'</option>';
+        		$html .= '</optgroup>';
 
                 return $html;
                 // return json_encode(['data' => $this->getById($id)->present()->name()]);
                 break;
             case 'profile_website':
             case 'linkedin':
-            	$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Name
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-                $html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-        		$html .= '<ul class="list list-unstyled">';
-                $html .= '<li>'.User::findOrFail($id)->link_profile.'</li>';
-                $html .= '</ul>';
-        		$html .= '</div>';
-        		$html .= '</li>';
+            	$html .= '<optgroup label="Link Profile">';
+                $html .= '<option>'.User::findOrFail($id)->optionnk_profile.'</option>';
+        		$html .= '</optgroup>';
 
                 return $html;
-                // return json_encode(['data' => $this->getById($id)->link_profile]);
+                // return json_encode(['data' => $this->getById($id)->optionnk_profile]);
                 break;
             case 'availability':
                 $status = null;
@@ -145,46 +103,25 @@ class TemplatePresenter extends Presenter
                     if ($v['id'] == $this->getById($id)->status)
                         $status = $v;
                 }
-                $html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Name
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-                $html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-        		$html .= '<ul class="list list-unstyled">';
-                $html .= '<li>'.$status.'</li>';
-                $html .= '</ul>';
-        		$html .= '</div>';
-        		$html .= '</li>';
+                $html .= '<optgroup label="Availability">';
+                $html .= '<option>'.$status.'</option>';
+        		$html .= '</optgroup>';
 
                 return $html;
                 // return json_encode(['data' => $status]);
                 break;
             case 'phone':
-            	$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Name
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-                $html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-        		$html .= '<ul class="list list-unstyled">';
-                $html .= '<li>'.User::findOrFail($id)->mobile_phone.'</li>';
-                $html .= '</ul>';
-        		$html .= '</div>';
-        		$html .= '</li>';
+            	$html .= '<optgroup label="Mobile Phone">';
+                $html .= '<option>'.User::findOrFail($id)->mobile_phone.'</option>';
+        		$html .= '</optgroup>';
 
                 return $html;
                 // return json_encode(['data' => $this->getById($id)->mobile_phone]);
                 break;
             default:
-            	$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Name
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-                $html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-        		$html .= '<ul class="list list-unstyled">';
-                $html .= '<li>'.User::findOrFail($id)->pluck($section).'</li>';
-                $html .= '</ul>';
-        		$html .= '</div>';
-        		$html .= '</li>';
+            	$html .= '<optgroup label="Item">';
+                $html .= '<option>'.User::findOrFail($id)->pluck($section).'</option>';
+        		$html .= '</optgroup>';
 
                 return $html;
                 // return json_encode(['data' =>$this->getById($id)->pluck($section)]);

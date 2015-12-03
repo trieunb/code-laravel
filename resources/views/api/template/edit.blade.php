@@ -5,8 +5,6 @@
 <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }} " media="screen" title="no title" charset="utf-8">
 <link rel="stylesheet" href="{{ asset('css/fonts.css') }} " media="screen" title="no title" charset="utf-8">
 <link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
-<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script> -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous"> -->
 
 @stop
 
@@ -29,46 +27,40 @@
 	</form>
 </div>
 <div class="col-md-12" id="buttons" >
-
-	<div class="dropdown">
-		<button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Choose Type Edit
-			<span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu" aria-labelledby="dLabel" id="choose-type">
-			<!-- <li id="manual">
-				<a>Type Manual</a>
-			</li> -->
-			<li >
-				<a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="circle dropdown">
-					Get Form Profile
-				</a>
-				<div id="get-from-profile" class="" aria-labelledby="dLabel">
-		<div class="top">
-			<span class="close">x</span>
-			<p>Choose the element you want to edit</p>
-		</div>
-		<ul class="list list-unstyled" >
-			<li id="manual"><a>Type Manual</a></li>
-			<li>
-				<a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-				<select name="" class="form-control">
-					<option value="">Get From Profile</option>
-					{!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
+	<ul class="dropdown-menu" aria-labelledby="dLabel" id="choose-type">
+			
+			<div id="get-from-profile" class="" aria-labelledby="dLabel">
+				<div class="top">
+					<span class="close">x</span>
+					<p>Choose the element you want to edit</p>
+				</div>
+				<ul class="list list-unstyled" >
+					<li id="manual"><a>Type Manual</a></li>
+					<li>
+						<a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
+							<select name="" class="form-control">
+								<option value="" disabled selected>Get From Profile</option>
+								{!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
 				</select><!-- <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
 					<div class="dropdown-menu" aria-labelledby="dLabel">
 					<ul class="list list-unstyled ">
 						{!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
 					</ul>
-					</div> -->
-				</a>
-			</li>
+				</div> -->
+						</a>
+					</li>
+				</ul>
+			</div>
+
 		</ul>
-	</div>
-			</li>
-		</ul>
-	</div>
-	
+	<!-- <div class="dropdown">
+		<button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Choose Type Edit
+			<span class="caret"></span>
+		</button>
+		
+	</div> -->
+
 </div>
 
 
@@ -86,7 +78,7 @@
 		var temp = null;
 
 		document.getElementById('content').addEventListener('touchstart', function() {
-
+			
 		});
 		document.getElementById('content').addEventListener('touchmove', function() {
 			
@@ -98,7 +90,6 @@
 				selection = document.selection.createRange();
 			}
 			selection.toString() !== '' ;
-
 			var parrentNode = window.getSelection().anchorNode.parentNode;
 			var currentHTMLSection = $('#content div').html();
 
@@ -110,9 +101,10 @@
 			var user_id = '{{ \Auth::user()->id }}';
 			var token = window.location.href.split('?')[1];
 
-			if (selection.toString() !== '' ) {
+			if (selection.toString() !== ''  && selection !== ' ') {
 
 				$('#buttons').show();
+				$('#buttons .dropdown-menu').show();
 
 				// var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
 				// $('#buttons').html(html);
@@ -127,7 +119,7 @@
 				$(document).off('change', 'select').on('change', 'select', function() {
 					// $('#buttons').html(html);
 					// $('select').click(function() {
-					$('#buttons').hide();
+						$('#buttons').hide();
 						if ($(parrentNode).html() == $('#content div').html()){
 							if (currentHTMLSection.indexOf(selection) != 0) {
 								temp = '<div class="'+section+'" contenteditable="true">'
@@ -138,10 +130,9 @@
 						}else {
 							parrentNode.innerHTML =  $('select option:selected').val();	
 						} 
-						$('select option:firt-child').prop('selected', true);
 					// });
 
-				});
+			});
 
         		/*$.ajax({
 		        	url: "/api/user/"+user_id+"/"+section+'?'+token,
