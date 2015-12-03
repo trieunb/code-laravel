@@ -71,4 +71,12 @@ class MarketPlacesController extends Controller
 
         return view('api.market.view', compact('content'));
     }
+
+    public function search(Request $request)
+    {        
+        return response()->json([
+            'status_code' => 200,
+            'data' => $this->template_market->search($request->get('search'))]
+        );
+    }
 }

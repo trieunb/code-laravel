@@ -127,6 +127,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('market', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
     get('market/template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
+    get('market/search', 'MarketPlacesController@search');
     
     /**
      * Cart Route
