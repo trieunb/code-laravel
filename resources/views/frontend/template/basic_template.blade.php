@@ -218,7 +218,7 @@
             @endforeach
         </div>
     </div>
-    <div class='key_quanlification content-box'>
+    <div class='key_qualification content-box'>
         <div class="header-title"
             style="color: red;
             font-weight:600;
