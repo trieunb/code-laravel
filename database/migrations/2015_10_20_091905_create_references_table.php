@@ -15,7 +15,7 @@ class CreateReferencesTable extends Migration
         Schema::create('references', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->string('reference');
+            $table->text('reference');
             $table->text('content');
             $table->timestamps();
         });

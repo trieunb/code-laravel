@@ -290,4 +290,21 @@ class TemplatesController extends Controller
             return response()->json(['status_code' => 400]);
         }
     }
+
+    public function getFromProfile($id, $section, Request $request)
+    {
+        $template = $this->template->getById($id);
+        $html = new \Htmldom($template->content);
+
+        foreach ($html->find('.'.$section) as $element) {
+            $element->outertext = $request->get('content');
+            $data['section'] = $element->outertext;
+        }
+
+        $data['content'] = $html->save();
+
+        return $this->template->applyForInfo($template, $section, $data)
+            ? response()->json(['status_code' => 200])
+            : response()->json(['status_code' => 400]);
+    }
 }

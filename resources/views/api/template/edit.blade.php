@@ -1,28 +1,93 @@
 @extends('api.app')
 
+@section('css')
+	<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" >
+  <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }} " media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="{{ asset('css/fonts.css') }} " media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
+  <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script> -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous"> -->
+
+@stop
+
 @section('content')
 	<!-- <div id="myPanel" style=""></div> -->
 	<div id="loading">
 		<img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
 	</div>
-	<div class="row">
+	<div class="row" >
 		<form id="upload">
 			<div id="content" class="col-md-12" contenteditable="true">
-				<input type="file" id="file" style="display: none;">
+				
 			  	@if ($section != 'availability')
 		  			{!! $content !!}
 	  			@else
 	  				{!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
 			  	@endif
-			  			
+	
 			  </div> 
 		</form>
 	</div>
-	<div class="col-md-12" id="buttons-edit">
-		<!-- <button class="col-xs-4 btn btn-primary" onclick="clickSave()" id="save">Save</button>
-		<button class="col-xs-5 btn btn-primary" onclick="clickApply()" id="apply">Apply from profile</button> -->
-	</div>  
+	<div class="col-md-12" id="buttons" >
+		 
+		<div class="dropdown">
+  <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Choose Type Edit
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dLabel">
+    <li id="manual">
+    	<a>Type Manual</a>
+    </li>
+    <li id="get-profile">
+    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="circle dropdown">
+                        Get Form Profile
+  	</a>
+    	
+    	<div class="" aria-labelledby="dLabel">
+            <div class="top">
+              <span class="close">x</span>
+              <p>Choose the element you want to edit</p>
+            </div>
+            <ul class="list list-unstyled list-inline">
+              	{!! $template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
+            </ul>
+      	</div>
+      	</div>
+    </li>
+  </ul>
+</div>
+		<div class="fw" id="collapseExample">
+            <div class="content">
+             
+              <div class="control">
 
+              <ul class="list-unstyled list-inline">
+              		<li>
+                      <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="circle dropdown">
+                        Type Manual
+                      </a>
+                    </li>
+                    <li id="fix-iphone" class="open">
+                      <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="circle dropdown">
+                       	Get From Profile
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dLabel" style="display: block;">
+                        <div class="top">
+                          <span class="close">x</span>
+                          <h4>Pages</h4>
+                          <p>Choose the element you want to edit</p>
+                        </div>
+                        <ul class="list list-unstyled"><li class=""><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">Contact Information<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a><div class="dropdown-menu" aria-labelledby="dLabel"><ul class="list list-unstyled"><li><a href="/api/template/edit/303/name?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Name</a></li><li><a href="/api/template/edit/303/address?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Address</a></li><li><a href="/api/template/edit/303/email?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Email Address</a></li></ul></div></li><li><a href="/api/template/edit/303/education?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Education</a></li><li><a href="/api/template/edit/303/work?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Work</a></li></ul>
+                        
+                      </div>
+
+                    </li>
+                  </ul>
+              </div>
+            </div>
+          </div>
+		
 @stop
 
 @section('scripts')
@@ -30,14 +95,153 @@
 	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
 	<script src="{{  asset('js/nicEdit.js') }}"></script>
 	<script>
+	function test() {
+		var selection = '';
+		var temp = null;
+
+    	document.getElementById('content').addEventListener('mouseup', function() {
+    		if (window.getSelection) {
+	          selection = window.getSelection();
+	        } else if (document.selection) {
+	          selection = document.selection.createRange();
+	        }
+	        selection.toString() !== '' ;
+	        
+	        var parrentNode = window.getSelection().anchorNode.parentNode;
+	        var currentHTMLSection = $('#content div').html();
+
+	        if ($(parrentNode).html() == $('#content div').html()) {
+	        	selection = window.getSelection().getRangeAt(0).toString();
+	        }
+
+	        var section = '{{ $section }}';
+	        var user_id = '{{ \Auth::user()->id }}';
+	        var token = window.location.href.split('?')[1];
+
+    		if (selection.toString() !== '' ) {
+    			
+        		$('#buttons').show();
+        		$('#manual').click(function() {
+					parrentNode.innerHTML = '';
+					var answer = confirm('Are you delete selected text ?');
+
+					if ( ! answer) return;
+
+					$('#buttons').html('');
+				});
+
+				$('#get-profile .dropdown-menu ul li').click(function() {
+					if ($(parrentNode).html() == $('#content div').html()){
+        						if (currentHTMLSection.indexOf(selection) != 0) {
+					        		temp = '<div class="'+section+'" contenteditable="true">'
+					        			+currentHTMLSection.replace(new RegExp(selection, "g"), $(this).html())
+					        			+'</div>';
+					        		$('#content').html(temp);
+					        	}
+				        	}else {
+				        		parrentNode.innerHTML =  $(this).html();	
+				        	} 
+					return;
+				});
+						
+        	/*	$.ajax({
+		        	url: "/api/user/"+user_id+"/"+section+'?'+token,
+		        	type: 'GET',
+		        	dataType: 'JSON',
+		        	success: function(result) {
+		        		var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
+		        		$('#buttons').html(html);
+		        		
+		        		$('#manual').click(function() {
+							parrentNode.innerHTML = '';
+							$('#buttons').html('');
+						});
+						$('#get-profile').click(function() {
+							if (typeof(result.data) !== 'object') {
+								parrentNode.innerHTML = result.data;
+							}else {
+								var html = '';
+								$.each(result.data, function(key, val) {
+									html += '<select id="get-from-profile" class="form-control">';
+									html += '<option disabled>List Item</option>';
+									switch(key) {
+									    case 'education':
+									    	$.each(val, function(k, obj) {
+										    	html += '<optgroup label="Item '+k+'">';
+										    	html += '<option>Title:'+obj.title+'</option>';
+												html += '<option>School:'+obj.school_name+'</option>';
+												html += '<option>Start:'+obj.start+'</option>';
+												html += '<option>End:'+obj.end+'</option>';
+												html += '<option>Degree:'+obj.degree+'</option>';
+												html += '<option>Result:'+obj.result+'</option>';
+												html += '</optgroup>';
+											});
+									        break;
+									    case 'work':
+										    $.each(val, function(k, obj) {
+										    	html += '<optgroup label="Item '+k+'">';
+										    	html += '<option>Company:'+obj.company+'</option>';
+										    	html += '<option>SubTitle:'+obj.sub_title+'</option>';
+												html += '<option>Start:'+obj.start+'</option>';
+												html += '<option>End:'+obj.end+'</option>';
+												html += '<option>Job title:'+obj.job_title+'</option>';
+												html += '<option>Job description:'+obj.job_description+'</option>';
+												html += '</optgroup>';
+											});
+									        break;
+								        case 'reference':
+								       		$.each(val, function(k, obj) {
+								       			html += '<optgroup label="Item '+k+'">';
+								       			html += '<option>Reference:'+obj.reference+'</option>';
+									    		html += '<option>Content:'+obj.content+'</option>';
+									    		html += '</optgroup>';
+								       		});
+								        	
+									        break;
+								        case 'key_qualification':
+								        	html += '<optgroup label="Item '+k+'">';
+									    	html += '<option>Content:'+obj.content+'</option>';
+									    	html += '</optgroup>';
+									        break;
+								        case 'objective':
+								        	html += '<optgroup label="Item '+k+'">';
+								        	html += '<option>Title:'+obj.title+'</option>';
+									    	html += '<option>Content:'+obj.content+'</option>';
+									    	html += '</optgroup>';
+									        break;
+									    default:
+									        break;
+									}
+									
+									html += '</select>';
+								});
+								$('#buttons').html(html);
+								$('#get-from-profile').click(function() {
+								 	if ($(parrentNode).html() == $('#content div').html()){
+		        						if (currentHTMLSection.indexOf(selection) != 0) {
+							        		temp = '<div class="'+section+'" contenteditable="true">'
+							        			+currentHTMLSection.replace(new RegExp(selection, "g"), $('#get-from-profile option:selected').val())
+							        			+'</div>';
+							        		$('#content').html(temp);
+							        	}
+						        	}else {
+						        		parrentNode.innerHTML =  $('#get-from-profile option:selected').val();	
+						        	} 
+								
+								});
+							}
+
+						});
+						
+		        	}
+		        });*/
+	        }
+    	});
+	}
+	test();
 	function editPhoto() {
 
 	}
-	$(document).ready(function() {
-
-		
-		
-	});
 	var isBusy = false;
 		/*$('img').click(function(e) {
 			e.preventDefault();
@@ -53,7 +257,7 @@
 				var url = window.location.href;
 				var token = url.split('=');
 
-				var content = $('#content select').length == 1 ? $('select option:selected').val()
+				var content = $('#content select').length == 1 ? $('select li:selected').val()
 					: $('#content').html();
 
 				content = content.replace(/\t|\n+/g, '');
@@ -78,32 +282,45 @@
 			// });
 		}
 		function clickApply() {
-			// $('#apply').click(function(e) {
-				// e.preventDefault();
-				var url = window.location.href;
-				var token = url.split('=');
-				if (isBusy) return;
-				$("#loading").show();
-				isBusy = true;
-				$.ajax({
-					url : '/api/template/apply/{{ $template->id }}/{{ $section}}?token='+token[1],
-					type : 'GET',
-					success: function(result) {
-						$("#loading").hide();
-						if (result.status_code == 200) {
-							if ($('#content select').length == 1) {
-								$('#content select option[value = '+result.data+']').attr('selected');
+			var url = window.location.href;
+			var token = url.split('=');
+			if (isBusy) return;
+			$("#loading").show();
+			isBusy = true;
+			$.ajax({
+				url : '/api/template/apply/{{ $template->id }}/{{ $section}}?token='+token[1],
+				type : 'GET',
+				success: function(result) {
+					$("#loading").hide();
+					if (result.status_code == 200) {
+						if ($('#content select').length == 1) {
+							$('#content select li[value = '+result.data+']').attr('selected');
 
-								console.log(result.data);
-							} else $('#content').html(result.data);
+							
+						} else $('#content').html(result.data);
 
-							alert('Apply data from Profile successfully!');
-						}
+						alert('Apply data from Profile successfully!');
 					}
-				}).always(function() {
-					isBusy = false;
-				});
-			// });
+				}
+			}).always(function() {
+				isBusy = false;
+			});
+		}
+
+		function getFromProfile() {
+			var section = "{{ $section }}";
+			$.ajax({
+				url: "{{ route('api.template.get.fromprofile', [$template->id, $section]) }}",
+				data: {
+					token: document.location.href.split('?token=')[1],
+					content: '<div contenteditable="true" class="'+section+'">'+$('.'+section).html()+'</div>'
+				},
+				type: "POST",
+				success: function(result) {
+					
+					alert('Successfully!');
+				}
+			});
 		}
 		// clickSave();
 		// clickApply();

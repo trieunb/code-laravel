@@ -77,7 +77,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         $template->description = $request->get('description');
         $template->version = $request->get('version');
         $template->status = $request->get('status');
-
+        if ($request->get('status') == 2) {
+            $template->published_at = time();
+        }
         TemplateMarket::makeSlug($template);
         $result = $template->save();
 

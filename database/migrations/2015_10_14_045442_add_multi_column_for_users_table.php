@@ -13,8 +13,8 @@ class AddMultiColumnForUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function($table) {
-            $table->string('link_profile', 100)->after('email')->nullable();
-            $table->string('infomation', 100)->after('link_profile')->nullable();
+            $table->text('link_profile')->after('email')->nullable();
+            $table->text('infomation')->after('link_profile')->nullable();
         });
     }
 

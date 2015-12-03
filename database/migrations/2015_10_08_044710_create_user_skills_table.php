@@ -15,10 +15,10 @@ class CreateUserSkillsTable extends Migration
         Schema::create('user_skills', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->string('skill_name', 45);
+            $table->text('skill_name');
             $table->boolean('skill_test');
-            $table->string('skill_test_point', 45);
-            $table->String('experience', 45);
+            $table->text('skill_test_point');
+            $table->text('experience');
             $table->timestamps();
         });
     }
