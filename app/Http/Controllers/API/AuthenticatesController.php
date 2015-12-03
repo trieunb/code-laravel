@@ -206,22 +206,21 @@ class AuthenticatesController extends Controller
         try {
             $user = \JWTAuth::toUser($request->get('token'));
             $rules->validate($request->all());
-            $old_pass = $request->get('old_pass');
-            $new_pass = $request->get('new_pass');
-            if (Hash::check($old_pass, $user->password)) {
+
+            if (Hash::check($request->get('old_pass'), $user->password)) {
                 
-                $this->user->update(['password' => Hash::make($new_pass)], $user->id);
+                $this->user->update(['password' => Hash::make($request->get('new_pass'))], $user->id);
                 
                 return response()->json([
                     'status_code' => 200,
                     'status' => true,
-                    'message' => "Success! Password Change Requested"
+                    'message' => "Success! Password Change Requested."
                 ]);
             }
             return response()->json([
                 'status_code' => 403,
                 'status' => false,
-                'message' => 'Password is incorrect'
+                'message' => 'Password is incorrect!'
             ], 403);
 
         } catch(ValidatorAPiException $e) {
