@@ -92,6 +92,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('user/status', 'UsersController@getStatus');
     get('user/removephoto/{id}', 'UsersController@removePhoto');
     get('user/answer/{id}', ['as' => 'api.user.get.answers', 'uses' => 'UsersController@getAnswersForAdmin']);
+    get('user/{id}/{section}', ['as' => 'api.user.get.section', 'uses' => 'UsersController@getSection']);
 
     post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('user/upload', ['uses' => 'UsersController@uploadImage']);
@@ -119,7 +120,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('template/menu/{id}', ['as'=> 'edit.template','uses' => 'TemplatesController@editFullTemplate']);
     post('template/{id}/edit/photo', ['as' => 'api.template.post.edit.photo', 'uses' => 'TemplatesController@editPhoto']);
     post('template/view/{id}', ['as'=> 'edit.template','uses' => 'TemplatesController@editFullTemplate']);
-
+    post('template/getfromprofile/{id}/{section}', ['as' => 'api.template.get.fromprofile', 'uses' => 'TemplatesController@getFromProfile']);
     /**
      * Market Route
      */

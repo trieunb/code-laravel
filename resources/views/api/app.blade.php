@@ -12,9 +12,11 @@
 	@yield('css')
 </head>
 <body>
+<main class="mobile">
 	<div class="container">
 		@yield('content')
 	</div>
+</main>
 	<script src="{{ asset('js/jquery-2.1.4.js') }}"></script>
 	<script src="{{ asset('js/bootstrap.js') }}"></script>
 	<script src="{{  asset('js/nicEdit.js') }}"></script>

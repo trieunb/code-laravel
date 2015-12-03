@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnThumbnailTemplates extends Migration
+class AddColumnPublishedAtForTemplateMarketsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AddColumnThumbnailTemplates extends Migration
      */
     public function up()
     {
-        Schema::table('templates', function($table) {
-            $table->text('image')->after('title');
+        Schema::table('template_markets', function($table) {
+            $table->timestamp('published_at')->nullable();
         });
     }
 
@@ -24,8 +24,8 @@ class AddColumnThumbnailTemplates extends Migration
      */
     public function down()
     {
-        Schema::table('templates', function ($table) {
-            $table->dropColumn('image');
+        Schema::table('template_markets', function($table) {
+            $table->dropColumn('published_at');
         });
     }
 }

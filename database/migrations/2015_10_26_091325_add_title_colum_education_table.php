@@ -13,7 +13,7 @@ class AddTitleColumEducationTable extends Migration
     public function up()
     {
         Schema::table('user_educations', function($table) {
-            $table->string('title', 100)->after('user_id');
+            $table->text('title')->after('user_id');
         });
     }
 

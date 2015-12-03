@@ -325,4 +325,10 @@ class UsersController extends Controller
 			return response()->json(['status' => false, 'message' => $e->getMessage()]);
 		}
 	}
+
+	public function getSection($id, $section)
+	{
+		\Log::info('get section user', [$id, $section]);
+		return $this->user->getSectionProfile($id, $section);
+	}
 }

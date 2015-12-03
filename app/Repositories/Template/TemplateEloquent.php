@@ -250,6 +250,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      */
     public function applyForInfo($template, $section, $data)
     {
+    
         $template->content = $data['content'];
         $sec = $template->section;
 
@@ -280,4 +281,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             ? event(new RenderImageAfterCreateTemplate($template->id, $template->content, $template->slug))
             : null;
     }
+
+    
 }

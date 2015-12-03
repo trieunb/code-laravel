@@ -7,11 +7,14 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\UpdateColumnWithClauseTrait;
+use Laracasts\Presenter\PresentableTrait;
 
 class Template extends Model
 {
 
-    use UpdateColumnWithClauseTrait, SoftDeletes;
+    use UpdateColumnWithClauseTrait, SoftDeletes, PresentableTrait;
+
+    protected $presenter = 'App\Presenter\TemplatePresenter';
 
     /**
      * Table name

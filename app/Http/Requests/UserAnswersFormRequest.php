@@ -25,6 +25,8 @@ class UserAnswersFormRequest extends Request
     {
 
         $rules = [];
+
+        if ( ! $this->has('points')) return $rules;
         
         foreach ($this->get('points') as $key => $val) {
 

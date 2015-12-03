@@ -1,8 +1,13 @@
 <?php
 namespace App\Repositories\User;
 
+use App\Models\Objective;
+use App\Models\Qualification;
 use App\Models\Question;
+use App\Models\Reference;
 use App\Models\User;
+use App\Models\UserEducation;
+use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
@@ -400,5 +405,47 @@ class UserEloquent extends AbstractRepository implements UserInterface
             Question::prepareQuestionsForSave($data)))
         )
             throw new \Exception('Error when save.');
+    }
+
+    public function getSectionProfile($id, $section)
+    {
+        switch ($section) {
+            case 'education':
+                return json_encode(['data' => ['education' => UserEducation::whereUserId($id)->get()]]);
+                break;
+            case 'work':
+                return json_encode(['data' => ['work' => UserWorkHistory::whereUserId($id)->get()]]);
+                break;
+            case 'reference':
+                return json_encode(['data' => ['reference' => Reference::whereUserId($id)->get()]]);
+                break;
+            case 'key_qualification':
+                return json_encode(['data' => ['key_qualification' => Qualification::whereUserId($id)->get()]]);
+                break;
+            case 'objective':
+                return json_encode(['data' => ['objective' => Objective::whereUserId($id)->get()]]);
+                break;
+            case 'name': 
+                return json_encode(['data' => $this->getById($id)->present()->name()]);
+                break;
+            case 'profile_website':
+            case 'linkedin':
+                return json_encode(['data' => $this->getById($id)->link_profile]);
+                break;
+            case 'availability':
+                $status = null;
+                foreach (\Setting::get('user_status') as $k => $v) {
+                    if ($v['id'] == $this->getById($id)->status)
+                        $status = $v;
+                }
+                return json_encode(['data' => $status]);
+                break;
+            case 'phone':
+                return json_encode(['data' => $this->getById($id)->mobile_phone]);
+                break;
+            default:
+                return json_encode(['data' =>$this->getById($id)->pluck($section)]);
+                break;
+        }
     }
 }

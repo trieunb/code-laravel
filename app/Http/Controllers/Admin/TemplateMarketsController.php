@@ -30,7 +30,7 @@ class TemplateMarketsController extends Controller
     {
         $sections = createClassSection();
         $result = createSection($request->get('content'), $sections);
-
+        
         return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
             ? redirect()->route('admin.template.get.index')->with('message', 'Create Template successfully!')
             : redirect()->back()->with('message', 'Error when create template!');
@@ -45,6 +45,11 @@ class TemplateMarketsController extends Controller
 
     public function postEdit(TemplateFormRequest $request, $id)
     {
+        $dom = new \DOMDocument();
+        dd($dom->loadHTML( $request->get('content')));
+       
+        return;
+        // return element_to_obj($dom->documentElement);
         $sections = createClassSection();
         $data = createSection($request->get('content'), $sections);
         
