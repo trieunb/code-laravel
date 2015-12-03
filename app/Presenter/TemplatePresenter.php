@@ -17,21 +17,16 @@ class TemplatePresenter extends Presenter
 		 switch ($section) {
             case 'education':
             	foreach (UserEducation::whereUserId($id)->get() as $key => $education) {
-            		$html .= '<li><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                              Education .'.($key + 1).'
-                              <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            </a>';
-            		$html .= '<div class="dropdown-menu" aria-labelledby="dLabel">';
-            		$html .= '<ul class="list list-unstyled">';
-            		$html .= '<li>Title:'.$education->title.'</li>';
-            		$html .= '<li>School:'.$education->school_name.'</li>';
-            		$html .= '<li>Start:'.$education->start.'</li>';
-            		$html .= '<li>End:'.$education->end.'</li>';
-            		$html .= '<li>Degree:'.$education->degree.'</li>';
-            		$html .= '<li>Result:'.$education->result.'</li>';
+            		$html .= '<optgroup label="Education .'.($key + 1).'">"';
+            		$html .= '<option>Title:'.$education->title.'</option>';
+            		$html .= '<option>School:'.$education->school_name.'</option>';
+            		$html .= '<option>Start:'.$education->start.'</option>';
+            		$html .= '<option>End:'.$education->end.'</option>';
+            		$html .= '<option>Degree:'.$education->degree.'</option>';
+            		$html .= '<option>Result:'.$education->result.'</option>';
             		$html .= '</ul>';
             		$html .= '</div>';
-            		$html .= '</li>';
+            		$html .= '</optgroup>';
             	}
 
                 return $html;

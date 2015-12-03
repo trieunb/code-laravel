@@ -1,129 +1,148 @@
 @extends('api.app')
 
 @section('css')
-	<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" >
-  <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }} " media="screen" title="no title" charset="utf-8">
-  <link rel="stylesheet" href="{{ asset('css/fonts.css') }} " media="screen" title="no title" charset="utf-8">
-  <link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
-  <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script> -->
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" >
+<link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }} " media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{{ asset('css/fonts.css') }} " media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script> -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous"> -->
 
 @stop
 
 @section('content')
-	<!-- <div id="myPanel" style=""></div> -->
-	<div id="loading">
-		<img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
-	</div>
-	<div class="row" >
-		<form id="upload">
-			<div id="content" class="col-md-12" contenteditable="true">
-				
-			  	@if ($section != 'availability')
-		  			{!! $content !!}
-	  			@else
-	  				{!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
-			  	@endif
-	
-			  </div> 
-		</form>
-	</div>
-	<div class="col-md-12" id="buttons" >
-		 
-		<div class="dropdown">
-  <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Choose Type Edit
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dLabel">
-    <li id="manual">
-    	<a>Type Manual</a>
-    </li>
-    <li id="get-profile">
-    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="circle dropdown">
-                        Get Form Profile
-  	</a>
-    	
-    	<div class="" aria-labelledby="dLabel">
-            <div class="top">
-              <span class="close">x</span>
-              <p>Choose the element you want to edit</p>
-            </div>
-            <ul class="list list-unstyled list-inline">
-              	{!! $template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
-            </ul>
-      	</div>
-      	</div>
-    </li>
-  </ul>
+<!-- <div id="myPanel" style=""></div> -->
+<div id="loading">
+	<img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
 </div>
-		
-		
+<div class="row" >
+	<form id="upload">
+		<div id="content" class="col-md-12" contenteditable="true">
+
+			@if ($section != 'availability')
+			{!! $content !!}
+			@else
+			{!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
+			@endif
+
+		</div> 
+	</form>
+</div>
+<div class="col-md-12" id="buttons" >
+
+	<div class="dropdown">
+		<button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Choose Type Edit
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" aria-labelledby="dLabel" id="choose-type">
+			<!-- <li id="manual">
+				<a>Type Manual</a>
+			</li> -->
+			<li >
+				<a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="circle dropdown">
+					Get Form Profile
+				</a>
+				<div id="get-from-profile" class="" aria-labelledby="dLabel">
+		<div class="top">
+			<span class="close">x</span>
+			<p>Choose the element you want to edit</p>
+		</div>
+		<ul class="list list-unstyled" >
+			<li id="manual"><a>Type Manual</a></li>
+			<li>
+				<a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
+				<select name="" class="form-control">
+					<option value="">Get From Profile</option>
+					{!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
+				</select><!-- <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
+					<div class="dropdown-menu" aria-labelledby="dLabel">
+					<ul class="list list-unstyled ">
+						{!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
+					</ul>
+					</div> -->
+				</a>
+			</li>
+		</ul>
+	</div>
+			</li>
+		</ul>
+	</div>
+	
+</div>
+
+
 @stop
 
 @section('scripts')
-	<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
-	{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
-	<script src="{{  asset('js/nicEdit.js') }}"></script>
-	<script>
+<script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
+{{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
+<script src="{{  asset('js/nicEdit.js') }}"></script>
+<script src="{{  asset('js/main.js') }}"></script>
+
+<script>
 	function test() {
 		var selection = '';
 		var temp = null;
 
-    	document.getElementById('content').addEventListener('mouseup', function() {
-    		if (window.getSelection) {
-	          selection = window.getSelection();
-	        } else if (document.selection) {
-	          selection = document.selection.createRange();
-	        }
-	        selection.toString() !== '' ;
-	        
-	        var parrentNode = window.getSelection().anchorNode.parentNode;
-	        var currentHTMLSection = $('#content div').html();
+		document.getElementById('content').addEventListener('touchstart', function() {
 
-	        if ($(parrentNode).html() == $('#content div').html()) {
-	        	selection = window.getSelection().getRangeAt(0).toString();
-	        }
+		});
+		document.getElementById('content').addEventListener('touchmove', function() {
+			
+		});
+		document.getElementById('content').addEventListener('touchend', function() {
+			if (window.getSelection) {
+				selection = window.getSelection();
+			} else if (document.selection) {
+				selection = document.selection.createRange();
+			}
+			selection.toString() !== '' ;
 
-	        var section = '{{ $section }}';
-	        var user_id = '{{ \Auth::user()->id }}';
-	        var token = window.location.href.split('?')[1];
+			var parrentNode = window.getSelection().anchorNode.parentNode;
+			var currentHTMLSection = $('#content div').html();
 
-    		if (selection.toString() !== '' ) {
-    			
-        		$('#buttons').show();
-        		$('#manual').click(function() {
+			if ($(parrentNode).html() == $('#content div').html()) {
+				selection = window.getSelection().getRangeAt(0).toString();
+			}
+
+			var section = '{{ $section }}';
+			var user_id = '{{ \Auth::user()->id }}';
+			var token = window.location.href.split('?')[1];
+
+			if (selection.toString() !== '' ) {
+
+				$('#buttons').show();
+
+				// var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
+				// $('#buttons').html(html);
+
+				$(document).off('click', '#manual').on('click', '#manual', function() {
 					var answer = confirm('Are you delete selected text ?');
 
 					if ( ! answer) return;
 					parrentNode.innerHTML = '';
-					$('#buttons').html('');
+					$('#buttons').hide();
 				});
-				var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
-		        		$('#buttons').html(html);
-		        		
-		        		$('#manual').click(function() {
-							parrentNode.innerHTML = '';
-							$('#buttons').html('');
-						});
-						$('#get-profile').click(function() {
-							$('#buttons').html(html);
-								$('#get-from-profile').click(function() {
-								 	if ($(parrentNode).html() == $('#content div').html()){
-		        						if (currentHTMLSection.indexOf(selection) != 0) {
-							        		temp = '<div class="'+section+'" contenteditable="true">'
-							        			+currentHTMLSection.replace(new RegExp(selection, "g"), $('#get-from-profile option:selected').val())
-							        			+'</div>';
-							        		$('#content').html(temp);
-							        	}
-						        	}else {
-						        		parrentNode.innerHTML =  $('#get-from-profile option:selected').val();	
-						        	} 
-								
-								});
+				$(document).off('change', 'select').on('change', 'select', function() {
+					// $('#buttons').html(html);
+					// $('select').click(function() {
+					$('#buttons').hide();
+						if ($(parrentNode).html() == $('#content div').html()){
+							if (currentHTMLSection.indexOf(selection) != 0) {
+								temp = '<div class="'+section+'" contenteditable="true">'
+								+currentHTMLSection.replace(new RegExp(selection, "g"), $('select option:selected').val())
+								+'</div>';
+								$('#content').html(temp);
+							}
+						}else {
+							parrentNode.innerHTML =  $('select option:selected').val();	
+						} 
+						$('select option:firt-child').prop('selected', true);
+					// });
 
-						});
-					
+				});
+
         		/*$.ajax({
 		        	url: "/api/user/"+user_id+"/"+section+'?'+token,
 		        	type: 'GET',
@@ -215,20 +234,20 @@
 						
 		        	}
 		        });*/
-	        }
-    	});
-	}
-	test();
-	function editPhoto() {
+}
+});
+}
+test();
+function editPhoto() {
 
-	}
-	var isBusy = false;
+}
+var isBusy = false;
 		/*$('img').click(function(e) {
 			e.preventDefault();
 			$('#file').trigger('click');
 		});*/
 
-		function clickSave() {
+function clickSave() {
 			// $('#save').click(function(e) {
 				// e.preventDefault();
 				if (isBusy) return;
@@ -238,7 +257,7 @@
 				var token = url.split('=');
 
 				var content = $('#content select').length == 1 ? $('select li:selected').val()
-					: $('#content').html();
+				: $('#content').html();
 
 				content = content.replace(/\t|\n+/g, '');
 
@@ -260,48 +279,48 @@
 				});
 				
 			// });
-		}
-		function clickApply() {
-			var url = window.location.href;
-			var token = url.split('=');
-			if (isBusy) return;
-			$("#loading").show();
-			isBusy = true;
-			$.ajax({
-				url : '/api/template/apply/{{ $template->id }}/{{ $section}}?token='+token[1],
-				type : 'GET',
-				success: function(result) {
-					$("#loading").hide();
-					if (result.status_code == 200) {
-						if ($('#content select').length == 1) {
-							$('#content select li[value = '+result.data+']').attr('selected');
+}
+function clickApply() {
+	var url = window.location.href;
+	var token = url.split('=');
+	if (isBusy) return;
+	$("#loading").show();
+	isBusy = true;
+	$.ajax({
+		url : '/api/template/apply/{{ $template->id }}/{{ $section}}?token='+token[1],
+		type : 'GET',
+		success: function(result) {
+			$("#loading").hide();
+			if (result.status_code == 200) {
+				if ($('#content select').length == 1) {
+					$('#content select li[value = '+result.data+']').attr('selected');
 
-							
-						} else $('#content').html(result.data);
 
-						alert('Apply data from Profile successfully!');
-					}
-				}
-			}).always(function() {
-				isBusy = false;
-			});
-		}
+				} else $('#content').html(result.data);
 
-		function getFromProfile() {
-			var section = "{{ $section }}";
-			$.ajax({
-				url: "{{ route('api.template.get.fromprofile', [$template->id, $section]) }}",
-				data: {
-					token: document.location.href.split('?token=')[1],
-					content: '<div contenteditable="true" class="'+section+'">'+$('.'+section).html()+'</div>'
-				},
-				type: "POST",
-				success: function(result) {
-					
-					alert('Successfully!');
-				}
-			});
+				alert('Apply data from Profile successfully!');
+			}
 		}
+	}).always(function() {
+		isBusy = false;
+	});
+}
+
+function getFromProfile() {
+	var section = "{{ $section }}";
+	$.ajax({
+		url: "{{ route('api.template.get.fromprofile', [$template->id, $section]) }}",
+		data: {
+			token: document.location.href.split('?token=')[1],
+			content: '<div contenteditable="true" class="'+section+'">'+$('.'+section).html()+'</div>'
+		},
+		type: "POST",
+		success: function(result) {
+
+			alert('Successfully!');
+		}
+	});
+}
 		// clickSave();
 		// clickApply();
 	/*	CKEDITOR.inline('editor',{
@@ -325,7 +344,7 @@
             }
         }); 
         
-        CKEDITOR.instances.editor.setData("{!! $content !!}");*/
+CKEDITOR.instances.editor.setData("{!! $content !!}");*/
 
 		/*bkLib.onDomLoaded(function() {
           	var myNicEditor = new nicEditor();
@@ -374,4 +393,4 @@
 		  }
 		}*/
 	</script>
-@stop
+	@stop
