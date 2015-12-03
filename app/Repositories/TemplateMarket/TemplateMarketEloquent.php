@@ -29,6 +29,15 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         return $this->getDataWhereClause('status', '=', 2);
     }
 
+    public function getPaginationTemplateMarket($page)
+    {
+        $offset = ($page - 1) * 10;
+        return $this->model->where('status', '=', 2)
+            ->skip($offset)
+            ->take(10)
+            ->get();
+    }
+
     public function getDetailTemplateMarket($template_id)
     {
         $template_mk = $this->model->findOrFail($template_id);

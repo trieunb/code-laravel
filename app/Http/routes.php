@@ -123,7 +123,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Market Route
      */
-    get('market', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/{page}', ['uses' => 'MarketPlacesController@getPaginationTemplateMarket']);
     get('market/template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
     
