@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\Objective;
 use App\Models\Qualification;
 use App\Models\Question;
+use App\Models\UserQuestion;
 use App\Models\Reference;
 use App\Models\Role;
 use App\Models\Section;
@@ -25,6 +26,8 @@ use App\Repositories\Qualification\QualificationEloquent;
 use App\Repositories\Qualification\QualificationInterface;
 use App\Repositories\Question\QuestionEloquent;
 use App\Repositories\Question\QuestionInterface;
+use App\Repositories\UserQuestion\UserQuestionEloquent;
+use App\Repositories\UserQuestion\UserQuestionInterface;
 use App\Repositories\Reference\ReferenceEloquent;
 use App\Repositories\Reference\ReferenceInterface;
 use App\Repositories\Role\RoleEloquent;
@@ -108,6 +111,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
 		$this->app->bind(QuestionInterface::class, function() {
 			return new QuestionEloquent(new Question);
+		});
+
+		$this->app->bind(UserQuestionInterface::class, function() {
+			return new UserQuestionEloquent(new UserQuestion);
 		});
 	}
 }

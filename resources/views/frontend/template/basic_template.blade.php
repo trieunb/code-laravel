@@ -67,7 +67,7 @@
             border-bottom: 3px solid #D8D8D8;">
             <ul style="list-style:none">
                 <li>
-                    <label style="font-weight:600">Age: </label>{{$age}}
+                    <label style="font-weight:600">Age:</label> {{$age}}
                 </li>
                 <li>
                     <?php
@@ -75,11 +75,12 @@
                         if ($user_info->gender == 0) $gender = 'Male';
                         if ($user_info->gender == 1) $gender = 'Female';
                         if ($user_info->gender == 2) $gender = 'Other';
+                        if(is_null($user_info->gender)) $gender = null;
                     ?>
-                    <label style="font-weight:600">Gender: </label>{{ $gender }}
+                    <label style="font-weight:600">Gender:</label> {{ $gender }}
                 </li>
                 <li>
-                    <label style="font-weight:600">Info: </label>{{$user_info->infomation}}
+                    <label style="font-weight:600">Info:</label> {{$user_info->infomation}}
                 </li>
             </ul>
         </div>
