@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\Question\QuestionInterface;
+use App\Repositories\UserQuestion\UserQuestionInterface;
 use Illuminate\Http\Request;
+use App\Models\UserQuestion;
 
 class QuestionsController extends Controller
 {
@@ -15,9 +17,16 @@ class QuestionsController extends Controller
      */
     private $question;
 
-    public function __construct(QuestionInterface $question)
+    /**
+     * UserQuestionInterface
+     * @var $question
+     */
+    private $user_question;
+
+    public function __construct(QuestionInterface $question, UserQuestionInterface $user_question)
     {
         $this->question = $question;
+        $this->user_question = $user_question;
     }
 
     /**
@@ -117,15 +126,35 @@ class QuestionsController extends Controller
 
     public function postAnswerOfUser(Request $request)
     {
-        $answers = [];
-        foreach ($request as $key => $value) {
-            $answers = [
-                'question_id' => $value['id'],
-                'user_id' => \Auth::user()->id,
-                'result' => $value['result'],
-                'point' => $value['point']
-            ];
+        $user = \JWTAuth::toUser($request->get('token'));
+
+        foreach ($request->get('answers') as $value) {
+            $ids = UserQuestion::where('user_id', $user->id)
+                ->where('question_id', $value['question_id'])->first();
+            if ($ids) {
+                $data_update[] = $value;
+            } else {
+                $data_save[] = $value;
+            }
         }
-        return $this->question->saveUserAnswer($answers);
+
+        if (isset($data_update) && count($data_update) > 0) {
+            foreach ($data_update as $value) {
+                $question_id = [
+                    'question_id' => $value['question_id']
+                ];
+                $data = [
+                    'result' => $value['result'],
+                    'point' => $value['point']
+                ];
+                UserQuestion::where('question_id', $question_id)->update($data);
+            }
+        }
+        if (isset($data_save) && count($data_save) > 0) {
+            $this->user_question->saveUserAnswer($data_save, $user->id);
+        }
+        
+        
+        return response()->json([ 'status_code' => 200, 'status' => true ]);
     }
 }

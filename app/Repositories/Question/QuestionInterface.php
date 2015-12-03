@@ -24,6 +24,4 @@ interface QuestionInterface extends Repository
 	 * @return mixed 
 	 */
 	public function getQuestions();
-
-	public function saveUserAnswer($request);
 }

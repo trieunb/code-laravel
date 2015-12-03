@@ -56,11 +56,4 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
     {
         return $this->getDataWhereClause('publish', '=', 1);
     }
-
-    public function saveUserAnswer($request)
-    {
-        return Question::insert($request);
-    }
-
-	
 }
