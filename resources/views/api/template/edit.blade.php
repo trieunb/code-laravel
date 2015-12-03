@@ -57,36 +57,7 @@
     </li>
   </ul>
 </div>
-		<div class="fw" id="collapseExample">
-            <div class="content">
-             
-              <div class="control">
-
-              <ul class="list-unstyled list-inline">
-              		<li>
-                      <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="circle dropdown">
-                        Type Manual
-                      </a>
-                    </li>
-                    <li id="fix-iphone" class="open">
-                      <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="circle dropdown">
-                       	Get From Profile
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="dLabel" style="display: block;">
-                        <div class="top">
-                          <span class="close">x</span>
-                          <h4>Pages</h4>
-                          <p>Choose the element you want to edit</p>
-                        </div>
-                        <ul class="list list-unstyled"><li class=""><a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">Contact Information<span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span></a><div class="dropdown-menu" aria-labelledby="dLabel"><ul class="list list-unstyled"><li><a href="/api/template/edit/303/name?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Name</a></li><li><a href="/api/template/edit/303/address?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Address</a></li><li><a href="/api/template/edit/303/email?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Email Address</a></li></ul></div></li><li><a href="/api/template/edit/303/education?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Education</a></li><li><a href="/api/template/edit/303/work?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDkyODk1MDQsInN1YiI6MSwiaXNzIjoiaHR0cDpcL1wvMTE3LjMuMzYuMTE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTQ0ODg1NzUwNSwibmJmIjoxNDQ4ODU3NTA1LCJqdGkiOiIwM2Q1N2Q0OTA3MjhiOWQ4ODVjYTk1YjJkODQ3MGUxNCJ9.Hq2V9WF6BWcaJC3AQaXvB1RlsTtwnCCt2RZpLnOGkQM">Work</a></li></ul>
-                        
-                      </div>
-
-                    </li>
-                  </ul>
-              </div>
-            </div>
-          </div>
+		
 		
 @stop
 
@@ -122,29 +93,38 @@
     			
         		$('#buttons').show();
         		$('#manual').click(function() {
-					parrentNode.innerHTML = '';
 					var answer = confirm('Are you delete selected text ?');
 
 					if ( ! answer) return;
-
+					parrentNode.innerHTML = '';
 					$('#buttons').html('');
 				});
+				var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
+		        		$('#buttons').html(html);
+		        		
+		        		$('#manual').click(function() {
+							parrentNode.innerHTML = '';
+							$('#buttons').html('');
+						});
+						$('#get-profile').click(function() {
+							$('#buttons').html(html);
+								$('#get-from-profile').click(function() {
+								 	if ($(parrentNode).html() == $('#content div').html()){
+		        						if (currentHTMLSection.indexOf(selection) != 0) {
+							        		temp = '<div class="'+section+'" contenteditable="true">'
+							        			+currentHTMLSection.replace(new RegExp(selection, "g"), $('#get-from-profile option:selected').val())
+							        			+'</div>';
+							        		$('#content').html(temp);
+							        	}
+						        	}else {
+						        		parrentNode.innerHTML =  $('#get-from-profile option:selected').val();	
+						        	} 
+								
+								});
 
-				$('#get-profile .dropdown-menu ul li').click(function() {
-					if ($(parrentNode).html() == $('#content div').html()){
-        						if (currentHTMLSection.indexOf(selection) != 0) {
-					        		temp = '<div class="'+section+'" contenteditable="true">'
-					        			+currentHTMLSection.replace(new RegExp(selection, "g"), $(this).html())
-					        			+'</div>';
-					        		$('#content').html(temp);
-					        	}
-				        	}else {
-				        		parrentNode.innerHTML =  $(this).html();	
-				        	} 
-					return;
-				});
-						
-        	/*	$.ajax({
+						});
+					
+        		/*$.ajax({
 		        	url: "/api/user/"+user_id+"/"+section+'?'+token,
 		        	type: 'GET',
 		        	dataType: 'JSON',
