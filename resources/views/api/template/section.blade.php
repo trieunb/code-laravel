@@ -94,7 +94,7 @@
             </div>
         </div>
         <div class="fw text-center">
-            <button class="btn-trans fill edit" id="edit-template">
+            <button class="btn-trans fill edit" id="edit-template" onclick="clickEditTemplate()">
                 END EDIT MODE
             </button>
         </div>

@@ -1,4 +1,4 @@
-$(document).ready(function() {
+
   var section = ['div.name', 'div.address', 'div.phone',
       'div.email', 'div.profile_website', 'div.linkedin',
       'div.reference', 'div.objective', 'div.activitie',
@@ -11,8 +11,7 @@ $(document).ready(function() {
     var $sls = $(cls);
     $(cls).attr("contentEditable", true);
   }
-  $('#edit-template').click(function(e) {
-      e.preventDefault();
+  function clickEditTemplate() {
       var url = window.location.href;
       var token = url.split('=');
       var content = $('#content').html();
@@ -30,5 +29,4 @@ $(document).ready(function() {
           }
         }
       });
-    });
-});
+  }
