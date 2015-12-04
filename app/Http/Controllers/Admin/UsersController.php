@@ -98,13 +98,6 @@ class UsersController extends Controller
         //
     }
 
-    public function answer($id)
-    {
-        $answers = $this->user->answerForUser($id);
-        $user = $this->user->getById($id);
-
-        return view('admin.user.answer', compact('answers', 'user'));
-    }
 
     public function postAnswer(UserAnswersFormRequest $request)
     {

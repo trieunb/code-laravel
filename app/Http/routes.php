@@ -30,9 +30,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      * User Route
      */
     get('user', ['as' => 'admin.user.get.index', 'uses' => 'UsersController@index']);
-    get('user/answer/{id}', ['as' => 'admin.user.get.answer', 'uses' => 'UsersController@answer']);
     
-    post('user/answer/{id}', ['as' => 'admin.user.post.answer', 'uses' => 'UsersController@postAnswer']);
+    // post('user/answer/{id}', ['as' => 'admin.user.post.answer', 'uses' => 'UsersController@postAnswer']);
     /**
      * Template Route
      */

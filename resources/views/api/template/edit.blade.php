@@ -6,7 +6,17 @@
           charset="utf-8">
     <link rel="stylesheet" href="{{ asset('css/fonts.css') }} " media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
-
+    <style>
+        #buttons select {
+            outline: none;
+            border: none;
+            background: initial;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            text-indent: 1px;
+            text-overflow: '';
+        }
+    </style>
     @stop
 
     @section('content')
@@ -40,7 +50,7 @@
                     <li id="manual"><a>Type Manual</a></li>
                     <li>
                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                            <select name="" class="form-control">
+                            <select name="" class="">
                                 <option value="" disabled selected>Get From Profile</option>
                                 {!!$template->present()->createMenuProfile($user_id, $section) !!}
                             </select><!-- <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
@@ -70,7 +80,6 @@
 
 @section('scripts')
     <script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
-    {{-- <script src="{{  asset('js/ckeditor/ckeditor.js') }}"></script> --}}
     <script src="{{  asset('js/nicEdit.js') }}"></script>
     <script src="{{  asset('js/main.js') }}"></script>
 
@@ -78,14 +87,16 @@
         function test() {
             var selection = '';
             var temp = null;
-
+            var eventListener = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+                ? 'touchend'
+                : 'mouseup';
             document.getElementById('content').addEventListener('touchstart', function () {
 
             });
             document.getElementById('content').addEventListener('touchmove', function () {
 
             });
-            document.getElementById('content').addEventListener('mouseup', function () {
+            document.getElementById('content').addEventListener(eventListener, function () {
                 if (window.getSelection) {
                     selection = window.getSelection();
                 } else if (document.selection) {

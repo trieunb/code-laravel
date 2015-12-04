@@ -105,12 +105,12 @@ class QuestionsController extends Controller
         //
     }
 
-    public function answer($id)
+    public function answer($id, UserInterface $userInterface)
     {
-        $user = \Auth::user();
+        $user = $userInterface->getById($id);
 
-        $answers = $this->user->answerForUser($user->id);
+        $answers = $userInterface->answerForUser($id);
         
-        return view('admin.user.answer', compact('user', 'answers'));
+        return view('admin.question.answer', compact('user', 'answers'));
     }
 }

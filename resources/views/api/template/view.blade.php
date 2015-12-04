@@ -8,11 +8,6 @@
 </style>
 @endsection
 @section('content')
-    <div class="container">
-        <div class="row">
-            <button onclick="clickEditTemplate()" type="submit" class="btn btn-primary pull-right" id="edit-template">Edit</button>
-        </div>
-    </div>
     <div id="content">
         {!! $content !!}
     </div>
