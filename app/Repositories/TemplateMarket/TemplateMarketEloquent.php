@@ -23,10 +23,15 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      * Get all template in market place
      * @return mixed 
      */
-    public function getAllTemplateMarket($sortby, $order, $page)
+    public function getAllTemplateMarket($sortby, $order, $page,$search)
     {
         $offset = ($page -1 ) * 5;
         $sort = $this->model->where('status', '=', 2);
+
+        if ($search != null && $search != '') {
+            $sort->where('slug', 'LIKE', "%{$search}%");
+        }
+
         if ($sortby == 'price' && $order == 'ASC')
             $sort = $sort->orderBy('price', 'ASC');
         if ($sortby == 'price' && $order == 'DESC')
@@ -35,6 +40,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             $sort = $sort->orderBy('created_at', 'DESC');
         if ($sortby == 'created_at' && $order == 'ASC')
             $sort = $sort->orderBy('created_at', 'ASC');
+
         return $sort->skip($offset)
             ->take(5)
             ->get();
