@@ -44,9 +44,9 @@
                                 <option value="" disabled selected>Get From Profile</option>
                                 {!!$template->present()->createMenuProfile($user_id, $section) !!}
                             </select><!-- <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-							<div class="dropdown-menu" aria-labelledby="dLabel">
-							<ul class="list list-unstyled ">
-								{!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
+                            <div class="dropdown-menu" aria-labelledby="dLabel">
+                            <ul class="list list-unstyled ">
+                                {!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
                                     </ul>
                                 </div> -->
                         </a>
@@ -316,7 +316,7 @@
         }
         // clickSave();
         // clickApply();
-        /*	CKEDITOR.inline('editor',{
+        /*  CKEDITOR.inline('editor',{
          on: {
          instanceReady: function() {
          this.document.appendStyleSheet( '{{ asset("js/ckeditor/contents.css") }}' );

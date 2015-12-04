@@ -124,7 +124,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Market Route
      */
-    get('market', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
+    get('market/{page}', ['uses' => 'MarketPlacesController@getPaginationTemplateMarket']);
     get('market/template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
     get('market/search', 'MarketPlacesController@search');
@@ -150,7 +151,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('question/', 'QuestionsController@index');
 
     post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
-    post('question/', 'QuestionsController@postAnswerOfUser');
+    post('answers/', 'QuestionsController@postAnswerOfUser');
 });
 
 get('/test', function() {
