@@ -144,7 +144,7 @@ class QuestionsController extends Controller
                     'question_id' => $value['question_id']
                 ];
                 $data = [
-                    'result' => $value['result'],
+                    'point' => $value['point'],
                 ];
                 UserQuestion::where('question_id', $question_id)->update($data);
             }
