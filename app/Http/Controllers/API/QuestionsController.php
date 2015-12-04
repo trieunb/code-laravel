@@ -8,6 +8,7 @@ use App\Repositories\Question\QuestionInterface;
 use App\Repositories\UserQuestion\UserQuestionInterface;
 use Illuminate\Http\Request;
 use App\Models\UserQuestion;
+use App\Models\Question;
 
 class QuestionsController extends Controller
 {
@@ -37,11 +38,23 @@ class QuestionsController extends Controller
     public function index(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => $this->question->getQuestions()
-        ]);
+        
+        $user_answers = UserQuestion::where('user_id', $user->id)->get();
+        if (count($user_answers) > 0) {
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'data' => $user_answers
+            ]);
+        } else {
+            $questions = Question::where('publish', '=', 1)->get();
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'data' => $questions
+            ]);
+        }
+        
     }
 
     /**
@@ -127,6 +140,8 @@ class QuestionsController extends Controller
     public function postAnswerOfUser(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
+
+        // $user->questions()->attach([2,3,4], ['point' => 5]);
 
         foreach ($request->get('answers') as $value) {
             $ids = UserQuestion::where('user_id', $user->id)

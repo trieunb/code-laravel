@@ -9,9 +9,7 @@ interface TemplateMarketInterface extends Repository
 	 * Get all template in market place
 	 * @return mixed 
 	 */
-    public function getAllTemplateMarket();
-
-    public function getPaginationTemplateMarket($page);
+    public function getAllTemplateMarket($sortby, $order, $page, $search);
     
 	public function getDetailTemplateMarket($template_id);
 

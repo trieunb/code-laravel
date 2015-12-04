@@ -25,7 +25,6 @@ class MarketPlacesController extends Controller
     public function getAllTemplateMarket(Request $request)
     {
         $token = \JWTAuth::toUser($request->get('token'));
-        
         if (!$token) {
             return response()->json([
                 'status_code' => 500,
@@ -33,31 +32,12 @@ class MarketPlacesController extends Controller
                 'message' => 'token provider'
             ], 500);
         }
-
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template_market->getAllTemplateMarket()
+            'data' => $this->template_market->getAllTemplateMarket($request->get('sortby'), $request->get('order'), $request->get('page'), $request->get('search'))
         ]);
-    }
 
-    public function getPaginationTemplateMarket(Request $request, $page)
-    {
-        $token = \JWTAuth::toUser($request->get('token'));
-        
-        if (!$token) {
-            return response()->json([
-                'status_code' => 500,
-                'status' => false,
-                'message' => 'token provider'
-            ], 500);
-        }
-
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'data' => $this->template_market->getPaginationTemplateMarket($page)
-        ]);
     }
 
     public function getDetailTemplateMarket(Request $request, $template_id)
