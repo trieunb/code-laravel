@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Requests\CreateQuestionFormRequest;
 use App\Repositories\Question\QuestionEloquent;
 use App\Repositories\Question\QuestionInterface;
+use App\Repositories\User\UserInterface;
 use Illuminate\Http\Request;
 
 class QuestionsController extends Controller
@@ -16,10 +17,12 @@ class QuestionsController extends Controller
      * @var $question
      */
     private $question;
+    private $user;
 
-    public function __construct(QuestionInterface $question)
+    public function __construct(QuestionInterface $question,UserInterface $user)
     {
         $this->question = $question;
+        $this->user = $user;
     }
 
     /**
@@ -104,6 +107,10 @@ class QuestionsController extends Controller
 
     public function answer($id)
     {
-        dd($this->question->answerForUser($id));
+        $user = \Auth::user();
+
+        $answers = $this->user->answerForUser($user->id);
+        
+        return view('admin.user.answer', compact('user', 'answers'));
     }
 }

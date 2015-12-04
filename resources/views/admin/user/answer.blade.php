@@ -33,9 +33,8 @@
 				<div class="row">
 					<ul>
 						<li>Question: {{ $answer->content }}</li>
-						<li>Answer: {{ $answer->pivot->result }}</li>
 						<br>
-						<input type="text" class="js-range-{{ $answer->id }}"  />
+						<input  type="text" class="js-range-{{ $answer->id }}"  />
 						<br>
 							<input readonly type="text" name="points[{{ $answer->id}}]" class="js-display-change-{{ $answer->id }} form-control  display" value="{{ $answer->pivot->point }}"></input>	
 							<?php $points[] = $answer->pivot->point ?>

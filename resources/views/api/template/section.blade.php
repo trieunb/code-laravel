@@ -27,8 +27,7 @@
                 <div class="col-md-6 text-right edit">
                     <span>Price: Free</span>
                     <button class="btn-trans semi-bold">Read more</button>
-                    <!--  <button class="btn-trans semi-bold start collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Edit</button>
-                    <button class="btn-trans fill semi-bold end collapsed" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">End edit</button> -->
+
                 </div>
                 <div class="fw" id="collapseExample">
                     <div class="content">
@@ -132,13 +131,23 @@
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 <script>
+    var tmp = '';
+    document.getElementById('content').addEventListener('touchstart', function () {
+
+    });
     document.getElementById('content').addEventListener('mouseup', function () {
+
+
+        var touches = event.changedTouches;
+
+        document.getElementById('content').addEventListener('mouseup', function () {
         if (window.getSelection) {
             selection = window.getSelection();
         } else if (document.selection) {
             selection = document.selection.createRange();
         }
         selection.toString() !== '';
+
         var parrentNode = window.getSelection().anchorNode.parentNode;
         var currentHTMLSection = $('#content div').html();
 
@@ -153,7 +162,7 @@
             'key_qualification', 'availability', 'infomation'
         ]
 
-        var top = $(document).scrollTop() + 50;
+        var top = $(document).scrollTop() - 30;
         $('#buttons').css({'top': top, position : 'absolute', width: '70%'});
         if (sections.indexOf(section) == -1) {
           var context = $(parrentNode).parents()[0];
@@ -164,25 +173,41 @@
         }
         var user_id = "{{ \Auth::user()->id }}";
         var token = document.location.href.split('?');
+        tmp = selection.toString();
         if (selection.toString() === '' || selection.toString() === " ") return;
         $(document).off('click', '#manual').on('click', '#manual', function () {
-            var answer = confirm('Are you delete selected text ?');
+            var answer = confirm('This option will delete your text style!');
 
             if (!answer) return;
             parrentNode.innerHTML = '';
             $('#buttons').hide();
         });
         $(document).off('change', 'select').on('change', 'select', function () {
-                        $('#buttons').hide();
-
-                        if ($(parrentNode).html() == $('#content div.'+section).html()) {
-                          
-                                temp = $(parrentNode).html().replace(new RegExp(window.getSelection().getRangeAt(0).toString(), "g"), $('select option:selected').val());
-                                $('#content div.'+section).html(temp);
-                        } else {
-                            parrentNode.innerHTML = $('select option:selected').val();
+                $('#buttons').hide();
+                if (tmp == '' || tmp == ' ' || tmp == null) return;
+                // alert(window.getSelection().getRangeAt(0).toString());
+                var ht = $(parrentNode).html().toString();
+                ht = ht.replace(/<br\s*[\/]?>/gi, ' ');
+                ht.replace(new RegExp(/\s+g/), '');
+                if ($(parrentNode).html() == $('#content div.'+section).html()) {
+                        var tmpHTML = $(parrentNode).html();
+                        $(parrentNode).html(ht);
+                        tmp = tmp.replace(new RegExp(/\s+g/), '');
+                        if ( $(parrentNode).text().indexOf(tmp) == -1) {
+                            alert('Not found selected text!');
+                            $(parrentNode).html(tmpHTML);
+                            return;
                         }
-                    });
+                        $(parrentNode).html(tmpHTML);
+                        var answer = confirm('This option will delete your selected text!');
+                        if ( ! answer) return;
+                        var temp = $(parrentNode).text().replace(new RegExp(tmp, "g"), $('select option:selected').val());
+                        // alert(window.getSelection().getRangeAt(0).toString());
+                        $('#content div.'+section).html(temp);
+                } else {
+                    parrentNode.innerHTML = $('select option:selected').val();
+                }
+        });
 
         $.ajax({
             url: "/api/user/" + user_id + "/" + section + "?" + token[1],
@@ -262,6 +287,8 @@
             }
         });
     });
+            });
+    
  $(document).ready(function() {
             $('.close').click(function() {
                 $('#buttons').hide();
