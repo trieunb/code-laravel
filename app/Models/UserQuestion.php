@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UpdateColumnWithClauseTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\belongsTo;
+use App\Models\Question;
 
 class UserQuestion extends Model
 {
@@ -16,4 +17,6 @@ class UserQuestion extends Model
         'result',
         'point'
     ];
+
+    
 }
