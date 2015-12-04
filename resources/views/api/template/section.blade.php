@@ -135,7 +135,7 @@
     document.getElementById('content').addEventListener('touchstart', function () {
 
     });
-    document.getElementById('content').addEventListener('mouseup', function () {
+    document.getElementById('content').addEventListener('touchmove', function () {
 
 
         var touches = event.changedTouches;
@@ -147,7 +147,10 @@
             selection = document.selection.createRange();
         }
         selection.toString() !== '';
-
+        var clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
+        var span = document.createElement('span');
+        span.appendChild(clonedSlection);
+        var replace = span.innerHTML;
         var parrentNode = window.getSelection().anchorNode.parentNode;
         var currentHTMLSection = $('#content div').html();
 
@@ -185,24 +188,17 @@
         $(document).off('change', 'select').on('change', 'select', function () {
                 $('#buttons').hide();
                 if (tmp == '' || tmp == ' ' || tmp == null) return;
-                // alert(window.getSelection().getRangeAt(0).toString());
-                var ht = $(parrentNode).html().toString();
-                ht = ht.replace(/<br\s*[\/]?>/gi, ' ');
-                ht.replace(new RegExp(/\s+g/), '');
                 if ($(parrentNode).html() == $('#content div.'+section).html()) {
-                        var tmpHTML = $(parrentNode).html();
-                        $(parrentNode).html(ht);
-                        tmp = tmp.replace(new RegExp(/\s+g/), '');
-                        if ( $(parrentNode).text().indexOf(tmp) == -1) {
+                        if ( $(parrentNode).html().indexOf(replace) == -1) {
                             alert('Not found selected text!');
                             $(parrentNode).html(tmpHTML);
                             return;
                         }
-                        $(parrentNode).html(tmpHTML);
+
                         var answer = confirm('This option will delete your selected text!');
                         if ( ! answer) return;
-                        var temp = $(parrentNode).text().replace(new RegExp(tmp, "g"), $('select option:selected').val());
-                        // alert(window.getSelection().getRangeAt(0).toString());
+                        var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+
                         $('#content div.'+section).html(temp);
                 } else {
                     parrentNode.innerHTML = $('select option:selected').val();

@@ -85,7 +85,7 @@
             document.getElementById('content').addEventListener('touchmove', function () {
 
             });
-            document.getElementById('content').addEventListener('touchend', function () {
+            document.getElementById('content').addEventListener('mouseup', function () {
                 if (window.getSelection) {
                     selection = window.getSelection();
                 } else if (document.selection) {
@@ -110,7 +110,10 @@
 
                     // var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
                     // $('#buttons').html(html);
-
+                    var clonedSlection = window.getSelection().getRangeAt(0).cloneRange().cloneContents();
+                    var span = document.createElement('span');
+                    span.appendChild(clonedSlection);
+                    var replace = span.innerHTML;
                     $(document).off('click', '#manual').on('click', '#manual', function () {
                         var answer = confirm('This option will delete your selected text!');
 
@@ -121,13 +124,13 @@
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
                         if ($(parrentNode).html() == $('#content div').html()) {
-                            if (currentHTMLSection.indexOf(selection) != 0) {
+                            if ($('#content div').html().indexOf(replace) != 0) {
                                 var answer = confirm('This option will delete your text style!');
 
                                 if (!answer) return;
-                               
+                                
                                 temp = '<div class="' + section + '" contenteditable="true">'
-                                        + $('#content div').text().replace(new RegExp(selection, "g"), $('select option:selected').val())
+                                        + $('#content div').html().replace(new RegExp(replace, "g"), $('select option:selected').val())
                                         + '</div>';
                                 $('#content').html(temp);
                             }
