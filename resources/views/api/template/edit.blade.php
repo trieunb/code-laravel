@@ -112,7 +112,7 @@
                     // $('#buttons').html(html);
 
                     $(document).off('click', '#manual').on('click', '#manual', function () {
-                        var answer = confirm('Are you delete selected text ?');
+                        var answer = confirm('This option will delete your selected text!');
 
                         if (!answer) return;
                         parrentNode.innerHTML = '';
@@ -122,8 +122,12 @@
                         $('#buttons').hide();
                         if ($(parrentNode).html() == $('#content div').html()) {
                             if (currentHTMLSection.indexOf(selection) != 0) {
+                                var answer = confirm('This option will delete your text style!');
+
+                                if (!answer) return;
+                               
                                 temp = '<div class="' + section + '" contenteditable="true">'
-                                        + currentHTMLSection.replace(new RegExp(selection, "g"), $('select option:selected').val())
+                                        + $('#content div').text().replace(new RegExp(selection, "g"), $('select option:selected').val())
                                         + '</div>';
                                 $('#content').html(temp);
                             }
@@ -381,6 +385,10 @@
          headStyle.top = window.pageYOffset + 'px';
          }
          }*/
-        
+         $(document).ready(function() {
+            $('.close').click(function() {
+                $('#buttons').hide();
+            });
+         });
     </script>
 @stop
