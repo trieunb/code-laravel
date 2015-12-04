@@ -31,10 +31,11 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
 
     public function getPaginationTemplateMarket($page)
     {
-        $offset = ($page - 1) * 10;
+        $offset = $page * 5;
         return $this->model->where('status', '=', 2)
-            ->skip($offset)
-            ->take(10)
+            // ->skip($offset)
+            ->take($offset)
+            ->orderBy('created_at', 'DESC')
             ->get();
     }
 
