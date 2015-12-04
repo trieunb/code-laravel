@@ -709,7 +709,7 @@ p.full-name {
 #buttons {
   display: none;
 }
-#buttons .dropdown-menu {
-  left: 0;
-  top: 30px;
+#choose-type {
+  left: 0 !important;
+  top: 30px !important;
 }

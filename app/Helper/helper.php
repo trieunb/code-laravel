@@ -408,7 +408,7 @@ if (!function_exists('apply_data_for_other')) {
                     $element->innertext = $tmp;
                 }
                 break;
-            case 'key_quanlification':
+            case 'key_qualification':
                 $tmp .= '<h3 style="font-weight:600">Qualifications</h3>'; 
                 $tmp .= '<ul style="list-style:none">';
 
@@ -458,7 +458,7 @@ if (!function_exists('createClassSection')) {
             'div.email', 'div.profile_website', 'div.linkedin',
             'div.reference', 'div.objective', 'div.activitie',
             'div.work', 'div.education', 'div.photo', 'div.personal_test',
-            'div.key_quanlification', 'div.availability', 'div.infomation'
+            'div.key_qualification', 'div.availability', 'div.infomation'
         ];
     }
 }

@@ -179,5 +179,5 @@ CKEDITOR.config.format_WorkExperience= { element: 'div', attributes: { 'class': 
 CKEDITOR.config.format_Educations= { element: 'div', attributes: { 'class': 'education' } };
 CKEDITOR.config.format_Photos= { element: 'div', attributes: { 'class': 'photo' } };
 CKEDITOR.config.format_PersonalityTest= { element: 'div', attributes: { 'class': 'personal_test' } };
-CKEDITOR.config.format_KeyQuanlifications= { element: 'div', attributes: { 'class': 'key_quanlification' } };
+CKEDITOR.config.format_KeyQuanlifications= { element: 'div', attributes: { 'class': 'key_qualification' } };
 CKEDITOR.config.format_Availability = { element: 'div', attributes: { 'class': 'availability' } };

@@ -74,24 +74,29 @@ class TemplatesController extends Controller
 
     public function editView($id, $section, Request $request)
     {
-        $user_id = \JWTAuth::toUser($request->get('token'))->id;
-        $template = $this->template->forUser($id, $user_id);
-        $content = array_get($template->section, $section);
-        $status = null;
-        $setting = [];
+        try {
+             $user_id = \JWTAuth::toUser($request->get('token'))->id;
+            $template = $this->template->forUser($id, $user_id);
+            $content = array_get($template->section, $section);
+            $status = null;
+            $setting = [];
 
-        foreach (\Setting::get('user_status') as $k => $v) {
-            if ($v['id'] == $template->user->status)
-                $status = $v;
-            $setting[$v['id']] = $v['value'];
+            foreach (\Setting::get('user_status') as $k => $v) {
+                if ($v['id'] == $template->user->status)
+                    $status = $v;
+                $setting[$v['id']] = $v['value'];
+            }
+            
+          
+            $template->user->status = $template->user->status != 0 && $template->user->status != null ? $status : null;
+
+            return view()->make('api.template.edit', compact('content', 'section', 
+                'user_id', 'template', 'setting')
+            );
+        } catch (\Exception $e) {
+           return response()->json(['status_code' => 400, 'message' => $e->getMessage()]);
         }
-        
-      
-        $template->user->status = $template->user->status != 0 && $template->user->status != null ? $status : null;
-
-        return view()->make('api.template.edit', compact('content', 'section', 
-            'user_id', 'template', 'setting')
-        );
+       
     }
 
     public function postEdit($id, $section, Request $request)
