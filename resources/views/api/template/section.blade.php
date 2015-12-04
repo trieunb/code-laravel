@@ -14,6 +14,9 @@
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <style>
         #buttons select {
+            display: block;
+            width: 150px;
+            background-image: none;
             outline: none;
             border: none;
             background: initial;
@@ -21,6 +24,12 @@
             -moz-appearance: none;
             text-indent: 1px;
             text-overflow: '';
+        }
+        #manual {
+            cursor:pointer;
+        }
+         #manual -child a {
+            text-indent: 6px;
         }
     </style>
 </head>
@@ -118,10 +127,10 @@
                     <p>Choose the element you want to edit</p>
                 </div>
                 <ul class="list list-unstyled">
-                    <li id="manual"><a>Type Manual</a></li>
+                    <li id="manual" onClick=""><a>Type Manual</a></li>
                     <li>
                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                            <select id="set-data" name="">
+                            <select id="set-data" name="" class="">
 
 
                             </select>
@@ -148,7 +157,7 @@
     document.getElementById('content').addEventListener('touchstart', function () {
 
     });
-    document.getElementById('content').addEventListener('touchmove', function () {
+    document.getElementById('content').addEventListener(eventListener, function () {
 
 
         var touches = event.changedTouches;
@@ -182,9 +191,18 @@
             var top = $(document).scrollTop() - 30;
             $('#buttons').css({'top': top, position : 'absolute', width: '70%'});
             if (sections.indexOf(section) == -1) {
-              var context = $(parrentNode).parents()[0];
-              var section = $(context).attr('class');
-              
+
+             
+              $.each( $(parrentNode).parents(), function(key, val) {
+                
+                 var context = val;
+                 var tmp = $(context).attr('class');
+
+                 if (sections.indexOf(tmp) != -1) {
+                    section = tmp;
+                 }
+              });
+               
               if (sections.indexOf(section) == -1)
                 return;
             }
@@ -193,14 +211,24 @@
             tmp = selection.toString();
             if (selection.toString() === '' || selection.toString() === " ") return;
             $(document).off('click', '#manual').on('click', '#manual', function () {
-                var answer = confirm('This option will delete your text style!');
+           // $('body').on('#manual', 'click', function(e){
+            // document.getElementById('manual').addEventListener('click', function(){
+                // answer();
+                var answer = confirm('This option will delete your selected text!');
+                if ( ! answer) return;
+                if ($(parrentNode).html() == $('#content div.'+section).html()) {
+                    
+                    var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), '');
 
-                if (!answer) return;
-                parrentNode.innerHTML = '';
+                    $('#content div.'+section).html(temp);
+                } else {
+                    parrentNode.innerHTML = '';
+                }
                 $('#buttons').hide();
             });
             $(document).off('change', 'select').on('change', 'select', function () {
                     $('#buttons').hide();
+                    alert('work');
                     if (tmp == '' || tmp == ' ' || tmp == null) return;
                     if ($(parrentNode).html() == $('#content div.'+section).html()) {
                             if ( $(parrentNode).html().indexOf(replace) == -1) {
@@ -299,10 +327,16 @@
             });
     
  $(document).ready(function() {
-            $('.close').click(function() {
-                $('#buttons').hide();
-            });
-         });
+    $('.close').click(function() {
+        $('#buttons').hide();
+    });
+ });
+ function answer() {
+    return confirm('This option will delete your selected text!');
+ }
+ function ttt() {
+    alert('1');
+ }
 </script>
 </body>
 </html>

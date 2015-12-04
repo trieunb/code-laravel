@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
     <style>
         #buttons select {
+            display: block;
+            width: 150px;
+            background-image: none;
             outline: none;
             border: none;
             background: initial;
@@ -15,6 +18,12 @@
             -moz-appearance: none;
             text-indent: 1px;
             text-overflow: '';
+        }
+        #manual {
+            cursor:pointer;
+        }
+        #manual a {
+            text-indent: 6px;
         }
     </style>
     @stop
@@ -47,7 +56,7 @@
                     <p>Choose the element you want to edit</p>
                 </div>
                 <ul class="list list-unstyled">
-                    <li id="manual"><a>Type Manual</a></li>
+                    <li id="manual" onClick=""><a>Type Manual</a></li>
                     <li>
                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
                             <select name="" class="">
@@ -79,7 +88,6 @@
 @stop
 
 @section('scripts')
-    <script src="{{  asset('js/jquery-2.1.4.js') }}"></script>
     <script src="{{  asset('js/nicEdit.js') }}"></script>
     <script src="{{  asset('js/main.js') }}"></script>
 
@@ -125,11 +133,22 @@
                     span.appendChild(clonedSlection);
                     var replace = span.innerHTML;
                     $(document).off('click', '#manual').on('click', '#manual', function () {
+                    
+                    // document.getElementById('manual').addEventListener('click', function(){
                         var answer = confirm('This option will delete your selected text!');
+                        if ( ! answer) return;
+                        if ($(parrentNode).html() == $('#content div.'+section).html()) {
+                            
+                            var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), '');
 
-                        if (!answer) return;
-                        parrentNode.innerHTML = '';
+                            $('#content div.'+section).html(temp);
+                        } else {
+                            parrentNode.innerHTML = '';
+                        }
                         $('#buttons').hide();
+                         document.removeEventListener("click", function() {
+                            document.getElementById('manual')
+                         });
                     });
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
