@@ -107,9 +107,8 @@
 
                     $('#buttons').show();
                     $('#buttons .dropdown-menu').show();
-
-                    // var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
-                    // $('#buttons').html(html);
+                    var top = $(document).scrollTop() - 30;
+                    $('#buttons').css({'top': top, position : 'absolute', width: '70%'});
                     var clonedSlection = window.getSelection().getRangeAt(0).cloneRange().cloneContents();
                     var span = document.createElement('span');
                     span.appendChild(clonedSlection);
