@@ -141,8 +141,6 @@ class QuestionsController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
 
-        // $user->questions()->attach([2,3,4], ['point' => 5]);
-
         foreach ($request->get('answers') as $value) {
             $ids = UserQuestion::where('user_id', $user->id)
                 ->where('question_id', $value['question_id'])->first();
