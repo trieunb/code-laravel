@@ -40,7 +40,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             $sort = $sort->orderBy('created_at', 'DESC');
         if ($sortby == 'created_at' && $order == 'ASC')
             $sort = $sort->orderBy('created_at', 'ASC');
-
+            
         return $sort->skip($offset)
             ->take(5)
             ->get();

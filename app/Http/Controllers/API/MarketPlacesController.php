@@ -24,6 +24,7 @@ class MarketPlacesController extends Controller
 
     public function getAllTemplateMarket(Request $request)
     {
+        \Log::info('test Search', $request->all());
         $token = \JWTAuth::toUser($request->get('token'));
         if (!$token) {
             return response()->json([

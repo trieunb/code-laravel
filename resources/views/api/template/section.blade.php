@@ -216,13 +216,12 @@
                 // answer();
                 var answer = confirm('This option will delete your selected text!');
                 if ( ! answer) return;
+                  var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), '');
                 if ($(parrentNode).html() == $('#content div.'+section).html()) {
-                    
-                    var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), '');
 
                     $('#content div.'+section).html(temp);
                 } else {
-                    parrentNode.innerHTML = '';
+                    parrentNode.innerHTML = temp;
                 }
                 $('#buttons').hide();
             });
@@ -243,7 +242,9 @@
 
                             $('#content div.'+section).html(temp);
                     } else {
-                        parrentNode.innerHTML = $('select option:selected').val();
+                        console.log(replace);
+                        var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+                        parrentNode.innerHTML = replaceContent;
                     }
             });
 
@@ -301,15 +302,19 @@
 
                                     break;
                                 case 'key_qualification':
+                                $.each(val, function (k, obj) {
                                     html += '<optgroup label="Qualification ' + k + '">';
                                     html += '<option>Content:' + obj.content + '</option>';
                                     html += '</optgroup>';
+                                });
                                     break;
                                 case 'objective':
+                                $.each(val, function (k, obj) {
                                     html += '<optgroup label="Objective ' + k + '">';
                                     html += '<option>Title:' + obj.title + '</option>';
                                     html += '<option>Content:' + obj.content + '</option>';
                                     html += '</optgroup>';
+                                });
                                     break;
                                 default:
                                     break;

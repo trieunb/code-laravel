@@ -4,10 +4,10 @@
             <div class="photo" >
                 @if ( is_null($user_info->avatar['origin']))
                     <img style="width:100%; height:100%"
-                    src="{!! asset('uploads/origin/avatar.jpg') !!}">
+                    src="{!! asset('uploads/origin/avatar.jpg') !!}" onclick="obj.changeAvatar()">
                 @else
                     <img style="width:100%; height:100%" 
-                    src="{!! asset($user_info->avatar['origin']) !!}">
+                    src="{!! asset($user_info->avatar['origin']) !!}" onclick="obj.changeAvatar()">
                 @endif
             </div>
             <div class="text-info" 
@@ -53,7 +53,7 @@
             <span>Tell: {{$user_info->mobile_phone}}</span>
         </div>
     </div>
-    <div class='activitie content-box'>
+    <div class='infomation content-box'>
         <div class="header-title"
         style="color: red;
         font-weight:600;
@@ -85,36 +85,39 @@
             </ul>
         </div>
     </div>
-    <div class='education content-box'>
-        <div class="header-title"
-            style="color: red;
-            font-weight:600;
-            padding:15px;">
-            <span>Education</span>
-        </div>
-        <div class="box"
-            style="background: #f3f3f3;
-            padding: 15px;
-            border-top: 3px solid #D8D8D8;
-            border-bottom: 3px solid #D8D8D8;">
-            @foreach ($user_info->user_educations as $edu)
-            <label style="font-weight:600;">{{$edu['title']}}</label>
-            <ul style="">
-                <li>
-                    <label style="font-weight:600">School: </label>{{$edu['school_name']}}
-                </li>
-                <li>
-                    <label style="font-weight:600">Time: </label>{{$edu['start'] . '-' . $edu['end']}}
-                </li>
-                <li>
-                    <label style="font-weight:600">Degree: </label>{{$edu['degree']}}
-                </li>
-            </ul>
-            <hr>
-            @endforeach
+    <div class="education">
+        <div class='content-box'>
+            <div class="header-title"
+                style="color: red;
+                font-weight:600;
+                padding:15px;">
+                <span>Education</span>
+            </div>
+            <div class="box"
+                style="background: #f3f3f3;
+                padding: 15px;
+                border-top: 3px solid #D8D8D8;
+                border-bottom: 3px solid #D8D8D8;">
+                @foreach ($user_info->user_educations as $edu)
+                <label style="font-weight:600;">{{$edu['title']}}</label>
+                <ul style="">
+                    <li>
+                        <label style="font-weight:600">School: </label>{{$edu['school_name']}}
+                    </li>
+                    <li>
+                        <label style="font-weight:600">Time: </label>{{$edu['start'] . '-' . $edu['end']}}
+                    </li>
+                    <li>
+                        <label style="font-weight:600">Degree: </label>{{$edu['degree']}}
+                    </li>
+                </ul>
+                <hr>
+                @endforeach
+            </div>
         </div>
     </div>
-    <div class='personal_test content-box'>
+    <div class="personal_test">
+         <div class='content-box'>
         <div class="header-title"
             style="color: red;
             font-weight:600;
@@ -139,121 +142,132 @@
             @endforeach
         </div>
     </div>
-    <div class='work content-box'>
-        <div class="header-title"
-            style="color: red;
-            font-weight:600;
-            padding:15px;">
-            <span>Experience</span>
-        </div>
-        <div class="box"
-            style="background: #f3f3f3;
-            padding: 15px;
-            border-top: 3px solid #D8D8D8;
-            border-bottom: 3px solid #D8D8D8;">
-            @foreach ($user_info->user_work_histories as $histories)
-            <label style="font-weight:600;">{{$histories['job_title']}}</label>
-            <ul style="">
-                <li>
-                    <label style="font-weight:600">Company: </label>{{$histories['company']}}
-                </li>
-                <li>
-                    <label style="font-weight:600">Time: </label>{{$histories['start'] . '-' . $histories['end']}}
-                </li>
-                <li>
-                    <label style="font-weight:600">Description: </label>{{$histories['job_description']}}
-                </li>
-            </ul>
-            <hr>
-            @endforeach
+    </div>
+    <div class="work">
+        <div class=' content-box'>
+            <div class="header-title"
+                style="color: red;
+                font-weight:600;
+                padding:15px;">
+                <span>Experience</span>
+            </div>
+            <div class="box"
+                style="background: #f3f3f3;
+                padding: 15px;
+                border-top: 3px solid #D8D8D8;
+                border-bottom: 3px solid #D8D8D8;">
+                @foreach ($user_info->user_work_histories as $histories)
+                <label style="font-weight:600;">{{$histories['job_title']}}</label>
+                <ul style="">
+                    <li>
+                        <label style="font-weight:600">Company: </label>{{$histories['company']}}
+                    </li>
+                    <li>
+                        <label style="font-weight:600">Time: </label>{{$histories['start'] . '-' . $histories['end']}}
+                    </li>
+                    <li>
+                        <label style="font-weight:600">Description: </label>{{$histories['job_description']}}
+                    </li>
+                </ul>
+                <hr>
+                @endforeach
+            </div>
         </div>
     </div>
-    <div class='reference content-box'>
-        <div class="header-title"
-            style="color: red;
-            font-weight:600;
-            padding:15px;">
-            <span>References</span>
-        </div>
-        <div class="box"
-            style="background: #f3f3f3;
-            padding: 15px;
-            border-top: 3px solid #D8D8D8;
-            border-bottom: 3px solid #D8D8D8;">
-            @foreach ($user_info->references as $ref)
-            <ul style="list-style:none">
-                <li>
-                    <label style="font-weight:600">References: </label>{{$ref['reference'] }}
-                </li>
-                <li>
-                    <label style="font-weight:600">Content: </label>{{$ref['content']}}
-                </li>
-            </ul>
-            <hr>
-            @endforeach
-        </div>
-    </div>
-    <div class='objective content-box'>
-        <div class="header-title"
-            style="color: red;
-            font-weight:600;
-            padding:15px;">
-            <span>Objectives</span>
-        </div>
-        <div class="box"
-            style="background: #f3f3f3;
-            padding: 15px;
-            border-top: 3px solid #D8D8D8;
-            border-bottom: 3px solid #D8D8D8;">
-            @foreach ($user_info->objectives as $obj)
-            <ul style="list-style:none">
-                <li>
-                    <label style="font-weight:600">Title: </label>{{$obj['title']}}
-                </li>
-                <li>
-                    <label style="font-weight:600">Content: </label>{{$obj['content']}}
-                </li>
-            </ul>
-            <hr>
-            @endforeach
+    <div class="reference">
+        <div class='content-box'>
+            <div class="header-title"
+                style="color: red;
+                font-weight:600;
+                padding:15px;">
+                <span>References</span>
+            </div>
+            <div class="box"
+                style="background: #f3f3f3;
+                padding: 15px;
+                border-top: 3px solid #D8D8D8;
+                border-bottom: 3px solid #D8D8D8;">
+                @foreach ($user_info->references as $ref)
+                <ul style="list-style:none">
+                    <li>
+                        <label style="font-weight:600">References: </label>{{$ref['reference'] }}
+                    </li>
+                    <li>
+                        <label style="font-weight:600">Content: </label>{{$ref['content']}}
+                    </li>
+                </ul>
+                <hr>
+                @endforeach
+            </div>
         </div>
     </div>
-    <div class='key_qualification content-box'>
-        <div class="header-title"
-            style="color: red;
-            font-weight:600;
-            padding:15px;">
-            <span>Qualifications</span>
-        </div>
-        <div class="box"
-            style="background: #f3f3f3;
-            padding: 15px;
-            border-top: 3px solid #D8D8D8;
-            border-bottom: 3px solid #D8D8D8;">
-            @foreach ($user_info->qualifications as $qua)
-            <ul style="list-style-type:disc;">
-                <li>
-                    {{$qua['content']}}
-                </li>
-            </ul>
-            @endforeach
+    <div class="objective">
+        <div class='content-box'>
+            <div class="header-title"
+                style="color: red;
+                font-weight:600;
+                padding:15px;">
+                <span>Objectives</span>
+            </div>
+            <div class="box"
+                style="background: #f3f3f3;
+                padding: 15px;
+                border-top: 3px solid #D8D8D8;
+                border-bottom: 3px solid #D8D8D8;">
+                @foreach ($user_info->objectives as $obj)
+                <ul style="list-style:none">
+                    <li>
+                        <label style="font-weight:600">Title: </label>{{$obj['title']}}
+                    </li>
+                    <li>
+                        <label style="font-weight:600">Content: </label>{{$obj['content']}}
+                    </li>
+                </ul>
+                <hr>
+                @endforeach
+            </div>
         </div>
     </div>
-    <div class='availability content-box'>
-        <div class="header-title" 
-            style="color: red;
-            font-weight:600;
-            padding:15px;">
-            <span>Availability</span>
+    <div class="key_qualification">
+        <div class='content-box'>
+            <div class="header-title"
+                style="color: red;
+                font-weight:600;
+                padding:15px;">
+                <span>Qualifications</span>
+            </div>
+            <div class="box"
+                style="background: #f3f3f3;
+                padding: 15px;
+                border-top: 3px solid #D8D8D8;
+                border-bottom: 3px solid #D8D8D8;">
+                @foreach ($user_info->qualifications as $qua)
+                <ul style="list-style-type:disc;">
+                    <li>
+                        {{$qua['content']}}
+                    </li>
+                </ul>
+                @endforeach
+            </div>
         </div>
-        <div class="box" 
-            style="background: #f3f3f3;
-            padding: 15px;
-            border-top: 3px solid #D8D8D8;
-            border-bottom: 3px solid #D8D8D8;">
-            <p>
-                {{$user_info->status['value']}}
-            </p>
+    </div>
+    <div class="availability">
+        <div class='availability content-box'>
+            <div class="header-title" 
+                style="color: red;
+                font-weight:600;
+                padding:15px;">
+                <span>Availability</span>
+            </div>
+            <div class="box" 
+                style="background: #f3f3f3;
+                padding: 15px;
+                border-top: 3px solid #D8D8D8;
+                border-bottom: 3px solid #D8D8D8;">
+                <p>
+                    {{$user_info->status['value']}}
+                </p>
+            </div>
         </div>
     </div>
 </div>

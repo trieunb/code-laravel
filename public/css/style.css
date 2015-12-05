@@ -713,3 +713,8 @@ p.full-name {
   left: 0 !important;
   top: 30px !important;
 }
+
+.highlight {
+  border: 1px dashed #000000;
+  padding: 2px;
+}
