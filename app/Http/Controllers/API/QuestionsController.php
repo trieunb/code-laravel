@@ -52,7 +52,7 @@ class QuestionsController extends Controller
                 $data[] = [
                     'question_id' => $value['id'],
                     'user_id' => $user->id,
-                    'Content' => $value['content'],
+                    'content' => $value['content'],
                     'point' => 0
                 ] ;
                 $ids[] = $value['id'];
