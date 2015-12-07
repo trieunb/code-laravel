@@ -92,7 +92,7 @@ class TemplatePresenter extends Presenter
 	            case 'profile_website':
 	            case 'linkedin':
 	            	$html .= '<optgroup label="Link Profile">';
-	                $html .= '<option>'.User::findOrFail($id)->optionnk_profile.'</option>';
+	                $html .= '<option>'.User::findOrFail($id)->link_profile.'</option>';
 	        		$html .= '</optgroup>';
 
 	                return $html;

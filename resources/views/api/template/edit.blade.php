@@ -34,6 +34,10 @@
         <img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
     </div>
     <div class="row">
+        <!-- 
+        @if ($section == 'photo')
+            <button onClick="changeAvatar()" class="btn btn-primary pull-right" style="margin-bottom: 20px">Upload</button>
+        @endif -->
         <form id="upload">
             <div id="content" class="col-md-12" contenteditable="true">
 
@@ -57,19 +61,21 @@
                 </div>
                 <ul class="list list-unstyled">
                     <li id="manual" onClick=""><a>Type Manual</a></li>
-                    <li>
-                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                            <select name="" class="">
-                                <option value="" disabled selected>Get From Profile</option>
-                                {!!$template->present()->createMenuProfile($user_id, $section) !!}
-                            </select><!-- <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                            <div class="dropdown-menu" aria-labelledby="dLabel">
-                            <ul class="list list-unstyled ">
-                                {!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
-                                    </ul>
-                                </div> -->
-                        </a>
-                    </li>
+                    @if ($template->present()->createMenuProfile($user_id, $section) != '')
+                        <li>
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
+                                <select name="" class="">
+                                    <option value="" disabled selected>Get From Profile</option>
+                                    {!!$template->present()->createMenuProfile($user_id, $section) !!}
+                                </select><!-- <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
+                                <div class="dropdown-menu" aria-labelledby="dLabel">
+                                <ul class="list list-unstyled ">
+                                    {!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
+                                        </ul>
+                                    </div> -->
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
 
@@ -111,6 +117,8 @@
                     selection = document.selection.createRange();
                 }
                 selection.toString() !== '';
+                 var section = '{{ $section }}';
+                 if (section === 'photo') return;
                 var parrentNode = window.getSelection().anchorNode.parentNode;
                 var currentHTMLSection = $('#content div').html();
 
@@ -118,7 +126,7 @@
                     selection = window.getSelection().getRangeAt(0).toString();
                 }
 
-                var section = '{{ $section }}';
+               
                 var user_id = '{{ \Auth::user()->id }}';
                 var token = window.location.href.split('?')[1];
 
@@ -155,7 +163,7 @@
                             if ($('#content div').html().indexOf(replace) != 0) {
                                 var answer = confirm('This option will delete your text style!');
 
-                                if (!answer) return;
+                                if (!q) return;
                                 
                                 temp = '<div class="' + section + '" contenteditable="true">'
                                         + $('#content div').html().replace(new RegExp(replace, "g"), $('select option:selected').val())
@@ -263,7 +271,7 @@
             });
         }
         test();
-        function editPhoto() {
+        function changeAvatar() {
 
         }
         var isBusy = false;
@@ -271,7 +279,10 @@
          e.preventDefault();
          $('#file').trigger('click');
          });*/
+        var app = {};
+        app.changeAvatar = function() {
 
+        }
         function clickSave() {
             // $('#save').click(function(e) {
             // e.preventDefault();

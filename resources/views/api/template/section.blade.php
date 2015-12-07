@@ -157,7 +157,8 @@
     document.getElementById('content').addEventListener('touchstart', function () {
 
     });
-    document.getElementById('content').addEventListener(eventListener, function () {
+
+    document.getElementById('content').addEventListener('mouseup', function () {
 
 
         var touches = event.changedTouches;
@@ -169,12 +170,19 @@
             } else if (document.selection) {
                 selection = document.selection.createRange();
             }
+            $('div[contenteditable="true"]').removeClass('highlight');
+
             selection.toString() !== '';
             var clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
             var span = document.createElement('span');
             span.appendChild(clonedSlection);
+            // span.className = 'highlight';
             var replace = span.innerHTML;
             var parrentNode = window.getSelection().anchorNode.parentNode;
+            /*if (parrentNode.outerHTML.indexOf('<span class="highlight">') == -1) {
+                var currentTextChange = $(parrentNode).html().replace(new RegExp(replace, "g"), span.outerHTML);
+                $(parrentNode).html(currentTextChange);
+            }*/
             var currentHTMLSection = $('#content div').html();
 
             if ($(parrentNode).html() == $('#content div').html()) {
@@ -206,6 +214,7 @@
               if (sections.indexOf(section) == -1)
                 return;
             }
+            $('div.'+section).addClass('highlight');
             var user_id = "{{ \Auth::user()->id }}";
             var token = document.location.href.split('?');
             tmp = selection.toString();
@@ -224,28 +233,30 @@
                     parrentNode.innerHTML = temp;
                 }
                 $('#buttons').hide();
+
+                $('div.'+section).removeClass('highlight');
             });
             $(document).off('change', 'select').on('change', 'select', function () {
-                    $('#buttons').hide();
-                    alert('work');
-                    if (tmp == '' || tmp == ' ' || tmp == null) return;
-                    if ($(parrentNode).html() == $('#content div.'+section).html()) {
-                            if ( $(parrentNode).html().indexOf(replace) == -1) {
-                                alert('Not found selected text!');
-                                $(parrentNode).html(tmpHTML);
-                                return;
-                            }
+                $('#buttons').hide();
 
-                            var answer = confirm('This option will delete your selected text!');
-                            if ( ! answer) return;
-                            var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+                if (tmp == '' || tmp == ' ' || tmp == null) return;
+                if ($(parrentNode).html() == $('#content div.'+section).html()) {
+                        if ( $(parrentNode).html().indexOf(replace) == -1) {
+                            alert('Not found selected text!');
+                            $(parrentNode).html(tmpHTML);
+                            return;
+                        }
 
-                            $('#content div.'+section).html(temp);
-                    } else {
-                        console.log(replace);
-                        var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
-                        parrentNode.innerHTML = replaceContent;
-                    }
+                        var answer = confirm('This option will delete your selected text!');
+                        if ( ! answer) return;
+                        var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+
+                        $('#content div.'+section).html(temp);
+                } else {
+                    var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+                    parrentNode.innerHTML = replaceContent;
+                }
+                $('div.'+section).removeClass('highlight');
             });
 
             $.ajax({
@@ -266,8 +277,12 @@
                         html += '</optgroup>';
                     } else {
                         $.each(result.data, function (key, val) {
-
+                             console.log(val);
+                            if (val.length == 0) {
+                                $('#choose-type ul > li:last-child').html('');
+                            }
                             switch (key) {
+
                                 case 'education':
                                     $.each(val, function (k, obj) {
                                         html += '<optgroup label="Education ' + k + '">';
@@ -329,18 +344,16 @@
                 }
             });
         });
-            });
+    });
     
  $(document).ready(function() {
     $('.close').click(function() {
         $('#buttons').hide();
     });
+    
  });
  function answer() {
     return confirm('This option will delete your selected text!');
- }
- function ttt() {
-    alert('1');
  }
 </script>
 </body>

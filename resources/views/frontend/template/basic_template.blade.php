@@ -4,10 +4,10 @@
             <div class="photo" >
                 @if ( is_null($user_info->avatar['origin']))
                     <img style="width:100%; height:100%"
-                    src="{!! asset('uploads/origin/avatar.jpg') !!}" onclick="obj.changeAvatar()">
+                    src="{!! asset('uploads/origin/avatar.jpg') !!}" onclick="app.changeAvatar()">
                 @else
                     <img style="width:100%; height:100%" 
-                    src="{!! asset($user_info->avatar['origin']) !!}" onclick="obj.changeAvatar()">
+                    src="{!! asset($user_info->avatar['origin']) !!}" onclick="app.changeAvatar()">
                 @endif
             </div>
             <div class="text-info" 
@@ -53,36 +53,38 @@
             <span>Tell: {{$user_info->mobile_phone}}</span>
         </div>
     </div>
-    <div class='infomation content-box'>
-        <div class="header-title"
-        style="color: red;
-        font-weight:600;
-        padding:15px;">
-            <span>Personal Infomation</span>
-        </div>
-        <div class="box" 
-            style="background: #f3f3f3;
-            padding: 15px;
-            border-top: 3px solid #D8D8D8;
-            border-bottom: 3px solid #D8D8D8;">
-            <ul style="list-style:none">
-                <li>
-                    <label style="font-weight:600">Age:</label> {{$age}}
-                </li>
-                <li>
-                    <?php
-                        $gender = '';
-                        if ($user_info->gender == 0) $gender = 'Male';
-                        if ($user_info->gender == 1) $gender = 'Female';
-                        if ($user_info->gender == 2) $gender = 'Other';
-                        if(is_null($user_info->gender)) $gender = null;
-                    ?>
-                    <label style="font-weight:600">Gender:</label> {{ $gender }}
-                </li>
-                <li>
-                    <label style="font-weight:600">Info:</label> {{$user_info->infomation}}
-                </li>
-            </ul>
+    <div class="infomation">
+        <div class='content-box'>
+            <div class="header-title"
+            style="color: red;
+            font-weight:600;
+            padding:15px;">
+                <span>Personal Infomation</span>
+            </div>
+            <div class="box" 
+                style="background: #f3f3f3;
+                padding: 15px;
+                border-top: 3px solid #D8D8D8;
+                border-bottom: 3px solid #D8D8D8;">
+                <ul style="list-style:none">
+                    <li>
+                        <label style="font-weight:600">Age:</label> {{$age}}
+                    </li>
+                    <li>
+                        <?php
+                            $gender = '';
+                            if ($user_info->gender == 0) $gender = 'Male';
+                            if ($user_info->gender == 1) $gender = 'Female';
+                            if ($user_info->gender == 2) $gender = 'Other';
+                            if(is_null($user_info->gender)) $gender = null;
+                        ?>
+                        <label style="font-weight:600">Gender:</label> {{ $gender }}
+                    </li>
+                    <li>
+                        <label style="font-weight:600">Info:</label> {{$user_info->infomation}}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="education">
