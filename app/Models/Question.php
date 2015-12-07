@@ -16,7 +16,8 @@ class Question extends Model
     protected $table = 'questions';
 
     protected $casts = [
-        'id' => 'int'
+        'id' => 'int',
+        'point' => 'int'
     ];
     
     /**

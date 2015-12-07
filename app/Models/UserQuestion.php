@@ -14,6 +14,12 @@ class UserQuestion extends Model
 
     public $timestamps = false;
 
+    protected $casts = [
+        'user_id' => 'int',
+        'question_id' => 'int',
+        'point' => 'int'
+    ];
+
     protected $fillable = [
         'question_id',
         'user_id',
