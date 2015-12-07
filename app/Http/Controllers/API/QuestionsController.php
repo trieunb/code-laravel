@@ -39,7 +39,7 @@ class QuestionsController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         
-        $user_answers = UserQuestion::where('user_id', $user->id)->get();
+        $user_answers = $this->user_question->getDataWhereClause('user_id', '=', $user->id);
         if (count($user_answers) > 0) {
             return response()->json([
                 'status_code' => 200,
@@ -161,7 +161,9 @@ class QuestionsController extends Controller
             $data = [
                 'point' => $value['point'],
             ];
-            UserQuestion::where('question_id', $question_id)->update($data);
+            UserQuestion::where('question_id', $question_id)
+                ->where('user_id', $user->id)
+                ->update($data);
         }
         
         return response()->json([ 'status_code' => 200, 'status' => true ]);
