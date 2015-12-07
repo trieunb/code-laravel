@@ -25,6 +25,10 @@
         #manual a {
             text-indent: 6px;
         }
+        #content img{
+            width: 100% !important;
+            height: 200px !important;
+        }
     </style>
     @stop
 
@@ -155,15 +159,16 @@
                             parrentNode.innerHTML = replaceHTML;
                         }
                         $('#buttons').hide();
-                      
+                     
                     });
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
+                        
                         if ($(parrentNode).html() == $('#content div').html()) {
-                            if ($('#content div').html().indexOf(replace) != 0) {
+                            if ($('#content div').html().indexOf(replace) != -1) {
                                 var answer = confirm('This option will delete your text style!');
 
-                                if (!q) return;
+                                if (!answer) return;
                                 
                                 temp = '<div class="' + section + '" contenteditable="true">'
                                         + $('#content div').html().replace(new RegExp(replace, "g"), $('select option:selected').val())
@@ -317,6 +322,10 @@
             // });
         }
         function clickApply() {
+            var answer = confirm('This option will delete your text style!');
+
+            if (!answer) return;
+
             var url = window.location.href;
             var token = url.split('=');
             if (isBusy) return;

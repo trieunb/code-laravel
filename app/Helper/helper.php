@@ -217,7 +217,12 @@ if (!function_exists('createSectionData')) {
                     $section['contact']['infomation'] = 'Personal Infomation';
                     break;
                 default:
-                    $section[$k] = ucfirst($k);
+                    if ($k == 'work') {
+                        $section['work'] = 'Experience';
+                    }else {
+                        $section[$k] = ucfirst($k);
+                    }
+                    
                     break;
             }
         }

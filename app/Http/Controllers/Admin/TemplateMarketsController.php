@@ -88,4 +88,34 @@ class TemplateMarketsController extends Controller
 
         return redirect()->back();
     }
+
+    public function postUpload(Request $request)
+    {
+        try {
+            $file = $request->file('upload');
+            $folder = public_path('uploads/template');
+            $filename = md5(str_random(40)).time().'.'.$file->getClientOriginalExtension();
+            $file->move($folder, $filename);
+        } catch (\Exception $e) {
+            return response()->json(['status_code' => 400, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function postUploadFiles(Request $request)
+    {
+        
+    }
+
+    public function browseImage(Request $request)
+    {
+        $test = $request->get('CKEditorFuncNum');
+        $images = [];
+        $files = \File::files(public_path('uploads/template'));
+
+        foreach ($files as $file) {
+            $images[] = pathinfo($file);
+        }
+
+        return view('admin.template.files', compact('test', 'images'));
+    }
 }

@@ -36,7 +36,7 @@ class MarketPlacesController extends Controller
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template_market->getAllTemplateMarket($request->get('sortby'), $request->get('order'), $request->get('page'), $request->get('search'))
+            'data' => $this->template_market->getAllTemplateMarket($request->get('sortby'), $request->get('order'), $request->get('page'), str_slug($request->get('search')))
         ]);
 
     }

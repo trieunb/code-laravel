@@ -31,6 +31,10 @@
          #manual -child a {
             text-indent: 6px;
         }
+        #content img{
+            width: 100% !important;
+            height: 200px !important;
+        }
     </style>
 </head>
 <body>
@@ -149,6 +153,10 @@
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 <script>
+    var app = {};
+    app.changeAvatar = function() {
+
+    }
     var tmp = '';
     var eventListener = '';
     if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
@@ -297,7 +305,7 @@
                                     break;
                                 case 'work':
                                     $.each(val, function (k, obj) {
-                                        html += '<optgroup label="Work ' + k + '">';
+                                        html += '<optgroup label="Experience ' + k + '">';
                                         html += '<option>Company:' + obj.company + '</option>';
                                         html += '<option>SubTitle:' + obj.sub_title + '</option>';
                                         html += '<option>Start:' + obj.start + '</option>';
@@ -352,9 +360,6 @@
     });
     
  });
- function answer() {
-    return confirm('This option will delete your selected text!');
- }
 </script>
 </body>
 </html>

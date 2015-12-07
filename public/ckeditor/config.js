@@ -5,9 +5,18 @@
 CKEDITOR.plugins.add( 'mycombo' ) ;
 
 CKEDITOR.editorConfig = function( config ) {
-	// Define changes to default configuration here.
-	// For complete reference see:
-	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
+	config.filebrowserBrowseUrl = 'http://117.3.36.11:8069/ckfinder/ckfinder.html';
+
+config.filebrowserImageBrowseUrl = 'http://117.3.36.11:8069/ckfinder/ckfinder.html?type=Images';
+
+config.filebrowserFlashBrowseUrl = 'http://117.3.36.11:8069/ckfinder/ckfinder.html?type=Flash';
+
+config.filebrowserUploadUrl = 'http://117.3.36.11:8069/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
+
+config.filebrowserImageUploadUrl = 'http://117.3.36.11:8069/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';
+
+config.filebrowserFlashUploadUrl = 'http://117.3.36.11:8069/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
+
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
@@ -36,7 +45,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
-	config.extraPlugins = 'section';
+	config.extraPlugins = 'section,dragresize';
 	 config.strinsert_strings = [
             {'name': 'Name', 'value': 'div'},
             {'name': 'Group 1'},

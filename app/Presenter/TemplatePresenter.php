@@ -35,7 +35,7 @@ class TemplatePresenter extends Presenter
 	                break;
 	            case 'work':
 	            	foreach (UserWorkHistory::whereUserId($id)->get() as $key => $work) {
-	            		$html .= '<optgroup label="Work .'.($key + 1).'">"';
+	            		$html .= '<optgroup label="Experience .'.($key + 1).'">"';
 	            		$html .= '<option>Company:'.$work->company.'</option>';
 	            		$html .= '<option>Title:'.$work->sub_title.'</option>';
 	            		$html .= '<option>Start:'.$work->start.'</option>';

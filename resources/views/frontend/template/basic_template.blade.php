@@ -68,15 +68,32 @@
                 border-bottom: 3px solid #D8D8D8;">
                 <ul style="list-style:none">
                     <li>
-                        <label style="font-weight:600">Age:</label> {{$age}}
+
+                        <label style="font-weight:600">Age:</label> {{ $age == '0' || $age == '' ? 'N/A' : $age}}
                     </li>
-                    <li>
+                    <li></h1>
                         <?php
                             $gender = '';
-                            if ($user_info->gender == 0) $gender = 'Male';
-                            if ($user_info->gender == 1) $gender = 'Female';
-                            if ($user_info->gender == 2) $gender = 'Other';
-                            if(is_null($user_info->gender)) $gender = null;
+                            
+                            if ($user_info->gender == null) {
+                                $gender = 'N/A';
+                            } else {
+                                switch ($user_info->gender) {
+                                    case 0:
+                                        $gender = 'Male';
+                                        break;
+                                    case 1:
+                                        $gender = 'Female';
+                                        break;
+                                    case 2:
+                                        $gender = 'Other';
+                                        break;
+                                    
+                                    default:
+                                        $gender = 'N/A';
+                                        break;
+                                }
+                            }
                         ?>
                         <label style="font-weight:600">Gender:</label> {{ $gender }}
                     </li>

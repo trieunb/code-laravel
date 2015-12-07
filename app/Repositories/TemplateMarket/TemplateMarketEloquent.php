@@ -25,7 +25,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function getAllTemplateMarket($sortby, $order, $page,$search)
     {
-        $offset = ($page -1 ) * 6;
+        $offset = ($page -1 ) * 10;
         $sort = $this->model->where('status', '=', 2);
 
         if ($search != null && $search != '') {
@@ -42,7 +42,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             $sort = $sort->orderBy('created_at', 'ASC');
             
         return $sort->skip($offset)
-            ->take(6)
+            ->take(10)
             ->get();
     }
 
