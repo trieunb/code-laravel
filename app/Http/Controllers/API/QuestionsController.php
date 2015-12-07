@@ -47,11 +47,24 @@ class QuestionsController extends Controller
                 'data' => $user_answers
             ]);
         } else {
-            $questions = Question::where('publish', '=', 1)->get();
+            $questions = $this->question->getQuestions();
+            foreach ($questions as $value) {
+                $data[] = [
+                    'question_id' => $value['id'],
+                    'user_id' => $user->id,
+                    'Content' => $value['content'],
+                    'point' => 0
+                ] ;
+                $ids[] = $value['id'];
+            }
+            $this->user_question->saveUserAnswer($data, $user->id);
+            $user_answers = UserQuestion::where('user_id', $user->id)
+                ->whereIn('question_id', $ids)
+                ->get();
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
-                'data' => $questions
+                'data' => $user_answers
             ]);
         }
         
@@ -142,30 +155,14 @@ class QuestionsController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
 
         foreach ($request->get('answers') as $value) {
-            $ids = UserQuestion::where('user_id', $user->id)
-                ->where('question_id', $value['question_id'])->first();
-            if ($ids) {
-                $data_update[] = $value;
-            } else {
-                $data_save[] = $value;
-            }
+            $question_id = [
+                'question_id' => $value['question_id']
+            ];
+            $data = [
+                'point' => $value['point'],
+            ];
+            UserQuestion::where('question_id', $question_id)->update($data);
         }
-
-        if (isset($data_update) && count($data_update) > 0) {
-            foreach ($data_update as $value) {
-                $question_id = [
-                    'question_id' => $value['question_id']
-                ];
-                $data = [
-                    'point' => $value['point'],
-                ];
-                UserQuestion::where('question_id', $question_id)->update($data);
-            }
-        }
-        if (isset($data_save) && count($data_save) > 0) {
-            $this->user_question->saveUserAnswer($data_save, $user->id);
-        }
-        
         
         return response()->json([ 'status_code' => 200, 'status' => true ]);
     }
