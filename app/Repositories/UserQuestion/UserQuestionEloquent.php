@@ -13,10 +13,6 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
      */
     protected $model;
 
-    protected $field_work_save = [
-        'result','point'
-    ];
-
     public function __construct(UserQuestion $model)
     {
         $this->model = $model;
@@ -34,15 +30,5 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
             ];
         }
         return UserQuestion::insert($data_save);
-    }
-
-    public function updateUserAnswer($data, $user_id)
-    {
-        foreach ($data as $value) {
-            $question_id[] = [
-                'question_id' => $value['question_id']
-            ];
-        }
-        return $this->updateMultiRecord($data,$this->field_work_save, $question_id);
     }
 }
