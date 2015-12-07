@@ -11,10 +11,14 @@ use App\Models\Question;
 class UserQuestion extends Model
 {
     protected $table = 'user_questions';
+
+    public $timestamps = false;
+
     protected $fillable = [
         'question_id',
         'user_id',
         'result',
+        'content',
         'point'
     ];
 
