@@ -54,6 +54,6 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
 
     public function getQuestions()
     {
-        return $this->model->where('publish', '=', 1)->get();
+        return $this->getDataWhereClause('publish', '=', 1);
     }
 }
