@@ -643,6 +643,12 @@ body button:hover {
       margin-top: 60px;
       margin-left: 35px;
     }
+    #fix-iphone>div.dropdown-menu {
+      width: 20% !important;
+    }
+    #fix-iphone>div.dropdown-menu .dropdown-menu {
+      min-width: 150px;
+    }
 }
 
 .image-avatar { 
