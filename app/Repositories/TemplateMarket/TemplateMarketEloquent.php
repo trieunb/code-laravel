@@ -26,22 +26,15 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     public function getAllTemplateMarket($sortby, $order, $page,$search)
     {
         $offset = ($page -1 ) * 10;
-        $sort = $this->model->where('status', '=', 2);
+        $query = $this->model->whereStatus(2);
 
         if ($search != null && $search != '') {
-            $sort->where('slug', 'LIKE', "%{$search}%");
+            $query->where('slug', 'LIKE', "%{$search}%");
         }
 
-        if ($sortby == 'price' && $order == 'ASC')
-            $sort = $sort->orderBy('price', 'ASC');
-        if ($sortby == 'price' && $order == 'DESC')
-            $sort = $sort->orderBy('price', 'DESC');
-        if ($sortby == 'created_at' && $order == 'DESC')
-            $sort = $sort->orderBy('created_at', 'DESC');
-        if ($sortby == 'created_at' && $order == 'ASC')
-            $sort = $sort->orderBy('created_at', 'ASC');
+        $query = $query->orderBy($sortby, $order);
             
-        return $sort->skip($offset)
+        return $query->skip($offset)
             ->take(10)
             ->get();
     }
@@ -76,7 +69,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function createOrUpdateTemplateByManage($request, $data, $user_id)
     {
-        $template = $request->has('id') ? $this->getById($request->get('id')) : new TemplateMarket;
+        $template = $request->has('id') 
+            ? $this->getById($request->get('id')) 
+            : new TemplateMarket;
         $template->title = $request->get('title');
         $template->user_id = $user_id;
         $template->cat_id = $request->get('cat_id');
