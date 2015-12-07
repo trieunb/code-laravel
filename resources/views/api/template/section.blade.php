@@ -255,7 +255,7 @@
                             return;
                         }
 
-                        var answer = confirm('This option will delete your selected text!');
+                        var answer = confirm('If you choose this action, it will may change style of section!');
                         if ( ! answer) return;
                         var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
 

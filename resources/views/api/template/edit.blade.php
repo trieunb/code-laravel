@@ -322,7 +322,7 @@
             // });
         }
         function clickApply() {
-            var answer = confirm('This option will delete your text style!');
+            var answer = confirm('If you choose this action, it will may change style of section!');
 
             if (!answer) return;
 
