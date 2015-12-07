@@ -34,7 +34,7 @@ class TemplatesController extends Controller
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->user->getTemplateFromUser($user->id)->templates
+            'data' => $this->template->getMyTemplates($user->id, $request->get('page'), $request->get('search'))
         ]); 
     }
 
