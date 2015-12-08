@@ -247,7 +247,7 @@
             </div>
         </div>
     </div>
-    <div class="key_quanlification">
+    <div class="key_qualification">
         <div class='content-box'>
             <div class="header-title"
                 style="color: red;

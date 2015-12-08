@@ -37,8 +37,8 @@ class TemplatePresenter extends Presenter
 	            case 'personal_test':
 	            	foreach (UserQuestion::whereUserId($id)->get() as $key => $personal_test) {
 	            		$html .= '<optgroup label="Skills .'.($key + 1).'">"';
-	            		$html .= '<option>Company:'.$personal_test->content.'</option>';
-	            		$html .= '<option>Title:'.$personal_test->point.'</option>';
+	            		$html .= '<option>Name:'.$personal_test->content.'</option>';
+	            		$html .= '<option>Point:'.$personal_test->point.'</option>';
 	            		$html .= '</optgroup>';
 	            	}
 	            	
