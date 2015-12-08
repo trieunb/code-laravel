@@ -29,7 +29,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         $query = $this->model->whereStatus(2);
 
         if ($search != null && $search != '') {
-            $query->where('slug', 'LIKE', "%{$search}%");
+            $query->where('title', 'LIKE', "%{$search}%");
         }
 
         $query = $query->orderBy($sortby, $order);
