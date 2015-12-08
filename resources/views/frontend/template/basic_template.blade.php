@@ -121,13 +121,13 @@
                 <label style="font-weight:600;">{{$edu['title']}}</label>
                 <ul style="">
                     <li>
-                        <label style="font-weight:600">School: </label>{{$edu['school_name']}}
+                        <span><label style="font-weight:600">School: </label>{{$edu['school_name']}}</span>
                     </li>
                     <li>
-                        <label style="font-weight:600">Time: </label>{{$edu['start'] . '-' . $edu['end']}}
+                        <span><label style="font-weight:600">Time: </label>{{$edu['start'] . '-' . $edu['end']}}</span>
                     </li>
                     <li>
-                        <label style="font-weight:600">Degree: </label>{{$edu['degree']}}
+                        <span><label style="font-weight:600">Degree: </label>{{$edu['degree']}}</span>
                     </li>
                 </ul>
                 <hr>
@@ -148,13 +148,13 @@
             padding: 15px;
             border-top: 3px solid #D8D8D8;
             border-bottom: 3px solid #D8D8D8;">
-            @foreach($user_info->soft_skill as $sk)
+            @foreach($user_info->questions as $sk)
             <ul style="list-style:none">
                 <li>
-                    <label style="font-weight:600">Name: </label>{{$sk['question']}}
+                    <span><label style="font-weight:600">Name: </label> {{$sk->pivot['content']}}</span>
                 </li>
                 <li>
-                    <label style="font-weight:600">Point: </label>{{$sk['value']}}
+                    <span><label style="font-weight:600">Point: </label> {{$sk->pivot['point']}}</span>
                 </li>
             </ul>
             <hr>
@@ -179,13 +179,13 @@
                 <label style="font-weight:600;">{{$histories['job_title']}}</label>
                 <ul style="">
                     <li>
-                        <label style="font-weight:600">Company: </label>{{$histories['company']}}
+                        <span><label style="font-weight:600">Company: </label>{{$histories['company']}}</span>
                     </li>
                     <li>
-                        <label style="font-weight:600">Time: </label>{{$histories['start'] . '-' . $histories['end']}}
+                        <span><label style="font-weight:600">Time: </label>{{$histories['start'] . '-' . $histories['end']}}</span>
                     </li>
                     <li>
-                        <label style="font-weight:600">Description: </label>{{$histories['job_description']}}
+                        <span><label style="font-weight:600">Description: </label>{{$histories['job_description']}}</span>
                     </li>
                 </ul>
                 <hr>
@@ -209,10 +209,10 @@
                 @foreach ($user_info->references as $ref)
                 <ul style="list-style:none">
                     <li>
-                        <label style="font-weight:600">References: </label>{{$ref['reference'] }}
+                        <span><label style="font-weight:600">References: </label>{{$ref['reference'] }}</span>
                     </li>
                     <li>
-                        <label style="font-weight:600">Content: </label>{{$ref['content']}}
+                        <span><label style="font-weight:600">Content: </label>{{$ref['content']}}</span>
                     </li>
                 </ul>
                 <hr>
@@ -236,10 +236,10 @@
                 @foreach ($user_info->objectives as $obj)
                 <ul style="list-style:none">
                     <li>
-                        <label style="font-weight:600">Title: </label>{{$obj['title']}}
+                        <span><label style="font-weight:600">Title: </label>{{$obj['title']}}</span>
                     </li>
                     <li>
-                        <label style="font-weight:600">Content: </label>{{$obj['content']}}
+                        <span><label style="font-weight:600">Content: </label>{{$obj['content']}}</span>
                     </li>
                 </ul>
                 <hr>
@@ -247,7 +247,7 @@
             </div>
         </div>
     </div>
-    <div class="key_qualification">
+    <div class="key_quanlification">
         <div class='content-box'>
             <div class="header-title"
                 style="color: red;
