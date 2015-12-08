@@ -101,7 +101,7 @@ class TemplatePresenter extends Presenter
 	            case 'availability':
 	                $status = null;
 	                foreach (\Setting::get('user_status') as $k => $v) {
-	                    if ($v['id'] == $this->getById($id)->status)
+	                    if ($v['id'] == User::findOrFail($id)->status)
 	                        $status = $v;
 	                }
 	                $html .= '<optgroup label="Availability">';

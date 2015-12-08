@@ -222,7 +222,8 @@
               if (sections.indexOf(section) == -1)
                 return;
             }
-            $('div.'+section).addClass('highlight');
+            if (section == 'availability') return;
+            $('div.'+section+'[contenteditable="true"]').addClass('highlight');
             var user_id = "{{ \Auth::user()->id }}";
             var token = document.location.href.split('?');
             tmp = selection.toString();

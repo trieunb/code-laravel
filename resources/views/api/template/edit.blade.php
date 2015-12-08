@@ -122,7 +122,7 @@
                 }
                 selection.toString() !== '';
                  var section = '{{ $section }}';
-                 if (section === 'photo') return;
+                 if (section === 'photo' || section == 'availability') return;
                 var parrentNode = window.getSelection().anchorNode.parentNode;
                 var currentHTMLSection = $('#content div').html();
 
@@ -297,7 +297,7 @@
             var url = window.location.href;
             var token = url.split('=');
 
-            var content = $('#content select').length == 1 ? $('select li:selected').val()
+            var content = $('#content select').length == 1 ? $('select option:selected').val()
                     : $('#content').html();
 
             content = content.replace(/\t|\n+/g, '');

@@ -69,7 +69,7 @@ if (!function_exists('createSection')) {
     function createSection($htmlString, &$sections, &$result = []) {
         $tmp = [];
         $html = new \Htmldom();
-        $html->load($htmlString);
+        $html->load(preg_replace('/\t|\n|\r+/', '', $htmlString));
         $contentProfile = '';
         $str = $htmlString;
         $content = '';

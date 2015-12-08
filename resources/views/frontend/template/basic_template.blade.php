@@ -271,7 +271,7 @@
         </div>
     </div>
     <div class="availability">
-        <div class='availability content-box'>
+        <div class='content-box'>
             <div class="header-title" 
                 style="color: red;
                 font-weight:600;

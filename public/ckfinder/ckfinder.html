@@ -109,7 +109,7 @@
 					{
 						config.selectActionFunction = function( fileUrl, data )
 						{
-							parentWindow['CKEDITOR'].tools.callFunction( funcNum, fileUrl, data );
+							parentWindow['CKEDITOR'].tools.callFunction( funcNum, document.location.origin+fileUrl, data );
 						};
 
 						config.selectThumbnailActionFunction = config.selectActionFunction;
@@ -129,6 +129,7 @@
 						action = null ;
 			}
 			config.action = action;
+			
 		}
 
 		// Always use 100% width and height when nested using this middle page.
