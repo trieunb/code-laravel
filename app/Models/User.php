@@ -191,7 +191,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function questions()
     {
-        return $this->belongsToMany(Question::class,'user_questions', 'user_id', 'question_id')->withPivot('point', 'result');
+        return $this->belongsToMany(Question::class,'user_questions', 'user_id', 'question_id')->withPivot('point', 'content');
     }
 
     /**

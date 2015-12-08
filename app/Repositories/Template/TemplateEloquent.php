@@ -284,13 +284,13 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
     public function getMyTemplates($user_id, $page, $search)
     {
-        $templates = $this->model->where('user_id', $user_id);
-        $offset = ($page - 1) * 6;
+        $templates = $this->model->whereUserId($user_id);
+        $offset = ($page - 1) * 10;
         if ($search != null && $search != '') {
-            $templates->where('slug', 'LIKE', "%{$search}%");
+            $templates->where('title', 'LIKE', "%{$search}%");
         }
         return $templates->skip($offset)
-                ->take(6)
+                ->take(10)
                 ->get();
     }
 

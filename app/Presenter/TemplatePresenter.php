@@ -7,6 +7,7 @@ use App\Models\Reference;
 use App\Models\User;
 use App\Models\UserEducation;
 use App\Models\UserWorkHistory;
+use App\Models\UserQuestion;
 use Laracasts\Presenter\Presenter;
 
 class TemplatePresenter extends Presenter
@@ -32,6 +33,17 @@ class TemplatePresenter extends Presenter
 
 	                return $html;
 	                // return json_encode(['data' => ['education' => UserEducation::whereUserId($id)->get()]]);
+	                break;
+	            case 'personal_test':
+	            	foreach (UserQuestion::whereUserId($id)->get() as $key => $personal_test) {
+	            		$html .= '<optgroup label="Skills .'.($key + 1).'">"';
+	            		$html .= '<option>Name:'.$personal_test->content.'</option>';
+	            		$html .= '<option>Point:'.$personal_test->point.'</option>';
+	            		$html .= '</optgroup>';
+	            	}
+	            	
+	                return $html;
+	                // return json_encode(['data' => ['work' => UserWorkHistory::whereUserId($id)->get()]]);
 	                break;
 	            case 'work':
 	            	foreach (UserWorkHistory::whereUserId($id)->get() as $key => $work) {
