@@ -74,9 +74,9 @@ class TemplateMarketsController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $this->template_market->delete($id);
-
-        return redirect()->back();
+        return $this->template_market->delete($id)
+            ? response()->json(['status' => true])
+            : response()->json(['status' => false]);
     }
 
     public function changeStatus(Request $request, $id)
@@ -117,5 +117,10 @@ class TemplateMarketsController extends Controller
         }
 
         return view('admin.template.files', compact('test', 'images'));
+    }
+
+    public function showDatatableTemplate()
+    {
+        return $this->template_market->dataTableTemplate();
     }
 }
