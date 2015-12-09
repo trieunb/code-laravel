@@ -8,6 +8,7 @@ use App\Models\Reference;
 use App\Models\User;
 use App\Models\UserEducation;
 use App\Models\UserWorkHistory;
+use App\Models\UserQuestion;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
@@ -411,6 +412,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
         switch ($section) {
             case 'education':
                 return json_encode(['data' => ['education' => UserEducation::whereUserId($id)->get()]]);
+                break;
+            case 'personal_test':
+                return json_encode(['data' => ['personal_test' => UserQuestion::whereUserId($id)->get()]]);
                 break;
             case 'work':
                 return json_encode(['data' => ['work' => UserWorkHistory::whereUserId($id)->get()]]);
