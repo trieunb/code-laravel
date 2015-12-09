@@ -47,8 +47,8 @@ Edit Template
                 {!! Form::select('status', [1 => 'Pending', 2=> 'Publish', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Edit</button>
-                <a href="{{ route('admin.template.get.index') }}" class="btn btn-default">Go to back</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{{ route('admin.template.get.index') }}" class="btn btn-default">Cancel</a>
             </div>
         </form>
     </div>

@@ -2,7 +2,7 @@
 
 
 @section('page-header')
-Template
+Create Template
 @stop
 
 @section('content')
@@ -53,7 +53,7 @@ Template
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Create</button>
-                <a href="{{ route('admin.template.get.index') }}" class="btn btn-default">Go to back</a>
+                <a href="{{ route('admin.template.get.index') }}" class="btn btn-default">Cancel</a>
             </div>
         </form>
     </div>
