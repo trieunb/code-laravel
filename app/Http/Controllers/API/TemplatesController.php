@@ -131,8 +131,10 @@ class TemplatesController extends Controller
         
         if ( !$response) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when save file.']);
-
-        event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content, $response['template']->slug));
+        if (\File::delete(public_path($response['template']->source_file_pdf)))
+            event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content, $response['template']->slug));
+        \Log::info('response edit photo', ['img' => $response['template']->image, 'pdf' => $response['template']->source_file_pdf]);
+        
         
         return $response
             // ? response()->json(['status_code' => 200, 'data' => asset($response['avatar'])])

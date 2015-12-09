@@ -32,7 +32,6 @@ class TemplatePresenter extends Presenter
 	            	}
 
 	                return $html;
-	                // return json_encode(['data' => ['education' => UserEducation::whereUserId($id)->get()]]);
 	                break;
 	            case 'personal_test':
 	            	foreach (UserQuestion::whereUserId($id)->get() as $key => $personal_test) {
@@ -43,7 +42,6 @@ class TemplatePresenter extends Presenter
 	            	}
 	            	
 	                return $html;
-	                // return json_encode(['data' => ['work' => UserWorkHistory::whereUserId($id)->get()]]);
 	                break;
 	            case 'work':
 	            	foreach (UserWorkHistory::whereUserId($id)->get() as $key => $work) {
@@ -58,7 +56,6 @@ class TemplatePresenter extends Presenter
 	            	}
 	            	
 	                return $html;
-	                // return json_encode(['data' => ['work' => UserWorkHistory::whereUserId($id)->get()]]);
 	                break;
 	            case 'reference':
 	            	foreach (Reference::whereUserId($id)->get() as $key => $reference) {
@@ -69,7 +66,6 @@ class TemplatePresenter extends Presenter
 	            	}
 	            	
 	                return $html;
-	                // return json_encode(['data' => ['reference' => Reference::whereUserId($id)->get()]]);
 	                break;
 	            case 'key_qualification':
 	            	foreach (Qualification::whereUserId($id)->get() as $key => $qualification) {
@@ -79,7 +75,6 @@ class TemplatePresenter extends Presenter
 	            	}
 	                
 	                return $html;
-	                // return json_encode(['data' => ['key_quaoptionfication' => Quaoptionfication::whereUserId($id)->get()]]);
 	                break;
 	            case 'objective':
 	            	foreach (Objective::whereUserId($id)->get() as $key => $objective) {
@@ -90,8 +85,6 @@ class TemplatePresenter extends Presenter
 	            	}
 	                
 	                return $html;
-
-	                // return json_encode(['data' => ['objective' => Objective::whereUserId($id)->get()]]);
 	                break;
 	            case 'name': 
 	            	$html .= '<optgroup label="Name">';
@@ -99,7 +92,6 @@ class TemplatePresenter extends Presenter
 	        		$html .= '</optgroup>';
 
 	                return $html;
-	                // return json_encode(['data' => $this->getById($id)->present()->name()]);
 	                break;
 	            case 'profile_website':
 	            case 'linkedin':
@@ -108,7 +100,6 @@ class TemplatePresenter extends Presenter
 	        		$html .= '</optgroup>';
 
 	                return $html;
-	                // return json_encode(['data' => $this->getById($id)->optionnk_profile]);
 	                break;
 	            case 'availability':
 	                $status = null;
@@ -121,7 +112,6 @@ class TemplatePresenter extends Presenter
 	        		$html .= '</optgroup>';
 
 	                return $html;
-	                // return json_encode(['data' => $status]);
 	                break;
 	            case 'phone':
 	            	$html .= '<optgroup label="Mobile Phone">';
@@ -129,7 +119,6 @@ class TemplatePresenter extends Presenter
 	        		$html .= '</optgroup>';
 
 	                return $html;
-	                // return json_encode(['data' => $this->getById($id)->mobile_phone]);
 	                break;
 	            default:
 	            	$html .= '<optgroup label="'.ucfirst($section).'">';
@@ -137,7 +126,6 @@ class TemplatePresenter extends Presenter
 	        		$html .= '</optgroup>';
 
 	                return $html;
-	                // return json_encode(['data' =>$this->getById($id)->pluck($section)]);
 	                break;
 	        }
 		} catch (\Exception $e) {

@@ -43,14 +43,14 @@
     <div class="fw box-title">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <h4>Click and Create Your Amazing Resume</h4>
                 </div>
                 <div class="col-md-6 text-right edit">
                     <span>Price: Free</span>
                     <button class="btn-trans semi-bold">Read more</button>
-
-                </div>
+                
+                </div> -->
                 <div class="fw" id="collapseExample">
                     <div class="content">
                         <div class="title">
@@ -154,6 +154,7 @@
 <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 <script>
     function eventChangeClick() {
+        alert('1'); 
         Android.changeAvatar();
     }
     var tmp = '';

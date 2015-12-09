@@ -168,7 +168,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         if ( !$user->save()) return;
         
         $data = editSection('photo', 
-            '<div class="photo" contenteditable="true"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
+            '<div class="photo"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
             $template->content);
         $sec = $template->section;
 

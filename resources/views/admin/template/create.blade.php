@@ -32,8 +32,6 @@ Create Template
 
             <div class="form-group">
                 <textarea id="content" name="content"></textarea> 
-                <!-- <div id="myNicPanel" style="width: 100%;"></div>
-                <div id="myInstance1"></div> -->
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
@@ -111,53 +109,45 @@ return false;
 
 
     // TinyMCE init
-    tinymce.init({
-        selector: "#content",
+   tinymce.init({
+  selector: "#content",
         height : 500,
         // plugins: "table,code, image, link, media",
         relative_urls: false,
         remove_script_host: false,
         style_formats: [
-         { title: 'Activitie', block: 'div', classes: 'activitie', styles: { color: '#0000' } },
-         { title: 'Address', block: 'div', classes:'address', styles: { color: '#00000' } },
-         { title: 'Availability', block: 'div', classes: 'availability', styles: { color: '#0000' } },
-         { title: 'Education', block: 'div', classes: 'education', styles: { color: '#0000' } },
-         { title: 'Email', block: 'div', classes: 'email', styles: { color: '#0000' } },
-         { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } },
-         { title: 'Qualification', block: 'div', classes: 'key_qualification', styles: { color: '#0000' } },
-        { title: 'Linkedin', block: 'div', classes: 'linkedin', styles: { color: '#0000' } },
-        { title: 'Mobile Phone number', block: 'div', classes: 'phone', styles: { color: '#0000' } },
         { title: 'Name', block: 'div', classes: 'name', styles: { color: '#000000' } },
-        { title: 'Objective', block: 'div', classes: 'objective', styles: { color: '#0000' } },
-        { title: 'Personal Test', block: 'div', classes: 'personal_test', styles: { color: '#0000' } },
-        { title: 'Photo', block: 'div', classes: 'photo', styles: { color: '#0000' } },
+        { title: 'Address', block: 'div', classes:'address', styles: { color: '#00000' } },
+        { title: 'Email', block: 'div', classes: 'email', styles: { color: '#0000' } },
         { title: 'Profile Website', block: 'div', classes: 'profile_website', styles: { color: '#0000' } },
+        { title: 'Linkedin', block: 'div', classes: 'linkedin', styles: { color: '#0000' } },
         { title: 'Reference', block: 'div', classes: 'reference', styles: { color: '#0000' } },
-       
-        { title: 'Work Experience', block: 'div', classes: 'work', styles: { color: '#0000' } }
+        { title: 'Objective', block: 'div', classes: 'objective', styles: { color: '#0000' } },
+        { title: 'Activitie', block: 'div', classes: 'activitie', styles: { color: '#0000' } },
+        { title: 'Work Experience', block: 'div', classes: 'work', styles: { color: '#0000' } },
+        { title: 'Education', block: 'div', classes: 'education', styles: { color: '#0000' } },
+        { title: 'Photo', block: 'div', classes: 'photo', styles: { color: '#0000' } },
+        { title: 'Qualification', block: 'div', classes: 'key_qualification', styles: { color: '#0000' } },
+        { title: 'Availability', block: 'div', classes: 'availability', styles: { color: '#0000' } },
+        { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } }
         ],
-        plugins: [
-        "advlist autolink autosave image lists charmap print preview hr  pagebreak spellchecker",
-        "wordcount  code fullscreen  nonbreaking",
-        "table contextmenu directionality textcolor paste textcolor colorpicker textpattern"
+  visualblocks_default_state: true,
+  end_container_on_empty_block: true,
+  plugins: [
+        " image,preview,hr,wordcount,code,table,colorpicker,textcolor"
         ],
+         toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
 
-        toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect |cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat | fullscreen | ltr rtl | spellchecker |   nonbreaking pagebreak",
+    menubar :false,
+    file_picker_callback : elFinderBrowser,
+  content_css: [
+    
+  ]
+ });
 
-        menubar: false,
-        toolbar_items_size: 'small',
-        file_picker_callback : elFinderBrowser
-    });
 
-   /* CKEDITOR.replace('content', {
-        config.format_section = 'div;Name;Address;Phone;Email;ProfileWebsite;LinkedInProfile;References;Objectives;OtherActivities;WorkExperiences;Educations;Photos';
-
-    });*/
 $(function() {
 
-   /* CKEDITOR.replace( 'content', {
-        format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name;Availability;PersonalInfomation'
-    } );*/
 var isBusy = false;
 $('form').validate({
     rules: {
