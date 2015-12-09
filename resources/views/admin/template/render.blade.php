@@ -4,10 +4,12 @@
 	<meta http-equiv="Content-Type" content="charset=utf-8" />
 	<meta charset="UTF-8">
 	<title></title>
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/fonts.css">
-	<link rel="stylesheet" href="css/style.css">
+	@unless(\Auth::user()->is('admin'))
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/fonts.css">
+		<link rel="stylesheet" href="css/style.css">
+	@endunless
 	<style>
 		body{font-family: 'dejavu sans';}
 	</style>

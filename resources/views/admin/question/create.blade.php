@@ -22,7 +22,7 @@ Create Question
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Create</button>
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-default">Go to back</a>
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-default">Cancel</a>
             </div>
         </form>
 @endsection

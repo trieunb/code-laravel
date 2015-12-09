@@ -155,18 +155,20 @@
 <script>
     var app = {};
     app.changeAvatar = function() {
-
+        alert('1');
     }
     var tmp = '';
     var eventListener = '';
+    var fixIOS = 'mouseup';
     if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
         eventListener = 'touchend';
+        fixIOS = 'touchmove';
     } else eventListener = 'mouseup';
     document.getElementById('content').addEventListener('touchstart', function () {
 
     });
 
-    document.getElementById('content').addEventListener('mouseup', function () {
+    document.getElementById('content').addEventListener(fixIOS, function () {
 
 
         var touches = event.changedTouches;

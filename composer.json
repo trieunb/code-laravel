@@ -24,7 +24,9 @@
         "laracasts/presenter": "0.2.*",
         "yangqi/htmldom": "dev-master",
         "thetispro/laravel5-setting": "dev-master",
-        "yajra/laravel-datatables-oracle": "~5.0"
+        "yajra/laravel-datatables-oracle": "~5.0",
+        "elibyy/laravel-tcpdf": "0.*",
+        "barryvdh/laravel-snappy": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -98,6 +98,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         $result = $template->save();
 
         if ($result) {
+            if (\File::exists($template->source_file_pdf)) {
+                \File::delete($template->source_file_pdf, $template->image['origin'], $template->image['thumb']);
+            }
             return event(new RenderFileWhenCreateTemplateMarket($template->slug, $template->content, $template->id));
         }
         

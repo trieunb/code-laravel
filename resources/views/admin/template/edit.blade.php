@@ -110,20 +110,21 @@ Edit Template
         relative_urls: false,
         remove_script_host: false,
         style_formats: [
+         { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } },
         { title: 'Name', block: 'div', classes: 'name', styles: { color: '#000000' } },
         { title: 'Address', block: 'div', classes:'address', styles: { color: '#00000' } },
         { title: 'Email', block: 'div', classes: 'email', styles: { color: '#0000' } },
         { title: 'Profile Website', block: 'div', classes: 'profile_website', styles: { color: '#0000' } },
         { title: 'Linkedin', block: 'div', classes: 'linkedin', styles: { color: '#0000' } },
+        { title: 'MobilPhone', block: 'div', classes: 'phone', styles: { color: '#0000' } },
+        { title: 'Availability', block: 'div', classes: 'availability', styles: { color: '#0000' } },
         { title: 'Reference', block: 'div', classes: 'reference', styles: { color: '#0000' } },
         { title: 'Objective', block: 'div', classes: 'objective', styles: { color: '#0000' } },
         { title: 'Activitie', block: 'div', classes: 'activitie', styles: { color: '#0000' } },
         { title: 'Work Experience', block: 'div', classes: 'work', styles: { color: '#0000' } },
         { title: 'Education', block: 'div', classes: 'education', styles: { color: '#0000' } },
         { title: 'Photo', block: 'div', classes: 'photo', styles: { color: '#0000' } },
-        { title: 'Qualification', block: 'div', classes: 'key_qualification', styles: { color: '#0000' } },
-        { title: 'Availability', block: 'div', classes: 'availability', styles: { color: '#0000' } },
-        { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } }
+        { title: 'Qualification', block: 'div', classes: 'key_qualification', styles: { color: '#0000' } }
         ],
         plugins: [
         "advlist autolink autosave image lists charmap print preview hr  pagebreak spellchecker",
