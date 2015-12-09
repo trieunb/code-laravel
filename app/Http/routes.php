@@ -14,6 +14,14 @@ use App\Models\User;
 |
 */
 get('test', function() {
+    $array = ['name', 'address', 'phone',
+        'email', 'profile_website', 'linkedin',
+        'reference', 'objective', 'activitie',
+        'work', 'education', 'photo', 'personal_test',
+        'key_qualification', 'availability', 'infomation'
+    ];
+    sort($array);
+    dd($array);
     dd(base_path('vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'));
 	return view('admin.template.render');
 });

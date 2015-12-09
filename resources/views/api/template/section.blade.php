@@ -153,9 +153,8 @@
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 <script>
-    var app = {};
-    app.changeAvatar = function() {
-        alert('1');
+    function eventChangeClick() {
+        Android.changeAvatar();
     }
     var tmp = '';
     var eventListener = '';

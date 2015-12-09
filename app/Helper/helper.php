@@ -97,7 +97,9 @@ if (!function_exists('createSection')) {
 
                         $content = str_replace($e->outertext,"<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>", $str);
 
-                        $tmp[$class] = "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>";
+                        $tmp[$class] = $section != 'photo'
+                            ? "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>"
+                            : "<div contenteditable='true' onclick='eventChangeClick()' class='{$class}'>".$contentProfile ."</div>";
                         $tmp['content'] = $content;
 
                     }

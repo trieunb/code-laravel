@@ -1,7 +1,7 @@
 <div class="container" style="word-wrap: break-word">
     <div class="row">
         <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
-            <div class="photo">
+            <div class="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
                     <img style="width:100%; height:100%"
                     src="{!! asset('uploads/origin/avatar.jpg') !!}">
@@ -11,15 +11,7 @@
                 @endif
             </div>
             <div class="text-info" 
-                style="position: absolute;
-                bottom: 0px;
-                width: 100%;
-                text-align:center; 
-                font-weight:600; 
-                color: #FFFFFF;
-                background-color: black;
-                opacity: 0.2;
-                height:100%" onclick="app.changeAvatar()">
+               >
                 <div class="info-basic" 
                     style="position: absolute;
                     text-align: center;

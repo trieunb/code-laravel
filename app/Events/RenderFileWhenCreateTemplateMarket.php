@@ -33,13 +33,15 @@ class RenderFileWhenCreateTemplateMarket extends Event
     {
         /*\PDF::loadView('admin.template.render', ['content' => $this->content])
             ->save(public_path('pdf/'.$this->slug.'.pdf'));*/
-        $pdf_settings = \Config::get('laravel-tcpdf');
+       /* $pdf_settings = \Config::get('laravel-tcpdf');
         $pdf = new \Elibyy\TCPDF\TCPdf($pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false);
         $pdf->SetPrintHeader(false);
         $pdf->SetPrintFooter(false);
         $pdf->AddPage();
         $pdf->writeHTML(view('admin.template.render', ['content' => $this->content])->render());
-        $pdf->output(public_path('pdf/'.$this->slug.'.pdf'), 'F');
+        $pdf->output(public_path('pdf/'.$this->slug.'.pdf'), 'F');*/
+        $snappy = \App::make('snappy.pdf');
+        $snappy->generateFromHtml( $this->content, public_path('pdf/'.$this->slug.'.pdf'));
 
         $filename = convertPDFToIMG($this->slug);
 
