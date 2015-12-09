@@ -117,4 +117,27 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             ->where('slug', 'LIKE', "%{$name}%")->get();
         return $this->getDataWhereClause('slug', 'LIKE', "%{$name}%");
     }
+
+    /**
+     * Get data with DataTable
+     * @return mixed 
+     */
+    public function dataTableTemplate()
+    {
+        $templates = $this->model->select('*');
+        return \Datatables::of($templates)
+            ->addColumn('action', function ($template) {
+                return '<div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-primary edit" href="' .route('admin.template.get.edit', $template->id) . '"><i class="glyphicon glyphicon-edit"></i></a>
+                    <a class="delete-data btn btn-danger" data-src="' .route('admin.template.delete', $template->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
+                  
+                </div>';
+            })
+            ->addColumn('status', function($template) {
+                return ($template->status == 2)
+                    ? '<a class="status-data btn btn-success" data-src="' .route('admin.template.status', $template->id) . '">Publish</a>'
+                    : '<a class="status-data btn btn-warning" data-src="' .route('admin.template.status', $template->id) . '">Pending</a>';
+            })
+        ->make(true);
+    }
 }
