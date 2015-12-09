@@ -81,12 +81,14 @@ class TemplateMarketsController extends Controller
 
     public function changeStatus(Request $request, $id)
     {
+        $publish = $this->template_market->getById($id);
         $data = [
-            'status' => $request->input('status')
+            'status' => ($publish->status == 1) ? $publish->status = 2 : $publish->status = 1
         ];
-        $this->template_market->update($data, $id);
 
-        return redirect()->back();
+        return $this->template_market->update($data, $id)
+            ? response()->json(['status' => true])
+            : response()->json(['status' => false]);
     }
 
     public function postUpload(Request $request)

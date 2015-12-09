@@ -13,6 +13,7 @@ Template List
         <th>Price</th>
         <th>Created At</th>
         <th>Updated At</th>
+        <th>Status</th>
         <th>Action</th>
     </thead>
 </table>
@@ -31,6 +32,7 @@ Template List
                     {data: 'price', name: 'price'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'updated_at', name: 'updated_at'},
+                    {data: 'status', name: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
                 order: [[0, 'DESC']]
@@ -43,6 +45,26 @@ Template List
                 if (isBusy) return;
                 var answer = confirm('Are you sure you want to delete?');
                 if ( ! answer) return;
+                isBusy = true;
+
+                $.ajax({
+                    url: $(this).data('src'),
+                    type: 'GET',
+                    success: function(result) {
+                        if (result.status == true) {
+                            console.log(result.status);
+                            TemplateDatatable.ajax.reload();
+                        }
+                    }
+                }).always(function() {
+                    isBusy = false;
+                });
+            });
+            
+            $(document).on('click', '.status-data', function(e) {
+                e.preventDefault();
+                
+                if (isBusy) return;
                 isBusy = true;
 
                 $.ajax({

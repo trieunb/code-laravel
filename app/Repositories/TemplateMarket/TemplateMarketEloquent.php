@@ -133,6 +133,11 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
                   
                 </div>';
             })
+            ->addColumn('status', function($template) {
+                return ($template->status == 2)
+                    ? '<a class="status-data btn btn-success" data-src="' .route('admin.template.status', $template->id) . '">Publish</a>'
+                    : '<a class="status-data btn btn-warning" data-src="' .route('admin.template.status', $template->id) . '">Pending</a>';
+            })
         ->make(true);
     }
 }
