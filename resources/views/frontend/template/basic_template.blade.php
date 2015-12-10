@@ -1,8 +1,8 @@
 <div class="container" style="
     word-wrap: break-word; 
     width: 100%;
-    max-width: 640px;
-    margin: 0 auto;">
+    margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
         <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
             <div class="photo" onclick="eventChangeClick()">
