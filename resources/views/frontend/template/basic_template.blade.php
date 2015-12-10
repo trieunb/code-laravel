@@ -73,7 +73,7 @@
                         <?php
                             $gender = '';
                             
-                            if ($user_info->gender == null) {
+                            if (is_null($user_info->gender)) {
                                 $gender = 'N/A';
                             } else {
                                 switch ($user_info->gender) {
