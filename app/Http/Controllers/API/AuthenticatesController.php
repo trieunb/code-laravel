@@ -178,7 +178,7 @@ class AuthenticatesController extends Controller
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
-                'firstlogin' => true,
+                'firstlogin' => false,
                 'token' => $token
             ]);
         }
