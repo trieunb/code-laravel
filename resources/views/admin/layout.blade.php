@@ -61,13 +61,28 @@
                                 <a href="{{URL::to('/admin')}}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                             </li>
                             <li>
+                                <a href="{{ route('admin.user.get.index') }}"><i class="fa fa-dashboard fa-fw"></i> User</a>
+                            </li>
+                            <li>
                                 <a href="#"><i class="fa fa-file-text fa-fw"></i> Market Place<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="{{ route('admin.template.get.create') }}">Create Template</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.template.get.index') }}">Templates</a>
+                                        <a href="{{ route('admin.template.get.index') }}">Template List</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-file-text fa-fw"></i> Question<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{{ route('admin.question.get.create') }}">Create Question</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.question.get.index') }}">Question List</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->

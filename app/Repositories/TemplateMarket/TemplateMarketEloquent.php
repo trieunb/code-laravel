@@ -23,16 +23,29 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      * Get all template in market place
      * @return mixed 
      */
-    public function getAllTemplateMarket()
+    public function getAllTemplateMarket($sortby, $order, $page,$search)
     {
-        return $this->getDataWhereClause('status', '=', 1);
+        $offset = ($page -1 ) * 10;
+        $query = $this->model->whereStatus(2);
+
+        if ($search != null && $search != '') {
+            $query->where('title', 'LIKE', "%{$search}%");
+        }
+
+        $query = $sortby != null
+            ? $query->orderBy($sortby, $order)
+            : $query->orderBy('price');
+            
+        return $query->skip($offset)
+            ->take(10)
+            ->get();
     }
 
     public function getDetailTemplateMarket($template_id)
     {
         $template_mk = $this->model->findOrFail($template_id);
 
-        return $template_mk->status == 1 ? $template_mk : null;
+        return $template_mk->status == 2 ? $template_mk : null;
     }
 
     /**
@@ -58,25 +71,79 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function createOrUpdateTemplateByManage($request, $data, $user_id)
     {
-        $template = $request->has('id') ? $this->getById($request->get('id')) : new TemplateMarket;
+        $template = $request->has('id') 
+            ? $this->getById($request->get('id')) 
+            : new TemplateMarket;
         $template->title = $request->get('title');
         $template->user_id = $user_id;
         $template->cat_id = $request->get('cat_id');
-        $template->content = $data['content'];
-        unset($data['content']);
-        $template->section = $data;
+
+        if (count($data) != 0) {
+            $template->content = $data['content'];
+            unset($data['content']);
+            $template->section = $data;
+        } else {
+            $template->content = $request->get('content');
+            $template->section = null;
+        }
+        
         $template->price = $request->get('price');
         $template->description = $request->get('description');
         $template->version = $request->get('version');
         $template->status = $request->get('status');
-
+        if ($request->get('status') == 2) {
+            $template->published_at = time();
+        }
         TemplateMarket::makeSlug($template);
         $result = $template->save();
 
         if ($result) {
+            if (\File::exists($template->source_file_pdf)) {
+                \File::delete($template->source_file_pdf, $template->image['origin'], $template->image['thumb']);
+            }
             return event(new RenderFileWhenCreateTemplateMarket($template->slug, $template->content, $template->id));
         }
         
         return false;
+    }
+
+    /**
+     * Search template In Market Area
+     * @param  string $name 
+     * @return        
+     */
+    public function search($name)
+    {
+        dd($name);
+        return $this->model
+            ->whereStatus(2)
+            ->where('slug', 'LIKE', "%{$name}%")->get();
+        return $this->getDataWhereClause('slug', 'LIKE', "%{$name}%");
+    }
+
+    /**
+     * Get data with DataTable
+     * @return mixed 
+     */
+    public function dataTableTemplate()
+    {
+        $templates = $this->model->select('*');
+        return \Datatables::of($templates)
+            ->editColumn('image', function($template) {
+                return '<a class="fancybox" href="'.asset($template->image['origin']).'"><img src="'.asset($template->image['origin']).'"/></a>';
+            })
+            ->addColumn('action', function ($template) {
+                return '<div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-primary edit" href="' .route('admin.template.get.edit', $template->id) . '"><i class="glyphicon glyphicon-edit"></i></a>
+                    <a class="delete-data btn btn-danger" data-src="' .route('admin.template.delete', $template->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
+                  
+                </div>';
+            })
+            ->addColumn('status', function($template) {
+                return ($template->status == 2)
+                    ? '<a class="status-data btn btn-success" data-src="' .route('admin.template.status', $template->id) . '">Publish</a>'
+                    : '<a class="status-data btn btn-warning" data-src="' .route('admin.template.status', $template->id) . '">Pending</a>';
+            })
+        ->make(true);
     }
 }

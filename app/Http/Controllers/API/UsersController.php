@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exceptions\NotFoundFieldIdException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\EditProfileRequest;
@@ -90,7 +91,7 @@ class UsersController extends Controller
 		TemplateMarketInterface $template_market,
 		QualificationInterface $qualification
 	) {
-		$this->middleware('jwt.auth');
+		$this->middleware('jwt.auth', ['except' => ['dataTable', 'getAnswersForAdmin']]);
 
 		$this->user = $user;
 		$this->user_education = $user_education;
@@ -103,13 +104,18 @@ class UsersController extends Controller
 		$this->qualification = $qualification;
 	}
 
+	public function dataTable()
+	{
+		return $this->user->dataTable();
+	}
+
 	public function getProfile(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
 		
 		return response()->json([
 			'status_code' => 200, 'status' => true, 'data' => $this->user->getProfile($user->id)
-		]);
+		], 200, [], 0);
 	}
 
 	public function postProfile($id, Request $request, 
@@ -121,14 +127,11 @@ class UsersController extends Controller
 		Reference_Rule $reference_rule,
 		Qualification_Rule $qualification_rule
 	) {
-		\Log::info('test API', $request->all());
+		
 		$user = \JWTAuth::toUser($request->get('token'));
+		\Log::info('post Profile', $request->all());
 		if ($user->id != $id) {
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
-		}
-		if ( !$request->only(['user', 'user_educations', 'user_work_histories', 'user_skills', 
-			'objectives', 'references'])) {
-			return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Not crendential']);
 		}
 
 		if ($request->has('user')) {
@@ -140,100 +143,106 @@ class UsersController extends Controller
 			}
 		}
 
-		if ($request->has('user_educations')) {
-			try {
-				if (count($request->get('user_educations')) > 1) {
-					foreach ($request->get('user_educations') as $user_education_data) {
-							$user_education_rule->validate($user_education_data);
+		try {
+			
+			if ($request->has('user_educations')) {
+				try {
+					if (count($request->get('user_educations')) > 1) {
+						foreach ($request->get('user_educations') as $user_education_data) {
+								$user_education_rule->validate($user_education_data);
+						}
+					} else {
+						$user_education_rule->validate($request->get('user_educations')[0]);
 					}
-				} else {
-					$user_education_rule->validate($request->get('user_educations')[0]);
-				}
 
-				$this->user_education->saveFromApi($request->get('user_educations'), $user->id);
-			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
-			}	
-		}
-		
-		if ($request->has('user_work_histories')) {
-			try {
-				if (count($request->get('user_work_histories')) > 1) {
-					foreach ($request->get('user_work_histories') as $user_work_history_data) {
-						$user_work_history_rule->validate($user_work_history_data);
+					$this->user_education->saveFromApi($request->get('user_educations'), $user->id);
+				} catch (ValidatorAPiException $e) {
+					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
+				}	
+			}
+			
+			if ($request->has('user_work_histories')) {
+				try {
+					if (count($request->get('user_work_histories')) > 1) {
+						foreach ($request->get('user_work_histories') as $user_work_history_data) {
+							$user_work_history_rule->validate($user_work_history_data);
+						}
+					} else {
+						$user_work_history_rule->validate($request->get('user_work_histories')[0]);	
 					}
-				} else {
-					$user_work_history_rule->validate($request->get('user_work_histories')[0]);	
+
+					$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
+				} catch (ValidatorAPiException $e) {
+					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 				}
-
-				$this->user_work_history->saveFromApi($request->get('user_work_histories'), $user->id);
-			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
-		}
-		
-		if ($request->has('user_skills')) {
-			try {
-				if (count($request->get('user_skills')) > 1) {
-					foreach ($request->get('user_skills') as $user_skill_data) {
-						$user_skill_rule->validate($user_skill_data);
-					}	
-				}else {
-					$user_skill_rule->validate($request->get('user_skills')[0]);
-				}		
+			
+			if ($request->has('user_skills')) {
+				try {
+					if (count($request->get('user_skills')) > 1) {
+						foreach ($request->get('user_skills') as $user_skill_data) {
+							$user_skill_rule->validate($user_skill_data);
+						}	
+					}else {
+						$user_skill_rule->validate($request->get('user_skills')[0]);
+					}		
 
-				$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
-			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
+					$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
+				} catch (ValidatorAPiException $e) {
+					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
+				}
 			}
-		}
 
-		if ($request->has('objectives')) {
-			try {
-				if (count($request->get('objectives')) > 1) {
-					foreach ($request->get('objectives') as $objective) {
-						$objective_rule->validate($objective);
+			if ($request->has('objectives')) {
+
+				try {
+					if (count($request->get('objectives')) > 1) {
+						foreach ($request->get('objectives') as $objective) {
+							$objective_rule->validate($objective);
+						}
+					} else {
+						$objective_rule->validate($request->get('objectives')[0]);
 					}
-				} else {
-					$objective_rule->validate($request->get('objectives')[0]);
+
+					$this->objective->saveFromApi($request->get('objectives'), $id);
+				} catch (ValidatorAPiException $e) {
+					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 				}
-
-				$this->objective->saveFromApi($request->get('objectives'), $id);
-			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
-		}
 
-		if ($request->has('references')) {
-			try {
-				if (count($request->get('references')) > 1) {
-					foreach ($request->get('references') as $reference) {
-						$reference_rule->validate($reference);
+			if ($request->has('references')) {
+				try {
+					if (count($request->get('references')) > 1) {
+						foreach ($request->get('references') as $reference) {
+							$reference_rule->validate($reference);
+						}
+					} else {
+						$reference_rule->validate($request->get('references')[0]);
 					}
-				} else {
-					$reference_rule->validate($request->get('references')[0]);
+
+					$this->reference->saveFromApi($request->get('references'), $id);
+				} catch(ValidatorAPiException $e) {
+					return response()->json(['status_code' => 422, 'status' => false, 'message' => $e->getErrors()], 422);
 				}
-
-				$this->reference->saveFromApi($request->get('references'), $id);
-			} catch(ValidatorAPiException $e) {
-				return response()->json(['status_code' => 422, 'status' => false, 'message' => $e->getErrors()], 422);
 			}
-		}
 
-		if ($request->has('qualifications')) {
-			try {
-				if (count($request->get('qualifications')) > 0) {
-					foreach ($request->get('qualifications') as $qualification) {
-						$qualification_rule->validate($qualification);
+			if ($request->has('qualifications')) {
+				try {
+					if (count($request->get('qualifications')) > 0) {
+						foreach ($request->get('qualifications') as $qualification) {
+							$qualification_rule->validate($qualification);
+						}
+					} else {
+						$qualification_rule->validate($request->get('qualifications')[0]);
 					}
-				} else {
-					$qualification_rule->validate($request->get('qualifications')[0]);
-				}
 
-				$this->qualification->saveFromApi($request->get('qualifications'), $id);
-			} catch (ValidatorAPiException $e) {
-				return response()->json(['status_code' => 422, 'message' => $e->getErrors()]);
+					$this->qualification->saveFromApi($request->get('qualifications'), $id);
+				} catch (ValidatorAPiException $e) {
+					return response()->json(['status_code' => 422, 'message' => $e->getErrors()]);
+				}
 			}
+		} catch (NotFoundFieldIdException $e) {
+			return response()->json(['status_code' => 442, 'message' => 'Not found property Id']);
 		}
 		
 		return response()->json(['status_code' => 200, 'status' => true]);
@@ -262,7 +271,13 @@ class UsersController extends Controller
 		} catch(UploadException $e) {
 			return response()->json(['status_code' => 500, 'status' => false, 'message' => $e->getErrorMessage()]);
 		}
-		
+	}
+
+	public function removePhoto($id)
+	{
+		return $this->user->removePhoto($id)
+			? response()->json(['status_code' => 200])
+			: response()->json(['status_code' => 400]);
 	}
 
 	public function getStatus(Request $request)
@@ -277,7 +292,6 @@ class UsersController extends Controller
 
 	public function postStatus(Request $request)
 	{
-		\Log::info('test Status', $request->all());
 		try {
 			$user = \JWTAuth::toUser($request->get('token'));
 			$result = $this->user->editStatus($user->id, $request->get('status'));
@@ -288,5 +302,33 @@ class UsersController extends Controller
 		} catch (\Exception $e) {
 			return response()->json(['status_code' => 400]);
 		}
+	}
+
+	public function getAnswersForAdmin()
+	{
+		try {
+			$answers = $this->user->answerForUser(\Auth::user()->id);
+			$points = [];
+
+			foreach ($answers as $answer) {
+				$points[] = $answer->pivot->point;
+			}
+
+			$data = [
+				'start' => $answers[0]->id,
+				'end' => $answers[count($answers) - 1]->id,
+				'points' => $points
+			];
+			
+			return response()->json(['status' => true, 'data' => $data]);
+		} catch (\Exception $e) {
+			return response()->json(['status' => false, 'message' => $e->getMessage()]);
+		}
+	}
+
+	public function getSection($id, $section)
+	{
+		\Log::info('get section user', [$id, $section]);
+		return $this->user->getSectionProfile($id, $section);
 	}
 }

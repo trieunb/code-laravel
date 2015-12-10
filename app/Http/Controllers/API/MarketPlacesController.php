@@ -9,17 +9,23 @@ use App\Repositories\TemplateMarket\TemplateMarketInterface;
 
 class MarketPlacesController extends Controller
 {
+    /**
+     * TemplateMarketInterface
+     * @var $template_market
+     */
     protected $template_market;
 
     public function __construct(TemplateMarketInterface $template_market)
     {
+        $this->middleware('jwt.auth');
+        
         $this->template_market = $template_market;
     }
 
     public function getAllTemplateMarket(Request $request)
     {
+        \Log::info('test Search', $request->all());
         $token = \JWTAuth::toUser($request->get('token'));
-        
         if (!$token) {
             return response()->json([
                 'status_code' => 500,
@@ -27,24 +33,12 @@ class MarketPlacesController extends Controller
                 'message' => 'token provider'
             ], 500);
         }
-
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template_market->getAllTemplateMarket()
+            'data' => $this->template_market->getAllTemplateMarket($request->get('sortby'), $request->get('order'), $request->get('page'), $request->get('search'))
         ]);
-    }
 
-    public function getDetailTemplateMarket(Request $request, $template_id)
-    {
-        $token = \JWTAuth::toUser($request->get('token'));
-        $template_market = $this->template_market->getDetailTemplateMarket($template_id);
-        
-        return $template_market
-            ? response()->json([
-                'status_code' => 200, 'status' => true, 'data' => $template_market
-            ])
-            : response()->json(['status_code' => 404, 'status' => false, 'message' => 'Page not found']);
     }
 
     public function postTemplatesFromMarket(Request $request)
@@ -61,9 +55,17 @@ class MarketPlacesController extends Controller
     public function view($id, Request $request)
     {
         $template = $this->template_market->getDetailTemplateMarket($id);
-
-        $content = str_replace('contenteditable="true"', '', $template->content);
+        $content = preg_replace('/contenteditable="true"|contenteditable=\'true\'/', '', $template->content);
+        $content = str_replace("contenteditable='true'", '', $template->content);
 
         return view('api.market.view', compact('content'));
+    }
+
+    public function search(Request $request)
+    {        
+        return response()->json([
+            'status_code' => 200,
+            'data' => $this->template_market->search($request->get('search'))]
+        );
     }
 }

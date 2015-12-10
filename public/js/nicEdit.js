@@ -270,7 +270,7 @@ var nicEditorConfig = bkClass.extend({
         'hr': {name: __('Horizontal Rule'), command: 'insertHorizontalRule', noActive: true}
     },
     iconsPath: '/js/nicEditorIcons.gif',
-    buttonList: ['save', 'bold', 'italic', 'underline', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'fontSize', 'fontFamily', 'fontFormat', 'indent', 'outdent', 'image', 'upload', 'link', 'unlink', 'forecolor', 'bgcolor'],
+    buttonList: ['save', 'bold', 'italic', 'underline', 'left', 'center', 'right', 'justify', 'ol', 'ul', 'fontSize', 'fontFamily', 'fontFormat', 'defineSection', 'indent', 'outdent', 'image', 'upload', 'link', 'unlink', 'forecolor', 'bgcolor'],
     iconList: {
         "bold": 1,
         "center": 2,
@@ -808,7 +808,7 @@ var nicEditorPane = bkClass.extend({
         this.ne = C;
         this.elm = D;
         this.pos = D.pos();
-        console.log(D, this.pos);
+        // console.log(D, this.pos);
         this.contain = new bkElement("div").setStyle({
             zIndex: "99999",
             overflow: "hidden",
@@ -976,7 +976,8 @@ var nicSelectOptions = {
     buttons: {
         'fontSize': {name: __('Select Font Size'), type: 'nicEditorFontSizeSelect', command: 'fontsize'},
         'fontFamily': {name: __('Select Font Family'), type: 'nicEditorFontFamilySelect', command: 'fontname'},
-        'fontFormat': {name: __('Select Font Format'), type: 'nicEditorFontFormatSelect', command: 'formatBlock'}
+        'fontFormat': {name: __('Select Font Format'), type: 'nicEditorFontFormatSelect', command: 'formatBlock'},
+        'defineSection': {name: __('Select Section'), type: 'nicEditorDefineSection', command: 'formatBlock'}
     }
 };
 
@@ -1058,6 +1059,7 @@ var nicEditorSelect = bkClass.extend({
                 overflow: "hidden",
                 cursor: "pointer"
             });
+      
             var D = new bkElement("div").setStyle({padding: "0px 4px"}).setContent(B[1]).appendTo(A).noSelect();
             D.addEvent("click", this.update.closure(this, B[0])).addEvent("mouseover", this.over.closure(this, D)).addEvent("mouseout", this.out.closure(this, D)).setAttributes("id", B[0]);
             this.pane.append(A);
@@ -1076,6 +1078,8 @@ var nicEditorSelect = bkClass.extend({
     }, add: function (B, A) {
         this.selOptions.push(new Array(B, A))
     }, update: function (A) {
+
+            console.log(this.options.command, A);
         this.ne.nicCommand(this.options.command, A);
         this.close()
     }
@@ -1128,6 +1132,31 @@ var nicEditorFontFormatSelect = nicEditorSelect.extend({
         for (itm in this.sel) {
             var A = itm.toUpperCase();
             this.add("<" + A + ">", "<" + itm + ' style="padding: 0px; margin: 0px;">' + this.sel[itm] + "</" + A + ">")
+        }
+    }
+});
+var nicEditorDefineSection = nicEditorSelect.extend({
+    sel: {
+        name: "Name",
+        address: "Address",
+        phone: "Phone",
+        email: "Email",
+        profile_website: "Profile Website",
+        linkedin: "Linkedin",
+        reference: "Reference",
+        objective: "Objective",
+        activitie: "Activitie",
+        work: "Work Experience",
+        education: "Education",
+        personal_test: "Personal_test",
+        key_qualification: "Qualification",
+        availability: "Availability",
+        infomation: "Infomation",
+    }, init: function () {
+        this.setDisplay("Section");
+        for (itm in this.sel) {
+            var A = itm.toUpperCase();
+            this.add("<div class='1'>", '<div class="'+itm+'"'  + ' style="padding: 0px; margin: 0px;">' + this.sel[itm] + "</div>")
         }
     }
 });

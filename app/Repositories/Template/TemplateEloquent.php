@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Template;
 
+use App\Events\RenderImageAfterCreateTemplate;
 use App\Models\Template;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
@@ -84,12 +85,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
     }
 
-   /* public function getBasicTemplate($user_id)
-    {
-        return $this->getById($user_id);
-    }*/
-
-     /**
+    /**
      * Create template
      * @param  int $user_id  
      * @param  mixed $request
@@ -121,25 +117,77 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
     public function editTemplate($id, $user_id, $section, $request)
     {
         $template = $this->forUser($id, $user_id);
+        if ( ! isset($template->section[$section])) return;
         $sec = $template->section;
-        $data = editSection($section, $request->get('content'), $template->content);
+        $tmp = '';
+        if ($section == 'availability') {
+
+            foreach (\Setting::get('user_status') as $status) {
+                if ($status['id'] == $request->get('content'))
+                    $tmp = $template->type == 2 
+                        ? '<div class="availability content-box" contenteditable="true">'
+                            .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
+                            .'<span>Availability</span></div>'
+                            .'<div class="box" style="background: #f3f3f3;padding: 15px;border-top: 3px solid #D8D8D8;border-bottom: 3px solid #D8D8D8;">'
+                            .'<p>'.$status['value'].'</p></div></div>'
+                        : '<div class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';
+            }
+
+            $user = \App\Models\User::find($user_id);
+            $user->status = $request->get('content');
+
+            if ( ! $user->save()) {
+                return null;    
+            }
+            
+            $data = editSection($section, $tmp, $template->content);
+            
+            
+        } else {
+            $data = editSection($section, $request->get('content'), $template->content);
+        }
 
         $template->content = $data['content'];
         $template->section = array_set($sec, $section, $data['section']);
-
+        
         return $template->save() ? $template : null;
+    }
+
+    public function editPhoto($id, $user_id, $file)
+    {
+        $template = $this->getById($id);
+
+        if ( ! isset($template->section['photo'])) return null;
+
+        $user = \App\Models\User::find($user_id);
+
+        if ($user->avatar['origin'] == null || $user->avatar['origin'] == '') return null;
+
+        $user->avatar = \App\Models\User::uploadAvatar($file);
+      
+        if ( !$user->save()) return;
+        
+        $data = editSection('photo', 
+            '<div class="photo"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
+            $template->content);
+        $sec = $template->section;
+
+        $template->content = $data['content'];
+        $template->section = array_set($sec, 'photo', $data['section']);
+
+        return $template->save() ? ['avatar' => $user->avatar['origin'], 'template' => $template ]: null;
     }
 
     /**
      * Create template basic
      * @param  int $user_id 
-     * @param  string $content 
+     * @param  array $data 
      * @return mixed          
      */
-    public function createTemplateBasic($user_id, $section, $content)
+    public function createTemplateBasic($user_id, $data)
     {
         $template = $this->model->whereUserId($user_id)
-            ->whereType(2)
+            ->whereType('2')
             ->first();
 
         if ( ! $template) {
@@ -150,8 +198,9 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             Template::makeSlug($template);
         }
 
-        $template->content = $content;
-        $template->section = $section;
+        $template->content = $data['content'];
+        unset($data['content']);
+        $template->section = $data;
         
         return $template->save() ? $template : null;
     }
@@ -191,4 +240,59 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
         return $template->save();
     }
+
+     /**
+     * Apply data into infomation section
+     * @param  Template $template 
+     * @param  string $section 
+     * @param  array $data     
+     * @return bool           
+     */
+    public function applyForInfo($template, $section, $data)
+    {
+    
+        $template->content = $data['content'];
+        $sec = $template->section;
+
+        $template->section = array_set($sec, $section, $data['section']);
+
+        return $template->save() 
+            ? ['section' => $section == 'availability' ? $template->user->status : $data['section'], 'template' => $template] 
+            : false;
+    }
+
+    /**
+     * Edit full screen template
+     * @param  int $id      
+     * @param  int $user_id 
+     * @param  mixed $request 
+     * @return bool          
+     */
+    public function editFullScreenTempalte($id, $user_id, $request)
+    {
+        $template = $this->forUser($id, $user_id);
+        $sections = createClassSection();
+        $result = createSection($request->get('content'), $sections);
+        $template->content = $request->get('content');
+        unset($result['content']);
+        $template->section = $result;
+        
+        return $template->save()
+            ? event(new RenderImageAfterCreateTemplate($template->id, $template->content, $template->slug))
+            : null;
+    }
+
+    public function getMyTemplates($user_id, $page, $search)
+    {
+        $templates = $this->model->whereUserId($user_id);
+        $offset = ($page - 1) * 10;
+        if ($search != null && $search != '') {
+            $templates->where('title', 'LIKE', "%{$search}%");
+        }
+        return $templates->skip($offset)
+                ->take(10)
+                ->get();
+    }
+
+    
 }

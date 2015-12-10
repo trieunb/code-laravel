@@ -521,7 +521,7 @@ body button:hover {
 .mobile .box-title {
   padding-top: 20px;
   background: #FFFFFF;
-  border-top: 1px solid #aaaaaa;
+  /* border-top: 1px solid #aaaaaa; */
 }
 .mobile .box-title .col-md-6 {
   text-align: left;
@@ -573,18 +573,19 @@ body button:hover {
   color: #bfbfbf;
   font-size: 151%;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu {
+.mobile .box-title .fw .content .control li .dropdown-menu, #buttons .dropdown-menu{
   border-radius: 0px;
-  max-width: 50vw;
+  /*max-width: 50vw;*/
   border: 2px solid #84c414;
   background: #84c414;
+  left: inherit;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu .top {
+.mobile .box-title .fw .content .control li .dropdown-menu .top, #buttons .dropdown-menu .top{
   padding: 10px;
   position: relative;
   color: #FFFFFF;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu .top .close {
+.mobile .box-title .fw .content .control li .dropdown-menu .top .close, #buttons .dropdown-menu .top .close{
   opacity: 1;
   position: absolute;
   top: 5px;
@@ -592,22 +593,22 @@ body button:hover {
   color: #FFFFFF;
   font-size: 114%;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu .list {
+.mobile .box-title .fw .content .control li .dropdown-menu .list, #buttons .dropdown-menu .list{
   background: #f3f3f3;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu .list li {
+.mobile .box-title .fw .content .control li .dropdown-menu .list li, #buttons .dropdown-menu .list li {
   position: relative;
   border-bottom: 1px solid #aaaaaa;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu .list li a {
+.mobile .box-title .fw .content .control li .dropdown-menu .list li a, #buttons .dropdown-menu .list li a {
   padding: 10px;
   display: block;
   color: #333333;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu .list li:last-child {
+.mobile .box-title .fw .content .control li .dropdown-menu .list li:last-child, #buttons .dropdown-menu .list li:last-child {
   border: none;
 }
-.mobile .box-title .fw .content .control li .dropdown-menu .dropdown-menu {
+.mobile .box-title .fw .content .control li .dropdown-menu .dropdown-menu, #buttons .dropdown-menu {
   left: 100%;
   top: 0;
   margin-top: 0;
@@ -617,10 +618,13 @@ body button:hover {
   background: #84c414;
   color: #FFFFFF;
 }
-.mobile .box-title .fw .content .control li.open li.active .arrow {
+.mobile .box-title .fw .content .control li.open li.active .arrow, #buttons li.open li.active .arrow {
   display: block;
+  position: absolute;
+  top: 10px;
+  right: 0;
 }
-.mobile .box-title .fw .content .control li.open li.active > a {
+.mobile .box-title .fw .content .control li.open li.active > a, #buttons li.open li.active > a {
   color: #84c414;
   background: #FFFFFF;
 }
@@ -629,6 +633,8 @@ body button:hover {
     position: fixed;
     top: 0;
   }
+
+
 @media screen and (max-width: 440px) {
     #myPanel {
      
@@ -636,6 +642,12 @@ body button:hover {
     #editor {
       margin-top: 60px;
       margin-left: 35px;
+    }
+    #fix-iphone>div.dropdown-menu {
+      width: 20% !important;
+    }
+    #fix-iphone>div.dropdown-menu .dropdown-menu {
+      min-width: 150px;
     }
 }
 
@@ -690,4 +702,25 @@ p.full-name {
 
 #buttons-edit button:last-child {
   right: 20px;
+}
+#loading {
+  display: none;
+  position: fixed;
+  z-index: 99999999;
+  background: #dedede;
+}
+.display {
+  width: 20%;
+}
+#buttons {
+  display: none;
+}
+#choose-type {
+  left: 0 !important;
+  top: 30px !important;
+}
+
+.highlight {
+  border: 1px dashed #000000;
+  padding: 2px;
 }

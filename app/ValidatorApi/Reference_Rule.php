@@ -9,7 +9,8 @@ class Reference_Rule extends AbstractValidator
 	{
 		return [
 			'reference' => 'required|min:3',
-			'content' => 'required|min:3'
+			'content' => 'required|min:3',
+			'position' => 'required'
 		];
 	}
 }

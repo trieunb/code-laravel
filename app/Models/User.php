@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Category;
 use App\Models\Objective;
 use App\Models\Qualification;
+use App\Models\Question;
 use App\Models\Reference;
 use App\Models\Role;
 use App\Models\Template;
@@ -21,6 +22,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Laracasts\Presenter\PresentableTrait;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -28,7 +30,8 @@ class User extends Model implements AuthenticatableContract,
                                     CanResetPasswordContract,
                                     HasRoleAndPermissionContract
 {
-    use Authenticatable, CanResetPassword, HasRoleAndPermission;
+    use Authenticatable, CanResetPassword, HasRoleAndPermission,
+        PresentableTrait;
 
     /**
      * The database table used by the model.
@@ -37,6 +40,8 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $table = 'users';
 
+    protected $presenter = 'App\Presenter\UserPresenter';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -44,6 +49,7 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $fillable = [
         'linkedin_id',
+        'facebook_id',
         'firstname',
         'lastname',
         'email',
@@ -51,6 +57,7 @@ class User extends Model implements AuthenticatableContract,
         'link_profile',
         'infomation',
         'dob',
+        'location',
         'gender',
         'avatar',
         'address',
@@ -72,8 +79,8 @@ class User extends Model implements AuthenticatableContract,
     protected $casts = [
         'soft_skill' => 'json',
         'avatar' => 'json',
+        'location' => 'json',
         'id' => 'int',
-        'linkedin_id' => 'int',
         'gender' => 'int'
     ];
     /**
@@ -99,8 +106,8 @@ class User extends Model implements AuthenticatableContract,
      */
     public $path = 'uploads/';
 
-    public $img_width_thumb = 200;
-    public $img_height_thumb = 200;
+    public $img_width_thumb = 400;
+    public $img_height_thumb = 300;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -172,12 +179,19 @@ class User extends Model implements AuthenticatableContract,
     }
 
      /**
-     * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function qualifications()
     {
         return $this->hasMany(Qualification::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function questions()
+    {
+        return $this->belongsToMany(Question::class,'user_questions', 'user_id', 'question_id')->withPivot('point', 'content');
     }
 
     /**
