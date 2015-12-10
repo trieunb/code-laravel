@@ -124,24 +124,41 @@ class AuthenticatesController extends Controller
         $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
         
         if ( ! $user) {
-            if (isset($response['email'])) {
+            if (isset($response['emailAddress'])) {
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
                 if ( ! $user) {
                     $user = $this->user->createUserFromOAuth($response, $token);
+                    $token = \JWTAuth::fromUser($user);
+                    $this->user->updateUserLogin($user, $token);
+                    return response()->json([
+                        'status_code' => 200,
+                        'status' => true,
+                        'firstlogin' => true,
+                        'token' => $token
+                    ]);
                 } else {
-                    $this->user->updateUserFromOauth($response, $token, $user->id);   
+                    $this->user->updateUserFromOauth($response, $token, $user->id);
+                    $token = \JWTAuth::fromUser($user);
+                    $this->user->updateUserLogin($user, $token);
+                    return response()->json([
+                        'status_code' => 200,
+                        'status' => true,
+                        'firstlogin' => false,
+                        'token' => $token
+                    ]);   
                 }
             } else {
                 $user = $this->user->createUserFromOAuth($response, $token);
+                $token = \JWTAuth::fromUser($user);
+                $this->user->updateUserLogin($user, $token);
+                return response()->json([
+                    'status_code' => 200,
+                    'status' => true,
+                    'firstlogin' => true,
+                    'token' => $token
+                ]);
             }
-            $token = \JWTAuth::fromUser($user);
-            $this->user->updateUserLogin($user, $token);
-            return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'firstlogin' => true,
-                'token' => $token
-            ]);
+            
         } else {
             $token = \JWTAuth::fromUser($user);
             $this->user->updateUserLogin($user, $token);
@@ -167,20 +184,37 @@ class AuthenticatesController extends Controller
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
                 if ( ! $user) {
                     $user = $this->user->createUserFacebook($response, $token);
+                    $token = \JWTAuth::fromUser($user);
+                    $this->user->updateUserLogin($user, $token);
+                    return response()->json([
+                        'status_code' => 200,
+                        'status' => true,
+                        'firstlogin' => true,
+                        'token' => $token
+                    ]);
                 } else {
-                    $this->user->updateUserFacebook($response, $token, $user->id);   
+                    $this->user->updateUserFacebook($response, $token, $user->id);
+                    $token = \JWTAuth::fromUser($user);
+                    $this->user->updateUserLogin($user, $token);
+                    return response()->json([
+                        'status_code' => 200,
+                        'status' => true,
+                        'firstlogin' => false,
+                        'token' => $token
+                    ]);  
                 }
             } else {
                 $user = $this->user->createUserFacebook($response, $token);
+                $token = \JWTAuth::fromUser($user);
+                $this->user->updateUserLogin($user, $token);
+                return response()->json([
+                    'status_code' => 200,
+                    'status' => true,
+                    'firstlogin' => true,
+                    'token' => $token
+                ]);
             }
-            $token = \JWTAuth::fromUser($user);
-            $this->user->updateUserLogin($user, $token);
-            return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'firstlogin' => true,
-                'token' => $token
-            ]);
+           
         } else {
             $token = \JWTAuth::fromUser($user);
             $this->user->updateUserLogin($user, $token);
