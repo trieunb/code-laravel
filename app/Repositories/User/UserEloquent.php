@@ -447,4 +447,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 break;
         }
     }
+
+    public function updateUserLogin($user)
+    {
+        $token = \JWTAuth::fromUser($user);
+        $this->model->update(['token' => $token], $user->id);
+        return \Auth::login($user);
+    }
 }
