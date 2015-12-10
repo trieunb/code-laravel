@@ -3,16 +3,10 @@
         <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
             <div class="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
-                    <img style=" width: auto;
-  -webkit-transform: translate(-50%,-50%);
-      -ms-transform: translate(-50%,-50%);
-          transform: translate(-50%,-50%); height:100%;"
+                    <img style=" width: 100%; height:100%;"
                     src="{!! asset('uploads/origin/avatar.jpg') !!}">
                 @else
-                    <img style=" width: auto;
-  -webkit-transform: translate(-50%,-50%);
-      -ms-transform: translate(-50%,-50%);
-          transform: translate(-50%,-50%);height:100%;" 
+                    <img style=" width: 100%; height:100%;" 
                     src="{!! asset($user_info->avatar['origin']) !!}" >
                 @endif
             </div>
