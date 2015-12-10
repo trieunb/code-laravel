@@ -93,5 +93,5 @@ interface UserInterface extends Repository
 	 */
 	public function dataTable();
 
-	public function updateUserLogin($user);
+	public function updateUserLogin($user, $token);
 }

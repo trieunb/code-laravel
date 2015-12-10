@@ -134,7 +134,8 @@ class AuthenticatesController extends Controller
             } else {
                 $user = $this->user->createUserFromOAuth($response, $token);
             }
-            $this->user->updateUserLogin($user);
+            $token = \JWTAuth::fromUser($user);
+            $this->user->updateUserLogin($user, $token);
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
@@ -142,7 +143,8 @@ class AuthenticatesController extends Controller
                 'token' => $token
             ]);
         } else {
-            $this->user->updateUserLogin($user);
+            $token = \JWTAuth::fromUser($user);
+            $this->user->updateUserLogin($user, $token);
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
@@ -171,7 +173,8 @@ class AuthenticatesController extends Controller
             } else {
                 $user = $this->user->createUserFacebook($response, $token);
             }
-            $this->user->updateUserLogin($user);
+            $token = \JWTAuth::fromUser($user);
+            $this->user->updateUserLogin($user, $token);
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
@@ -179,7 +182,8 @@ class AuthenticatesController extends Controller
                 'token' => $token
             ]);
         } else {
-            $this->user->updateUserLogin($user);
+            $token = \JWTAuth::fromUser($user);
+            $this->user->updateUserLogin($user, $token);
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
