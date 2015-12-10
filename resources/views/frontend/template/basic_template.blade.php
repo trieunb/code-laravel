@@ -1,12 +1,16 @@
-<div class="container" style="word-wrap: break-word">
+<div class="container" style="
+    word-wrap: break-word; 
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;">
     <div class="row">
         <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
             <div class="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
-                    <img style="max-width: 100%; height:100%;"
+                    <img style="min-width: 100%; height:100%;"
                     src="{!! asset('uploads/origin/avatar.jpg') !!}">
                 @else
-                    <img style="max-width:100%; height:100%;" 
+                    <img style="min-width:100%; height:100%;" 
                     src="{!! asset($user_info->avatar['origin']) !!}" >
                 @endif
             </div>
