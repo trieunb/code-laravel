@@ -27,7 +27,6 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
 		return \Datatables::of($this->model->select('*'))
             ->addColumn('action', function ($question) {
             	return '<div class="btn-group" role="group" aria-label="...">
-            		<a class="btn btn-success" href="'.route('admin.question.get.answer', $question->id).'">Answer Of User</a>
                   	<a class="btn btn-primary edit" href="' .route('admin.question.get.edit', $question->id) . '" data-toggle="modal" data-target="#modal-admin"><i class="glyphicon glyphicon-edit"></i></a>
                   	<a class="delete-data btn btn-danger" data-src="' . route('api.question.get.deleteAdmin', $question->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
                 </div>';

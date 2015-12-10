@@ -43,14 +43,14 @@
     <div class="fw box-title">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <h4>Click and Create Your Amazing Resume</h4>
                 </div>
                 <div class="col-md-6 text-right edit">
                     <span>Price: Free</span>
                     <button class="btn-trans semi-bold">Read more</button>
-
-                </div>
+                
+                </div> -->
                 <div class="fw" id="collapseExample">
                     <div class="content">
                         <div class="title">
@@ -153,20 +153,22 @@
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 <script>
-    var app = {};
-    app.changeAvatar = function() {
-
+    function eventChangeClick() {
+        alert('1'); 
+        Android.changeAvatar();
     }
     var tmp = '';
     var eventListener = '';
+    var fixIOS = 'mouseup';
     if( /iPhone|iPad|iPod/i.test(navigator.userAgent) ) {
         eventListener = 'touchend';
+        fixIOS = 'touchmove';
     } else eventListener = 'mouseup';
     document.getElementById('content').addEventListener('touchstart', function () {
 
     });
 
-    document.getElementById('content').addEventListener('mouseup', function () {
+    document.getElementById('content').addEventListener(fixIOS, function () {
 
 
         var touches = event.changedTouches;

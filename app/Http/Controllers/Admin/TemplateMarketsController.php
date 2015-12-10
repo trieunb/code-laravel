@@ -26,7 +26,7 @@ class TemplateMarketsController extends Controller
     	return view('admin.template.create');
     }
 
-    public function postCreate(Request $request)
+    public function postCreate(TemplateFormRequest $request)
     {
         $sections = createClassSection();
         $result = createSection($request->get('content'), $sections);

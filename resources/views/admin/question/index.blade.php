@@ -5,7 +5,7 @@
 @stop
 
 @section('page-header')
-Manage Question
+Question List
 @stop
 
 @section('content')
@@ -49,7 +49,8 @@ Manage Question
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'updated_at', name: 'updated_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false}
-		        ]
+		        ],
+		        order: [[3, 'DESC']]
 		    });
 
 		    $('body').on('hidden.modal.bs', function() {

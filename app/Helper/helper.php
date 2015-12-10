@@ -97,7 +97,9 @@ if (!function_exists('createSection')) {
 
                         $content = str_replace($e->outertext,"<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>", $str);
 
-                        $tmp[$class] = "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>";
+                        $tmp[$class] = $section != 'photo'
+                            ? "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>"
+                            : "<div  onclick='eventChangeClick()' class='{$class}'>".$contentProfile ."</div>";
                         $tmp['content'] = $content;
 
                     }
@@ -142,7 +144,9 @@ if (!function_exists('editSection')) {
         //    $currentSectionString = $element->outertext;
         // }
 
-        $replace = '<div class="'.$section.'">';
+        $replace = $section != 'photo'
+            ? '<div class="'.$section.'">'
+            : '<div class="'.$section.'" onclick="eventChangeClick()">';
 
         foreach ($html_request->find('div.'.$section) as $key => $element) {
             $replace .= $key == count($html_request->find('div.'.$section)) - 1 

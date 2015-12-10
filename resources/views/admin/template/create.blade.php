@@ -32,8 +32,6 @@ Create Template
 
             <div class="form-group">
                 <textarea id="content" name="content"></textarea> 
-                <!-- <div id="myNicPanel" style="width: 100%;"></div>
-                <div id="myInstance1"></div> -->
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
@@ -60,11 +58,13 @@ Create Template
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
-<script src="{{ asset('js/nicEdit.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('js/html2canvas.min.js') }}"></script>
+<script src="{{ asset('js/html2canvas.svg.min.js') }}"></script>
+<script src="{{ asset('js/html2canvas.js') }}"></script>
+<script src="{{ asset('js/jspdf.debug.js') }}"></script>
 <script>
     function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.open({
@@ -109,8 +109,8 @@ return false;
 
 
     // TinyMCE init
-    tinymce.init({
-        selector: "#content",
+   tinymce.init({
+  selector: "#content",
         height : 500,
         // plugins: "table,code, image, link, media",
         relative_urls: false,
@@ -131,28 +131,23 @@ return false;
         { title: 'Availability', block: 'div', classes: 'availability', styles: { color: '#0000' } },
         { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } }
         ],
-        plugins: [
-        "advlist autolink autosave image lists charmap print preview hr  pagebreak spellchecker",
-        "wordcount  code fullscreen  nonbreaking",
-        "table contextmenu directionality textcolor paste textcolor colorpicker textpattern"
+  visualblocks_default_state: true,
+  end_container_on_empty_block: true,
+  plugins: [
+        " image,preview,hr,wordcount,code,table,colorpicker,textcolor"
         ],
+         toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
 
-        toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect |cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat | fullscreen | ltr rtl | spellchecker |   nonbreaking pagebreak",
+    menubar :false,
+    file_picker_callback : elFinderBrowser,
+  content_css: [
+    
+  ]
+ });
 
-        menubar: false,
-        toolbar_items_size: 'small',
-        file_picker_callback : elFinderBrowser
-    });
 
-   /* CKEDITOR.replace('content', {
-        config.format_section = 'div;Name;Address;Phone;Email;ProfileWebsite;LinkedInProfile;References;Objectives;OtherActivities;WorkExperiences;Educations;Photos';
-
-    });*/
 $(function() {
 
-   /* CKEDITOR.replace( 'content', {
-        format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name;Availability;PersonalInfomation'
-    } );*/
 var isBusy = false;
 $('form').validate({
     rules: {

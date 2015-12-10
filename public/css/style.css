@@ -521,7 +521,7 @@ body button:hover {
 .mobile .box-title {
   padding-top: 20px;
   background: #FFFFFF;
-  border-top: 1px solid #aaaaaa;
+  /* border-top: 1px solid #aaaaaa; */
 }
 .mobile .box-title .col-md-6 {
   text-align: left;

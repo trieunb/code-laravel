@@ -102,6 +102,9 @@
     <script src="{{  asset('js/main.js') }}"></script>
 
     <script>
+    $(document).ready(function() {
+        $('.photo').attr('onclick', 'app.changeAvatar()');
+    });
         function test() {
             var selection = '';
             var temp = null;
@@ -286,7 +289,7 @@
          });*/
         var app = {};
         app.changeAvatar = function() {
-
+            
         }
         function clickSave() {
             // $('#save').click(function(e) {

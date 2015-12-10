@@ -1,7 +1,20 @@
 @extends('admin.layout')
+
+@section('style')
+<style>
+    table img {
+        width: 200px;
+        height: 200px;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{{ asset('fancybox/source/jquery.fancybox.css?') }}">
+<link rel="stylesheet" href="{{ asset('fancybox/source/helpers/jquery.fancybox-thumbs.css') }}" type="text/css" media="screen" />
+@stop
+
 @section('page-header')
 Template List
 @stop
+
 @section('content')
 @if (\Session::has('message'))
     <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
@@ -11,6 +24,7 @@ Template List
         <th>Id</th>
         <th>Title</th>
         <th>Price</th>
+        <th>Image</th>
         <th>Created At</th>
         <th>Updated At</th>
         <th>Status</th>
@@ -19,8 +33,22 @@ Template List
 </table>
 @endsection
 @section('script')
+    <script src="{{ asset('fancybox/lib/jquery.mousewheel-3.0.6.pack.js') }}"></script>
+    <script src="{{ asset('fancybox/source/jquery.fancybox.pack.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('fancybox/source/helpers/jquery.fancybox-buttons.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('fancybox/source/helpers/jquery.fancybox-media.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('fancybox/source/helpers/jquery.fancybox-thumbs.js') }}"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
+            $('.fancybox').fancybox({
+                openEffect  : 'none',
+                closeEffect : 'none',
+                beforeShow: function () {
+                    this.width = 800;
+                    this.height = 700;
+                }
+            });
             var TemplateDatatable = $('#templates-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -30,6 +58,7 @@ Template List
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
                     {data: 'price', name: 'price'},
+                    {data: 'image', name: 'image', orderable: false, searchable: false},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'updated_at', name: 'updated_at'},
                     {data: 'status', name: 'status', orderable: false, searchable: false},

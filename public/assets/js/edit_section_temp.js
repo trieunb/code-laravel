@@ -9,7 +9,8 @@
   {
     var cls = section[i];
     var $sls = $(cls);
-    $(cls).attr("contentEditable", true);
+    if (section[i] != 'div.photo')
+      $(cls).attr("contentEditable", true);
   }
   function clickEditTemplate() {
       var url = window.location.href;

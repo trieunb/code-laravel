@@ -106,8 +106,8 @@ class User extends Model implements AuthenticatableContract,
      */
     public $path = 'uploads/';
 
-    public $img_width_thumb = 200;
-    public $img_height_thumb = 200;
+    public $img_width_thumb = 400;
+    public $img_height_thumb = 300;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

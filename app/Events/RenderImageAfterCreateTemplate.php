@@ -40,20 +40,27 @@ class RenderImageAfterCreateTemplate extends Event
         $this->template_id = $template_id;
         $this->content = $content;
         $this->filename = $slug;
+        \Log::info('test thoi', [$this->filename]);
     }
 
     public function render(TemplateInterface $template)
     {
-        $this->content = replace_url_img($this->content);
+        // $this->content = replace_url_img($this->content);
         try {
-             \PDF::loadView('api.template.index', ['content' => $this->content])
-            ->save(public_path('pdf/'.$this->filename.'.pdf'));
-        
+
+            //  \PDF::loadView('api.template.index', ['content' => $this->content])
+            // ->save(public_path('pdf/'.$this->filename.'.pdf'));
+            \App::make('dompdf.wrapper')->loadView('api.template.index', ['content' => $this->content])
+           ->save(public_path('pdf/'.$this->filename.'.pdf'));
+            // $snappy = \App::make('snappy.pdf');
+            // $snappy->generateFromHtml(  $this->content, public_path('pdf/'.$this->filename.'.pdf'));
+       
             $this->createImage();
             // convertPDFToIMG($this->filename);
 
             return $this->saveImage($template);
         } catch (\Exception $e) {
+            \Log::info('null', [$e->getMessage()]);
             return null;
         }
     }

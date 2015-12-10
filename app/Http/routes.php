@@ -13,6 +13,18 @@ use App\Models\User;
 | and give it the controller to call when that URI is requested.
 |
 */
+get('test', function() {
+    $array = ['name', 'address', 'phone',
+        'email', 'profile_website', 'linkedin',
+        'reference', 'objective', 'activitie',
+        'work', 'education', 'photo', 'personal_test',
+        'key_qualification', 'availability', 'infomation'
+    ];
+    sort($array);
+    dd($array);
+    dd(base_path('vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'));
+	return view('admin.template.render');
+});
 Route::pattern('id', '[0-9]+');
 
 get('/', function() {
@@ -124,7 +136,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Market Route
      */
     get('market/', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
-    get('market/template/{id}', ['uses' => 'MarketPlacesController@getDetailTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
     // get('market/search', 'MarketPlacesController@search');
     
@@ -152,14 +163,3 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('answers/', 'QuestionsController@postAnswerOfUser');
 });
 
-get('/test', function() {
-    return User::whereHas('questions', function($q) {
-        $q->whereQuestionId(11);
-    })->get();
-    dd(User::with(['questions', function($q) {
-  
-    }])->get());
-    dd(User::find(1)->questions, User::whereHas('questions', function($q) {
-        $q->whereQuestionId(11);
-    })->get());
-});

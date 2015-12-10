@@ -41,18 +41,6 @@ class MarketPlacesController extends Controller
 
     }
 
-    public function getDetailTemplateMarket(Request $request, $template_id)
-    {
-        $token = \JWTAuth::toUser($request->get('token'));
-        $template_market = $this->template_market->getDetailTemplateMarket($template_id);
-        
-        return $template_market
-            ? response()->json([
-                'status_code' => 200, 'status' => true, 'data' => $template_market
-            ])
-            : response()->json(['status_code' => 404, 'status' => false, 'message' => 'Page not found']);
-    }
-
     public function postTemplatesFromMarket(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
@@ -67,7 +55,8 @@ class MarketPlacesController extends Controller
     public function view($id, Request $request)
     {
         $template = $this->template_market->getDetailTemplateMarket($id);
-        $content = str_replace('contenteditable="true"', '', $template->content);
+        $content = preg_replace('/contenteditable="true"|contenteditable=\'true\'/', '', $template->content);
+        $content = str_replace("contenteditable='true'", '', $template->content);
 
         return view('api.market.view', compact('content'));
     }

@@ -98,6 +98,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         $result = $template->save();
 
         if ($result) {
+            if (\File::exists($template->source_file_pdf)) {
+                \File::delete($template->source_file_pdf, $template->image['origin'], $template->image['thumb']);
+            }
             return event(new RenderFileWhenCreateTemplateMarket($template->slug, $template->content, $template->id));
         }
         
@@ -126,6 +129,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     {
         $templates = $this->model->select('*');
         return \Datatables::of($templates)
+            ->editColumn('image', function($template) {
+                return '<a class="fancybox" href="'.asset($template->image['origin']).'"><img src="'.asset($template->image['origin']).'"/></a>';
+            })
             ->addColumn('action', function ($template) {
                 return '<div class="btn-group" role="group" aria-label="...">
                     <a class="btn btn-primary edit" href="' .route('admin.template.get.edit', $template->id) . '"><i class="glyphicon glyphicon-edit"></i></a>

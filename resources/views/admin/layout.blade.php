@@ -82,7 +82,7 @@
                                         <a href="{{ route('admin.question.get.create') }}">Create Question</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.question.get.index') }}">View</a>
+                                        <a href="{{ route('admin.question.get.index') }}">Question List</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->

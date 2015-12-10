@@ -115,7 +115,7 @@ class UsersController extends Controller
 		
 		return response()->json([
 			'status_code' => 200, 'status' => true, 'data' => $this->user->getProfile($user->id)
-		], 200, [], JSON_NUMERIC_CHECK);
+		], 200, [], 0);
 	}
 
 	public function postProfile($id, Request $request, 
@@ -127,9 +127,9 @@ class UsersController extends Controller
 		Reference_Rule $reference_rule,
 		Qualification_Rule $qualification_rule
 	) {
-		\Log::info('post Profile', $request->all());
+		
 		$user = \JWTAuth::toUser($request->get('token'));
-
+		\Log::info('post Profile', $request->all());
 		if ($user->id != $id) {
 			return response()->json(['status_code' => 403,'status' => false, 'message' => 'access for denied'], 403);
 		}
