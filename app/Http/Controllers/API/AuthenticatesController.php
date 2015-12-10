@@ -121,24 +121,35 @@ class AuthenticatesController extends Controller
         $token = $request->get('token');
         $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-urls::(original),location:(name),public-profile-url,email-address,date-of-birth)?oauth2_access_token=".$token."&format=json";
         $response = json_decode(file_get_contents($url), true);
-        $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
-        $linkedin = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
+        $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
         
         if ( ! $user) {
-            $user = $linkedin ? $linkedin :  $this->user->createUserFromOAuth($response, $token);
-        } else if ( !$linkedin ) {
-            $this->user->updateUserFromOauth($response, $token, $user->id);
+            if (isset($response['email'])) {
+                $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
+                if ( ! $user) {
+                    $user = $this->user->createUserFromOAuth($response, $token);
+                } else {
+                    $this->user->updateUserFromOauth($response, $token, $user->id);   
+                }
+            } else {
+                $user = $this->user->createUserFromOAuth($response, $token);
+            }
+            $this->user->updateUserLogin($user);
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'firstlogin' => true,
+                'token' => $token
+            ]);
+        } else {
+            $this->user->updateUserLogin($user);
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'firstlogin' => false,
+                'token' => $token
+            ]);
         }
-        
-        Auth::login($user);
-        $token = \JWTAuth::fromUser($user);
-        $this->user->update(['token' => $token], $user->id);
-
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'token' => $token
-        ]);
     }
 
     public function loginWithFacebook(Request $request)
@@ -160,10 +171,7 @@ class AuthenticatesController extends Controller
             } else {
                 $user = $this->user->createUserFacebook($response, $token);
             }
-            Auth::login($user);
-            $token = \JWTAuth::fromUser($user);
-            $this->user->update(['token' => $token], $user->id);
-
+            $this->user->updateUserLogin($user);
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
@@ -171,10 +179,7 @@ class AuthenticatesController extends Controller
                 'token' => $token
             ]);
         } else {
-            Auth::login($user);
-            $token = \JWTAuth::fromUser($user);
-            $this->user->update(['token' => $token], $user->id);
-
+            $this->user->updateUserLogin($user);
             return response()->json([
                 'status_code' => 200,
                 'status' => true,

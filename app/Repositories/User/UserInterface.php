@@ -92,4 +92,6 @@ interface UserInterface extends Repository
 	 * @return mixed 
 	 */
 	public function dataTable();
+
+	public function updateUserLogin($user);
 }
