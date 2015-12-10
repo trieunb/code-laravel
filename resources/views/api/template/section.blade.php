@@ -154,7 +154,6 @@
 <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 <script>
     function eventChangeClick() {
-        alert('1'); 
         Android.changeAvatar();
     }
     var tmp = '';

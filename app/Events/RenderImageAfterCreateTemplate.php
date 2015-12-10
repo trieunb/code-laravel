@@ -50,10 +50,10 @@ class RenderImageAfterCreateTemplate extends Event
 
             //  \PDF::loadView('api.template.index', ['content' => $this->content])
             // ->save(public_path('pdf/'.$this->filename.'.pdf'));
-            \App::make('dompdf.wrapper')->loadView('api.template.index', ['content' => $this->content])
-           ->save(public_path('pdf/'.$this->filename.'.pdf'));
-            // $snappy = \App::make('snappy.pdf');
-            // $snappy->generateFromHtml(  $this->content, public_path('pdf/'.$this->filename.'.pdf'));
+           //  \App::make('dompdf.wrapper')->loadView('api.template.index', ['content' => $this->content])
+           // ->save(public_path('pdf/'.$this->filename.'.pdf'));
+            $snappy = \App::make('snappy.pdf');
+            $snappy->generateFromHtml(  $this->content, public_path('pdf/'.$this->filename.'.pdf'));
        
             $this->createImage();
             // convertPDFToIMG($this->filename);
