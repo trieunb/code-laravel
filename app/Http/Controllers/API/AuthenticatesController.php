@@ -160,17 +160,28 @@ class AuthenticatesController extends Controller
             } else {
                 $user = $this->user->createUserFacebook($response, $token);
             }
-        }
-        
-        Auth::login($user);
-        $token = \JWTAuth::fromUser($user);
-        $this->user->update(['token' => $token], $user->id);
+            Auth::login($user);
+            $token = \JWTAuth::fromUser($user);
+            $this->user->update(['token' => $token], $user->id);
 
-        return response()->json([
-            'status_code' => 200,
-            'status' => true,
-            'token' => $token
-        ]);
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'firstlogin' = true,
+                'token' => $token
+            ]);
+        } else {
+            Auth::login($user);
+            $token = \JWTAuth::fromUser($user);
+            $this->user->update(['token' => $token], $user->id);
+
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'firstlogin' = true,
+                'token' => $token
+            ]);
+        }
     }
 
     public function postForgetPassword(Request $request)
