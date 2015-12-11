@@ -62,7 +62,6 @@ class RenderImageAfterCreateTemplate extends Event
        
             $this->createImage();
             // convertPDFToIMG($this->filename);
-
             return $this->saveImage($template);
         } catch (\Exception $e) {
             \Log::info('null', [$e->getMessage()]);
@@ -98,14 +97,13 @@ class RenderImageAfterCreateTemplate extends Event
     private function saveImage($templateInterface)
     {
         $images = [];
-
         for ($i=0; $i < $this->pageNumb; $i++) { 
             $resize = \Image::make(public_path('images/template/'.$this->filename.'-'.$i.'.jpg'))
                 ->resize(200,150)
                 ->save(public_path('thumb/template/'.$this->filename.'-'.$i.'.jpg'));
       
-            $images['origin'][] = 'images/template/'.$filename.'-'.$i.'.jpg';
-            $images['thumb'][] = 'thumb/template/'.$filename.'-'.$i.'.jpg';
+            $images['origin'][] = 'images/template/'.$this->filename.'-'.$i.'.jpg';
+            $images['thumb'][] = 'thumb/template/'.$this->filename.'-'.$i.'.jpg';
         }
          
         
