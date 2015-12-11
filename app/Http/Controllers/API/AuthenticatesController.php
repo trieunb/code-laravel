@@ -214,7 +214,16 @@ class AuthenticatesController extends Controller
                     'token' => $token
                 ]);
             }
-           
+            Auth::login($user);
+            $token = \JWTAuth::fromUser($user);
+            $this->user->update(['token' => $token], $user->id);
+
+            return response()->json([
+                'status_code' => 200,
+                'status' => true,
+                'firstlogin' => true,
+                'token' => $token
+            ]);
         } else {
             $token = \JWTAuth::fromUser($user);
             $this->user->updateUserLogin($user, $token);
