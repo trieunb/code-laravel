@@ -89,6 +89,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     get('question/answer/{id}', ['as' => 'admin.question.get.answer', 'uses' => 'QuestionsController@answer']);
     
     post('question/create', ['as' => 'admin.question.post.create', 'uses' => 'QuestionsController@store']);
+
+    /**
+     * Report
+     */
+    get('report', ['as' => 'admin.report.get.index', 'uses' => 'ReportController@index']);
 });
 
 

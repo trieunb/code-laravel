@@ -165,6 +165,7 @@ return [
         yajra\Datatables\DatatablesServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
     ],
 
     /*
