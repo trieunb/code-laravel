@@ -226,7 +226,7 @@
             }
             if (section == 'availability') return;
             $('div.'+section+'[contenteditable="true"]').addClass('highlight');
-            var user_id = "{{ \Auth::user()->id }}";
+            var user_id = "{{ $user->id }}";
             var token = document.location.href.split('?');
             tmp = selection.toString();
             if (selection.toString() === '' || selection.toString() === " ") return;
@@ -278,13 +278,15 @@
                     $('#buttons').show();
                     $('#buttons .dropdown-menu').show();
                     var html = '';
+
                     html += '<option disabled selected>Get From Profile</option>';
                     if (typeof(result.data) !== 'object') {
+                    
                         var f = section.charAt(0)
                                 .toUpperCase();
                         f = f + section.substr(1);
                         html += '<optgroup label="' + f + '">';
-                        html += '<option>' + result.data + '</option>';
+                        html += '<option>'+ result.data + '</option>';
                         html += '</optgroup>';
                     } else {
                         $.each(result.data, function (key, val) {

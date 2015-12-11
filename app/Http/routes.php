@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Question;
-use App\Models\User;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -13,24 +10,48 @@ use App\Models\User;
 | and give it the controller to call when that URI is requested.
 |
 */
-get('test', function() {
-    $array = ['name', 'address', 'phone',
-        'email', 'profile_website', 'linkedin',
-        'reference', 'objective', 'activitie',
-        'work', 'education', 'photo', 'personal_test',
-        'key_qualification', 'availability', 'infomation'
-    ];
-    sort($array);
-    dd($array);
-    dd(base_path('vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'));
-	return view('admin.template.render');
-});
-Route::pattern('id', '[0-9]+');
 
-get('/', function() {
-    return view('welcome');
+get('test', function() {
+    $job = \App\JobTest::find(1);
+    $skills = [];
+    foreach ($job->skill as $skill)
+        $skills[] = $skill['skill'];
+
+    $userIds = [];
+    $data = \DB::table('users')
+        ->selectRaw('DISTINCT users.id')
+        ->join('user_skills', 'user_skills.user_id', '=', 'users.id')
+        // ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
+        // ->join('user_work_histories', 'user_work_histories.user_id', '=', 'users.id')
+        ->whereRaw('MATCH (skill_name, experience) AGAINST (?)', [implode(',', $skills)])
+        // ->orWhereRaw('MATCH (school_name, degree, result) AGAINST (?)', [$job->education])
+        // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [implode(',', $skills)])
+        // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->description.','.$job->title])
+        ->get();
+    $dataUsers = [];
+
+    foreach ($data as $value) {
+        $userIds[] = $value->id;
+    }
+    
+    $data = \DB::table('users')
+        ->selectRaw('DISTINCT users.id')
+        ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
+        ->whereNotIn('users.id', [implode(',', $userIds)])
+        ->get();
+
+    $users = \App\Models\User::whereNotIn('id', [implode(',', $userIds)])->get();
+
+    foreach ($users as $user) {
+
+        if ($user->location != null)
+            $dataUsers[$user->id] = $user->location;
+    }
+
+
+        dd($dataUsers, $data);
 });
-//, 'middleware' => 'role:admin|member'
+
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
 
@@ -54,6 +75,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     get('template/detail/{id}', ['as' => 'admin.template.get.detail', 'uses' => 'TemplateMarketsController@detail']);
     get('template/delete/{id}', ['as' => 'admin.template.delete', 'uses' => 'TemplateMarketsController@delete']);
     get('template/datatable', ['as' => 'api.template.get.dataTable', 'uses' => 'TemplateMarketsController@showDatatableTemplate']);
+    get('template/view/{id}', ['as' => 'admin.template.get.view', 'uses' => 'TemplateMarketsController@getView']);
     
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit/{id}', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);

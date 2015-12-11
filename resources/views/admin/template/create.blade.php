@@ -61,10 +61,6 @@ Create Template
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.svg.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.js') }}"></script>
-<script src="{{ asset('js/jspdf.debug.js') }}"></script>
 <script>
     function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.open({
@@ -104,56 +100,58 @@ Create Template
             }
         });
 return false;
-    }
+}
 
 
 
     // TinyMCE init
-   tinymce.init({
-  selector: "#content",
-        height : 500,
+    tinymce.init({
+      selector: "#content",
+      height : 500,
         // plugins: "table,code, image, link, media",
         relative_urls: false,
         remove_script_host: false,
         style_formats: [
-        { title: 'Name', block: 'div', classes: 'name', styles: { color: '#000000' } },
-        { title: 'Address', block: 'div', classes:'address', styles: { color: '#00000' } },
-        { title: 'Email', block: 'div', classes: 'email', styles: { color: '#0000' } },
-        { title: 'Profile Website', block: 'div', classes: 'profile_website', styles: { color: '#0000' } },
-        { title: 'Linkedin', block: 'div', classes: 'linkedin', styles: { color: '#0000' } },
-        { title: 'Reference', block: 'div', classes: 'reference', styles: { color: '#0000' } },
-        { title: 'Objective', block: 'div', classes: 'objective', styles: { color: '#0000' } },
         { title: 'Activitie', block: 'div', classes: 'activitie', styles: { color: '#0000' } },
-        { title: 'Work Experience', block: 'div', classes: 'work', styles: { color: '#0000' } },
-        { title: 'Education', block: 'div', classes: 'education', styles: { color: '#0000' } },
-        { title: 'Photo', block: 'div', classes: 'photo', styles: { color: '#0000' } },
-        { title: 'Qualification', block: 'div', classes: 'key_qualification', styles: { color: '#0000' } },
+        { title: 'Address', block: 'div', classes:'address', styles: { color: '#00000' } },
         { title: 'Availability', block: 'div', classes: 'availability', styles: { color: '#0000' } },
-        { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } }
+        { title: 'Education', block: 'div', classes: 'education', styles: { color: '#0000' } },
+        { title: 'Email', block: 'div', classes: 'email', styles: { color: '#0000' } },
+        { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } },
+        { title: 'Qualification', block: 'div', classes: 'key_qualification', styles: { color: '#0000' } },
+        { title: 'Linkedin', block: 'div', classes: 'linkedin', styles: { color: '#0000' } },
+        { title: 'Mobile Phone number', block: 'div', classes: 'phone', styles: { color: '#0000' } },
+        { title: 'Name', block: 'div', classes: 'name', styles: { color: '#000000' } },
+        { title: 'Objective', block: 'div', classes: 'objective', styles: { color: '#0000' } },
+        { title: 'Personal Test', block: 'div', classes: 'personal_test', styles: { color: '#0000' } },
+        { title: 'Photo', block: 'div', classes: 'photo', styles: { color: '#0000' } },
+
+        { title: 'Profile Website', block: 'div', classes: 'profile_website', styles: { color: '#0000' } },
+        { title: 'Reference', block: 'div', classes: 'reference', styles: { color: '#0000' } },
+
+        { title: 'Work Experience', block: 'div', classes: 'work', styles: { color: '#0000' } }
         ],
-  visualblocks_default_state: true,
-  end_container_on_empty_block: true,
-  plugins: [
+        // visualblocks_default_state: true,
+        // end_container_on_empty_block: true,
+        plugins: [
         " image,preview,hr,wordcount,code,table,colorpicker,textcolor"
         ],
-         toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
+        toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
 
-    menubar :false,
-    file_picker_callback : elFinderBrowser,
-  content_css: [
-    
-  ]
- });
+        menubar :false,
+        file_picker_callback : elFinderBrowser,
+
+    });
 
 
 $(function() {
 
-var isBusy = false;
-$('form').validate({
-    rules: {
-        title : {
-            required: true,
-            remote : {
+    var isBusy = false;
+    $('form').validate({
+        rules: {
+            title : {
+                required: true,
+            /*remote : {
                 url: '{{ route("admin.template.check") }}',
                 type: 'GET',
                 data: {
@@ -161,7 +159,7 @@ $('form').validate({
                         return $( "#title" ).val();
                     }
                 }   
-            }
+            }*/
         },
         cat_id : {
             required : true

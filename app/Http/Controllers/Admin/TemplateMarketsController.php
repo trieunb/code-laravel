@@ -47,7 +47,7 @@ class TemplateMarketsController extends Controller
     {
         $sections = createClassSection();
         $data = createSection($request->get('content'), $sections);
-        
+
         return $this->template_market->createOrUpdateTemplateByManage($request, $data, \Auth::user()->id)
             ? redirect()->route('admin.template.get.index')->with('message', 'Edit Template successfully!')
             : redirect()->back()->with('message', 'Error when create template!');
@@ -124,5 +124,12 @@ class TemplateMarketsController extends Controller
     public function showDatatableTemplate()
     {
         return $this->template_market->dataTableTemplate();
+    }
+
+    public function getView($id)
+    {
+        $template = $this->template_market->getById($id);
+
+        return view('admin.template.view', ['title' => $template->title, 'content' => $template->content]);
     }
 }

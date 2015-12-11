@@ -24,7 +24,6 @@ Template List
         <th>Id</th>
         <th>Title</th>
         <th>Price</th>
-        <th>Image</th>
         <th>Created At</th>
         <th>Updated At</th>
         <th>Status</th>
@@ -40,15 +39,9 @@ Template List
     <script type="text/javascript" src="{{ asset('fancybox/source/helpers/jquery.fancybox-thumbs.js') }}"></script>
 
     <script type="text/javascript">
+
         $(document).ready(function () {
-            $('.fancybox').fancybox({
-                openEffect  : 'none',
-                closeEffect : 'none',
-                beforeShow: function () {
-                    this.width = 800;
-                    this.height = 700;
-                }
-            });
+           
             var TemplateDatatable = $('#templates-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -58,7 +51,6 @@ Template List
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
                     {data: 'price', name: 'price'},
-                    {data: 'image', name: 'image', orderable: false, searchable: false},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'updated_at', name: 'updated_at'},
                     {data: 'status', name: 'status', orderable: false, searchable: false},
@@ -66,7 +58,20 @@ Template List
                 ],
                 order: [[0, 'DESC']]
             });
-
+            /* $('#templates-table tbody').on( 'click', 'td', function () {
+                    $('#templates-table a').removeClass('fancybox');
+                    $.each($(this).find('a'), function(key, val) {
+                        $(val).addClass('fancybox');
+                    });
+            } );
+             $('.fancybox').fancybox({
+                openEffect  : 'none',
+                closeEffect : 'none',
+                beforeShow: function () {
+                    this.width = 1000;
+                    this.height = 1200;
+                }
+            });*/
             var isBusy = false;
             $(document).on('click', '.delete-data', function(e) {
                 e.preventDefault();

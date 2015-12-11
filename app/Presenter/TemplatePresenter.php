@@ -122,7 +122,7 @@ class TemplatePresenter extends Presenter
 	                break;
 	            default:
 	            	$html .= '<optgroup label="'.ucfirst($section).'">';
-	                $html .= '<option>'.User::findOrFail($id)->pluck($section).'</option>';
+	                $html .= '<option>'.User::findOrFail($id)->$section.'</option>';
 	        		$html .= '</optgroup>';
 
 	                return $html;

@@ -55,7 +55,6 @@ Edit Template
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
@@ -153,7 +152,7 @@ Edit Template
         rules: {
             title : {
                 required: true,
-                remote : {
+               /* remote : {
                     url: '{{ route("admin.template.check") }}',
                     type: 'GET',
                     data: {
@@ -164,7 +163,7 @@ Edit Template
                             return $('#template_id').val();   
                         }
                     }   
-                }
+                }*/
             },
             cat_id : {
                 required : true
@@ -174,11 +173,6 @@ Edit Template
             },
             status : {
                 required : true
-            }
-        },
-        messages : {
-            title: {
-                remote : 'Title exists, please change title'
             }
         },
         highlight: function(element) {
