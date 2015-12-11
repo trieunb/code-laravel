@@ -76,10 +76,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     get('template/delete/{id}', ['as' => 'admin.template.delete', 'uses' => 'TemplateMarketsController@delete']);
     get('template/datatable', ['as' => 'api.template.get.dataTable', 'uses' => 'TemplateMarketsController@showDatatableTemplate']);
     get('template/view/{id}', ['as' => 'admin.template.get.view', 'uses' => 'TemplateMarketsController@getView']);
-    
+    get('template/{id}/define', ['as' => 'admin.template.get.define', 'uses' => 'TemplateMarketsController@getDefine']);
+    get('template/status/{id}', ['as' => 'admin.template.status', 'uses' => 'TemplateMarketsController@changeStatus']);
+
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit/{id}', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
-    get('template/status/{id}', ['as' => 'admin.template.status', 'uses' => 'TemplateMarketsController@changeStatus']);
+    post('template/define', ['as' => 'admin.template.post.define', 'uses' => 'TemplateMarketsController@postDefine']);
     /**
      * Question Route
      */

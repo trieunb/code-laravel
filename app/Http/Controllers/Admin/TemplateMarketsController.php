@@ -32,7 +32,7 @@ class TemplateMarketsController extends Controller
         $result = createSection($request->get('content'), $sections);
         
         return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
-            ? redirect()->route('admin.template.get.index')->with('message', 'Create Template successfully!')
+            ? redirect()->route('admin.template.get.define')->with('message', 'Create Template successfully!')
             : redirect()->back()->with('message', 'Error when create template!');
     }
 
@@ -131,5 +131,17 @@ class TemplateMarketsController extends Controller
         $template = $this->template_market->getById($id);
 
         return view('admin.template.view', ['title' => $template->title, 'content' => $template->content]);
+    }
+
+    public function getDefine($id)
+    {
+        $template = $this->template_market->getById($id);
+
+        return view('admin.template.define', compact('template'));
+    }
+
+    public function postDefine(Request $request)
+    {
+        
     }
 }
