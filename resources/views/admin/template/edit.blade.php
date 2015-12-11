@@ -55,7 +55,6 @@ Edit Template
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
@@ -125,7 +124,7 @@ Edit Template
         { title: 'Photo', block: 'div', classes: 'photo', styles: { color: '#0000' } },
         { title: 'Profile Website', block: 'div', classes: 'profile_website', styles: { color: '#0000' } },
         { title: 'Reference', block: 'div', classes: 'reference', styles: { color: '#0000' } },
-       
+        { title: 'Skill', block: 'div', classes: 'skill', styles: { color: '#0000' } },
         { title: 'Work Experience', block: 'div', classes: 'work', styles: { color: '#0000' } }
         ],
         plugins: [
@@ -153,7 +152,7 @@ Edit Template
         rules: {
             title : {
                 required: true,
-                remote : {
+               /* remote : {
                     url: '{{ route("admin.template.check") }}',
                     type: 'GET',
                     data: {
@@ -164,7 +163,7 @@ Edit Template
                             return $('#template_id').val();   
                         }
                     }   
-                }
+                }*/
             },
             cat_id : {
                 required : true
@@ -174,11 +173,6 @@ Edit Template
             },
             status : {
                 required : true
-            }
-        },
-        messages : {
-            title: {
-                remote : 'Title exists, please change title'
             }
         },
         highlight: function(element) {

@@ -26,8 +26,7 @@ class RenderImageAfterCreateTemplate extends Event
      * @var $template_id
      */
     private $template_id;
-    private $PROPERTY;
-    private $numPage;
+    private $pageNumb;
 
     use SerializesModels;
 
@@ -53,12 +52,16 @@ class RenderImageAfterCreateTemplate extends Event
             // ->save(public_path('pdf/'.$this->filename.'.pdf'));
            //  \App::make('dompdf.wrapper')->loadView('api.template.index', ['content' => $this->content])
            // ->save(public_path('pdf/'.$this->filename.'.pdf'));
+            if (\File::exists(public_path('pdf/'.$this->filename.'.pdf'))) {
+                \File::delete(public_path('pdf/'.$this->filename.'.pdf'));
+            }
             $snappy = \App::make('snappy.pdf');
-            $snappy->generateFromHtml(  $this->content, public_path('pdf/'.$this->filename.'.pdf'));
+            $snappy->generateFromHtml($this->content, 
+                public_path('pdf/'.$this->filename.'.pdf')
+            );
        
             $this->createImage();
             // convertPDFToIMG($this->filename);
-
             return $this->saveImage($template);
         } catch (\Exception $e) {
             \Log::info('null', [$e->getMessage()]);
@@ -72,16 +75,17 @@ class RenderImageAfterCreateTemplate extends Event
      */
     private function createImage()
     {
-        $img = new \Imagick();
-        $this->numPage = $img->getNumberImages();
 
-        for ($i = 0; $i < $this->numPage; $i++) {
-            $img->readImage(public_path('pdf/'.$this->filename.'.pdf['.$i.']'));
+        $img = new \Imagick(public_path('pdf/'.$this->filename.'.pdf'));
+        $this->pageNumb = $img->getNumberImages();
+
+        for ($i = 0; $i < $this->pageNumb; $i++) {
+             $img->readImage(public_path('pdf/'.$this->filename.'.pdf['.$i.']'));
             $img->setImageFormat('jpg');
-            $img->setSize(595, 842);
+            $img->setSize(700, 1000);
             $img->writeImage(public_path('images/template/'.$this->filename.'-'.$i.'.jpg'));
         }
-        
+       
         $img->clear();
         $img->destroy();
     }
@@ -94,14 +98,17 @@ class RenderImageAfterCreateTemplate extends Event
     private function saveImage($templateInterface)
     {
         $images = [];
-        for ($i = 0; $i < $this->numPage; $i++) {
+
+        for ($i=0; $i < $this->pageNumb; $i++) { 
             $resize = \Image::make(public_path('images/template/'.$this->filename.'-'.$i.'.jpg'))
                 ->resize(200,150)
                 ->save(public_path('thumb/template/'.$this->filename.'-'.$i.'.jpg'));
-            $images['origin'][] = public_path('images/template/'.$this->filename.'-'.$i.'.jpg');
-            $images['thumb'][] = public_path('thumb/template/'.$this->filename.'-'.$i.'.jpg');
+      
+            $images['origin'][] = 'images/template/'.$this->filename.'-'.$i.'.jpg';
+            $images['thumb'][] = 'thumb/template/'.$this->filename.'-'.$i.'.jpg';
         }
-       
+         
+
         
         if (!$resize) return null;
 

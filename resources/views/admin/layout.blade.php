@@ -61,7 +61,7 @@
                                 <a href="{{URL::to('/admin')}}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.user.get.index') }}"><i class="fa fa-dashboard fa-fw"></i> User</a>
+                                <a href="{{ route('admin.user.get.index') }}"><i class="fa fa-user fa-fw"></i> User</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-file-text fa-fw"></i> Market Place<span class="fa arrow"></span></a>
@@ -76,13 +76,22 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-file-text fa-fw"></i> Question<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-question fa-fw"></i> Question<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="{{ route('admin.question.get.create') }}">Create Question</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('admin.question.get.index') }}">Question List</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Report<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{{ route('admin.report.get.index') }}">report manager</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
