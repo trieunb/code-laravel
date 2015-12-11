@@ -7,24 +7,14 @@
         <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
             <div class="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
-                    <img style="left: -100%;
-                        position:absolute;
-                        right: -100%;
-                        top: -100%;
-                        bottom: -100%;
-                        margin: auto;
-                        height: auto;
-                        width: auto"
+                    <img style="
+                        height: 100%;
+                        width: 100%"
                     src="{!! asset('uploads/origin/avatar.jpg') !!}">
                 @else
-                    <img style="left: -100%;
-                        position:absolute;
-                        right: -100%;
-                        top: -100%;
-                        bottom: -100%;
-                        margin: auto;
-                        min-height: auto;
-                        min-width: auto" 
+                    <img style="
+                        height: 100%;
+                        width: 100%" 
                     src="{!! asset($user_info->avatar['thumb']) !!}" >
                 @endif
             </div>
