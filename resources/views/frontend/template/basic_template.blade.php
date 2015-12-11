@@ -4,7 +4,7 @@
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow:hidden; height:400px; width:300px">
+        <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
             <div class="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
                     <img style="left: -100%;
@@ -25,7 +25,7 @@
                         margin: auto;
                         min-height: auto;
                         min-width: auto" 
-                    src="{!! asset($user_info->avatar['origin']) !!}" >
+                    src="{!! asset($user_info->avatar['thumb']) !!}" >
                 @endif
             </div>
             <div class="text-info" 
