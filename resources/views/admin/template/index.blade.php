@@ -64,7 +64,7 @@ Template List
                     {data: 'status', name: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
-                order: [[0, 'DESC']]
+                order: [[4, 'DESC']]
             });
 
             var isBusy = false;
