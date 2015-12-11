@@ -27,6 +27,7 @@ class RenderImageAfterCreateTemplate extends Event
      */
     private $template_id;
     private $PROPERTY;
+    private $numPage;
 
     use SerializesModels;
 
@@ -72,10 +73,15 @@ class RenderImageAfterCreateTemplate extends Event
     private function createImage()
     {
         $img = new \Imagick();
-        $img->readImage(public_path('pdf/'.$this->filename.'.pdf[0]'));
-        $img->setImageFormat('jpg');
-        $img->setSize(200, 200);
-        $img->writeImage(public_path('images/template/'.$this->filename.'.jpg'));
+        $this->numPage = $img->getNumberImages();
+
+        for ($i = 0; $i < $this->numPage; $i++) {
+            $img->readImage(public_path('pdf/'.$this->filename.'.pdf['.$i.']'));
+            $img->setImageFormat('jpg');
+            $img->setSize(595, 842);
+            $img->writeImage(public_path('images/template/'.$this->filename.'-'.$i.'.jpg'));
+        }
+        
         $img->clear();
         $img->destroy();
     }
@@ -87,17 +93,21 @@ class RenderImageAfterCreateTemplate extends Event
      */
     private function saveImage($templateInterface)
     {
-         $resize = \Image::make(public_path('images/template/'.$this->filename.'.jpg'))
-            ->resize(200,150)
-            ->save(public_path('thumb/template/'.$this->filename.'.jpg'));
+        $images = [];
+        for ($i = 0; $i < $this->numPage; $i++) {
+            $resize = \Image::make(public_path('images/template/'.$this->filename.'-'.$i.'.jpg'))
+                ->resize(200,150)
+                ->save(public_path('thumb/template/'.$this->filename.'-'.$i.'.jpg'));
+            $images['origin'][] = public_path('images/template/'.$this->filename.'-'.$i.'.jpg');
+            $images['thumb'][] = public_path('thumb/template/'.$this->filename.'-'.$i.'.jpg');
+        }
+       
         
         if (!$resize) return null;
 
         $template = $templateInterface->getById($this->template_id);
-        $template->image = [
-            'origin' => 'images/template/'.$this->filename.'.jpg',
-            'thumb' => 'thumb/template/'.$this->filename.'.jpg'
-        ];
+
+        $template->image = $images;
         $template->source_file_pdf = 'pdf/'.$this->filename.'.pdf';
         
         return $template->save();
