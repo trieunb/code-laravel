@@ -109,11 +109,7 @@
         </div>
     </div>
     <div class="container">
-        <div class="row wrapper detail">
-            <div id="content" class="fw w_bg">
-                {!! $template->content !!}
-            </div>
-        </div>
+        {!! $template->content !!}
         <div class="fw text-center">
             <button class="btn-trans fill edit" id="edit-template" onclick="clickEditTemplate()">
                 END EDIT MODE
