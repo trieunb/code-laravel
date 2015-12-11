@@ -4,13 +4,27 @@
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
+        <div class='image-avatar' style="position: relative; overflow:hidden; height:400px; width:300px">
             <div class="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
-                    <img style="min-width: 100%; height:100%;"
+                    <img style="left: -100%;
+                        position:absolute;
+                        right: -100%;
+                        top: -100%;
+                        bottom: -100%;
+                        margin: auto;
+                        height: auto;
+                        width: auto"
                     src="{!! asset('uploads/origin/avatar.jpg') !!}">
                 @else
-                    <img style="min-width:100%; height:100%;" 
+                    <img style="left: -100%;
+                        position:absolute;
+                        right: -100%;
+                        top: -100%;
+                        bottom: -100%;
+                        margin: auto;
+                        min-height: auto;
+                        min-width: auto" 
                     src="{!! asset($user_info->avatar['origin']) !!}" >
                 @endif
             </div>
