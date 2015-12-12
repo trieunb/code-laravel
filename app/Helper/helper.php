@@ -73,11 +73,11 @@ if (!function_exists('createSection')) {
         $contentProfile = '';
         $str = $htmlString;
         $content = '';
-        
+
         if (count($sections) > 0) {
             foreach ($sections as $index => $section) {
-                $class = explode('.', $section);
-                $class = end($class);
+                $class = explode('=', $section);
+                $class = substr(end($class), 0, -1);
                 
                 foreach ($html->find($section) as $key => $e) {
                     if ($key != 0) {
@@ -95,11 +95,11 @@ if (!function_exists('createSection')) {
                         // $e->{'contentediable'} = 'true';
                         // $outer = str_replace($outerCurrent, $e->outertext, $str);
 
-                        $content = str_replace($e->outertext,"<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>", $str);
+                        $content = str_replace($e->outertext,'<div contenteditable="true" lang="'.$class.'"">'.$contentProfile .'</div>', $str);
 
                         $tmp[$class] = $section != 'photo'
-                            ? "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>"
-                            : "<div  onclick='eventChangeClick()' class='{$class}'>".$contentProfile ."</div>";
+                            ? '<div contenteditable="true" lang="'.$class.'">'.$contentProfile .'</div>'
+                            : '<div  onclick="eventChangeClick()" lang="'.$class.'">'.$contentProfile .'</div>';
                         $tmp['content'] = $content;
 
                     }
@@ -145,18 +145,18 @@ if (!function_exists('editSection')) {
         // }
 
         $replace = $section != 'photo'
-            ? '<div class="'.$section.'">'
-            : '<div class="'.$section.'" onclick="eventChangeClick()">';
+            ? '<div lang="'.$section.'">'
+            : '<div lang="'.$section.'" onclick="eventChangeClick()">';
 
-        foreach ($html_request->find('div.'.$section) as $key => $element) {
-            $replace .= $key == count($html_request->find('div.'.$section)) - 1 
+        foreach ($html_request->find('div[lang='.$section.']') as $key => $element) {
+            $replace .= $key == count($html_request->find('div[lang='.$section.']')) - 1 
                 ? $element->innertext
                 : $element->innertext.'<br>';
         }
 
         $replace .= '</div>';
 
-        foreach ($html->find('div.'.$section) as $element) {
+        foreach ($html->find('div[lang='.$section.']') as $element) {
            $element->outertext = $replace;
        }
 
@@ -320,10 +320,10 @@ if (!function_exists('apply_data_for_section_infomation')) {
         $html = new \Htmldom($str);
         $result = [];
 
-        if ( !$html->find('div.'.$section)) 
+        if ( !$html->find('div[lang='.$section.']')) 
             return ['section' => '', 'content' => $str];
 
-        foreach ($html->find('div.'.$section) as $value) {
+        foreach ($html->find('div[lang='.$section.']') as $value) {
             // $search = trim($value->outertext);
             // $current = $value->innertext;
             // $value->innertext = str_replace($current, $replace, strip_tags($value->innertext));
@@ -338,7 +338,7 @@ if (!function_exists('apply_data_for_section_infomation')) {
         // $str = str_replace($current, $replace, $str);
 
         return [
-            'section' => '<div class="'.$section.'" contenteditable="true">'.$tmp.'</div>',
+            'section' => '<div lang="'.$section.'" contenteditable="true">'.$tmp.'</div>',
             'content' => preg_replace('/\n/', '', $html->save())
         ];;
     }
@@ -367,7 +367,7 @@ if (!function_exists('apply_data_for_other')) {
 
                 }
 
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -381,7 +381,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';                   
                 }
                 
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -397,7 +397,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';                 
                 }
                 
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
                 break;
@@ -413,7 +413,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';                 
                 }
 
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
                 break;
@@ -425,7 +425,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li>'.$v->content.'</li>';           
                 }
                 $tmp .= '</ul>';  
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -440,7 +440,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';  
                 }
                 
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -454,7 +454,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>';  
                 }
                 
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -465,7 +465,7 @@ if (!function_exists('apply_data_for_other')) {
         }
 
         return [
-            'section' => '<div class="'.$section.'" contenteditable="true">'.$tmp.'</div>',
+            'section' => '<div lang="'.$section.'" contenteditable="true">'.$tmp.'</div>',
             'content' => $html->save()
         ];
     }
@@ -478,28 +478,11 @@ if (!function_exists('createClassSection')) {
      */
     function createClassSection()
     {
-        return ['div.name', 'div.address', 'div.phone',
-            'div.email', 'div.profile_website', 'div.linkedin',
-            'div.reference', 'div.objective', 'div.activitie', 'div.skill',
-            'div.work', 'div.education', 'div.photo', 'div.personal_test',
-            'div.key_qualification', 'div.availability', 'div.infomation'
+        return ['div[lang=name]', 'div[lang=address]', 'div[lang=phone]',
+            'div[lang=email]', 'div[lang=profile_website]', 'div[lang=linkedin]',
+            'div[lang=reference]', 'div[lang=objective]', 'div[lang=activitie]', 'div[lang=skill]',
+            'div[lang=work]', 'div[lang=education]', 'div[lang=photo]', 'div[lang=personal_test]',
+            'div[lang=key_qualification]', 'div[lang=availability]', 'div[lang=infomation]'
         ];
     }
-}
-
-function element_to_obj($element) {
-    dd($element);
-    $obj = array( "tag" => $element->tagName );
-    foreach ($element->attributes as $attribute) {
-        $obj[$attribute->name] = $attribute->value;
-    }
-    foreach ($element->childNodes as $subElement) {
-        if ($subElement->nodeType == XML_TEXT_NODE) {
-            $obj["html"] = $subElement->wholeText;
-        }
-        else {
-            $obj["children"][] = element_to_obj($subElement);
-        }
-    }
-    return $obj;
 }

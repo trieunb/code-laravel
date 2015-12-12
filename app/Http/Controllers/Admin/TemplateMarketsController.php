@@ -30,9 +30,10 @@ class TemplateMarketsController extends Controller
     {
         $sections = createClassSection();
         $result = createSection($request->get('content'), $sections);
-        
-        return $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id)
-            ? redirect()->route('admin.template.get.define')->with('message', 'Create Template successfully!')
+        $response = $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id);
+       
+        return $response
+            ? redirect()->route('admin.template.get.define', $response->id)->with('message', 'Create Template successfully!')
             : redirect()->back()->with('message', 'Error when create template!');
     }
 
