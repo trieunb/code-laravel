@@ -443,7 +443,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 return json_encode(['data' => $this->getById($id)->mobile_phone]);
                 break;
             default:
-                return json_encode(['data' =>$this->getById($id)->pluck($section)]);
+                return json_encode(['data' =>$this->getById($id)->$section]);
                 break;
         }
     }

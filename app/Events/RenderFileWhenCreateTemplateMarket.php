@@ -16,7 +16,7 @@ class RenderFileWhenCreateTemplateMarket extends Event
     private $slug;
     private $content;
     private $template_id;
-
+    private $pageNumb;
     /**
      * Create a new event instance.
      *
@@ -41,11 +41,30 @@ class RenderFileWhenCreateTemplateMarket extends Event
         $pdf->writeHTML(view('admin.template.render', ['content' => $this->content])->render());
         $pdf->output(public_path('pdf/'.$this->slug.'.pdf'), 'F');*/
         $snappy = \App::make('snappy.pdf');
+        if (\File::exists(public_path('pdf/'.$this->slug.'.pdf'))) {
+            \File::delete(public_path('pdf/'.$this->slug.'.pdf'));
+        }
         $snappy->generateFromHtml( $this->content, public_path('pdf/'.$this->slug.'.pdf'));
 
-        $filename = convertPDFToIMG($this->slug);
-
+        $filename = $this->convertPDFToIMG($this->slug);
         $this->saveFile($template, $filename);
+    }
+
+    public function convertPDFToIMG($filename, $width = 500, $height = 700) {
+        $imageFile = str_random(20).uniqid();
+        $img = new \Imagick(public_path('pdf/'.$filename.'.pdf'));
+        $this->pageNumb = $img->getNumberImages();
+        for ($i = 0; $i < $this->pageNumb; $i++) {
+            $img->readImage(public_path('pdf/'.$filename.'.pdf['.$i.']'));
+            $img->setImageFormat('jpg');
+            // $img->setSize($width, $height);
+            $img->writeImage(public_path('images/template/'.$imageFile.'-'.$i.'.jpg'));
+        }
+       
+        $img->clear();
+        $img->destroy();
+
+        return $imageFile;
     }
 
     /**
@@ -55,17 +74,31 @@ class RenderFileWhenCreateTemplateMarket extends Event
      */
     private function saveFile($TemplateMarketInterface, $filename)
     {
-         $resize = \Image::make(public_path('images/template/'.$filename.'.jpg'))
-            ->resize(200,150)
-            ->save(public_path('thumb/template/'.$filename.'.jpg'));
+        $images = [];
+
+        for ($i = 0; $i < $this->pageNumb; $i++) {
+            $resize = \Image::make(public_path('images/template/'.$filename.'-'.$i.'.jpg'))
+                ->resize(200,150)
+                ->save(public_path('thumb/template/'.$filename.'-'.$i.'.jpg'));
+
+            $images['origin'][] = 'images/template/'.$filename.'-'.$i.'.jpg';
+            $images['thumb'][] = 'thumb/template/'.$filename.'-'.$i.'.jpg';
+        }
+        
 
         if (!$resize) return null;
 
         $template = $TemplateMarketInterface->getById($this->template_id);
-        $template->image = [
-            'origin' => 'images/template/'.$filename.'.jpg',
-            'thumb' => 'thumb/template/'.$filename.'.jpg'
-        ];
+
+        if (count($template->image['origin']) > 1) {
+            \File::delete(implode(',', $template->image['origin']));
+            \File::delete(implode(',', $template->image['thumb']));
+        } elseif (count($template->image['origin']) == 1) {
+            \File::delete($template->image['origin'][0]);
+            \File::delete($template->image['thumb'][0]);
+        }
+        
+        $template->image = $images;
         $template->source_file_pdf = 'pdf/'.$this->slug.'.pdf';
         
         return $template->save();

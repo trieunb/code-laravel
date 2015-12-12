@@ -26,7 +26,7 @@ class TemplateFormRequest extends Request
         $title = $this->has('id') ? ','.$this->get('id') : '';
 
         return [
-            'title' => 'required|unique:template_markets,title'.$title,
+            'title' => 'required',
         ];
     }
 }

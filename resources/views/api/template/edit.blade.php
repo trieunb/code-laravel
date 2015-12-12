@@ -65,8 +65,9 @@
                 </div>
                 <ul class="list list-unstyled">
                     <li id="manual" onClick=""><a>Type Manual</a></li>
+                   
                     @if ($template->present()->createMenuProfile($user_id, $section) != '')
-                        <li>
+                        <li> 
                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
                                 <select name="" class="">
                                     <option value="" disabled selected>Get From Profile</option>
@@ -103,7 +104,7 @@
 
     <script>
     $(document).ready(function() {
-        $('.photo').attr('onclick', 'app.changeAvatar()');
+        $('.photo').attr('onclick', 'eventChangeClick()');
     });
         function test() {
             var selection = '';
@@ -134,7 +135,7 @@
                 }
 
                
-                var user_id = '{{ \Auth::user()->id }}';
+                var user_id = '{{ $user_id }}';
                 var token = window.location.href.split('?')[1];
 
                 if (selection.toString() !== '' && selection !== ' ') {
@@ -288,8 +289,9 @@
          $('#file').trigger('click');
          });*/
         var app = {};
-        app.changeAvatar = function() {
-            
+        function eventChangeClick() {
+            alert('Change Photo');
+            Android.changeAvatar();
         }
         function clickSave() {
             // $('#save').click(function(e) {

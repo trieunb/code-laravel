@@ -49,11 +49,11 @@ class TemplatesController extends Controller
         ]);
     }
 
-    public function getSections($id)
+    public function getSections($id, Request $request)
     {
         $sections = $this->template->getById($id)->section;
-
-        return view('template.api.section', compact('sections'));
+        $user_id = \JWTAuth::toUser($request->get('token'));
+        return view('api.template.section', compact('sections'));
     }
 
     public function edit($id, Request $request)
@@ -75,7 +75,7 @@ class TemplatesController extends Controller
     public function editView($id, $section, Request $request)
     {
         try {
-             $user_id = \JWTAuth::toUser($request->get('token'))->id;
+            $user_id = \JWTAuth::toUser($request->get('token'))->id;
             $template = $this->template->forUser($id, $user_id);
             $content = array_get($template->section, $section);
             $status = null;
@@ -207,10 +207,13 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
         $sourcePDF = public_path($template->source_file_pdf);
-
+        \Log::info('test sendmail', [$id, $user->id, \File::exists($sourcePDF), $sourcePDF]);
         if ( ! \File::exists($sourcePDF)) {
-            \PDF::loadView('api.template.index', ['content' => $template->content])
-            ->save(public_path('pdf/'.$template->slug.'.pdf'));
+            $snappy = \App::make('snappy.pdf');
+            $snappy->generateFromHtml( $template->content, public_path('pdf/'.$template->slug.'.pdf'));
+            // \PDF::loadView('api.template.index', ['content' => $template->content])
+            // ->save(public_path('pdf/'.$template->slug.'.pdf'));
+            $sourcePDF = public_path('pdf/'.$template->slug.'.pdf');
         }
       
         event(new sendMailAttachFile($user, '', $sourcePDF));
@@ -228,12 +231,13 @@ class TemplatesController extends Controller
 
     public function menu($id, Request $request)
     {
-        $template = $this->template->forUser($id, \Auth::user()->id);
+        $user = \JWTAuth::toUser($request->get('token'));
+        $template = $this->template->forUser($id, $user->id);
         $token = $request->get('token');
         try {
             $section = createSectionData($template);
 
-            return view('api.template.section', compact('section', 'token', 'template'));   
+            return view('api.template.section', compact('section', 'token', 'template', 'user'));   
         } catch (\Exception $e) {
             return response()->json(['status' => 400, 'message' => $e->getMessage()]);
         }
@@ -249,7 +253,8 @@ class TemplatesController extends Controller
     public function apply($id, $section, Request $request)
     {
         try {
-            $template = $this->template->forUser($id, \Auth::user()->id);
+            $user_id = \JWTAuth::toUser($request->get('token'))->id;
+            $template = $this->template->forUser($id, $user_id);
             $token = $request->get('token');
             $data = null;
             $personalInfomation = [
@@ -257,18 +262,18 @@ class TemplatesController extends Controller
             ];
 
             if (in_array($section, $personalInfomation)) {
-                $data = $this->user->getById(\Auth::user()->id)->pluck($section);
+                $data = $this->user->getById($user_id)->$section;
             } else if ($section == 'name') {
-                $data = $this->user->getById(\Auth::user()->id)->present()->name;
+                $data = $this->user->getById($user_id)->present()->name;
             } else if ($section == 'linkedin' || $section == 'profile_website') {
-                $data =  $this->user->getById(\Auth::user()->id)->link_profile;
+                $data =  $this->user->getById($user_id)->link_profile;
             } else if ($section == 'phone') {
-                $data = $this->user->getById(\Auth::user()->id)->mobile_phone;
+                $data = $this->user->getById($user_id)->mobile_phone;
             } else if ($section == 'photo') {
-                $data = $this->user->getById(\Auth::user()->id)->avatar['origin'];
+                $data = $this->user->getById($user_id)->avatar['origin'];
             } else if ($section == 'availability') {
                 foreach (\Setting::get('user_status') as $status) {
-                    if ($status['id'] == $this->user->getById(\Auth::user()->id)->status) {    
+                    if ($status['id'] == $this->user->getById($user_id)->status) {    
                         $data =  $template->type == 2 
                             ? '<div class="availability content-box" contenteditable="true">'
                                 .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
@@ -282,7 +287,7 @@ class TemplatesController extends Controller
 
             $result = is_string($data)
                 ? apply_data_for_section_infomation($section, $data, $template->content)
-                :apply_data_for_other($section, $template->content);
+                :apply_data_for_other($section, $template->content, $user_id);
 
             $response = $this->template->applyForInfo($template, $section, $result);
             

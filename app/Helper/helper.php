@@ -222,7 +222,7 @@ if (!function_exists('createSectionData')) {
                     break;
                 default:
                     if ($k == 'work') {
-                        $section['work'] = 'Experience';
+                        $section['work'] = 'Work Experience';
                     }else {
                         $section[$k] = ucfirst($k);
                     }
@@ -351,7 +351,7 @@ if (!function_exists('apply_data_for_other')) {
      * @param  [type] $str     [description]
      * @return [type]          [description]
      */
-    function apply_data_for_other($section, $str) {
+    function apply_data_for_other($section, $str, $user_id) {
         $html = new \Htmldom($str);
         $result = [];
         $tmp = '';
@@ -359,7 +359,7 @@ if (!function_exists('apply_data_for_other')) {
         switch ($section) {
             case 'reference':
                 $tmp .= '<h3 style="font-weight:600">References</h3>';
-                foreach (\App\Models\Reference::whereUserId(\Auth::user()->id)->get() as $v) {
+                foreach (\App\Models\Reference::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->reference.'</li>';
                     $tmp .= '<li>'.$v->content.'</li>';       
@@ -374,7 +374,7 @@ if (!function_exists('apply_data_for_other')) {
                 break;
             case 'objective':
                 $tmp .= '<h3 style="font-weight:600">Objectives</h3>';
-                foreach (\App\Models\Objective::whereUserId(\Auth::user()->id)->get() as $v) {
+                foreach (\App\Models\Objective::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->title.'</li>';
                     $tmp .= '<li>'.$v->content.'</li>'; 
@@ -387,11 +387,11 @@ if (!function_exists('apply_data_for_other')) {
 
                 break;
             case 'work':
-                $tmp .= '<h3 style="font-weight:600">Works</h3>';
-                foreach (\App\Models\UserWorkHistory::whereUserId(\Auth::user()->id)->get() as $v) {
+                $tmp .= '<h3 style="font-weight:600">Work Experience</h3>';
+                foreach (\App\Models\UserWorkHistory::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->job_title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
-                    $tmp .= '<li style="font-weight:600"><label style="font-weight:600">Company</label>: '.$v->title.'</li>';
+                    $tmp .= '<li style="font-weight:600"><label style="font-weight:600">Company</label>: '.$v->company.'</li>';
                     $tmp .= '<li>'.$v->start.'-'.$v->end.'</li>';   
                     $tmp .= '<li>'.$v->description.'</li>';   
                     $tmp .= '</ul>';                 
@@ -403,7 +403,7 @@ if (!function_exists('apply_data_for_other')) {
                 break;
             case 'education':
                 $tmp .= '<h3 style="font-weight:600">Education</h3>'; 
-                foreach (\App\Models\UserEducation::whereUserId(\Auth::user()->id)->get() as $v) {
+                foreach (\App\Models\UserEducation::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600"><label style="font-weight:600">School</label>: '.$v->school_name.'</li>';
@@ -421,7 +421,7 @@ if (!function_exists('apply_data_for_other')) {
                 $tmp .= '<h3 style="font-weight:600">Qualifications</h3>'; 
                 $tmp .= '<ul style="list-style:none">';
 
-                foreach (\App\Models\Qualification::whereUserId(\Auth::user()->id)->get() as $v) {
+                foreach (\App\Models\Qualification::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<li>'.$v->content.'</li>';           
                 }
                 $tmp .= '</ul>';  
@@ -430,12 +430,27 @@ if (!function_exists('apply_data_for_other')) {
                 }
 
                 break;
-            case 'personal_test':
-                $tmp .= '<h3 style="font-weight:600">Skills</h3>'; 
-                foreach (\App\Models\UserSkill::whereUserId(\Auth::user()->id)->get() as $v) {
+            case 'skill':
+                $tmp .= '<h3 style="font-weight:600">Skill</h3>'; 
+
+                foreach (\App\Models\UserSkill::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li><label style="font-weight:600">Name: </label>'.$v->skill_name.'</li>';
-                    $tmp .= '<li><label style="font-weight:600">Point: </label>'.$v->skill_test_point.'</li>';
+                    $tmp .= '<li><label style="font-weight:600">Experience: </label>'.$v->experience.'</li>';
+                    $tmp .= '</ul>';  
+                }
+                
+                foreach ($html->find('div.'.$section) as $element) {
+                    $element->innertext = $tmp;
+                }
+
+                break;
+            case 'personal_test':
+                $tmp .= '<h3 style="font-weight:600">Personal Test</h3>'; 
+                foreach (\App\Models\UserQuestion::whereUserId($user_id)->get() as $v) {
+                    $tmp .= '<ul style="list-style:none">';
+                    $tmp .= '<li><label style="font-weight:600">Content: </label>'.$v->content.'</li>';
+                    $tmp .= '<li><label style="font-weight:600">Point: </label>'.$v->point.'</li>';
                     $tmp .= '</ul>';  
                 }
                 
@@ -465,7 +480,7 @@ if (!function_exists('createClassSection')) {
     {
         return ['div.name', 'div.address', 'div.phone',
             'div.email', 'div.profile_website', 'div.linkedin',
-            'div.reference', 'div.objective', 'div.activitie',
+            'div.reference', 'div.objective', 'div.activitie', 'div.skill',
             'div.work', 'div.education', 'div.photo', 'div.personal_test',
             'div.key_qualification', 'div.availability', 'div.infomation'
         ];

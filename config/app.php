@@ -224,7 +224,7 @@ return [
         'Setting'   => Thetispro\Setting\Facades\Setting::class,
         'Datatables'=> yajra\Datatables\Datatables::class,
         // 'PDF'       => Barryvdh\DomPDF\Facade::class,
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'PDF'       => Barryvdh\Snappy\Facades\SnappyPdf::class,
     ],
 
 ];
