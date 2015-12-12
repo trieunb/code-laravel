@@ -1,16 +1,15 @@
 <div class="container" style="
     word-wrap: break-word; 
-    width: 640px;
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow:hidden; height:400px">
+        <div class='image-avatar' style="position: relative; overflow:hidden;">
             <div class="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
-                    <img style="width: 100%; height:100%;"
+                    <img style="width: 100%; height: auto;"
                     src="{!! asset('uploads/origin/avatar.jpg') !!}">
                 @else
-                    <img style="width:100%; height:100%;" 
+                    <img style="width:100%; height: auto;" 
                     src="{!! asset($user_info->avatar['origin']) !!}" >
                 @endif
             </div>
