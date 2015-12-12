@@ -150,7 +150,6 @@
                     var replace = span.innerHTML;
                     $(document).off('click', '#manual').on('click', '#manual', function () {
                     
-                    // document.getElementById('manual').addEventListener('click', function(){
                         var answer = confirm('This option will delete your selected text!');
                         if ( ! answer) return;
                         if ($(parrentNode).html() == $('#content div.'+section).html()) {
@@ -284,18 +283,12 @@
 
         }
         var isBusy = false;
-        /*$('img').click(function(e) {
-         e.preventDefault();
-         $('#file').trigger('click');
-         });*/
         var app = {};
         function eventChangeClick() {
             alert('Change Photo');
             Android.changeAvatar();
         }
         function clickSave() {
-            // $('#save').click(function(e) {
-            // e.preventDefault();
             if (isBusy) return;
             isBusy = true;
             $("#loading").show();

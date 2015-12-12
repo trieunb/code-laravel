@@ -109,7 +109,9 @@
         </div>
     </div>
     <div class="container">
-        {!! $template->content !!}
+            <div id="content" class="fw w_bg">
+                {!! $template->content !!}
+            </div>
         <div class="fw text-center">
             <button class="btn-trans fill edit" id="edit-template" onclick="clickEditTemplate()">
                 END EDIT MODE
@@ -194,7 +196,8 @@
             if ($(parrentNode).html() == $('#content div').html()) {
                 selection = window.getSelection().getRangeAt(0).toString();
             }
-            var section = $(parrentNode).attr('class');
+            var section = $(parrentNode).attr('lang');
+
             var sections = ['name', 'address', 'phone',
                 'email', 'profile_website', 'linkedin',
                 'reference', 'objective', 'activitie',
@@ -210,18 +213,17 @@
               $.each( $(parrentNode).parents(), function(key, val) {
                 
                  var context = val;
-                 var tmp = $(context).attr('class');
+                 var tmp = $(context).attr('lang');
 
                  if (sections.indexOf(tmp) != -1) {
                     section = tmp;
                  }
               });
-               
               if (sections.indexOf(section) == -1)
                 return;
             }
             if (section == 'availability') return;
-            $('div.'+section+'[contenteditable="true"]').addClass('highlight');
+            $('div[lang='+section+']').addClass('highlight');
             var user_id = "{{ $user->id }}";
             var token = document.location.href.split('?');
             tmp = selection.toString();
@@ -286,7 +288,6 @@
                         html += '</optgroup>';
                     } else {
                         $.each(result.data, function (key, val) {
-                             console.log(val);
                             if (val.length == 0) {
                                 $('#choose-type ul > li:last-child').html('');
                             }

@@ -117,7 +117,7 @@ class TemplatesController extends Controller
 
     public function editPhoto($id, Request $request)
     {
-
+        $user = \JWTAuth::toUser($request->get('token'));
         if ( !$request->hasFile('photo')) 
             return response()->json(['status_code' => '400']);
         
@@ -127,7 +127,7 @@ class TemplatesController extends Controller
             return response()->json(['status_code' => 422]);
         }
 
-        $response = $this->template->editPhoto($id, \Auth::user()->id, $request->file('photo'));
+        $response = $this->template->editPhoto($id, $user->id, $request->file('photo'));
         
         if ( !$response) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when save file.']);
@@ -275,12 +275,12 @@ class TemplatesController extends Controller
                 foreach (\Setting::get('user_status') as $status) {
                     if ($status['id'] == $this->user->getById($user_id)->status) {    
                         $data =  $template->type == 2 
-                            ? '<div class="availability content-box" contenteditable="true">'
+                            ? '<div lang="availability" class="availability content-box" contenteditable="true">'
                                 .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
                                 .'<span>Availability</span></div>'
                                 .'<div class="box" style="background: #f3f3f3;padding: 15px;border-top: 3px solid #D8D8D8;border-bottom: 3px solid #D8D8D8;">'
                                 .'<p>'.$status['value'].'</p></div></div>'
-                            : '<div class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';        
+                            : '<div lang="availability" class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';        
                     }
                 }
             }

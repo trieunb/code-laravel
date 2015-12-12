@@ -140,10 +140,6 @@ if (!function_exists('editSection')) {
 
         $currentSectionString = '';
 
-        // foreach ($html->find('div.'.$section) as $element) {
-        //    $currentSectionString = $element->outertext;
-        // }
-
         $replace = $section != 'photo'
             ? '<div lang="'.$section.'">'
             : '<div lang="'.$section.'" onclick="eventChangeClick()">';
@@ -324,18 +320,11 @@ if (!function_exists('apply_data_for_section_infomation')) {
             return ['section' => '', 'content' => $str];
 
         foreach ($html->find('div[lang='.$section.']') as $value) {
-            // $search = trim($value->outertext);
-            // $current = $value->innertext;
-            // $value->innertext = str_replace($current, $replace, strip_tags($value->innertext));
-
             $value->innertext = $section != 'photo'
                 ? '<span>'.$replace.'</span>'
                 : '<img src="'.asset($replace).'" width="100%">';
             $tmp = $value->innertext;
-
         }   
-
-        // $str = str_replace($current, $replace, $str);
 
         return [
             'section' => '<div lang="'.$section.'" contenteditable="true">'.$tmp.'</div>',
@@ -359,6 +348,7 @@ if (!function_exists('apply_data_for_other')) {
         switch ($section) {
             case 'reference':
                 $tmp .= '<h3 style="font-weight:600">References</h3>';
+
                 foreach (\App\Models\Reference::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->reference.'</li>';
@@ -366,7 +356,6 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>'; 
 
                 }
-
                 foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
@@ -374,13 +363,13 @@ if (!function_exists('apply_data_for_other')) {
                 break;
             case 'objective':
                 $tmp .= '<h3 style="font-weight:600">Objectives</h3>';
+               
                 foreach (\App\Models\Objective::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->title.'</li>';
                     $tmp .= '<li>'.$v->content.'</li>'; 
                     $tmp .= '</ul>';                   
                 }
-                
                 foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
@@ -388,6 +377,7 @@ if (!function_exists('apply_data_for_other')) {
                 break;
             case 'work':
                 $tmp .= '<h3 style="font-weight:600">Work Experience</h3>';
+               
                 foreach (\App\Models\UserWorkHistory::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->job_title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
@@ -396,13 +386,14 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li>'.$v->description.'</li>';   
                     $tmp .= '</ul>';                 
                 }
-                
                 foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
+
                 break;
             case 'education':
                 $tmp .= '<h3 style="font-weight:600">Education</h3>'; 
+                
                 foreach (\App\Models\UserEducation::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
@@ -412,10 +403,10 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li>'.$v->result.'</li>';   
                     $tmp .= '</ul>';                 
                 }
-
                 foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
+
                 break;
             case 'key_qualification':
                 $tmp .= '<h3 style="font-weight:600">Qualifications</h3>'; 
@@ -439,7 +430,6 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li><label style="font-weight:600">Experience: </label>'.$v->experience.'</li>';
                     $tmp .= '</ul>';  
                 }
-                
                 foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
@@ -453,7 +443,6 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li><label style="font-weight:600">Point: </label>'.$v->point.'</li>';
                     $tmp .= '</ul>';  
                 }
-                
                 foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
