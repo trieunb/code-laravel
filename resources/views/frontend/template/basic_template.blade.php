@@ -18,7 +18,9 @@
                     style="position: absolute;
                     text-align: center;
                     bottom: 10px;
-                    width: 100%;">
+                    width: 100%;
+                    font-weight: 600;
+                    color: black;">
                 <div class="name" >
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
                 </div>

@@ -145,6 +145,9 @@ class QuestionsController extends Controller
 
     public function postEditAdmin(Request $request)
     {
+        $ids = $request->get('id');
+        UserQuestion::where('question_id', $ids)
+                ->update(['content' => $request->content]);
         return $this->question->saveFromAdminArea($request)
             ? response()->json(['status' => true])
             : response()->json(['status' => false]);
