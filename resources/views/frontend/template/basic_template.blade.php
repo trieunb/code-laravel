@@ -1,6 +1,6 @@
 <div class="container" style="
     word-wrap: break-word; 
-    width: 400px;
+    width: 640px;
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
