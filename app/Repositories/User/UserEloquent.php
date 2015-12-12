@@ -365,7 +365,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ]))
             ->addColumn('action', function($user) {
                 return '<div class="btn-group" role="group" aria-label="...">
-                    <a class="btn btn-primary" href="'.route('admin.user.get.answer', $user->id).'">Answer Of User</a>
+                <a class="delete-user btn btn-xs btn-danger" data-src="'.route('admin.user.delete',$user->id).'"><i class="glyphicon glyphicon-remove"></i> Delete</a>
                 </div>';
             })
             ->editColumn('firstname', function($user) {

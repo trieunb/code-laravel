@@ -63,6 +63,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      * User Route
      */
     get('user', ['as' => 'admin.user.get.index', 'uses' => 'UsersController@index']);
+    get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
+    get('user/delete/{id}', ['as' => 'admin.user.delete', 'uses' => 'UsersController@destroy']);
     
     // post('user/answer/{id}', ['as' => 'admin.user.post.answer', 'uses' => 'UsersController@postAnswer']);
     /**
@@ -127,7 +129,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * User Route
      */
-    get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
     get('user/profile', 'UsersController@getProfile');
     get('user/status', 'UsersController@getStatus');
     get('user/removephoto/{id}', 'UsersController@removePhoto');
