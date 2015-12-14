@@ -11,3 +11,12 @@
 @section('content')
 	{!! $content !!}
 @endsection
+
+@section('script')
+	<script>
+		$(document).ready(function() {
+			$('div').removeAttr('contenteditable');
+		});
+	</script>
+	
+@endsection

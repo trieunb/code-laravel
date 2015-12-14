@@ -89,19 +89,33 @@ if (!function_exists('createSection')) {
                 }
 
                 foreach ($html->find($section) as $k => $e) {
+
                     if ($k == 0) {
                         $contentProfile = $e->innertext.$contentProfile;
                         $outerCurrent = $e->outertext;
+                     
                         // $e->{'contentediable'} = 'true';
                         // $outer = str_replace($outerCurrent, $e->outertext, $str);
 
+                        if (array_key_exists('contenteditable', $e->attr)) {
+                            unset($e->attr['contenteditable']);
+                        }
+                        if (array_key_exists('lang', $e->attr)) {
+                            unset($e->attr['lang']);
+                        }
+                        $attrs = '';
+                        if (count($e->attr) > 0) {
+                            foreach ($e->attr as $name => $attr) {
+                                $attrs .= $name.'= "'.$attr.'" ';
+                            }
+                        }
                         $content = str_replace($e->outertext,'<div contenteditable="true" lang="'.$class.'"">'.$contentProfile .'</div>', $str);
 
-                        $tmp[$class] = $section != 'photo'
-                            ? '<div contenteditable="true" lang="'.$class.'">'.$contentProfile .'</div>'
-                            : '<div  onclick="eventChangeClick()" lang="'.$class.'">'.$contentProfile .'</div>';
-                        $tmp['content'] = $content;
+                        $tmp[$class] = $section != 'div[lang=photo]'
+                            ? '<div '.$attrs.' contenteditable="true" lang="'.$class.'">'.$contentProfile .'</div>'
+                            : '<div '.$attrs.' onclick="eventChangeClick()" lang="'.$class.'">'.$contentProfile .'</div>';
 
+                        $tmp['content'] = preg_replace('/\t|\n|\r+/', '', $content);
                     }
                 }
 
@@ -140,11 +154,27 @@ if (!function_exists('editSection')) {
 
         $currentSectionString = '';
 
-        $replace = $section != 'photo'
-            ? '<div lang="'.$section.'">'
-            : '<div lang="'.$section.'" onclick="eventChangeClick()">';
+        $replace = '';
+        
+
 
         foreach ($html_request->find('div[lang='.$section.']') as $key => $element) {
+            if (array_key_exists('contenteditable', $e->attr)) {
+                unset($e->attr['contenteditable']);
+            }
+            if (array_key_exists('lang', $e->attr)) {
+                unset($e->attr['lang']);
+            }
+            $attrs = '';
+            if (count($e->attr) > 0) {
+                foreach ($e->attr as $name => $attr) {
+                    $attrs .= $name.'= "'.$attr.'" ';
+                }
+            }
+            $replace .= $section != 'photo'
+            ? '<div '.$attrs.' lang="'.$section.'">'
+            : '<div '.$attrs.' lang="'.$section.'" onclick="eventChangeClick()">';
+
             $replace .= $key == count($html_request->find('div[lang='.$section.']')) - 1 
                 ? $element->innertext
                 : $element->innertext.'<br>';
@@ -383,7 +413,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600"><label style="font-weight:600">Company</label>: '.$v->company.'</li>';
                     $tmp .= '<li>'.$v->start.'-'.$v->end.'</li>';   
-                    $tmp .= '<li>'.$v->description.'</li>';   
+                    $tmp .= '<li>'.$v->job_description.'</li>';   
                     $tmp .= '</ul>';                 
                 }
                 foreach ($html->find('div[lang='.$section.']') as $element) {

@@ -21,7 +21,7 @@ class TemplatesController extends Controller
 
     public function __construct(UserInterface $user, TemplateInterface $template)
     {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth', ['except' => 'view']);
 
         $this->user = $user;
         $this->template = $template;
@@ -225,7 +225,7 @@ class TemplatesController extends Controller
     {
         $template = $this->template->getById($id);
         $content = str_replace('contenteditable="true"', '', $template->content);
-
+        $content = str_replace("contenteditable='true'", '', $template->content);
         return view('api.template.view', compact('content','template'));
     }
 
@@ -321,4 +321,5 @@ class TemplatesController extends Controller
             ? response()->json(['status_code' => 200])
             : response()->json(['status_code' => 400]);
     }
+
 }

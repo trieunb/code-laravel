@@ -13,5 +13,9 @@
     </div>
 @stop
 @section('scripts')
-<script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
+<script>
+	$(document).ready(function() {
+		$('div').removeAttr('contenteditable');
+	});
+</script>
 @endsection

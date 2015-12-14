@@ -142,7 +142,6 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             ->addColumn('action', function ($template) {
                 return '<div class="btn-group" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.template.get.view', $template->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
-                    <a class="btn btn-info" href="' .route('admin.template.get.define', $template->id) . '"><i class="glyphicon glyphicon-pencil"></i></a>
                     <a class="btn btn-primary edit" href="' .route('admin.template.get.edit', $template->id) . '"><i class="glyphicon glyphicon-edit"></i></a>
                     <a class="delete-data btn btn-danger" data-src="' .route('admin.template.delete', $template->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
                 </div>';
