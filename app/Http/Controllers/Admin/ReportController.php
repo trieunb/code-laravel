@@ -6,37 +6,82 @@ use Khill\Lavacharts\Lavacharts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
-
+use Lava;
+use App\Models\User;
+use App\Models\TemplateMarket;
+use App\Models\Template;
+use Carbon\Carbon;
+use DB;
+use Date;
 
 class ReportController extends Controller
 {
 
-    public function index(Request $request)
+    public function reportUser(Request $request)
     {
-        $lava = new Lavacharts; // See note below for Laravel
+        $lava = new Lavacharts;
+        $userTable = $lava->DataTable();
 
-        $finances = $lava->DataTable();
+        $userTable->addStringColumn('Date of Month')
+                    ->addNumberColumn('Users');
 
-        $finances->addDateColumn('Year')
-                 ->addNumberColumn('Sales')
-                 ->addNumberColumn('Expenses')
-                 ->setDateTimeFormat('Y')
-                 ->addRow(array('2004', 1000, 400))
-                 ->addRow(array('2005', 1170, 460))
-                 ->addRow(array('2006', 660, 1120))
-                 ->addRow(array('2007', 1030, 54));
+        $users = User::select('*', DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))->groupBy('month')->orderBy('month', 'ASC')->get();
 
-        $columnchart = $lava->ColumnChart('Finances')
-                            ->setOptions(array(
-                              'datatable' => $finances,
-                              'title' => 'Company Performance',
-                              'titleTextStyle' => $lava->TextStyle(array(
-                                'color' => '#eb6b2c',
-                                'fontSize' => 14
-                              ))
-                            ));
-        return $finances; die();
+        foreach ($users as $user) {
+            $rowData = array(
+                date_format($user->created_at, 'Y-m'), $user->count
+            );
+            $userTable->addRow($rowData);
+        }
 
-        return view('admin.report.index', compact('columnchart'));
+        $chart = $lava->ColumnChart('UserChart');
+
+        $chart->datatable($userTable);
+
+        $chart = $lava->render('ColumnChart', 'UserChart', 'user-chart', true);
+
+        return view('admin.report.report_user', compact('chart'));
+    }
+
+    public function reportTemplate(Request $request)
+    {
+        $lava = new Lavacharts;
+        $templateTable = $lava->DataTable();
+
+        $templateTable->addStringColumn('Date of Month')
+                    ->addNumberColumn('Templates');
+
+        $templates_m = Template::select('*', DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))->groupBy('month')->orderBy('month', 'ASC')->get();
+
+        foreach ($templates_m as $temp_m) {
+            $rowData = array(
+                date_format($temp_m->created_at, 'Y-m'), $temp_m->count
+            );
+            $templateTable->addRow($rowData);
+        }
+
+        $chart_month = $lava->ColumnChart('TemplateChartMonth');
+
+        $chart_month->datatable($templateTable);
+
+        $chart_month = $lava->render('ColumnChart', 'TemplateChartMonth', 'template-chart', true);
+        
+        //// template
+
+        $templates_g = Template::select('*', DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))->groupBy('month')->orderBy('month', 'ASC')->get();
+
+        foreach ($templates_g as $temp_g) {
+            $rowData = array(
+                date_format($temp_m->created_at, 'Y-m'), $temp_m->count
+            );
+            $templateTable->addRow($rowData);
+        }
+
+        $chart_gender = $lava->ColumnChart('TemplateChartGender');
+
+        $chart_gender->datatable($templateTable);
+        $chart_gender = $lava->render('ColumnChart', 'TemplateChartGender', 'template-chart', true);
+
+        return view('admin.report.report_template', compact('chart_month', 'chart_gender'));
     }
 }
