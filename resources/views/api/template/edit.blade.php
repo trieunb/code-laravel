@@ -43,7 +43,7 @@
             <button onClick="changeAvatar()" class="btn btn-primary pull-right" style="margin-bottom: 20px">Upload</button>
         @endif -->
         <form id="upload">
-            <div id="content" class="col-md-12" contenteditable="true">
+            <div id="content"  class="col-md-12" contenteditable="true">
 
                 @if ($section != 'availability')
                     {!! $content !!}
@@ -72,12 +72,7 @@
                                 <select name="" class="">
                                     <option value="" disabled selected>Get From Profile</option>
                                     {!!$template->present()->createMenuProfile($user_id, $section) !!}
-                                </select><!-- <span class="arrow right pull-right"><i class="fa fa-chevron-right"></i></span>
-                                <div class="dropdown-menu" aria-labelledby="dLabel">
-                                <ul class="list list-unstyled ">
-                                    {!!$template->present()->createMenuProfile(\Auth::user()->id, $section) !!}
-                                        </ul>
-                                    </div> -->
+                                </select>
                             </a>
                         </li>
                     @endif
@@ -85,13 +80,6 @@
             </div>
 
         </ul>
-        <!-- <div class="dropdown">
-            <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Choose Type Edit
-                <span class="caret"></span>
-            </button>
-
-        </div> -->
 
     </div>
 
@@ -104,21 +92,23 @@
 
     <script>
     $(document).ready(function() {
+
         $('.photo').attr('onclick', 'eventChangeClick()');
     });
-        function test() {
-            var selection = '';
-            var temp = null;
-            var eventListener = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-                ? 'touchend'
-                : 'mouseup';
-            document.getElementById('content').addEventListener('touchstart', function () {
+    function test() {
+        var selection = '';
+        var temp = null;
+        var eventListener = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+            ? 'touchend'
+            : 'mouseup';
+        document.getElementById('content').addEventListener('touchstart', function () {
 
-            });
-            document.getElementById('content').addEventListener('touchmove', function () {
+        });
+        document.getElementById('content').addEventListener('touchmove', function () {
 
-            });
-            document.getElementById('content').addEventListener(eventListener, function () {
+        });
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+             
                 if (window.getSelection) {
                     selection = window.getSelection();
                 } else if (document.selection) {
@@ -133,6 +123,7 @@
                 if ($(parrentNode).html() == $('#content div').html()) {
                     selection = window.getSelection().getRangeAt(0).toString();
                 }
+
 
                
                 var user_id = '{{ $user_id }}';
@@ -150,7 +141,6 @@
                     var replace = span.innerHTML;
                     $(document).off('click', '#manual').on('click', '#manual', function () {
                     
-                    // document.getElementById('manual').addEventListener('click', function(){
                         var answer = confirm('This option will delete your selected text!');
                         if ( ! answer) return;
                         if ($(parrentNode).html() == $('#content div.'+section).html()) {
@@ -167,135 +157,128 @@
                     });
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
-                        
                         if ($(parrentNode).html() == $('#content div').html()) {
+                            console.log('1');
                             if ($('#content div').html().indexOf(replace) != -1) {
                                 var answer = confirm('This option will delete your text style!');
 
                                 if (!answer) return;
                                 
-                                temp = '<div class="' + section + '" contenteditable="true">'
+                                temp = '<div lang="' + section + '" contenteditable="true">'
                                         + $('#content div').html().replace(new RegExp(replace, "g"), $('select option:selected').val())
                                         + '</div>';
                                 $('#content').html(temp);
                             }
                         } else {
-                            var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
-                            parrentNode.innerHTML = replaceContent;
+                            var check = 0;
+                            if ($(parrentNode).html().indexOf(replace) != -1) {
+                                var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+                                parrentNode.innerHTML = replaceContent;
+                                check = 1;
+                            } 
+                            if (parrentNode.innerHTML == replace) {
+                                replaceContent = $(parrentNode).html().replace(replace, $('select option:selected').val());
+                                 parrentNode.innerHTML = replaceContent;
+                            } else {
+                                var replaceContent = $('#content div').html().replace(replace, $('select option:selected').val());
+                                $('#content div').html(replaceContent);
+                            }
                         }
                     });
+                }
+        } else {
+            document.getElementById('content').addEventListener(eventListener, function () {
+                if (window.getSelection) {
+                    selection = window.getSelection();
+                } else if (document.selection) {
+                    selection = document.selection.createRange();
+                }
+                selection.toString() !== '';
+                 var section = '{{ $section }}';
+                 if (section === 'photo' || section == 'availability') return;
+                var parrentNode = window.getSelection().anchorNode.parentNode;
+                var currentHTMLSection = $('#content div').html();
 
-                    /*$.ajax({
-                     url: "/api/user/"+user_id+"/"+section+'?'+token,
-                     type: 'GET',
-                     dataType: 'JSON',
-                     success: function(result) {
-                     var html = '<div class="dropdown"><button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger<span class="caret"></span></button><ul class="dropdown-menu" aria-labelledby="dLabel"><li id="manual">Type Manual</li><li id="get-profile">Get from profile</li></ul></div>';
-                     $('#buttons').html(html);
+                if ($(parrentNode).html() == $('#content div').html()) {
+                    selection = window.getSelection().getRangeAt(0).toString();
+                }
 
-                     $('#manual').click(function() {
-                     parrentNode.innerHTML = '';
-                     $('#buttons').html('');
-                     });
-                     $('#get-profile').click(function() {
-                     if (typeof(result.data) !== 'object') {
-                     parrentNode.innerHTML = result.data;
-                     }else {
-                     var html = '';
-                     $.each(result.data, function(key, val) {
-                     html += '<select id="get-from-profile" class="form-control">';
-                     html += '<option disabled>List Item</option>';
-                     switch(key) {
-                     case 'education':
-                     $.each(val, function(k, obj) {
-                     html += '<optgroup label="Item '+k+'">';
-                     html += '<option>Title:'+obj.title+'</option>';
-                     html += '<option>School:'+obj.school_name+'</option>';
-                     html += '<option>Start:'+obj.start+'</option>';
-                     html += '<option>End:'+obj.end+'</option>';
-                     html += '<option>Degree:'+obj.degree+'</option>';
-                     html += '<option>Result:'+obj.result+'</option>';
-                     html += '</optgroup>';
-                     });
-                     break;
-                     case 'work':
-                     $.each(val, function(k, obj) {
-                     html += '<optgroup label="Item '+k+'">';
-                     html += '<option>Company:'+obj.company+'</option>';
-                     html += '<option>SubTitle:'+obj.sub_title+'</option>';
-                     html += '<option>Start:'+obj.start+'</option>';
-                     html += '<option>End:'+obj.end+'</option>';
-                     html += '<option>Job title:'+obj.job_title+'</option>';
-                     html += '<option>Job description:'+obj.job_description+'</option>';
-                     html += '</optgroup>';
-                     });
-                     break;
-                     case 'reference':
-                     $.each(val, function(k, obj) {
-                     html += '<optgroup label="Item '+k+'">';
-                     html += '<option>Reference:'+obj.reference+'</option>';
-                     html += '<option>Content:'+obj.content+'</option>';
-                     html += '</optgroup>';
-                     });
 
-                     break;
-                     case 'key_qualification':
-                     html += '<optgroup label="Item '+k+'">';
-                     html += '<option>Content:'+obj.content+'</option>';
-                     html += '</optgroup>';
-                     break;
-                     case 'objective':
-                     html += '<optgroup label="Item '+k+'">';
-                     html += '<option>Title:'+obj.title+'</option>';
-                     html += '<option>Content:'+obj.content+'</option>';
-                     html += '</optgroup>';
-                     break;
-                     default:
-                     break;
-                     }
+               
+                var user_id = '{{ $user_id }}';
+                var token = window.location.href.split('?')[1];
 
-                     html += '</select>';
-                     });
-                     $('#buttons').html(html);
-                     $('#get-from-profile').click(function() {
-                     if ($(parrentNode).html() == $('#content div').html()){
-                     if (currentHTMLSection.indexOf(selection) != 0) {
-                     temp = '<div class="'+section+'" contenteditable="true">'
-                     +currentHTMLSection.replace(new RegExp(selection, "g"), $('#get-from-profile option:selected').val())
-                     +'</div>';
-                     $('#content').html(temp);
-                     }
-                     }else {
-                     parrentNode.innerHTML =  $('#get-from-profile option:selected').val();
-                     }
+                if (selection.toString() !== '' && selection !== ' ') {
 
-                     });
-                     }
+                    $('#buttons').show();
+                    $('#buttons .dropdown-menu').show();
+                    var top = $(document).scrollTop() - 30;
+                    $('#buttons').css({'top': top, position : 'absolute', width: '70%'});
+                    var clonedSlection = window.getSelection().getRangeAt(0).cloneRange().cloneContents();
+                    var span = document.createElement('span');
+                    span.appendChild(clonedSlection);
+                    var replace = span.innerHTML;
+                    $(document).off('click', '#manual').on('click', '#manual', function () {
+                    
+                        var answer = confirm('This option will delete your selected text!');
+                        if ( ! answer) return;
+                        if ($(parrentNode).html() == $('#content div.'+section).html()) {
+                            
+                            var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), '');
 
-                     });
+                            $('#content div.'+section).html(temp);
+                        } else {
+                             var replaceHTML = $(parrentNode).html().replace(new RegExp(replace, "g"), "");
+                            parrentNode.innerHTML = replaceHTML;
+                        }
+                        $('#buttons').hide();
+                     
+                    });
+                    $(document).off('change', 'select').on('change', 'select', function () {
+                        $('#buttons').hide();
+                        if ($(parrentNode).html() == $('#content div').html()) {
+                            console.log('1');
+                            if ($('#content div').html().indexOf(replace) != -1) {
+                                var answer = confirm('This option will delete your text style!');
 
-                     }
-                     });*/
+                                if (!answer) return;
+                                
+                                temp = '<div lang="' + section + '" contenteditable="true">'
+                                        + $('#content div').html().replace(new RegExp(replace, "g"), $('select option:selected').val())
+                                        + '</div>';
+                                $('#content').html(temp);
+                            }
+                        } else {
+                            var check = 0;
+                            if ($(parrentNode).html().indexOf(replace) != -1) {
+                                var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+                                parrentNode.innerHTML = replaceContent;
+                                check = 1;
+                            } 
+                            if (parrentNode.innerHTML == replace) {
+                                replaceContent = $(parrentNode).html().replace(replace, $('select option:selected').val());
+                                 parrentNode.innerHTML = replaceContent;
+                            } else {
+                                var replaceContent = $('#content div').html().replace(replace, $('select option:selected').val());
+                                $('#content div').html(replaceContent);
+                            }
+                        }
+                    });
                 }
             });
         }
-        test();
+    }
+    test();
         function changeAvatar() {
 
         }
         var isBusy = false;
-        /*$('img').click(function(e) {
-         e.preventDefault();
-         $('#file').trigger('click');
-         });*/
         var app = {};
         function eventChangeClick() {
             alert('Change Photo');
             Android.changeAvatar();
         }
         function clickSave() {
-            // $('#save').click(function(e) {
-            // e.preventDefault();
             if (isBusy) return;
             isBusy = true;
             $("#loading").show();
@@ -371,77 +354,7 @@
                 }
             });
         }
-        // clickSave();
-        // clickApply();
-        /*  CKEDITOR.inline('editor',{
-         on: {
-         instanceReady: function() {
-         this.document.appendStyleSheet( '{{ asset("js/ckeditor/contents.css") }}' );
-
-         CKEDITOR.instances['editor'].on('focus', function() {
-         var width = $(window).width();
-         if (width >= 1331) {
-         document.getElementsByTagName('div')[1].style.marginTop = "80px";
-         } else if (width <= 440) {
-         document.getElementsByTagName('div')[1].style.marginTop = "180px";
-         }
-         });
-         CKEDITOR.instances['editor'].on('blur', function() {
-         document.getElementsByTagName('div')[1].style.marginTop = "0px";
-         });
-
-         }
-         }
-         });
-
-         CKEDITOR.instances.editor.setData("{!! $content !!}");*/
-
-        /*bkLib.onDomLoaded(function() {
-         var myNicEditor = new nicEditor();
-         // new nicEditor({externalCSS : 'asset(css/style.css)'});
-         myNicEditor.setPanel('myPanel');
-         myNicEditor.addInstance('editor');
-         });
-         myNicEditor.addEvent('focus', function(e) {
-         alert('abcde');
-         });
-         var isFocused, focusedResizing;
-         window.tryfix = function() {
-         var inputs = document.getElementsByTagName('input')
-         for (var i = 0; i < inputs.length; i++) {
-         input = inputs[i];
-         input.onfocus = focused;
-         input.onblur = blured;
-         }
-         window.onscroll = scrolled;
-         }
-
-         function focused(event) {
-         isFocused = true;
-         scrolled();
-         }
-
-         function blured(event) {
-         isFocused = false;
-         var headStyle = document.getElementById('hed').style;
-         if (focusedResizing) {
-         focusedResizing = false;
-         headStyle.position = 'fixed';
-         headStyle.top = 0;
-         }
-         }
-
-         function scrolled() {
-         document.title = 'test';
-         var headStyle = document.getElementById('hed').style;
-         if (isFocused) {
-         if (!focusedResizing) {
-         focusedResizing = true;
-         headStyle.position = 'absolute';
-         }
-         headStyle.top = window.pageYOffset + 'px';
-         }
-         }*/
+        
          $(document).ready(function() {
             $('.close').click(function() {
                 $('#buttons').hide();

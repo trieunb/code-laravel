@@ -1,15 +1,15 @@
 
-  var section = ['div.name', 'div.address', 'div.phone',
-      'div.email', 'div.profile_website', 'div.linkedin',
-      'div.reference', 'div.objective', 'div.activitie',
-      'div.work', 'div.education', 'div.photo', 'div.personal_test',
-      'div.key_qualification',  'div.infomation'
+  var section = ['div[lang=name]', 'div[lang=skill]', 'div[lang=address]', 'div[lang=phone]',
+      'div[lang=email]', 'div[lang=profile_website]', 'div[lang=linkedin]',
+      'div[lang=reference]', 'div[lang=objective]', 'div[lang=activitie]',
+      'div[lang=work]', 'div[lang=education]', 'div[lang=photo]', 'div[lang=personal_test]',
+      'div[lang=key_qualification]',  'div[lang=infomation]'
   ];
   for(var i=0; i<section.length; i++)
   {
     var cls = section[i];
     var $sls = $(cls);
-    if (section[i] != 'div.photo')
+    if (section[i] != 'div[lang=photo]')
       $(cls).attr("contentEditable", true);
   }
   function clickEditTemplate() {

@@ -4,7 +4,7 @@
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
         <div class='image-avatar' style="position: relative; overflow:hidden;">
-            <div class="photo" onclick="eventChangeClick()">
+            <div lang="photo" onclick="eventChangeClick()">
                 @if ( is_null($user_info->avatar['origin']))
                     <img style="width: 100%; height: auto;"
                     src="{!! asset('uploads/origin/avatar.jpg') !!}">
@@ -18,16 +18,14 @@
                     style="position: absolute;
                     text-align: center;
                     bottom: 10px;
-                    width: 100%;
-                    font-weight: 600;
-                    color: black;">
-                <div class="name" >
+                    width: 100%;">
+                <div lang="name" >
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
                 </div>
-                <div class="profile_website">
+                <div lang="profile_website">
                     <span>{{$user_info->link_profile}}</span>
                 </div>
-                <div class="email">
+                <div lang="email">
                     email: <span>{{$user_info->email}}</span>
                 </div>
                 </div>
@@ -38,18 +36,18 @@
         color: white;
         font-weight:600;
         text-align:center;">
-        <div class="address">
+        <div lang="address">
             <span>{{$user_info->address}}</span><br>
             <span>{{($user_info->city)
                 ? $user_info->city . ', ' . $user_info->state
                 : null}}
             </span>
         </div>
-        <div class="phone">
+        <div lang="phone">
             <span>Tell: {{$user_info->mobile_phone}}</span>
         </div>
     </div>
-    <div class="infomation">
+    <div lang="infomation">
         <div class='content-box'>
             <div class="header-title"
             style="color: red;
@@ -100,7 +98,7 @@
             </div>
         </div>
     </div>
-    <div class="education">
+    <div lang="education">
         <div class='content-box'>
             <div class="header-title"
                 style="color: red;
@@ -131,7 +129,7 @@
             </div>
         </div>
     </div>
-    <div class="personal_test">
+    <div lang="personal_test">
          <div class='content-box'>
         <div class="header-title"
             style="color: red;
@@ -158,7 +156,7 @@
         </div>
     </div>
     </div>
-    <div class="work">
+    <div lang="work">
         <div class=' content-box'>
             <div class="header-title"
                 style="color: red;
@@ -189,7 +187,7 @@
             </div>
         </div>
     </div>
-    <div class="reference">
+    <div lang="reference">
         <div class='content-box'>
             <div class="header-title"
                 style="color: red;
@@ -216,7 +214,7 @@
             </div>
         </div>
     </div>
-    <div class="objective">
+    <div lang="objective">
         <div class='content-box'>
             <div class="header-title"
                 style="color: red;
@@ -243,7 +241,7 @@
             </div>
         </div>
     </div>
-    <div class="key_qualification">
+    <div lang="key_qualification">
         <div class='content-box'>
             <div class="header-title"
                 style="color: red;
@@ -266,7 +264,7 @@
             </div>
         </div>
     </div>
-    <div class="availability">
+    <div lang="availability">
         <div class='content-box'>
             <div class="header-title" 
                 style="color: red;

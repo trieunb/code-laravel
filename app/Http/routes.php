@@ -11,9 +11,20 @@
 |
 */
 
+get('pdf', function() {
+      $snappy = \App::make('snappy.pdf');
+       $snappy->generateFromHtml( $this->content, public_path('abc.pdf'));
+});
+
 get('test', function() {
     $job = \App\JobTest::find(1);
-    $skills = [];
+
+    dd(\Auth::check());
+    if ( ! \Auth::check()) {
+        \Auth::login(\App\Models\User::find(304));
+        return redirect('test');
+    } else dd(\Auth::check());
+    $skills = []; 
     foreach ($job->skill as $skill)
         $skills[] = $skill['skill'];
 
@@ -55,7 +66,7 @@ get('test', function() {
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'role:admin'], function() {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
     
@@ -154,7 +165,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/{id}/section', 'TemplatesController@getSections');
     get('template/menu/{id}', ['as' => 'api.template.get.menu', 'uses' => 'TemplatesController@menu']);
     get('template/apply/{id}/{section}', ['as' => 'api.template.get.profile.section', 'uses' => 'TemplatesController@apply']);
-
+    
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');

@@ -67,42 +67,61 @@ if (!function_exists('createSection')) {
      * @return array 
      */
     function createSection($htmlString, &$sections, &$result = []) {
+
         $tmp = [];
         $html = new \Htmldom();
         $html->load(preg_replace('/\t|\n|\r+/', '', $htmlString));
         $contentProfile = '';
         $str = $htmlString;
         $content = '';
-        
+
         if (count($sections) > 0) {
             foreach ($sections as $index => $section) {
-                $class = explode('.', $section);
-                $class = end($class);
+                $class = explode('=', $section);
+                $class = substr(end($class), 0, -1);
                 
                 foreach ($html->find($section) as $key => $e) {
                     if ($key != 0) {
                         $contentProfile .= '<br>'.$e->innertext;
-
-                        $content = str_replace($e->outertext, '', $str);
+                        $content = preg_replace('/\t|\n|\r+/', '' ,str_replace($e->outertext, '', $str));
                         $str = $content;
                     }
                 }
-
+               
                 foreach ($html->find($section) as $k => $e) {
+
                     if ($k == 0) {
+
                         $contentProfile = $e->innertext.$contentProfile;
                         $outerCurrent = $e->outertext;
+                          
                         // $e->{'contentediable'} = 'true';
                         // $outer = str_replace($outerCurrent, $e->outertext, $str);
 
-                        $content = str_replace($e->outertext,"<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>", $str);
+                        if (array_key_exists('contenteditable', $e->attr)) {
+                            unset($e->attr['contenteditable']);
+                        }
 
-                        $tmp[$class] = $section != 'photo'
-                            ? "<div contenteditable='true' class='{$class}'>".$contentProfile ."</div>"
-                            : "<div  onclick='eventChangeClick()' class='{$class}'>".$contentProfile ."</div>";
-                        $tmp['content'] = $content;
+                        $attrs = '';
+                        if (count($e->attr) > 0) {
+                            foreach ($e->attr as $name => $attr) {
+                                if ($name != 'lang')
+                                    $attrs .= $name.'= "'.$attr.'" ';
+                            }
+                        }
+                       /* if ($section == 'div[lang=education]')
+                            dd($e->outertext);*/
+                        $content = str_replace($e->outertext,'<div '.$attrs.' contenteditable="true" lang="'.$class.'"">'.$contentProfile .'</div>', $str);
 
+                        $tmp[$class] = $section != 'div[lang=photo]'
+                            ? '<div '.$attrs.' contenteditable="true" lang="'.$class.'">'.$contentProfile .'</div>'
+                            : '<div '.$attrs.' onclick="eventChangeClick()" lang="'.$class.'">'.$contentProfile .'</div>';
+
+                        $tmp['content'] = preg_replace('/\t|\n|\r+/', '', $content);
+                      /*  if ($section == 'div[lang=education]')
+                            dd($tmp['content']);*/
                     }
+
                 }
 
                 unset($sections[$index]);
@@ -140,23 +159,35 @@ if (!function_exists('editSection')) {
 
         $currentSectionString = '';
 
-        // foreach ($html->find('div.'.$section) as $element) {
-        //    $currentSectionString = $element->outertext;
-        // }
+        $replace = '';
+        
 
-        $replace = $section != 'photo'
-            ? '<div class="'.$section.'">'
-            : '<div class="'.$section.'" onclick="eventChangeClick()">';
 
-        foreach ($html_request->find('div.'.$section) as $key => $element) {
-            $replace .= $key == count($html_request->find('div.'.$section)) - 1 
+        foreach ($html_request->find('div[lang='.$section.']') as $key => $element) {
+            if (array_key_exists('contenteditable', $e->attr)) {
+                unset($e->attr['contenteditable']);
+            }
+            if (array_key_exists('lang', $e->attr)) {
+                unset($e->attr['lang']);
+            }
+            $attrs = '';
+            if (count($e->attr) > 0) {
+                foreach ($e->attr as $name => $attr) {
+                    $attrs .= $name.'= "'.$attr.'" ';
+                }
+            }
+            $replace .= $section != 'photo'
+            ? '<div '.$attrs.' lang="'.$section.'">'
+            : '<div '.$attrs.' lang="'.$section.'" onclick="eventChangeClick()">';
+
+            $replace .= $key == count($html_request->find('div[lang='.$section.']')) - 1 
                 ? $element->innertext
                 : $element->innertext.'<br>';
         }
 
         $replace .= '</div>';
 
-        foreach ($html->find('div.'.$section) as $element) {
+        foreach ($html->find('div[lang='.$section.']') as $element) {
            $element->outertext = $replace;
        }
 
@@ -320,25 +351,18 @@ if (!function_exists('apply_data_for_section_infomation')) {
         $html = new \Htmldom($str);
         $result = [];
 
-        if ( !$html->find('div.'.$section)) 
+        if ( !$html->find('div[lang='.$section.']')) 
             return ['section' => '', 'content' => $str];
 
-        foreach ($html->find('div.'.$section) as $value) {
-            // $search = trim($value->outertext);
-            // $current = $value->innertext;
-            // $value->innertext = str_replace($current, $replace, strip_tags($value->innertext));
-
+        foreach ($html->find('div[lang='.$section.']') as $value) {
             $value->innertext = $section != 'photo'
                 ? '<span>'.$replace.'</span>'
                 : '<img src="'.asset($replace).'" width="100%">';
             $tmp = $value->innertext;
-
         }   
 
-        // $str = str_replace($current, $replace, $str);
-
         return [
-            'section' => '<div class="'.$section.'" contenteditable="true">'.$tmp.'</div>',
+            'section' => '<div lang="'.$section.'" contenteditable="true">'.$tmp.'</div>',
             'content' => preg_replace('/\n/', '', $html->save())
         ];;
     }
@@ -359,6 +383,7 @@ if (!function_exists('apply_data_for_other')) {
         switch ($section) {
             case 'reference':
                 $tmp .= '<h3 style="font-weight:600">References</h3>';
+
                 foreach (\App\Models\Reference::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->reference.'</li>';
@@ -366,43 +391,44 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '</ul>'; 
 
                 }
-
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
                 break;
             case 'objective':
                 $tmp .= '<h3 style="font-weight:600">Objectives</h3>';
+               
                 foreach (\App\Models\Objective::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->title.'</li>';
                     $tmp .= '<li>'.$v->content.'</li>'; 
                     $tmp .= '</ul>';                   
                 }
-                
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
                 break;
             case 'work':
                 $tmp .= '<h3 style="font-weight:600">Work Experience</h3>';
+               
                 foreach (\App\Models\UserWorkHistory::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->job_title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600"><label style="font-weight:600">Company</label>: '.$v->company.'</li>';
                     $tmp .= '<li>'.$v->start.'-'.$v->end.'</li>';   
-                    $tmp .= '<li>'.$v->description.'</li>';   
+                    $tmp .= '<li>'.$v->job_description.'</li>';   
                     $tmp .= '</ul>';                 
                 }
-                
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
+
                 break;
             case 'education':
                 $tmp .= '<h3 style="font-weight:600">Education</h3>'; 
+                
                 foreach (\App\Models\UserEducation::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
@@ -412,10 +438,10 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li>'.$v->result.'</li>';   
                     $tmp .= '</ul>';                 
                 }
-
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
+
                 break;
             case 'key_qualification':
                 $tmp .= '<h3 style="font-weight:600">Qualifications</h3>'; 
@@ -425,7 +451,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li>'.$v->content.'</li>';           
                 }
                 $tmp .= '</ul>';  
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -439,8 +465,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li><label style="font-weight:600">Experience: </label>'.$v->experience.'</li>';
                     $tmp .= '</ul>';  
                 }
-                
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -453,8 +478,7 @@ if (!function_exists('apply_data_for_other')) {
                     $tmp .= '<li><label style="font-weight:600">Point: </label>'.$v->point.'</li>';
                     $tmp .= '</ul>';  
                 }
-                
-                foreach ($html->find('div.'.$section) as $element) {
+                foreach ($html->find('div[lang='.$section.']') as $element) {
                     $element->innertext = $tmp;
                 }
 
@@ -465,7 +489,7 @@ if (!function_exists('apply_data_for_other')) {
         }
 
         return [
-            'section' => '<div class="'.$section.'" contenteditable="true">'.$tmp.'</div>',
+            'section' => '<div lang="'.$section.'" contenteditable="true">'.$tmp.'</div>',
             'content' => $html->save()
         ];
     }
@@ -478,28 +502,11 @@ if (!function_exists('createClassSection')) {
      */
     function createClassSection()
     {
-        return ['div.name', 'div.address', 'div.phone',
-            'div.email', 'div.profile_website', 'div.linkedin',
-            'div.reference', 'div.objective', 'div.activitie', 'div.skill',
-            'div.work', 'div.education', 'div.photo', 'div.personal_test',
-            'div.key_qualification', 'div.availability', 'div.infomation'
+        return ['div[lang=name]', 'div[lang=address]', 'div[lang=phone]',
+            'div[lang=email]', 'div[lang=profile_website]', 'div[lang=linkedin]',
+            'div[lang=reference]', 'div[lang=objective]', 'div[lang=activitie]', 'div[lang=skill]',
+            'div[lang=work]', 'div[lang=education]', 'div[lang=photo]', 'div[lang=personal_test]',
+            'div[lang=key_qualification]', 'div[lang=availability]', 'div[lang=infomation]'
         ];
     }
-}
-
-function element_to_obj($element) {
-    dd($element);
-    $obj = array( "tag" => $element->tagName );
-    foreach ($element->attributes as $attribute) {
-        $obj[$attribute->name] = $attribute->value;
-    }
-    foreach ($element->childNodes as $subElement) {
-        if ($subElement->nodeType == XML_TEXT_NODE) {
-            $obj["html"] = $subElement->wholeText;
-        }
-        else {
-            $obj["children"][] = element_to_obj($subElement);
-        }
-    }
-    return $obj;
 }
