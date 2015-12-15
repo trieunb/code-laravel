@@ -86,4 +86,7 @@ interface TemplateInterface extends Repository
     public function editFullScreenTempalte($id, $user_id, $request);
 
     public function getMyTemplates($user_id, $page, $search);
+
+    public function reportTemplateMonth();
+    public function reportTemplateGender();
 }

@@ -724,3 +724,17 @@ p.full-name {
   border: 1px dashed #000000;
   padding: 2px;
 }
+.nav-tabs{
+  border-bottom: none;
+}
+.nav-tabs > li > a{
+  border-radius: 0px !important;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{
+    border: none;
+    background-color: #36C;
+    color: #FFF;
+}
+.bs-example{
+    margin: 20px;
+  }

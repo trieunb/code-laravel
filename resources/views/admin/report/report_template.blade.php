@@ -5,32 +5,33 @@
 @stop
 
 @section('page-header')
-    Report Template
+Report Template
+    
 @stop
 @section('content')
-<div class="bs-example">
-    <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a href="#month">Month</a></li>
-        <li><a href="#gender">Gender</a></li>
-    </ul>
-    <div class="tab-content">
-        <div id="month" class="tab-pane fade in active">
-            {!! $chart_month !!}
-        </div>
-        <div id="gender" class="tab-pane fade">
-            {!! $chart_gender !!}
-        </div>
+<ul class="nav nav-pills" id="myTab">
+    <li class="active"><a data-toggle="pill" href="#chart_month">Month</a></li>
+    <li><a data-toggle="pill" href="#chart_gender">Gender</a></li>
+</ul>
+<div class="tab-content">
+    <div id="chart_month" class="tab-pane fade in active">
+        {!! $chart_month !!}
+    </div>
+    <div id="chart_gender" class="tab-pane fade">
+        {!! $chart_gender !!}
     </div>
 </div>
+<!-- {!! $chart_month !!}
+{!! $chart_gender !!} -->
 @endsection
 
 @section('script')
     <script type="text/javascript">
         $(document).ready(function(){ 
-            $("#myTab a").click(function(e){
-                e.preventDefault();
-                $(this).tab('show');
-            });
+            $(".nav-pills a").click(function(e){
+            e.preventDefault();
+            $(this).tab('show');
+        });
         });
     </script>
 @endsection
