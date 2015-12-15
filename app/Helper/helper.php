@@ -67,6 +67,7 @@ if (!function_exists('createSection')) {
      * @return array 
      */
     function createSection($htmlString, &$sections, &$result = []) {
+
         $tmp = [];
         $html = new \Htmldom();
         $html->load(preg_replace('/\t|\n|\r+/', '', $htmlString));
@@ -82,41 +83,45 @@ if (!function_exists('createSection')) {
                 foreach ($html->find($section) as $key => $e) {
                     if ($key != 0) {
                         $contentProfile .= '<br>'.$e->innertext;
-
-                        $content = str_replace($e->outertext, '', $str);
+                        $content = preg_replace('/\t|\n|\r+/', '' ,str_replace($e->outertext, '', $str));
                         $str = $content;
                     }
                 }
-
+               
                 foreach ($html->find($section) as $k => $e) {
 
                     if ($k == 0) {
+
                         $contentProfile = $e->innertext.$contentProfile;
                         $outerCurrent = $e->outertext;
-                     
+                          
                         // $e->{'contentediable'} = 'true';
                         // $outer = str_replace($outerCurrent, $e->outertext, $str);
 
                         if (array_key_exists('contenteditable', $e->attr)) {
                             unset($e->attr['contenteditable']);
                         }
-                        if (array_key_exists('lang', $e->attr)) {
-                            unset($e->attr['lang']);
-                        }
+
                         $attrs = '';
                         if (count($e->attr) > 0) {
                             foreach ($e->attr as $name => $attr) {
-                                $attrs .= $name.'= "'.$attr.'" ';
+                                if ($name != 'lang')
+                                    $attrs .= $name.'= "'.$attr.'" ';
                             }
                         }
-                        $content = str_replace($e->outertext,'<div contenteditable="true" lang="'.$class.'"">'.$contentProfile .'</div>', $str);
+                       /* if ($section == 'div[lang=education]')
+                            dd($e->outertext);*/
+                        $content = str_replace($e->outertext,'<div '.$attrs.' contenteditable="true" lang="'.$class.'"">'.$contentProfile .'</div>', $str);
 
                         $tmp[$class] = $section != 'div[lang=photo]'
                             ? '<div '.$attrs.' contenteditable="true" lang="'.$class.'">'.$contentProfile .'</div>'
                             : '<div '.$attrs.' onclick="eventChangeClick()" lang="'.$class.'">'.$contentProfile .'</div>';
 
                         $tmp['content'] = preg_replace('/\t|\n|\r+/', '', $content);
+                      /*  if ($section == 'div[lang=education]')
+                            dd($tmp['content']);*/
                     }
+
                 }
 
                 unset($sections[$index]);

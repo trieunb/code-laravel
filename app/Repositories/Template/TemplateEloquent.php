@@ -189,7 +189,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template = $this->model->whereUserId($user_id)
             ->whereType('2')
             ->first();
-
         if ( ! $template) {
             $template = new Template();
             $template->user_id = $user_id;

@@ -201,7 +201,7 @@ function test() {
 
                 var sections = ['name', 'address', 'phone',
                     'email', 'profile_website', 'linkedin',
-                    'reference', 'objective', 'activitie',
+                    'reference', 'objective', 'activitie', 'skill'
                     'work', 'education', 'photo', 'personal_test',
                     'key_qualification', 'availability', 'infomation'
                 ]
