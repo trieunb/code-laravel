@@ -91,7 +91,10 @@
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Report<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="{{ route('admin.report.get.index') }}">report manager</a>
+                                        <a href="{{ route('admin.report.user') }}">report user</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.report.template') }}">report template</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
