@@ -21,8 +21,6 @@ Report Template
         {!! $chart_gender !!}
     </div>
 </div>
-<!-- {!! $chart_month !!}
-{!! $chart_gender !!} -->
 @endsection
 
 @section('script')

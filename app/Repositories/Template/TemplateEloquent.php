@@ -326,8 +326,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                       ))
             ]);
 
-        // $chart_month->datatable($templateTable);
-
         return $lava->render('ColumnChart', 'TemplateChart', 'chart_month', true);
     }
 
@@ -382,8 +380,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                       )),
                 'width' => 988
             ]);
-
-        // $chart_gender->datatable($templateTable);
 
         return $lava->render('ColumnChart', 'TemplateChart', 'chart_gender', true);
     }
