@@ -379,7 +379,8 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                 'titleTextStyle' => $lava->TextStyle(array(
                         'color' => '#eb6b2c',
                         'fontSize' => 14
-                      ))
+                      )),
+                'width' => 988
             ]);
 
         // $chart_gender->datatable($templateTable);
