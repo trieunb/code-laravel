@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\User\UserInterface;
+use App\Repositories\Device\DeviceInterface;
 use App\ValidatorApi\RegisterForm_Rule;
 use App\ValidatorApi\ChangePass_Rule;
 use App\ValidatorApi\ValidatorAPiException;
@@ -27,10 +28,12 @@ class AuthenticatesController extends Controller
      * @var $user
      */
     protected $user;
+    protected $device;
 
-    public function __construct(UserInterface $user)
+    public function __construct(UserInterface $user, DeviceInterface $device)
     {
         $this->user = $user;
+        $this->device = $device;
     }
 
     /**
@@ -75,6 +78,8 @@ class AuthenticatesController extends Controller
             $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
             $this->user->update(['token' => $token], $user->id);
 
+            $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
+
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
@@ -102,6 +107,8 @@ class AuthenticatesController extends Controller
             $token = JWTAuth::fromUser($user);
             $this->user->update(['token' => $token], $user->id);
 
+            $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
+
             return response()->json([
                     'status_code' => 200,
                     'status' => true,
@@ -122,53 +129,34 @@ class AuthenticatesController extends Controller
         $url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline,picture-urls::(original),location:(name),public-profile-url,email-address,date-of-birth)?oauth2_access_token=".$token."&format=json";
         $response = json_decode(file_get_contents($url), true);
         $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
-        
+        $firstlogin = false;
+
         if ( ! $user) {
             if (isset($response['emailAddress'])) {
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
                 if ( ! $user) {
                     $user = $this->user->createUserFromOAuth($response, $token);
-                    $token = \JWTAuth::fromUser($user);
-                    $this->user->updateUserLogin($user, $token);
-                    return response()->json([
-                        'status_code' => 200,
-                        'status' => true,
-                        'firstlogin' => true,
-                        'token' => $token
-                    ]);
+                    $firstlogin = true;
                 } else {
                     $this->user->updateUserFromOauth($response, $token, $user->id);
-                    $token = \JWTAuth::fromUser($user);
-                    $this->user->updateUserLogin($user, $token);
-                    return response()->json([
-                        'status_code' => 200,
-                        'status' => true,
-                        'firstlogin' => false,
-                        'token' => $token
-                    ]);   
+                    $firstlogin = false;
                 }
             } else {
                 $user = $this->user->createUserFromOAuth($response, $token);
-                $token = \JWTAuth::fromUser($user);
-                $this->user->updateUserLogin($user, $token);
-                return response()->json([
-                    'status_code' => 200,
-                    'status' => true,
-                    'firstlogin' => true,
-                    'token' => $token
-                ]);
+                $firstlogin = true;
             }
             
-        } else {
-            $token = \JWTAuth::fromUser($user);
-            $this->user->updateUserLogin($user, $token);
-            return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'firstlogin' => false,
-                'token' => $token
-            ]);
         }
+        $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
+        $token = \JWTAuth::fromUser($user);
+        $this->user->updateUserLogin($user, $token);
+        return response()->json([
+            'status_code' => 200,
+            'status' => true,
+            'firstlogin' => $firstlogin,
+            'token' => $token
+        ]);
+        
     }
 
     public function loginWithFacebook(Request $request)
@@ -178,62 +166,33 @@ class AuthenticatesController extends Controller
         $response = json_decode(file_get_contents($url), true);
         \Log::info('test Login Face', ['response' => $response, 'token' => $token, 'url' => $url]);
         $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
-        
+        $firstlogin = false;
+
         if ( !$user ) {
             if ( isset($response['email'] )) {
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
                 if ( ! $user) {
                     $user = $this->user->createUserFacebook($response, $token);
-                    $token = \JWTAuth::fromUser($user);
-                    $this->user->updateUserLogin($user, $token);
-                    return response()->json([
-                        'status_code' => 200,
-                        'status' => true,
-                        'firstlogin' => true,
-                        'token' => $token
-                    ]);
+                    $firstlogin = true;
                 } else {
                     $this->user->updateUserFacebook($response, $token, $user->id);
-                    $token = \JWTAuth::fromUser($user);
-                    $this->user->updateUserLogin($user, $token);
-                    return response()->json([
-                        'status_code' => 200,
-                        'status' => true,
-                        'firstlogin' => false,
-                        'token' => $token
-                    ]);  
+                    $firstlogin = false;
                 }
             } else {
                 $user = $this->user->createUserFacebook($response, $token);
-                $token = \JWTAuth::fromUser($user);
-                $this->user->updateUserLogin($user, $token);
-                return response()->json([
-                    'status_code' => 200,
-                    'status' => true,
-                    'firstlogin' => true,
-                    'token' => $token
-                ]);
+                $firstlogin = true;
             }
-            Auth::login($user);
-            $token = \JWTAuth::fromUser($user);
-            $this->user->update(['token' => $token], $user->id);
-
-            return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'firstlogin' => true,
-                'token' => $token
-            ]);
-        } else {
-            $token = \JWTAuth::fromUser($user);
-            $this->user->updateUserLogin($user, $token);
-            return response()->json([
-                'status_code' => 200,
-                'status' => true,
-                'firstlogin' => false,
-                'token' => $token
-            ]);
         }
+        $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
+        $token = \JWTAuth::fromUser($user);
+        $this->user->updateUserLogin($user, $token);
+        return response()->json([
+            'status_code' => 200,
+            'status' => true,
+            'firstlogin' => $firstlogin,
+            'token' => $token
+        ]);
+        
     }
 
     public function postForgetPassword(Request $request)

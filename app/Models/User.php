@@ -13,6 +13,7 @@ use App\Models\TemplateMarket;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
 use App\Models\UserWorkHistory;
+use App\Models\Device;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 use Bican\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Auth\Authenticatable;
@@ -236,5 +237,10 @@ class User extends Model implements AuthenticatableContract,
     public function roles()
     {
         return $this->belongsToMany('App\Models\Role');
+    }
+
+    public function device()
+    {
+        return $this->hasOne(Device::class);
     }
 }
