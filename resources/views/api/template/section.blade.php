@@ -177,7 +177,7 @@
     
 
                 document.getElementById('content').addEventListener(eventListener, function () {
-                     var touches = event.changedTouches;
+                    var touches = event.changedTouches;
                     if (window.getSelection) {
                         selection = window.getSelection();
                     } else if (document.selection) {
@@ -364,6 +364,7 @@
 
                         }
                     });
+                
                 });
             }
             test();

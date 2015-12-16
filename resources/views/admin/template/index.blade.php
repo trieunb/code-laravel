@@ -56,7 +56,7 @@ Template List
                     {data: 'status', name: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
-                order: [[4, 'DESC']]
+                order: [[3, 'DESC']]
             });
             /* $('#templates-table tbody').on( 'click', 'td', function () {
                     $('#templates-table a').removeClass('fancybox');

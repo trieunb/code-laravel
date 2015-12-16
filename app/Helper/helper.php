@@ -67,7 +67,6 @@ if (!function_exists('createSection')) {
      * @return array 
      */
     function createSection($htmlString, &$sections, &$result = []) {
-
         $tmp = [];
         $html = new \Htmldom();
         $html->load(preg_replace('/\t|\n|\r+/', '', $htmlString));

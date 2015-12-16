@@ -85,6 +85,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }, 'user_work_histories' => function($q) {
                 $q->orderBy('position');
             }, 'questions' => function($q) {
+            }, 'user_skills' => function($q) {
+                $q->orderBy('position');
             }, 'references' => function($q) {
                 $q->orderBy('position');
             }, 'objectives' => function($q) {
@@ -360,7 +362,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function dataTable()
     {
         return \Datatables::of($this->model->select([
-            'id', 'firstname', 'lastname', 'address', 'email',
+            'id', 'firstname', 'lastname', 'address', 'email','dob',
             'created_at', 'updated_at'
             ]))
             ->addColumn('action', function($user) {

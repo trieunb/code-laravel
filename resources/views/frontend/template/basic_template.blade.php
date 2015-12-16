@@ -135,7 +135,7 @@
             style="color: red;
             font-weight:600;
             padding:15px;">
-            <span>Skills</span>
+            <span>Career Growth Test</span>
         </div>
         <div class="box"
             style="background: #f3f3f3;

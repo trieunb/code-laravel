@@ -20,7 +20,8 @@
 			<th>Id</th>
 			<th>Fullname</th>
 			<th>Address</th>
-			<th>Email</th>
+            <th>Email</th>
+			<th>Birthday</th>
 			<th>Created At</th>
 			<th>Updated At</th>
 			<th>Action</th>
@@ -40,11 +41,12 @@
 		            {data: 'firstname', name: 'firstname'},
 		            {data: 'address', name: 'address'},
 		            {data: 'email', name: 'email'},
+                    {data: 'dob', name: 'dob'},
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'updated_at', name: 'updated_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false}
 		        ],
-		        order: [[4, 'DESC']]
+		        order: [[5, 'DESC']]
 		    });
 
 			var isBusy = false;

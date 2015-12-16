@@ -6,6 +6,12 @@ use App\Models\Template;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
 use App\Repositories\Template\TemplateInterface;
+use Khill\Lavacharts\Lavacharts;
+use Lava;
+use App\Models\User;
+use App\Models\TemplateMarket;
+use Carbon\Carbon;
+use DB;
 
 class TemplateEloquent extends AbstractDefineMethodRepository implements TemplateInterface
 {
@@ -293,5 +299,92 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                 ->get();
     }
 
+    public function reportTemplateMonth()
+    {
+        $lava = new Lavacharts;
+        $templateTable = $lava->DataTable();
+
+        $templateTable->addStringColumn('Date of Month')
+                    ->addNumberColumn('Templates');
+
+        $templates_m = Template::select('*', DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))->groupBy('month')->orderBy('month', 'ASC')->get();
+
+        foreach ($templates_m as $temp_m) {
+            $rowData = array(
+                date_format($temp_m->created_at, 'Y-m'), $temp_m->count
+            );
+            $templateTable->addRow($rowData);
+        }
+
+        $chart_month = $lava->ColumnChart('TemplateChart')->setOptions([
+                'datatable' => $templateTable,
+                'title' => 'Month',
+                'titleTextStyle' => $lava->TextStyle(array(
+                        'color' => '#eb6b2c',
+                        'fontSize' => 14
+                      ))
+            ]);
+
+        // $chart_month->datatable($templateTable);
+
+        return $lava->render('ColumnChart', 'TemplateChart', 'chart_month', true);
+    }
+
+    public function reportTemplateGender()
+    {
+        $lava = new Lavacharts;
+        $templateTable = $lava->DataTable();
+        $templateTable->addStringColumn('Gender')
+                    ->addNumberColumn('Templates');
+
+        $templates_m = User::select('*', DB::raw('COUNT(id) AS count'))->with('templates')->groupBy('gender')->orderBy('created_at', 'ASC')->get();
+        foreach ($templates_m as $temp_m) {
+
+            $templates_c = Template::with(['user' => function($q) use ($temp_m) {
+                $q->whereGender($temp_m->gender);
+            }])->get();
+
+            $count = 0;
+            foreach ($templates_c as $value) {
+                if(!is_null($value->user)) $count ++;   
+            }
+
+            $gender = '';             
+            switch ($temp_m->gender) {
+                case 0:
+                    $gender = 'Male';
+                    break;
+                case 1:
+                    $gender = 'Female';
+                    break;
+                case 2:
+                    $gender = 'Other';
+                    break;
+                
+                default:
+                    $gender = 'Other';
+                    break;
+            }
+            $rowData = array(
+                $gender, $count
+            );
+            
+            $templateTable->addRow($rowData);
+        }
+
+        $chart_gender = $lava->ColumnChart('TemplateChart')->setOptions([
+                'datatable' => $templateTable,
+                'title' => 'Gender',
+                'titleTextStyle' => $lava->TextStyle(array(
+                        'color' => '#eb6b2c',
+                        'fontSize' => 14
+                      )),
+                'width' => 988
+            ]);
+
+        // $chart_gender->datatable($templateTable);
+
+        return $lava->render('ColumnChart', 'TemplateChart', 'chart_gender', true);
+    }
     
 }

@@ -131,7 +131,7 @@ return false;
         // visualblocks_default_state: true,
         // end_container_on_empty_block: true,
         plugins: [
-        " image,preview,hr,wordcount,code,table,colorpicker,textcolor"
+        " image,preview,hr,code,table,colorpicker,textcolor"
         ],
         toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
 
