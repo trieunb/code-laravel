@@ -38,21 +38,19 @@
         <img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
     </div>
     <div class="row">
-        <!-- 
-        @if ($section == 'photo')
-            <button onClick="changeAvatar()" class="btn btn-primary pull-right" style="margin-bottom: 20px">Upload</button>
-        @endif -->
-        <form id="upload">
-            <div id="content"  class="col-md-12" contenteditable="true">
+        <div class="col-xs-12">
+            <form id="upload">
+                <div id="content"  class="col-md-12" contenteditable="true">
 
-                @if ($section != 'availability')
-                    {!! $content !!}
-                @else
-                    {!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
-                @endif
+                    @if ($section != 'availability')
+                        {!! $content !!}
+                    @else
+                        {!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
+                    @endif
 
-            </div>
-        </form>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="col-md-12" id="buttons">
         <ul class="dropdown-menu" aria-labelledby="dLabel" id="choose-type">

@@ -164,15 +164,13 @@ if (!function_exists('editSection')) {
 
 
         foreach ($html_request->find('div[lang='.$section.']') as $key => $element) {
-            if (array_key_exists('contenteditable', $e->attr)) {
-                unset($e->attr['contenteditable']);
+            if (array_key_exists('contenteditable', $element->attr)) {
+                unset($element->attr['contenteditable']);
             }
-            if (array_key_exists('lang', $e->attr)) {
-                unset($e->attr['lang']);
-            }
+
             $attrs = '';
-            if (count($e->attr) > 0) {
-                foreach ($e->attr as $name => $attr) {
+            if (count($element->attr) > 0) {
+                foreach ($element->attr as $name => $attr) {
                     $attrs .= $name.'= "'.$attr.'" ';
                 }
             }
