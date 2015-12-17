@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnTypeForTempaltesTable extends Migration
+class RemoveNotificationsFromUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AddColumnTypeForTempaltesTable extends Migration
      */
     public function up()
     {
-        Schema::table('templates', function($table) {
-            $table->tinyInteger('type')->nullable()->default(0);
+        Schema::table('users', function($table) {
+            $table->dropColumn('notifications');
         });
     }
 
@@ -24,8 +24,6 @@ class AddColumnTypeForTempaltesTable extends Migration
      */
     public function down()
     {
-        Schema::table('templates', function ($table) {
-            $table->dropColumn('type');
-        });
+        //
     }
 }
