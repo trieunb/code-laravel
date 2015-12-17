@@ -308,7 +308,11 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $templateTable->addStringColumn('Date of Month')
                     ->addNumberColumn('Templates');
 
-        $templates_m = Template::select('*', DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))->groupBy('month')->orderBy('month', 'ASC')->get();
+        $templates_m = Template::select('*', 
+                    DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))
+                    ->groupBy('month')
+                    ->orderBy('month', 'ASC')
+                    ->get();
 
         foreach ($templates_m as $temp_m) {
             $rowData = array(
@@ -319,11 +323,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
 
         $chart_month = $lava->ColumnChart('TemplateChart')->setOptions([
                 'datatable' => $templateTable,
-                'title' => 'Month',
-                'titleTextStyle' => $lava->TextStyle(array(
-                        'color' => '#eb6b2c',
-                        'fontSize' => 14
-                      ))
             ]);
 
         return $lava->render('ColumnChart', 'TemplateChart', 'chart_month', true);
@@ -336,7 +335,12 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $templateTable->addStringColumn('Gender')
                     ->addNumberColumn('Templates');
 
-        $templates_m = User::select('*', DB::raw('COUNT(id) AS count'))->with('templates')->groupBy('gender')->orderBy('created_at', 'ASC')->get();
+        $templates_m = User::select('*', DB::raw('COUNT(id) AS count'))
+                      ->whereNotNull('gender')
+                      ->with('templates')
+                      ->groupBy('gender')
+                      ->orderBy('created_at', 'ASC')
+                      ->get();
         foreach ($templates_m as $temp_m) {
 
             $templates_c = Template::with(['user' => function($q) use ($temp_m) {
@@ -348,7 +352,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                 if(!is_null($value->user)) $count ++;   
             }
 
-            $gender = '';             
+            $gender = ''; 
             switch ($temp_m->gender) {
                 case 0:
                     $gender = 'Male';
@@ -370,14 +374,8 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             
             $templateTable->addRow($rowData);
         }
-
         $chart_gender = $lava->ColumnChart('TemplateChart')->setOptions([
                 'datatable' => $templateTable,
-                'title' => 'Gender',
-                'titleTextStyle' => $lava->TextStyle(array(
-                        'color' => '#eb6b2c',
-                        'fontSize' => 14
-                      )),
                 'width' => 988
             ]);
 
