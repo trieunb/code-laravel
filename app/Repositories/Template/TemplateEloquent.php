@@ -299,32 +299,22 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                 ->get();
     }
 
-    public function reportTemplateMonth()
+    public function reportTemplateMonth($year = null)
     {
-        $lava = new Lavacharts;
-        $templateTable = $lava->DataTable();
+        $templates = $this->model->select('id', 
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(id) AS count')
+            )
+            ->groupBy('month')
+            ->orderBy('month');
 
-        $templateTable->addStringColumn('Date of Month')
-                    ->addNumberColumn('Templates');
+        $templates = ! is_null($year) 
+            ? $templates->whereYear('created_at', '=', $year)->get()
+            : $templates->get();
 
-        $templates_month = Template::select('*', 
-                    DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))
-                    ->groupBy('month')
-                    ->orderBy('month', 'ASC')
-                    ->get();
-
-        foreach ($templates_month as $temp_m) {
-            $rowData = array(
-                date_format($temp_m->created_at, 'Y-m'), $temp_m->count
-            );
-            $templateTable->addRow($rowData);
-        }
-
-        $chart_month = $lava->ColumnChart('TemplateChart')->setOptions([
-                'datatable' => $templateTable,
-            ]);
-
-        return $lava->render('ColumnChart', 'TemplateChart', 'chart_month', true);
+        $data = getCountDataOfMonth($templates);
+        
+        return $data;
     }
 
     public function reportTemplateGender()

@@ -476,3 +476,29 @@ if (!function_exists('createClassSection')) {
         ];
     }
 }
+
+if ( ! function_exists('getCountDataOfMonth')) {
+    /**
+     * Count data of month for Report
+     * @param  [type] $objects [description]
+     * @return [type]          [description]
+     */
+    function getCountDataOfMonth($objects) {
+        $data = [];
+
+        foreach ($objects as $object) { 
+            if($object->month ==0 ) $object->month = 1;
+            $data[$object->month] = $object->count;
+        }
+       
+        for ($i = 1; $i <= 12; $i++) {
+            if ( ! array_key_exists($i, $data)) {
+                $data[$i] = 0;
+            }
+        }
+
+        ksort($data);
+
+        return $data;
+    }
+}
