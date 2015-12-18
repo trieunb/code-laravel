@@ -16,7 +16,7 @@ get('pdf', function() {
        $snappy->generateFromHtml( $this->content, public_path('abc.pdf'));
 });
 
-get('test', function() {
+/*get('test', function() {
     $job = \App\JobTest::find(1);
      $skills = []; 
     foreach ($job->skill as $skill)
@@ -38,11 +38,11 @@ get('test', function() {
 
         })
         
-       /* ->WhereIn('users.id', function($query) use ($job){
+        ->WhereIn('users.id', function($query) use ($job){
             $query->select('user_id')
                 ->from('user_work_histories')
                 ->WhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->job_description.','.$job->job_title]);
-        })*/
+        })
         // ->orWhereRaw('MATCH (school_name, degree, result) AGAINST (?)', [$job->education])
         // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [implode(',', $skills)])
         // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->description.','.$job->title])
@@ -70,7 +70,7 @@ get('test', function() {
 
 
         dd($dataUsers, $data);
-});
+});*/
 
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
@@ -86,7 +86,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
     get('user/delete/{id}', ['as' => 'admin.user.delete', 'uses' => 'UsersController@destroy']);
     
-    // post('user/answer/{id}', ['as' => 'admin.user.post.answer', 'uses' => 'UsersController@postAnswer']);
     /**
      * Template Route
      */
@@ -188,7 +187,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
-    // get('market/search', 'MarketPlacesController@search');
     
     /**
      * Cart Route

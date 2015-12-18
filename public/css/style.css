@@ -707,7 +707,12 @@ p.full-name {
   display: none;
   position: fixed;
   z-index: 99999999;
-  background: #dedede;
+  background: #fff;
+  height: 100%;
+  top: 0;
+}
+#loading img{
+  margin-top: 20%;
 }
 .display {
   width: 20%;

@@ -13,7 +13,7 @@ class AddSectionColumnForTemplateMarkets extends Migration
     public function up()
     {
         Schema::table('template_markets', function($table) {
-            $table->json('section')->after('content')->nullable();
+            $table->longText('section')->after('content')->nullable();
         });
     }
 

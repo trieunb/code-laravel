@@ -35,11 +35,17 @@
             width: 100% !important;
             height: 200px !important;
         }
+        .mobile{
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
-
+    <div id="loading" class="mobile">
+        <img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
+    </div>
 <main class="mobile">
+
     <div class="fw box-title">
         <div class="container">
             <div class="row">
@@ -114,6 +120,8 @@
                     {!! $template->content !!}
                 </div>
             </div>
+        <br>
+        <br>
         <div class="fw text-center">
             <button class="btn-trans fill edit" id="edit-template" onclick="clickEditTemplate()">
                 END EDIT MODE
@@ -147,7 +155,7 @@
 
     </div>
 
-
+     
 </main>
 
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
@@ -263,10 +271,10 @@
 
                                 $('#content div[lang='+section+']').html(temp);
                         } else {
-                            if (parrentNode.innerHTML.indexOf(replace) != -1) {
-                                var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
-                                parrentNode.innerHTML = replaceContent;
-                            }
+                            // if (parrentNode.innerHTML.indexOf(replace) != -1) {
+                            //     var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+                            //     parrentNode.innerHTML = replaceContent;
+                            // }
                             if (parrentNode.innerHTML == replace) {
                                 var replaceContent = $(parrentNode).html().replace(replace, $('select option:selected').val());
                                 parrentNode.innerHTML = replaceContent;

@@ -58,6 +58,7 @@ if (!function_exists('convertPDFToIMG')) {
     }
 }
 
+
 if (!function_exists('createSection')) {
     /**
      * Create section for market place
@@ -82,45 +83,27 @@ if (!function_exists('createSection')) {
                 foreach ($html->find($section) as $key => $e) {
                     if ($key != 0) {
                         $contentProfile .= '<br>'.$e->innertext;
-                        $content = preg_replace('/\t|\n|\r+/', '' ,str_replace($e->outertext, '', $str));
+
+                        $content = str_replace($e->outertext, '', $str);
                         $str = $content;
                     }
                 }
-               
+
                 foreach ($html->find($section) as $k => $e) {
-
                     if ($k == 0) {
-
                         $contentProfile = $e->innertext.$contentProfile;
                         $outerCurrent = $e->outertext;
-                          
                         // $e->{'contentediable'} = 'true';
                         // $outer = str_replace($outerCurrent, $e->outertext, $str);
 
-                        if (array_key_exists('contenteditable', $e->attr)) {
-                            unset($e->attr['contenteditable']);
-                        }
+                        $content = str_replace($e->outertext,'<div contenteditable="true" lang="'.$class.'"">'.$contentProfile .'</div>', $str);
 
-                        $attrs = '';
-                        if (count($e->attr) > 0) {
-                            foreach ($e->attr as $name => $attr) {
-                                if ($name != 'lang')
-                                    $attrs .= $name.'= "'.$attr.'" ';
-                            }
-                        }
-                       /* if ($section == 'div[lang=education]')
-                            dd($e->outertext);*/
-                        $content = str_replace($e->outertext,'<div '.$attrs.' contenteditable="true" lang="'.$class.'"">'.$contentProfile .'</div>', $str);
+                        $tmp[$class] = $section != 'photo'
+                            ? '<div contenteditable="true" lang="'.$class.'">'.$contentProfile .'</div>'
+                            : '<div  onclick="eventChangeClick()" lang="'.$class.'">'.$contentProfile .'</div>';
+                        $tmp['content'] = $content;
 
-                        $tmp[$class] = $section != 'div[lang=photo]'
-                            ? '<div '.$attrs.' contenteditable="true" lang="'.$class.'">'.$contentProfile .'</div>'
-                            : '<div '.$attrs.' onclick="eventChangeClick()" lang="'.$class.'">'.$contentProfile .'</div>';
-
-                        $tmp['content'] = preg_replace('/\t|\n|\r+/', '', $content);
-                      /*  if ($section == 'div[lang=education]')
-                            dd($tmp['content']);*/
                     }
-
                 }
 
                 unset($sections[$index]);
@@ -158,25 +141,11 @@ if (!function_exists('editSection')) {
 
         $currentSectionString = '';
 
-        $replace = '';
-        
-
+        $replace = $section != 'photo'
+            ? '<div lang="'.$section.'">'
+            : '<div lang="'.$section.'" onclick="eventChangeClick()">';
 
         foreach ($html_request->find('div[lang='.$section.']') as $key => $element) {
-            if (array_key_exists('contenteditable', $element->attr)) {
-                unset($element->attr['contenteditable']);
-            }
-
-            $attrs = '';
-            if (count($element->attr) > 0) {
-                foreach ($element->attr as $name => $attr) {
-                    $attrs .= $name.'= "'.$attr.'" ';
-                }
-            }
-            $replace .= $section != 'photo'
-            ? '<div '.$attrs.' lang="'.$section.'">'
-            : '<div '.$attrs.' lang="'.$section.'" onclick="eventChangeClick()">';
-
             $replace .= $key == count($html_request->find('div[lang='.$section.']')) - 1 
                 ? $element->innertext
                 : $element->innertext.'<br>';

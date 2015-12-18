@@ -29,6 +29,9 @@
             width: 100% !important;
             height: 200px !important;
         }
+        .mobile{
+            overflow: hidden;
+        }
     </style>
     @stop
 
@@ -155,8 +158,8 @@
                     });
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
+                       
                         if ($(parrentNode).html() == $('#content div').html()) {
-                            console.log('1');
                             if ($('#content div').html().indexOf(replace) != -1) {
                                 var answer = confirm('This option will delete your text style!');
 
@@ -182,6 +185,10 @@
                                 $('#content div').html(replaceContent);
                             }
                         }
+                        $(this).find('option').removeAttr('disabled');
+                        $(this).find('option').removeAttr('selected'); 
+                        $('select option:eq(0)').attr('selected');
+                        $('select option:eq(0)').attr('disabled', true);
                     });
                 }
         } else {
@@ -234,6 +241,7 @@
                     });
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
+                        
                         if ($(parrentNode).html() == $('#content div').html()) {
                             console.log('1');
                             if ($('#content div').html().indexOf(replace) != -1) {
@@ -247,12 +255,12 @@
                                 $('#content').html(temp);
                             }
                         } else {
-                            var check = 0;
+                           /* var check = 0;
                             if ($(parrentNode).html().indexOf(replace) != -1) {
                                 var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
                                 parrentNode.innerHTML = replaceContent;
                                 check = 1;
-                            } 
+                            } */
                             if (parrentNode.innerHTML == replace) {
                                 replaceContent = $(parrentNode).html().replace(replace, $('select option:selected').val());
                                  parrentNode.innerHTML = replaceContent;
@@ -261,6 +269,10 @@
                                 $('#content div').html(replaceContent);
                             }
                         }
+                        $(this).find('option').removeAttr('disabled');
+                        $(this).find('option').removeAttr('selected'); 
+                        $('select option:eq(0)').attr('selected');
+                        $('select option:eq(0)').attr('disabled', true);
                     });
                 }
             });
