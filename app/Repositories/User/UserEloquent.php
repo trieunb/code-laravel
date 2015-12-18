@@ -11,6 +11,10 @@ use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
+use Khill\Lavacharts\Lavacharts;
+use Lava;
+use App\Models\TemplateMarket;
+use DB;
 
 
 
@@ -455,5 +459,96 @@ class UserEloquent extends AbstractRepository implements UserInterface
         
         $this->model->update(['token' => $token], $user->id);
         return \Auth::login($user);
+    }
+
+
+    public function reportUserMonth()
+    {
+        $lava = new Lavacharts;
+        $userTable = $lava->DataTable();
+
+        $userTable->addDateColumn('Year')
+                    ->addNumberColumn('Users');
+
+        $users = User::select(DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))->groupBy('month')->orderBy('month', 'ASC')->get();
+
+        $count = 0;
+        foreach ($users as $key => $user) {
+            $count = $count + $user->count;
+            $rowData = array(
+                date_format($user->created_at, 'Y-m'), $count
+            );
+            $userTable->addRow($rowData);
+        }
+
+        $chart_month = $lava->LineChart('UserChart')
+                    ->setOptions([
+                        'datatable' => $userTable
+                    ]);
+        return $lava->render('LineChart', 'UserChart', 'chart_month', true);
+    }
+
+    public function reportUserGender()
+    {
+        $lavaPieChart = new Lavacharts;
+        $userTable = $lavaPieChart->DataTable();
+
+        $userTable->addStringColumn('Year')
+                    ->addNumberColumn('Users');
+        $user_gender = User::select('*', DB::raw('COUNT(id) AS count'))
+                      ->whereNotNull('gender')
+                      ->groupBy('gender')
+                      ->orderBy('created_at', 'ASC')
+                      ->get();
+        $user_gendernull = User::select('*', DB::raw('COUNT(id) AS count'))
+                      ->whereNull('gender')
+                      ->groupBy('gender')
+                      ->first();
+        $user = User::count();
+
+        foreach ($user_gender as $value) {
+            $gender = ''; 
+            switch ($value->gender) {
+                case 0:
+                    $gender = 'Male';
+                    break;
+                case 1:
+                    $gender = 'Female';
+                    break;
+                case 2:
+                    $gender = 'Other';
+                    break;
+                
+                default:
+                    $gender = 'Other';
+                    break;
+            }
+            
+            if ($value->gender == 2) $count = $value->count + $user_gendernull->count; 
+            else $count =  $value->count;         
+            $rowData = array(
+                $gender, $count/count($user)
+            );
+            $userTable->addRow($rowData);
+        }
+
+        $chart_gender = $lavaPieChart->PieChart('UserChart')
+                    ->setOptions([
+                        'datatable' => $userTable,
+                        'is3D' => true,
+                        // 'slices' => array(
+                          //   $lavaPieChart->Slice(array(
+                          //     'offset' => 0.2
+                          //   )),
+                          //   $lavaPieChart->Slice(array(
+                          //     'offset' => 0.25
+                          //   )),
+                          //   $lavaPieChart->Slice(array(
+                          //     'offset' => 0.3
+                          //   ))
+                          // ),
+                        'width' => 988
+                    ]);
+        return $lavaPieChart->render('PieChart', 'UserChart', 'chart-gender', true);
     }
 }
