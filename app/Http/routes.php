@@ -116,7 +116,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     /**
      * Report
      */
-    get('report/user', ['as' => 'admin.report.user', 'uses' => 'ReportController@reportUser']);
+    get('report/user', ['as' => 'admin.report.user.month', 'uses' => 'ReportController@reportUserByMonth']);
     get('report/template', ['as' => 'admin.report.template', 'uses' => 'ReportController@reportTemplate']);
 });
 

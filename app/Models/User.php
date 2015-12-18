@@ -13,6 +13,7 @@ use App\Models\TemplateMarket;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
 use App\Models\UserWorkHistory;
+use App\Models\Device;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 use Bican\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Auth\Authenticatable;
@@ -236,5 +237,18 @@ class User extends Model implements AuthenticatableContract,
     public function roles()
     {
         return $this->belongsToMany('App\Models\Role');
+    }
+
+    public function device()
+    {
+        return $this->hasOne(Device::class);
+    }
+
+    public function getAgeAttribute() {
+    // do an age calculation on $this->dateOfBirth here
+        $age = ($this->dob != "0000-00-00")
+            ? Carbon::createFromFormat("Y-m-d", $this->dob)->age
+            : null;
+        return $age;
     }
 }
