@@ -26,6 +26,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Laracasts\Presenter\PresentableTrait;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract,                                    
                                     CanResetPasswordContract,
