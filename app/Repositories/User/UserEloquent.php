@@ -493,7 +493,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $lavaPieChart = new Lavacharts;
         $userTable = $lavaPieChart->DataTable();
 
-        $userTable->addStringColumn('Year')
+        $userTable->addStringColumn('Gender')
                     ->addNumberColumn('Users');
         $user_gender = User::select('*', DB::raw('COUNT(id) AS count'))
                       ->whereNotNull('gender')
@@ -536,19 +536,52 @@ class UserEloquent extends AbstractRepository implements UserInterface
                     ->setOptions([
                         'datatable' => $userTable,
                         'is3D' => true,
-                        // 'slices' => array(
-                          //   $lavaPieChart->Slice(array(
-                          //     'offset' => 0.2
-                          //   )),
-                          //   $lavaPieChart->Slice(array(
-                          //     'offset' => 0.25
-                          //   )),
-                          //   $lavaPieChart->Slice(array(
-                          //     'offset' => 0.3
-                          //   ))
-                          // ),
-                        'width' => 988
+                        'width' => 988,
+                        'height' => 350
                     ]);
         return $lavaPieChart->render('PieChart', 'UserChart', 'chart-gender', true);
+    }
+
+    public function reportUserAge()
+    {
+        $lava = new Lavacharts;
+        $userTable = $lava->DataTable();
+        $userTable->addStringColumn('Age')
+                    ->addNumberColumn('Users');
+
+        $users = User::get();
+        foreach ($users as $key => $user) {
+            $age[] = $user->getAgeAttribute();
+        }
+        $group1 = [];
+        $group2 = [];
+        $group3 = [];
+        foreach ($age as $key => $value) {
+            if ($value < 20) $group1[] = $value;
+            if ( $value >= 20 && $value < 30 ) $group2[] = $value;
+            if ($value > 30) $group3[] = $value;
+        }
+        $group = [
+            'Under 20 olds' => $group1,
+            '20 - 30 olds' => $group2,
+            'above 30 olds' => $group3
+        ];
+        // return json_encode($group);
+        foreach ($group as $key => $value) {
+            // return $value[$key];
+            $rowData = array(
+                $key, count($value)
+            );
+            $userTable->addRow($rowData);
+        }
+
+        $chart_age = $lava->PieChart('UserChart')
+                    ->setOptions([
+                        'datatable' => $userTable,
+                        'is3D' => true,
+                        'width' => 988,
+                        'height' => 350
+                    ]);
+        return $lava->render('PieChart', 'UserChart', 'chart_age', true);
     }
 }
