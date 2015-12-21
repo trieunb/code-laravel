@@ -738,3 +738,34 @@ p.full-name {
 .bs-example{
     margin: 20px;
   }
+#note-report{
+    list-style: none;
+    
+}
+#note-report li span {
+    height: 15px;
+    width: 20px;
+    float: left;
+}
+#note-report li:first-child span{
+    background: rgba(151,187,205,0.5);
+}
+#note-report li:last-child span{
+    background: rgba(220,220,220,0.75);
+}
+.note-report-user li:last-child span {
+    background : #46bfbd !important;
+}
+.note-report-user li:nth-child(2) span {
+    background : #ff5a5e !important;
+}
+
+.note-report-user li:first-child span {
+    background : #ffc870 !important;
+}
+.note-age li:first-child span {
+    background: #46bfbd !important;
+}
+.note-age li:last-child span {
+    background: #ffc870 !important;
+}

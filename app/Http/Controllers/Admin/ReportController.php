@@ -30,26 +30,24 @@ class ReportController extends Controller
 
     public function reportUserByMonth(Request $request)
     {
-
-        $users = User::select('*', 
-            DB::raw('YEAR(created_at) as year'), 
-            DB::raw('MONTH(created_at) as month'), 
-            DB::raw('COUNT(id) AS count'))
-        ->groupBy('year')
-        ->groupBy('month')
-        ->orderBy('created_at', 'ASC')
-        ->get();
+        $users = $this->user->reportUserMonth($request->get('year'));
         $count = 0;
+        $lables = [];
+        $count_arr = [];
         foreach ($users as $key => $user) {
-            $lables[] = date_format($user->created_at, 'Y-m');
+            $dateObj = \DateTime::createFromFormat('!m', $user['month']);
+            $lables[] = $dateObj->format('F');
             $count = $count + $user->count;
             $count_arr[] = $count;
         }
+
         $chart_gender = $this->user->reportUserGender();
         $chart_age = $this->user->reportUserAge();
         $chart_region = $this->user->reportUserRegion();
+
         return view('admin.report.report_user', 
-            compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region'));
+            compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region'))
+             ->with('year' , $request->get('year'));
     }
 
     public function reportUserByGender(Request $request)
