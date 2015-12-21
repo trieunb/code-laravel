@@ -7,6 +7,7 @@
         <title>Login</title>
         <!-- Bootstrap CSS -->
         <link href="{{  asset('css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{  asset('assets/css/OpenSans.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/style.css')}}">
     </head>
     <body>
@@ -16,9 +17,9 @@
                 <div class="col-sm-6 col-md-4 col-md-offset-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <strong> Sign in</strong>
+                            <h4> Login</h4>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body box-login">
                             <form role="form" action="{{route('admin.login')}}" method="POST">
                                 {!! csrf_field() !!}
                                 <fieldset>
@@ -31,28 +32,20 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-10  col-md-offset-1 ">
                                             <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="glyphicon glyphicon-user"></i>
-                                                    </span> 
-                                                    <input class="form-control" placeholder="Email" name="email" type="email" autofocus>
-                                                </div>
+                                                <label>Email address</label>
+                                                <input type="email" name="email" class="form-control" autofocus>
                                             </div>
                                             <div class="form-group">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="glyphicon glyphicon-lock"></i>
-                                                    </span>
-                                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
-                                                </div>
+                                                <label>Password</label>
+                                                <input type="password" name="password" class="form-control">
                                             </div>
+                                            <div class="checkbox">
+                                               <label>
+                                                 <input type="checkbox" name="remember"> Remember Me
+                                               </label>
+                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label">
-                                                    <input type="checkbox" name="remember"><small>Remember Me</small>
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Sign in">
+                                                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Login">
                                             </div>
                                         </div>
                                     </div>
