@@ -94,6 +94,7 @@ Report User
         
         <div class="title-char text-center"><h3>Registered users by test skill</h3></div>
     </div>
+
 </div>
 @endsection
 @section('script')
@@ -125,6 +126,7 @@ Report User
         }
         ]
     };
+    console.log(chart);
     var register_report = new Chart(ctx).Line(chart, {
         bezierCurve : false,
         scaleGridLineColor : "rgba(0,0,0,.05)",
@@ -138,45 +140,30 @@ Report User
         scaleGridLineColor : "rgba(0,0,0,.05)",
         responsive: true
     };
-    var data = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90]
-        }
-        ]
-    };
+
 
     var ctx_1 = document.getElementById('report-gender').getContext('2d');
-    var responseGender =   {!! $chart_gender !!};
-
+    var responseGender =   {!! json_encode($chart_gender) !!};
+    console.log(responseGender.Female);
     var data_gender = [
     {
-        value: responseGender[0].count,
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: responseGender[0].gender_user
-    },
-    {
-        value: responseGender[1].count,
+        value: responseGender.Male,
         color:"#46BFBD",
         highlight: "#5AD3D1",
-        label: responseGender[1].gender_user
+        label:  Object.keys(responseGender)[0]
     },
     {
-        value: responseGender[2].count,
+        value: responseGender.Female,
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+       
+        label:  Object.keys(responseGender)[1]
+    },
+    {
+        value: responseGender.Other,
         color:"#FDB45C",
         highlight: "#FFC870",
-        label: responseGender[2].gender_user
+        label: Object.keys(responseGender)[2]
     }
     ];
     var myPieChart;

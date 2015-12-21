@@ -479,7 +479,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function reportUserGender()
     {
-        return $this->model->select(DB::raw('COUNT(*) as `count`,
+        $gender = ['Male' => 0, 'Female' => 0, 'Other' => 0];
+        $users = $this->model->select(DB::raw('COUNT(*) as `count`,
             CASE WHEN gender = 0 THEN "Male"
                WHEN gender = 1 THEN "Female"
                WHEN gender = 2 OR gender is null THEN "Other"     
@@ -487,6 +488,15 @@ class UserEloquent extends AbstractRepository implements UserInterface
             )
             ->groupBy('gender_user')
             ->get();
+        $response = [];
+
+        foreach ($users as $user) {
+            $response[$user->gender_user] = (int)$user->count;
+        }
+
+        $genderDiff = array_diff_key($gender, $response);
+
+        return array_merge($response, $genderDiff);
     }
 
     public function reportUserAge()
