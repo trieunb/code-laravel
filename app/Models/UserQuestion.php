@@ -28,5 +28,9 @@ class UserQuestion extends Model
         'point'
     ];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
     
 }

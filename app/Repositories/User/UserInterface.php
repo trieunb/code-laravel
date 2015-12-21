@@ -104,4 +104,10 @@ interface UserInterface extends Repository
 	 * Report user by gender
 	 */
 	public function reportUserGender();
+
+	/**
+	 * Report user by region
+	 */
+	public function reportUserRegion();
+
 }

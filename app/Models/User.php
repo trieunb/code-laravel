@@ -12,6 +12,7 @@ use App\Models\Template;
 use App\Models\TemplateMarket;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
+use App\Models\UserQuestion;
 use App\Models\UserWorkHistory;
 use App\Models\Device;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
@@ -194,6 +195,12 @@ class User extends Model implements AuthenticatableContract,
     public function questions()
     {
         return $this->belongsToMany(Question::class,'user_questions', 'user_id', 'question_id')->withPivot('point', 'content');
+    }
+
+
+    public function user_questions()
+    {
+        return $this->hasMany(UserQuestion::class);
     }
 
     /**
