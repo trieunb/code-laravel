@@ -3,7 +3,7 @@
 return [
     'pdf' => [
         'enabled' => true,
-        'binary' => '/usr/bin/wkhtmltopdf',
+        'binary' => env('WKHTMLTOPDF_BIN_PATH', '/usr/bin/wkhtmltopdf'),
         'timeout' => false,
         'options' => [],
     ],
