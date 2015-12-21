@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helper\BrainTreeSKD;
+use App\Services\Braintree\BrainTreeSKD;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\Invoice\InvoiceInterface;
