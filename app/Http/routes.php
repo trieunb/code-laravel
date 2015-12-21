@@ -16,35 +16,44 @@ get('pdf', function() {
        $snappy->generateFromHtml( $this->content, public_path('abc.pdf'));
 });
 
-get('test', function() {
+/*get('test', function() {
     $job = \App\JobTest::find(1);
-
-    dd(\Auth::check());
-    if ( ! \Auth::check()) {
-        \Auth::login(\App\Models\User::find(304));
-        return redirect('test');
-    } else dd(\Auth::check());
-    $skills = []; 
+     $skills = []; 
     foreach ($job->skill as $skill)
         $skills[] = $skill['skill'];
-
     $userIds = [];
+    $queryWork = \DB::table('user_work_histories')->select('user_id')
+        ->WhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->job_description.','.$job->job_title]);
+    $querySkill = \DB::table('user_skills')->select('user_id')
+        ->whereRaw('MATCH (skill_name, experience) AGAINST (?)', [implode(',', $skills)]);
     $data = \DB::table('users')
-        ->selectRaw('DISTINCT users.id')
-        ->join('user_skills', 'user_skills.user_id', '=', 'users.id')
+        ->selectRaw('id')
         // ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
         // ->join('user_work_histories', 'user_work_histories.user_id', '=', 'users.id')
-        ->whereRaw('MATCH (skill_name, experience) AGAINST (?)', [implode(',', $skills)])
+        ->whereIn('id', function($query) use($job, $skills, $last_query) {
+            $query->select('user_id')
+                ->from('user_skills')
+                ->whereRaw('MATCH (skill_name, experience) AGAINST (?) UNION (SELECT user_id FROM user_work_histories '.
+                    'MATCH (company, job_title, job_description) AGAINST(?))', [implode(',', $skills), $job->job_description.','.$job->job_title]);
+
+        })
+        
+        ->WhereIn('users.id', function($query) use ($job){
+            $query->select('user_id')
+                ->from('user_work_histories')
+                ->WhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->job_description.','.$job->job_title]);
+        })
         // ->orWhereRaw('MATCH (school_name, degree, result) AGAINST (?)', [$job->education])
         // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [implode(',', $skills)])
         // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->description.','.$job->title])
-        ->get();
+        ->toSql();
+        $t =$job->job_description.','.$job->job_title;
+        dd($data, $t);
     $dataUsers = [];
-
     foreach ($data as $value) {
         $userIds[] = $value->id;
     }
-    
+    dd($data);
     $data = \DB::table('users')
         ->selectRaw('DISTINCT users.id')
         ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
@@ -61,7 +70,7 @@ get('test', function() {
 
 
         dd($dataUsers, $data);
-});
+});*/
 
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
@@ -77,7 +86,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
     get('user/delete/{id}', ['as' => 'admin.user.delete', 'uses' => 'UsersController@destroy']);
     
-    // post('user/answer/{id}', ['as' => 'admin.user.post.answer', 'uses' => 'UsersController@postAnswer']);
     /**
      * Template Route
      */
@@ -108,7 +116,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     /**
      * Report
      */
-    get('report/user', ['as' => 'admin.report.user', 'uses' => 'ReportController@reportUser']);
+    get('report/user', ['as' => 'admin.report.user.month', 'uses' => 'ReportController@reportUserByMonth']);
     get('report/template', ['as' => 'admin.report.template', 'uses' => 'ReportController@reportTemplate']);
 });
 
@@ -179,7 +187,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
-    // get('market/search', 'MarketPlacesController@search');
     
     /**
      * Cart Route

@@ -13,6 +13,12 @@
       $(cls).attr("contentEditable", true);
   }
   function clickEditTemplate() {
+      var isBusy = false;
+
+      if (isBusy) return;
+
+      isBusy = true;
+      $("#loading").show();
       var url = window.location.href;
       var token = url.split('=');
       var content = $('#content').html();
@@ -27,7 +33,11 @@
         success : function(result) {
           if (result.status == true) {
             alert('Edit template successfully');
+            $("#loading").hide();
+            isBusy = false;
           }
         }
+      }).always(function() {
+          isBusy = false;
       });
   }

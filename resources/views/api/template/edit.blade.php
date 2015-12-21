@@ -29,6 +29,9 @@
             width: 100% !important;
             height: 200px !important;
         }
+        .mobile{
+            overflow: hidden;
+        }
     </style>
     @stop
 
@@ -38,21 +41,19 @@
         <img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
     </div>
     <div class="row">
-        <!-- 
-        @if ($section == 'photo')
-            <button onClick="changeAvatar()" class="btn btn-primary pull-right" style="margin-bottom: 20px">Upload</button>
-        @endif -->
-        <form id="upload">
-            <div id="content"  class="col-md-12" contenteditable="true">
+        <div class="col-xs-12">
+            <form id="upload">
+                <div id="content"  class="col-md-12" contenteditable="true">
 
-                @if ($section != 'availability')
-                    {!! $content !!}
-                @else
-                    {!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
-                @endif
+                    @if ($section != 'availability')
+                        {!! $content !!}
+                    @else
+                        {!! Form::select('availability', $setting, $template->user->status, ['class' => 'form-control']) !!}
+                    @endif
 
-            </div>
-        </form>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="col-md-12" id="buttons">
         <ul class="dropdown-menu" aria-labelledby="dLabel" id="choose-type">
@@ -157,8 +158,8 @@
                     });
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
+                       
                         if ($(parrentNode).html() == $('#content div').html()) {
-                            console.log('1');
                             if ($('#content div').html().indexOf(replace) != -1) {
                                 var answer = confirm('This option will delete your text style!');
 
@@ -184,6 +185,10 @@
                                 $('#content div').html(replaceContent);
                             }
                         }
+                        $(this).find('option').removeAttr('disabled');
+                        $(this).find('option').removeAttr('selected'); 
+                        $('select option:eq(0)').attr('selected');
+                        $('select option:eq(0)').attr('disabled', true);
                     });
                 }
         } else {
@@ -236,6 +241,7 @@
                     });
                     $(document).off('change', 'select').on('change', 'select', function () {
                         $('#buttons').hide();
+                        
                         if ($(parrentNode).html() == $('#content div').html()) {
                             console.log('1');
                             if ($('#content div').html().indexOf(replace) != -1) {
@@ -249,12 +255,12 @@
                                 $('#content').html(temp);
                             }
                         } else {
-                            var check = 0;
+                           /* var check = 0;
                             if ($(parrentNode).html().indexOf(replace) != -1) {
                                 var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
                                 parrentNode.innerHTML = replaceContent;
                                 check = 1;
-                            } 
+                            } */
                             if (parrentNode.innerHTML == replace) {
                                 replaceContent = $(parrentNode).html().replace(replace, $('select option:selected').val());
                                  parrentNode.innerHTML = replaceContent;
@@ -263,6 +269,10 @@
                                 $('#content div').html(replaceContent);
                             }
                         }
+                        $(this).find('option').removeAttr('disabled');
+                        $(this).find('option').removeAttr('selected'); 
+                        $('select option:eq(0)').attr('selected');
+                        $('select option:eq(0)').attr('disabled', true);
                     });
                 }
             });

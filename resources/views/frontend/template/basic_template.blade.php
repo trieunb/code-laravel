@@ -62,7 +62,6 @@
                 border-bottom: 3px solid #D8D8D8;">
                 <ul style="list-style:none">
                     <li>
-
                         <label style="font-weight:600">Age:</label> {{ $age == '0' || $age == '' ? 'N/A' : $age}}
                     </li>
                     <li></h1>
@@ -145,10 +144,23 @@
             @foreach($user_info->questions as $sk)
             <ul style="list-style:none">
                 <li>
-                    <span><label style="font-weight:600">Name: </label> {{$sk->pivot['content']}}</span>
+                    <span>{{$sk->pivot['content']}}</span>
                 </li>
                 <li>
-                    <span><label style="font-weight:600">Point: </label> {{$sk->pivot['point']}}</span>
+                    <input type="range" min="10" max="1000" step="10" value="{{ $sk->pivot['point'] }}" data-rangeslider="" 
+                    style="position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0;">
+                    <div class="rangeslider rangeslider--horizontal" id="js-rangeslider-5"
+                        style="height: 5px;
+                        width: 100%;
+                        background: #e6e6e6;
+                        position: relative;">
+                        <div class="rangeslider__fill"
+                        style="width: {{ $sk->pivot['point']*10 }}%;
+                        background: #FF0000;
+                        position: absolute;
+                        top: 
+                        0;height: 100%;"></div>
+                    </div>
                 </li>
             </ul>
             <hr>

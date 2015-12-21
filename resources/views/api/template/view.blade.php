@@ -5,6 +5,9 @@
   .border-section{
     border: 2px solid #bcbcbc;
   }
+    .mobile{
+            overflow: hidden;
+        }
 </style>
 @endsection
 @section('content')
@@ -16,6 +19,9 @@
 <script>
 	$(document).ready(function() {
 		$('div').removeAttr('contenteditable');
+		$('table').removeAttr('width');
+		$('table').css('width', 'auto');
+		$('table').css('margin', 'auto');
 	});
 </script>
 @endsection

@@ -103,12 +103,10 @@ return false;
 }
 
 
-
     // TinyMCE init
     tinymce.init({
       selector: "#content",
       height : 500,
-        // plugins: "table,code, image, link, media",
         relative_urls: false,
         remove_script_host: false,
         style_formats: [
@@ -129,11 +127,11 @@ return false;
         { title: 'Reference', block: 'div', attributes: {lang: 'reference'}, styles: { color: '#0000' } },
         { title: 'Skill', block: 'div', attributes:{lang: 'skill'}, styles: { color: '#0000' } },
         { title: 'Work Experience', block: 'div', attributes:{lang: 'work'}, styles: { color: '#0000' } }
-        ],block_formats: 'Paragraph=div;Header 1=h1;Header 2=h2;Header 3=h3',
+        ],
         // visualblocks_default_state: true,
         // end_container_on_empty_block: true,
         plugins: [
-        " image,preview,hr,wordcount,code,table,colorpicker,textcolor"
+        " image,preview,hr,code,table,colorpicker,textcolor"
         ],
         toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
 

@@ -11,6 +11,10 @@ use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
+use Khill\Lavacharts\Lavacharts;
+use Lava;
+use App\Models\TemplateMarket;
+use DB;
 
 
 
@@ -456,5 +460,87 @@ class UserEloquent extends AbstractRepository implements UserInterface
         
         $this->model->update(['token' => $token], $user->id);
         return \Auth::login($user);
+    }
+
+    /**
+     * Report user by month
+     */
+    public function reportUserMonth($year = null)
+    {
+        $user = $this->model->select('*', 
+                    DB::raw('MONTH(created_at) as month'), 
+                    DB::raw('COUNT(id) AS count'))
+                ->groupBy('month')
+                ->orderBy('created_at', 'ASC');
+        return is_null($year)
+            ? $user->get()
+            : $user->whereYear('created_at', '=', $year)->get();
+    }
+
+    public function reportUserGender()
+    {
+        return $this->model->select(DB::raw('COUNT(*) as `count`,
+            CASE WHEN gender = 0 THEN "Male"
+               WHEN gender = 1 THEN "Female"
+               WHEN gender = 2 OR gender is null THEN "Other"     
+               END as "gender_user"')
+            )
+            ->groupBy('gender_user')
+            ->get();
+    }
+
+    public function reportUserAge()
+    {
+        return $this->model->select(DB::raw('COUNT(*) as count, CASE 
+                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds" 
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Above 30 olds"
+                END as "group_age"'
+            ))
+            ->groupBy('group_age')
+            ->get();
+    }
+
+    public function reportUserRegion()
+    {
+        $lava = new Lavacharts;
+        $userTable = $lava->DataTable();
+        $userTable->addStringColumn('Region')
+                    ->addNumberColumn('Users');
+
+        $users = User::select('*', DB::raw('COUNT(id) as count'))
+                ->groupBy('country')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        $user_count = User::count();
+        foreach ($users as  $user) {
+            $region = '';
+            switch ($user->country) {
+                case '':
+                    $region = 'Other';
+                    break;
+                case $user->country:
+                    $region = $user->country;
+                    break;
+                default:
+                    $region = 'Other';
+                    break;
+            }
+
+            $rowData = array(
+                $region, $user->count/count($user_count)
+            );
+            $userTable->addRow($rowData);
+
+        }
+
+        $chart_region = $lava->PieChart('UserChart')
+                    ->setOptions([
+                        'datatable' => $userTable,
+                        'is3D' => true,
+                        'width' => 988,
+                        'height' => 350
+                    ]);
+        return $lava->render('PieChart', 'UserChart', 'chart_region', true);
     }
 }

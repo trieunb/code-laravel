@@ -18,4 +18,10 @@ interface InvoiceInterface extends Repository
 	 * @return bool     
 	 */
 	public function paid($invoice_id);
+
+	/**
+	 * Report for Admin
+	 * @return mixed
+	 */
+	public function report();
 }

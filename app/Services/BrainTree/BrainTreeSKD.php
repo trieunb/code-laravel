@@ -1,12 +1,13 @@
 <?php
-namespace App\Helper;
+namespace App\Services\Braintree;
 
+use App\Contracts\BraintreeContract;
 use Braintree\ClientToken;
 use Braintree\Customer;
-use Braintree\Transaction;
 use Braintree\Exception\NotFound;
+use Braintree\Transaction;
 
-class BrainTreeSKD
+class BrainTreeSKD implements BraintreeContract
 {
 	public static function getClientToken($user)
 	{
@@ -16,14 +17,14 @@ class BrainTreeSKD
 		$customerId = $obj->findOrCreateCustomer($user);
 
 		if ( !$customerId) return false;
-		
+
 		return ClientToken::generate(['customerId' => $customerId]);
 	}
 
 	/**
-	 * Create Customer 
-	 * @param  mixed $user 
-	 * @return int|false       
+	 * Create Customer
+	 * @param  mixed $user
+	 * @return int|false
 	 */
 	private function findOrCreateCustomer($user)
 	{
@@ -37,9 +38,9 @@ class BrainTreeSKD
 				'firstName' => $user->firstname,
 				'lastName' => $user->lastName,
 				'email' => $user->email,
-				'phone'	=> $user->mobile_phone,			
+				'phone'	=> $user->mobile_phone,
 			]);
-			
+
 			if ( ! $result->success) {
 				return false;
 			}
@@ -50,7 +51,7 @@ class BrainTreeSKD
 
 	public static function transaction(array $data)
 	{
-		if ( !isset($data['paymentMethodNonce']) || $data['paymentMethodNonce'] == "") 
+		if ( !isset($data['paymentMethodNonce']) || $data['paymentMethodNonce'] == "")
 			throw new PaymentMethodException('Payment method not valid');
 
 		$result =  Transaction::sale([
