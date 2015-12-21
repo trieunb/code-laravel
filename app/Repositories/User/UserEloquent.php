@@ -543,5 +543,4 @@ class UserEloquent extends AbstractRepository implements UserInterface
                     ]);
         return $lava->render('PieChart', 'UserChart', 'chart_region', true);
     }
-
 }

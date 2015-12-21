@@ -12,6 +12,7 @@ use App\Models\Template;
 use App\Models\TemplateMarket;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
+use App\Models\UserQuestion;
 use App\Models\UserWorkHistory;
 use App\Models\Device;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;

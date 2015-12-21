@@ -27,6 +27,4 @@ class UserQuestion extends Model
         'content',
         'point'
     ];
-
-    
 }

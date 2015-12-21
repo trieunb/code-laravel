@@ -34,6 +34,7 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
 
     /**
      * Report matrix skill 
+     * @param int $question_id
      * @return array 
      */
     public function reportSkill($question_id)

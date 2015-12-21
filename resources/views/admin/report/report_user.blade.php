@@ -40,7 +40,7 @@ Report User
     <li id="register" class="active"><a data-toggle="pill" href="#chart_month">Month</a></li>
     <li id="gender"><a data-toggle="pill" href="#chart_gender">Gender</a></li>
     <li id="age"><a data-toggle="pill" href="#chart_age">Age</a></li>
-    <li><a data-toggle="pill" href="#chart_textskill">Region</a></li>
+    <li><a data-toggle="pill" href="#chart_region">Region</a></li>
 </ul>
 <div class="tab-content">
     <div id="chart_month" class="tab-pane fade in active">
@@ -53,7 +53,7 @@ Report User
         </div>
         <div class="row">
             <div class="col-xs-4 pull-right">
-                 {!! Form::selectYear('year', 2000, 2020, is_null($year) ?  \Carbon\Carbon::now()->year : $year, ['class' => 'form-control', 'id' => 'year']) !!}
+                 {!! Form::selectYear('question', 2000, 2020, is_null($question) ?  \Carbon\Carbon::now()->year : $year, ['class' => 'form-control', 'id' => 'year']) !!}
             </div>
         </div>
         <canvas id="report-month" style="width:100%; height:300px"></canvas>
