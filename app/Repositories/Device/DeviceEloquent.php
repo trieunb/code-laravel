@@ -9,9 +9,9 @@ class DeviceEloquent extends AbstractRepository implements DeviceInterface
 {
     protected $model;
 
-    public function __construct(Device $decive)
+    public function __construct(Device $device)
     {
-        $this->model = $decive;
+        $this->model = $device;
     }
 
     public function createOrUpdateDevice($user_id, $data)
@@ -23,7 +23,7 @@ class DeviceEloquent extends AbstractRepository implements DeviceInterface
         $device->device_id = $data['device_id'];
         $device->platform = $data['device_platform'];
 
-        return $device->save(); 
+        return $device->save();
     }
 
 }

@@ -57,7 +57,7 @@ class RenderFileWhenCreateTemplateMarket extends Event
         for ($i = 0; $i < $this->pageNumb; $i++) {
             $img->readImage(public_path('pdf/'.$filename.'.pdf['.$i.']'));
             $img->setImageFormat('jpg');
-            // $img->setSize($width, $height);
+            $img->setSize($width, $height);
             $img->writeImage(public_path('images/template/'.$imageFile.'-'.$i.'.jpg'));
         }
        

@@ -13,6 +13,7 @@ class CreateUserEducationsTable extends Migration
     public function up()
     {
         Schema::create('user_educations', function(Blueprint $table) {
+            $table->engine = 'MyISAM';
             $table->increments('id');
             $table->integer('user_id');
             $table->string('school_name', 200);
