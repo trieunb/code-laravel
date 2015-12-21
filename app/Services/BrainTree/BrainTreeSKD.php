@@ -1,12 +1,13 @@
 <?php
-namespace App\Helper;
+namespace App\Services\Braintree;
 
+use App\Contract\BraintreeContract;
 use Braintree\ClientToken;
 use Braintree\Customer;
-use Braintree\Transaction;
 use Braintree\Exception\NotFound;
+use Braintree\Transaction;
 
-class BrainTreeSKD
+class BrainTreeSKD implements BraintreeContract
 {
 	public static function getClientToken($user)
 	{
