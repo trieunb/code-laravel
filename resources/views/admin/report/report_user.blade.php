@@ -41,7 +41,6 @@ Report User
     <li id="gender"><a data-toggle="pill" href="#chart_gender">Gender</a></li>
     <li id="age"><a data-toggle="pill" href="#chart_age">Age</a></li>
     <li><a data-toggle="pill" href="#chart_region">Region</a></li>
-    <li><a data-toggle="pill" href="#chart_testskill">Test Skill</a></li>
 </ul>
 <div class="tab-content">
     <div id="chart_month" class="tab-pane fade in active">
