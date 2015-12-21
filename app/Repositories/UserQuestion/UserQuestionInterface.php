@@ -12,5 +12,5 @@ interface UserQuestionInterface extends Repository
      * Report matrix skill 
      * @return array 
      */
-    public function reportSkill();
+    public function reportSkill($question_id);
 }

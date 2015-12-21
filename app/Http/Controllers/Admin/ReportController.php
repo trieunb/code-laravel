@@ -52,7 +52,7 @@ class ReportController extends Controller
         $chart_gender = $this->user->reportUserGender();
         $chart_age = $this->user->reportUserAge();
         $chart_region = $this->user->reportUserRegion();
-        dd($this->user_question->reportSkill(14));
+        
         return view('admin.report.report_user', 
             compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region'))
              ->with('year' , $request->get('year'));
