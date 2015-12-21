@@ -462,127 +462,43 @@ class UserEloquent extends AbstractRepository implements UserInterface
         return \Auth::login($user);
     }
 
-
-    public function reportUserMonth()
+    /**
+     * Report user by month
+     */
+    public function reportUserMonth($year = null)
     {
-        $lava = new Lavacharts;
-        $userTable = $lava->DataTable();
-
-        $userTable->addDateColumn('Year')
-                    ->addNumberColumn('Users');
-
-        $users = User::select(DB::raw('MONTH(created_at) as month'),DB::raw('COUNT(id) AS count'))->groupBy('month')->orderBy('month', 'ASC')->get();
-
-        $count = 0;
-        foreach ($users as $key => $user) {
-            $count = $count + $user->count;
-            $rowData = array(
-                date_format($user->created_at, 'Y-m'), $count
-            );
-            $userTable->addRow($rowData);
-        }
-
-        $chart_month = $lava->LineChart('UserChart')
-                    ->setOptions([
-                        'datatable' => $userTable
-                    ]);
-        return $lava->render('LineChart', 'UserChart', 'chart_month', true);
+        $user = $this->model->select('*', 
+                    DB::raw('MONTH(created_at) as month'), 
+                    DB::raw('COUNT(id) AS count'))
+                ->groupBy('month')
+                ->orderBy('created_at', 'ASC');
+        return is_null($year)
+            ? $user->get()
+            : $user->whereYear('created_at', '=', $year)->get();
     }
 
     public function reportUserGender()
     {
-        $lavaPieChart = new Lavacharts;
-        $userTable = $lavaPieChart->DataTable();
-
-        $userTable->addStringColumn('Gender')
-                    ->addNumberColumn('Users');
-        $user_gender = User::select('*', DB::raw('COUNT(id) AS count'))
-                      ->whereNotNull('gender')
-                      ->groupBy('gender')
-                      ->orderBy('created_at', 'DESC')
-                      ->get();
-        $user_gendernull = User::select('*', DB::raw('COUNT(id) AS count'))
-                      ->whereNull('gender')
-                      ->groupBy('gender')
-                      ->first();
-        $user = User::count();
-
-        foreach ($user_gender as $value) {
-            $gender = ''; 
-            switch ($value->gender) {
-                case 0:
-                    $gender = 'Male';
-                    break;
-                case 1:
-                    $gender = 'Female';
-                    break;
-                case 2:
-                    $gender = 'Other';
-                    break;
-                
-                default:
-                    $gender = 'Other';
-                    break;
-            }
-            
-            if ($value->gender == 2) $count = $value->count + $user_gendernull->count; 
-            else $count =  $value->count;         
-            $rowData = array(
-                $gender, $count/count($user)
-            );
-            $userTable->addRow($rowData);
-        }
-
-        $chart_gender = $lavaPieChart->PieChart('UserChart')
-                    ->setOptions([
-                        'datatable' => $userTable,
-                        'is3D' => true,
-                        'width' => 988,
-                        'height' => 350
-                    ]);
-        return $lavaPieChart->render('PieChart', 'UserChart', 'chart-gender', true);
+        return $this->model->select(DB::raw('COUNT(*) as `count`,
+            CASE WHEN gender = 0 THEN "Male"
+               WHEN gender = 1 THEN "Female"
+               WHEN gender = 2 OR gender is null THEN "Other"     
+               END as "gender_user"')
+            )
+            ->groupBy('gender_user')
+            ->get();
     }
 
     public function reportUserAge()
     {
-        $lava = new Lavacharts;
-        $userTable = $lava->DataTable();
-        $userTable->addStringColumn('Age')
-                    ->addNumberColumn('Users');
-
-        $users = User::get();
-        foreach ($users as $key => $user) {
-            $age[] = $user->getAgeAttribute();
-        }
-        $group1 = [];
-        $group2 = [];
-        $group3 = [];
-        foreach ($age as $key => $value) {
-            if ($value < 20) $group1[] = $value;
-            if ( $value >= 20 && $value < 30 ) $group2[] = $value;
-            if ($value > 30) $group3[] = $value;
-        }
-        $group = [
-            'Under 20 olds' => $group1,
-            '20 - 30 olds' => $group2,
-            'above 30 olds' => $group3
-        ];
-
-        foreach ($group as $key => $value) {
-            $rowData = array(
-                $key, count($value)
-            );
-            $userTable->addRow($rowData);
-        }
-
-        $chart_age = $lava->PieChart('UserChart')
-                    ->setOptions([
-                        'datatable' => $userTable,
-                        'is3D' => true,
-                        'width' => 988,
-                        'height' => 350
-                    ]);
-        return $lava->render('PieChart', 'UserChart', 'chart_age', true);
+        return $this->model->select(DB::raw('COUNT(*) as count, CASE 
+                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds" 
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Above 30 olds"
+                END as "group_age"'
+            ))
+            ->groupBy('group_age')
+            ->get();
     }
 
     public function reportUserRegion()

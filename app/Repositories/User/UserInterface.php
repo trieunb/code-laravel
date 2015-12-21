@@ -109,4 +109,5 @@ interface UserInterface extends Repository
 	 * Report user by region
 	 */
 	public function reportUserRegion();
+
 }

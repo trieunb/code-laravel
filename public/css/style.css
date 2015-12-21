@@ -744,7 +744,11 @@ p.full-name {
   }
 #note-report{
     list-style: none;
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> 54aaed0c880b9e39218fefa057662877a5512ddd
 }
 #note-report li span {
     height: 15px;
@@ -757,3 +761,20 @@ p.full-name {
 #note-report li:last-child span{
     background: rgba(220,220,220,0.75);
 }
+.note-report-user li:last-child span {
+    background : #46bfbd !important;
+}
+.note-report-user li:nth-child(2) span {
+    background : #ff5a5e !important;
+}
+
+.note-report-user li:first-child span {
+    background : #ffc870 !important;
+}
+.note-age li:first-child span {
+    background: #46bfbd !important;
+}
+.note-age li:last-child span {
+    background: #ffc870 !important;
+}
+
