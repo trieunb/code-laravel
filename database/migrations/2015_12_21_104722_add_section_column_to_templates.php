@@ -12,7 +12,7 @@ class AddSectionColumnToTemplates extends Migration
      */
     public function up()
     {
-        Schema::table('templates', functioN($table) {
+        Schema::table('templates', function($table) {
             $table->longText('section')->after('content')->nullable();
         });
     }
