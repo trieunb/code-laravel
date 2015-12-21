@@ -9,6 +9,7 @@ use App\Models\TemplateMarket;
 use App\Models\User;
 use App\Repositories\Invoice\InvoiceInterface;
 use App\Repositories\Template\TemplateInterface;
+use App\Repositories\UserQuestion\UserQuestionInterface;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
 use DB;
@@ -23,13 +24,16 @@ class ReportController extends Controller
     private $template;
     private $user;
     private $invoice;
+    private $user_question;
 
     public function __construct(TemplateInterface $template, UserInterface $user,
-        InvoiceInterface $invoice
+        InvoiceInterface $invoice,
+        UserQuestionInterface $user_question
     ){
         $this->template = $template;
         $this->user = $user;
         $this->invoice = $invoice;
+        $this->user_question = $user_question;
     }
 
     public function reportUserByMonth(Request $request)
@@ -48,18 +52,12 @@ class ReportController extends Controller
         $chart_gender = $this->user->reportUserGender();
         $chart_age = $this->user->reportUserAge();
         $chart_region = $this->user->reportUserRegion();
-
+        dd($this->user_question->reportSkill(14));
         return view('admin.report.report_user', 
             compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region'))
              ->with('year' , $request->get('year'));
     }
 
-    public function reportUserByGender(Request $request)
-    {
-        $user_gender = $this->user->reportUserGender();
-
-        return view('admin.report.report_user_gender', compact('user_gender'));
-    }
 
     public function reportTemplate(Request $request)
     {

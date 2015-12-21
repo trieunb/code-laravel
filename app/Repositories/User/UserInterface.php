@@ -110,8 +110,4 @@ interface UserInterface extends Repository
 	 */
 	public function reportUserRegion();
 
-	/**
-	 * Report user by test skill matrix
-	 */
-	public function reportUserTestSkill();
 }

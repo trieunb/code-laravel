@@ -491,46 +491,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function reportUserAge()
     {
-        /*$lava = new Lavacharts;
-        $userTable = $lava->DataTable();
-        $userTable->addStringColumn('Age')
-                    ->addNumberColumn('Users');
-
-        $users = User::get();
-        foreach ($users as $key => $user) {
-            $age[] = $user->getAgeAttribute();
-        }
-        $group1 = [];
-        $group2 = [];
-        $group3 = [];
-        foreach ($age as $key => $value) {
-            if ($value < 20) $group1[] = $value;
-            if ( $value >= 20 && $value < 30 ) $group2[] = $value;
-            if ($value > 30) $group3[] = $value;
-        }
-        $group = [
-            'Under 20 olds' => $group1,
-            '20 - 30 olds' => $group2,
-            'above 30 olds' => $group3
-        ];
-        // dd($group);
-        // return json_encode($group);
-        foreach ($group as $key => $value) {
-            // return $value[$key];
-            $rowData = array(
-                $key, count($value)
-            );
-            $userTable->addRow($rowData);
-        }
-
-        $chart_age = $lava->PieChart('UserChart')
-                    ->setOptions([
-                        'datatable' => $userTable,
-                        'is3D' => true,
-                        'width' => 988,
-                        'height' => 350
-                    ]);
-        return $lava->render('PieChart', 'UserChart', 'chart_age', true);*/
         return $this->model->select(DB::raw('COUNT(*) as count, CASE 
                 WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds" 
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
@@ -584,11 +544,4 @@ class UserEloquent extends AbstractRepository implements UserInterface
         return $lava->render('PieChart', 'UserChart', 'chart_region', true);
     }
 
-    public function reportUserTestSkill()
-    {
-        $lava = new Lavacharts;
-        $userTable = $lava->DataTable();
-        $userTable->addStringColumn('Test Skill')
-                    ->addNumberColumn('Users');
-    }
 }

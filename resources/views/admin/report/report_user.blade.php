@@ -53,7 +53,7 @@ Report User
         </div>
         <div class="row">
             <div class="col-xs-4 pull-right">
-                <input class="form-control" id="datepicker" type="name" name="search" placeholder="Search for year..." value="<?php echo $year; ?>">
+                 {!! Form::selectYear('year', 2000, 2020, is_null($year) ?  \Carbon\Carbon::now()->year : $year, ['class' => 'form-control', 'id' => 'year']) !!}
             </div>
         </div>
         <canvas id="report-month" style="width:100%; height:300px"></canvas>
@@ -102,6 +102,12 @@ Report User
 <script type="text/javascript">
   $(function() {
     'use strict';
+
+    $('#year').change(function() {
+        var year = $(this).find('option:selected').val();
+        window.location.href = '/admin/report/user?year='+year;
+    });
+
     var options = {responsive: true};
     var ctx = document.getElementById('report-month').getContext('2d');
     var chart = {

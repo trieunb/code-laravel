@@ -31,4 +31,39 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
         }
         return UserQuestion::insert($data_save);
     }
+
+    /**
+     * Report matrix skill 
+     * @return array 
+     */
+    public function reportSkill($question_id)
+    {
+        $questions = \App\Models\UserQuestion::select(\DB::raw('CASE
+                    WHEN point = 1 or point = 0 or point = 2 THEN "LOW"
+                    WHEN point = 3 or point = 4 THEN "ALOW AVERAGE"
+                    WHEN point = 5 or point = 6 THEN "AVERAGE"
+                    WHEN point = 7 or point = 8 THEN "ABOVE AVERAGE"
+                    WHEN point = 9 or point = 10 THEN "HIGH"
+                    END as "level",
+                    COUNT(*) as "count"'))
+                ->where('question_id', $question_id)
+                ->groupBy(\DB::raw('CASE 
+                    WHEN point = 1 or point = 0 or point = 2 THEN "LOW"
+                        WHEN point = 3 or point = 4 THEN "ALOW AVERAGE"
+                        WHEN point = 5 or point = 6 THEN "AVERAGE"
+                        WHEN point = 7 or point = 8 THEN "ABOVE AVERAGE"
+                        WHEN point = 9 or point = 10 THEN "HIGH"
+                    END'))
+                ->get();
+        
+        $levels = ['LOW' => 0, 'ALOW AVERAGE' => 0, 'AVERAGE' => 0, 'ABOVE AVERAGE' => 0, 'HIGH' => 0];
+        $response = [];
+
+        foreach ($questions as $question) {
+            $response[$question->level] = $question->count;    
+        }
+        $diffArray = array_diff_key($levels, $response);
+        
+        return array_merge($response, $diffArray);
+    }
 }
