@@ -39,13 +39,10 @@ Report Template
 </div>
 <div class="row">
     <div class="col-xs-4 pull-right">
-        <input class="form-control" id="datepicker" type="name" name="search" placeholder="Search for year...">
+        {!! Form::selectYear('year', 2000, 2020, is_null($year) ?  \Carbon\Carbon::now()->year : $year, ['class' => 'form-control', 'id' => 'year']) !!}
     </div>
 </div>
-<ul class="nav nav-pills" id="myTab">
-    <li id="tab1" class="active"><a data-toggle="pill" href="#chart_month">Month</a></li>
-    <li id="tab2"><a data-toggle="pill" href="#chart_gender">Bought</a></li>
-</ul>
+
 <div class="tab-content">
     <div id="chart_month" class="tab-pane fade in active">
         <canvas id="report-month" style="width:100%; height:300px"></canvas>
@@ -102,7 +99,11 @@ Report Template
             };
             var myBarChart = new Chart(ctx).Bar(data, options);
         });
-        $('#datepicker').datepicker({
+        $('#year').change(function() {
+            var year = $(this).find('option:selected').val();
+            window.location.href = '/admin/report/template?year='+year;
+        });
+       /* $('#datepicker').datepicker({
             changeYear: true,
             showButtonPanel: true,
             dateFormat: 'yy'
@@ -113,17 +114,7 @@ Report Template
                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
                 thisCalendar.datepicker('setDate', new Date(year, 1, 1));
                 window.location.href = '/admin/report/template?year='+year;
-                /*$.ajax({
-                    url: "{{ route('admin.report.template') }}",
-                    type: 'GET',
-                    data: {
-                        year : year
-                    },
-                    success: function(result) {
-
-                    }
-                });*/
             });
-        });
+        });*/
     </script>
 @endsection

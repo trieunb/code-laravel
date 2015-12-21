@@ -67,6 +67,7 @@ class ReportController extends Controller
         $chart_month = $this->template->reportTemplateMonth($request->get('year'));
         $bought_report = $this->invoice->report($request->get('year'));
         
-        return view('admin.report.report_template', compact('chart_month', 'bought_report'));
+        return view('admin.report.report_template', compact('chart_month', 'bought_report'))
+            ->with('year', $request->get('year'));
     }
 }
