@@ -1,13 +1,13 @@
 <?php
-namespace App\Contract;
+namespace App\Contracts;
 
-interface BraintreeContract 
+interface BraintreeContract
 {
 	/**
-	 * Get token 
-	 * @return mixed 
+	 * Get token
+	 * @return mixed
 	 */
-	public static function getClientToken();
+	public static function getClientToken($user);
 
 	/**
 	 * Create Transaction
