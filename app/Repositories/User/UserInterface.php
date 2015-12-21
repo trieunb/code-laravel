@@ -104,4 +104,14 @@ interface UserInterface extends Repository
 	 * Report user by gender
 	 */
 	public function reportUserGender();
+
+	/**
+	 * Report user by region
+	 */
+	public function reportUserRegion();
+
+	/**
+	 * Report user by test skill matrix
+	 */
+	public function reportUserTestSkill();
 }

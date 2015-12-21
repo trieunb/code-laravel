@@ -498,7 +498,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $user_gender = User::select('*', DB::raw('COUNT(id) AS count'))
                       ->whereNotNull('gender')
                       ->groupBy('gender')
-                      ->orderBy('created_at', 'ASC')
+                      ->orderBy('created_at', 'DESC')
                       ->get();
         $user_gendernull = User::select('*', DB::raw('COUNT(id) AS count'))
                       ->whereNull('gender')
@@ -583,5 +583,56 @@ class UserEloquent extends AbstractRepository implements UserInterface
                         'height' => 350
                     ]);
         return $lava->render('PieChart', 'UserChart', 'chart_age', true);
+    }
+
+    public function reportUserRegion()
+    {
+        $lava = new Lavacharts;
+        $userTable = $lava->DataTable();
+        $userTable->addStringColumn('Region')
+                    ->addNumberColumn('Users');
+
+        $users = User::select('*', DB::raw('COUNT(id) as count'))
+                ->groupBy('country')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        $user_count = User::count();
+        foreach ($users as  $user) {
+            $region = '';
+            switch ($user->country) {
+                case '':
+                    $region = 'Other';
+                    break;
+                case $user->country:
+                    $region = $user->country;
+                    break;
+                default:
+                    $region = 'Other';
+                    break;
+            }
+
+            $rowData = array(
+                $region, $user->count/count($user_count)
+            );
+            $userTable->addRow($rowData);
+
+        }
+
+        $chart_region = $lava->PieChart('UserChart')
+                    ->setOptions([
+                        'datatable' => $userTable,
+                        'is3D' => true,
+                        'width' => 988,
+                        'height' => 350
+                    ]);
+        return $lava->render('PieChart', 'UserChart', 'chart_region', true);
+    }
+
+    public function reportUserTestSkill()
+    {
+        $lava = new Lavacharts;
+        $userTable = $lava->DataTable();
+        $userTable->addStringColumn('Test Skill')
+                    ->addNumberColumn('Users');
     }
 }

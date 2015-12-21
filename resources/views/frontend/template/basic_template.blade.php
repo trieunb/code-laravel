@@ -146,7 +146,7 @@
             @foreach($user_info->questions as $sk)
             <ul style="list-style:none">
                 <li>
-                    <span><label style="font-weight:600">Logic: </label> {{$sk->pivot['content']}}</span>
+                    <span>{{$sk->pivot['content']}}</span>
                 </li>
                 <li>
                     <input type="range" min="10" max="1000" step="10" value="{{ $sk->pivot['point'] }}" data-rangeslider="" 
