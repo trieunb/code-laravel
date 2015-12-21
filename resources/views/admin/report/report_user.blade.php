@@ -14,7 +14,7 @@
     <li><a data-toggle="pill" href="#chart_gender">Gender</a></li>
     <li><a data-toggle="pill" href="#chart_age">Age</a></li>
     <li><a data-toggle="pill" href="#chart_region">Region</a></li>
-    <li><a data-toggle="pill" href="#chart_textskill">Region</a></li>
+    <li><a data-toggle="pill" href="#chart_textskill">Test Skill</a></li>
 </ul>
 <div class="tab-content">
     <div id="chart_month" class="tab-pane fade in active">
@@ -32,10 +32,6 @@
     <div id="chart_region" class="tab-pane fade">
         {!! $chart_region !!}
         <div class="title-char text-center"><h3>Registered users by region</h3></div>
-    </div>
-    <div id="chart_region" class="tab-pane fade">
-        
-        <div class="title-char text-center"><h3>Registered users by test skill</h3></div>
     </div>
 </div>
 

@@ -627,12 +627,4 @@ class UserEloquent extends AbstractRepository implements UserInterface
                     ]);
         return $lava->render('PieChart', 'UserChart', 'chart_region', true);
     }
-
-    public function reportUserTestSkill()
-    {
-        $lava = new Lavacharts;
-        $userTable = $lava->DataTable();
-        $userTable->addStringColumn('Test Skill')
-                    ->addNumberColumn('Users');
-    }
 }
