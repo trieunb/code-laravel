@@ -567,9 +567,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             '20 - 30 olds' => $group2,
             'above 30 olds' => $group3
         ];
-        // return json_encode($group);
+
         foreach ($group as $key => $value) {
-            // return $value[$key];
             $rowData = array(
                 $key, count($value)
             );
