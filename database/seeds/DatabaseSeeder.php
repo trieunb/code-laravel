@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserEducationTableSeeder::class);
         $this->call(UserSKillTableSeeder::class);
         $this->call(UserWorkHistoryTableSeeder::class);
+        $this->call(AdminUserSeeder::class);
 
         Model::reguard();
     }

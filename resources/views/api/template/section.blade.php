@@ -35,11 +35,17 @@
             width: 100% !important;
             height: 200px !important;
         }
+        .mobile{
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
-
+    <div id="loading" class="mobile">
+        <img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
+    </div>
 <main class="mobile">
+
     <div class="fw box-title">
         <div class="container">
             <div class="row">
@@ -109,7 +115,13 @@
         </div>
     </div>
     <div class="container">
-        {!! $template->content !!}
+            <div id="content" class="fw w_bg">
+                <div class="col-xs-12">
+                    {!! $template->content !!}
+                </div>
+            </div>
+        <br>
+        <br>
         <div class="fw text-center">
             <button class="btn-trans fill edit" id="edit-template" onclick="clickEditTemplate()">
                 END EDIT MODE
@@ -143,16 +155,18 @@
 
     </div>
 
-
+     
 </main>
 
 <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/js/edit_section_temp.js')}}"></script>
 <script>
+
     function eventChangeClick() {
         alert('Change Photo');
         Android.changeAvatar();
     }
+    $('div[lang=photo]').attr('onclick', 'eventChangeClick()');
     var tmp = '';
     var eventListener = '';
     var fixIOS = 'mouseup';
@@ -160,200 +174,210 @@
         eventListener = 'touchend';
         fixIOS = 'touchmove';
     } else eventListener = 'mouseup';
-    document.getElementById('content').addEventListener('touchstart', function () {
+        document.getElementById('content').addEventListener('touchstart', function () {
 
-    });
-
-    document.getElementById('content').addEventListener(fixIOS, function () {
-
-
-        var touches = event.changedTouches;
-        
-        document.getElementById('content').addEventListener(eventListener, function () {
-
-            if (window.getSelection) {
-                selection = window.getSelection();
-            } else if (document.selection) {
-                selection = document.selection.createRange();
-            }
-            $('div[contenteditable="true"]').removeClass('highlight');
-
-            selection.toString() !== '';
-            var clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
-            var span = document.createElement('span');
-            span.appendChild(clonedSlection);
-            // span.className = 'highlight';
-            var replace = span.innerHTML;
-            var parrentNode = window.getSelection().anchorNode.parentNode;
-            /*if (parrentNode.outerHTML.indexOf('<span class="highlight">') == -1) {
-                var currentTextChange = $(parrentNode).html().replace(new RegExp(replace, "g"), span.outerHTML);
-                $(parrentNode).html(currentTextChange);
-            }*/
-            var currentHTMLSection = $('#content div').html();
-
-            if ($(parrentNode).html() == $('#content div').html()) {
-                selection = window.getSelection().getRangeAt(0).toString();
-            }
-            var section = $(parrentNode).attr('class');
-            var sections = ['name', 'address', 'phone',
-                'email', 'profile_website', 'linkedin',
-                'reference', 'objective', 'activitie',
-                'work', 'education', 'photo', 'personal_test',
-                'key_qualification', 'availability', 'infomation'
-            ]
-
-            var top = $(document).scrollTop() - 30;
-            $('#buttons').css({'top': top, position : 'absolute', width: '70%'});
-            if (sections.indexOf(section) == -1) {
-
-             
-              $.each( $(parrentNode).parents(), function(key, val) {
-                
-                 var context = val;
-                 var tmp = $(context).attr('class');
-
-                 if (sections.indexOf(tmp) != -1) {
-                    section = tmp;
-                 }
-              });
-               
-              if (sections.indexOf(section) == -1)
-                return;
-            }
-            if (section == 'availability') return;
-            $('div.'+section+'[contenteditable="true"]').addClass('highlight');
-            var user_id = "{{ $user->id }}";
-            var token = document.location.href.split('?');
-            tmp = selection.toString();
-            if (selection.toString() === '' || selection.toString() === " ") return;
-            $(document).off('click', '#manual').on('click', '#manual', function () {
-           // $('body').on('#manual', 'click', function(e){
-            // document.getElementById('manual').addEventListener('click', function(){
-                // answer();
-                var answer = confirm('This option will delete your selected text!');
-                if ( ! answer) return;
-                  var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), '');
-                if ($(parrentNode).html() == $('#content div.'+section).html()) {
-
-                    $('#content div.'+section).html(temp);
-                } else {
-                    parrentNode.innerHTML = temp;
-                }
-                $('#buttons').hide();
-
-                $('div.'+section).removeClass('highlight');
-            });
-            $(document).off('change', 'select').on('change', 'select', function () {
-                $('#buttons').hide();
-
-                if (tmp == '' || tmp == ' ' || tmp == null) return;
-                if ($(parrentNode).html() == $('#content div.'+section).html()) {
-                        if ( $(parrentNode).html().indexOf(replace) == -1) {
-                            alert('Not found selected text!');
-                            $(parrentNode).html(tmpHTML);
-                            return;
-                        }
-
-                        var answer = confirm('If you choose this action, it will may change style of section!');
-                        if ( ! answer) return;
-                        var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
-
-                        $('#content div.'+section).html(temp);
-                } else {
-                    var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
-                    parrentNode.innerHTML = replaceContent;
-                }
-                $('div.'+section).removeClass('highlight');
-            });
-
-            $.ajax({
-                url: "/api/user/" + user_id + "/" + section + "?" + token[1],
-                type: 'GET',
-                dataType: 'JSON',
-                success: function (result) {
-                    $('#buttons').show();
-                    $('#buttons .dropdown-menu').show();
-                    var html = '';
-
-                    html += '<option disabled selected>Get From Profile</option>';
-                    if (typeof(result.data) !== 'object') {
-                    
-                        var f = section.charAt(0)
-                                .toUpperCase();
-                        f = f + section.substr(1);
-                        html += '<optgroup label="' + f + '">';
-                        html += '<option>'+ result.data + '</option>';
-                        html += '</optgroup>';
-                    } else {
-                        $.each(result.data, function (key, val) {
-                             console.log(val);
-                            if (val.length == 0) {
-                                $('#choose-type ul > li:last-child').html('');
-                            }
-                            switch (key) {
-
-                                case 'education':
-                                    $.each(val, function (k, obj) {
-                                        html += '<optgroup label="Education ' + k + '">';
-                                        html += '<option>Title:' + obj.title + '</option>';
-                                        html += '<option>School:' + obj.school_name + '</option>';
-                                        html += '<option>Start:' + obj.start + '</option>';
-                                        html += '<option>End:' + obj.end + '</option>';
-                                        html += '<option>Degree:' + obj.degree + '</option>';
-                                        html += '<option>Result:' + obj.result + '</option>';
-                                        html += '</optgroup>';
-                                    });
-                                    break;
-                                case 'work':
-                                    $.each(val, function (k, obj) {
-                                        html += '<optgroup label="Experience ' + k + '">';
-                                        html += '<option>Company:' + obj.company + '</option>';
-                                        html += '<option>SubTitle:' + obj.sub_title + '</option>';
-                                        html += '<option>Start:' + obj.start + '</option>';
-                                        html += '<option>End:' + obj.end + '</option>';
-                                        html += '<option>Job title:' + obj.job_title + '</option>';
-                                        html += '<option>Job description:' + obj.job_description + '</option>';
-                                        html += '</optgroup>';
-                                    });
-                                    break;
-                                case 'reference':
-                                    $.each(val, function (k, obj) {
-                                        html += '<optgroup label="Reference ' + k + '">';
-                                        html += '<option>Reference:' + obj.reference + '</option>';
-                                        html += '<option>Content:' + obj.content + '</option>';
-                                        html += '</optgroup>';
-                                    });
-
-                                    break;
-                                case 'key_qualification':
-                                $.each(val, function (k, obj) {
-                                    html += '<optgroup label="Qualification ' + k + '">';
-                                    html += '<option>Content:' + obj.content + '</option>';
-                                    html += '</optgroup>';
-                                });
-                                    break;
-                                case 'objective':
-                                $.each(val, function (k, obj) {
-                                    html += '<optgroup label="Objective ' + k + '">';
-                                    html += '<option>Title:' + obj.title + '</option>';
-                                    html += '<option>Content:' + obj.content + '</option>';
-                                    html += '</optgroup>';
-                                });
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                        });
-                    }
-
-                    $('#set-data').html(html);
-
-
-                }
-            });
         });
-    });
+        // document.getElementById('content').addEventListener(fixIOS, function () {
+
+
+           
+            function test() {
+    
+
+                document.getElementById('content').addEventListener(eventListener, function () {
+                    var touches = event.changedTouches;
+                    if (window.getSelection) {
+                        selection = window.getSelection();
+                    } else if (document.selection) {
+                        selection = document.selection.createRange();
+                    }
+                    $('div[contenteditable="true"]').removeClass('highlight');
+
+                    selection.toString() !== '';
+                    var clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
+                    var span = document.createElement('span');
+                    span.appendChild(clonedSlection);
+
+                    var replace = span.innerHTML;
+
+                    var parrentNode = window.getSelection().anchorNode.parentNode;
+
+                    var currentHTMLSection = $('#content div').html();
+
+                    if ($(parrentNode).html() == $('#content div').html()) {
+                        selection = window.getSelection().getRangeAt(0).toString();
+                    }
+                    var section = $(parrentNode).attr('lang');
+
+                    var sections = ['name', 'address', 'phone',
+                        'email', 'profile_website', 'linkedin',
+                        'reference', 'objective', 'activitie', 'skill',
+                        'work', 'education', 'photo', 'personal_test',
+                        'key_qualification', 'availability', 'infomation'
+                    ]
+
+                    var top = $(document).scrollTop() - 30;
+                    $('#buttons').css({'top': top, position : 'absolute', width: '70%'});
+                    if (sections.indexOf(section) == -1) {
+
+                     
+                      $.each( $(parrentNode).parents(), function(key, val) {
+                        
+                         var context = val;
+                         var tmp = $(context).attr('lang');
+
+                         if (sections.indexOf(tmp) != -1) {
+                            section = tmp;
+                         }
+                      });
+                      if (sections.indexOf(section) == -1)
+                        return;
+                    }
+                    if (section == 'availability') return;
+                    $('div[lang='+section+']').addClass('highlight');
+                    var user_id = "{{ $user->id }}";
+                    var token = document.location.href.split('?');
+                    tmp = selection.toString();
+                   
+                    if (selection.toString() === '' || selection.toString() === " ") return;
+                    $(document).off('click', '#manual').on('click', '#manual', function () {
+                        var answer = confirm('This option will delete your selected text!');
+                        if ( ! answer) return;
+                          var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), '');
+                        if ($(parrentNode).html() == $('#content div.'+section).html()) {
+
+                            $('#content div[lang='+section+']').html(temp);
+                        } else {
+                            parrentNode.innerHTML = temp;
+                        }
+                        $('#buttons').hide();
+
+                        $('div[lang='+section+']').removeClass('highlight');
+                    });
+                    $(document).off('change', 'select').on('change', 'select', function () {
+                        $('#buttons').hide();
+
+                        if (tmp == '' || tmp == ' ' || tmp == null) return;
+                        if ($(parrentNode).html() == $('#content div[lang'+section+']').html()) {
+                                if ( $(parrentNode).html().indexOf(replace) == -1) {
+                                    alert('Not found selected text!');
+                                    $(parrentNode).html(tmpHTML);
+                                    return;
+                                }
+
+                                var answer = confirm('If you choose this action, it will may change style of section!');
+                                if ( ! answer) return;
+                                var temp = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+
+                                $('#content div[lang='+section+']').html(temp);
+                        } else {
+                            // if (parrentNode.innerHTML.indexOf(replace) != -1) {
+                            //     var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
+                            //     parrentNode.innerHTML = replaceContent;
+                            // }
+                            if (parrentNode.innerHTML == replace) {
+                                var replaceContent = $(parrentNode).html().replace(replace, $('select option:selected').val());
+                                parrentNode.innerHTML = replaceContent;
+                            } else {
+                                var replaceContent = $('#content div[lang='+section+']').html().replace(replace, $('select option:selected').val());
+                                $('#content div[lang='+section+']').html(replaceContent);
+                            }
+
+                        }
+                        $('div[lang='+section+']').removeClass('highlight');
+                    });
+
+                    $.ajax({
+                        url: "/api/user/" + user_id + "/" + section + "?" + token[1],
+                        type: 'GET',
+                        dataType: 'JSON',
+                        success: function (result) {
+                            $('#buttons').show();
+                            $('#buttons .dropdown-menu').show();
+                            var html = '';
+
+                            html += '<option disabled selected>Get From Profile</option>';
+                            if (typeof(result.data) !== 'object') {
+                            
+                                var f = section.charAt(0)
+                                        .toUpperCase();
+                                f = f + section.substr(1);
+                                html += '<optgroup label="' + f + '">';
+                                html += '<option>'+ result.data + '</option>';
+                                html += '</optgroup>';
+                            } else {
+                                $.each(result.data, function (key, val) {
+                                    if (val.length == 0) {
+                                        $('#choose-type ul > li:last-child').html('');
+                                    }
+                                    switch (key) {
+
+                                        case 'education':
+                                            $.each(val, function (k, obj) {
+                                                html += '<optgroup label="Education ' + k + '">';
+                                                html += '<option>Title:' + obj.title + '</option>';
+                                                html += '<option>School:' + obj.school_name + '</option>';
+                                                html += '<option>Start:' + obj.start + '</option>';
+                                                html += '<option>End:' + obj.end + '</option>';
+                                                html += '<option>Degree:' + obj.degree + '</option>';
+                                                html += '<option>Result:' + obj.result + '</option>';
+                                                html += '</optgroup>';
+                                            });
+                                            break;
+                                        case 'work':
+                                            $.each(val, function (k, obj) {
+                                                html += '<optgroup label="Experience ' + k + '">';
+                                                html += '<option>Company:' + obj.company + '</option>';
+                                                html += '<option>SubTitle:' + obj.sub_title + '</option>';
+                                                html += '<option>Start:' + obj.start + '</option>';
+                                                html += '<option>End:' + obj.end + '</option>';
+                                                html += '<option>Job title:' + obj.job_title + '</option>';
+                                                html += '<option>Job description:' + obj.job_description + '</option>';
+                                                html += '</optgroup>';
+                                            });
+                                            break;
+                                        case 'reference':
+                                            $.each(val, function (k, obj) {
+                                                html += '<optgroup label="Reference ' + k + '">';
+                                                html += '<option>Reference:' + obj.reference + '</option>';
+                                                html += '<option>Content:' + obj.content + '</option>';
+                                                html += '</optgroup>';
+                                            });
+
+                                            break;
+                                        case 'key_qualification':
+                                        $.each(val, function (k, obj) {
+                                            html += '<optgroup label="Qualification ' + k + '">';
+                                            html += '<option>Content:' + obj.content + '</option>';
+                                            html += '</optgroup>';
+                                        });
+                                            break;
+                                        case 'objective':
+                                        $.each(val, function (k, obj) {
+                                            html += '<optgroup label="Objective ' + k + '">';
+                                            html += '<option>Title:' + obj.title + '</option>';
+                                            html += '<option>Content:' + obj.content + '</option>';
+                                            html += '</optgroup>';
+                                        });
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                });
+                            }
+
+                            $('#set-data').html(html);
+
+
+                        }
+                    });
+                
+                });
+            }
+            test();
+        // });
+    
     
  $(document).ready(function() {
     $('.close').click(function() {

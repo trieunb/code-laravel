@@ -2,48 +2,25 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helper\BrainTreeSKD;
+use App\Services\Braintree\BrainTreeSKD;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\Invoice\InvoiceInterface;
-use App\Repositories\TemplateMarket\TemplateMarketInterface;
-use App\Repositories\Template\TemplateInterface;
-use Braintree\Customer;
-use Gloudemans\Shoppingcart\Exceptions\ShoppingcartInvalidItemException;
 use Illuminate\Http\Request;
 
 class CartsController extends Controller
 {
-    /**
-     * TemplateInterface
-     * @var $template
-     */
-	private $template;
-
-    /**
-     * TemplateMarketInterface
-     * @var $template_mk
-     */
-    private $template_mk;
-
     /**
      * InvoiceInterface
      * @var $invoice
      */
     private $invoice;
 
-    /**
-     * Constructor method
-     * @param TemplateMarketInterface $template_mk 
-     * @param TemplateInterface       $template    
-     */
-    public function __construct(TemplateMarketInterface $template_mk,
-        TemplateInterface $template, InvoiceInterface $invoice)
+
+    public function __construct( InvoiceInterface $invoice)
     {
     	$this->middleware('jwt.auth');
         
-		$this->template = $template;
-        $this->template_mk = $template_mk;
         $this->invoice = $invoice;
     }
 

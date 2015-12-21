@@ -39,7 +39,6 @@ header .navbar .navbar-collapse .navbar-right .dropdown > a {
 }
 body {
   background: #ffffff;
-  font-family: OpenSans;
 }
 main {
   margin-top: 30px;
@@ -591,7 +590,7 @@ body button:hover {
   top: 5px;
   right: 5px;
   color: #FFFFFF;
-  font-size: 114%;
+  font-size: 140%;
 }
 .mobile .box-title .fw .content .control li .dropdown-menu .list, #buttons .dropdown-menu .list{
   background: #f3f3f3;
@@ -637,7 +636,7 @@ body button:hover {
 
 @media screen and (max-width: 440px) {
     #myPanel {
-     
+
     }
     #editor {
       margin-top: 60px;
@@ -651,15 +650,15 @@ body button:hover {
     }
 }
 
-.image-avatar { 
-   position: relative; 
-   width: 100%; 
+.image-avatar {
+   position: relative;
+   width: 100%;
 }
 
-.text-infomation { 
-   position: absolute; 
-   bottom: 30px; 
-   width: 100%; 
+.text-infomation {
+   position: absolute;
+   bottom: 30px;
+   width: 100%;
 }
 
 .info {
@@ -707,7 +706,12 @@ p.full-name {
   display: none;
   position: fixed;
   z-index: 99999999;
-  background: #dedede;
+  background: #fff;
+  height: 100%;
+  top: 0;
+}
+#loading img{
+  margin-top: 20%;
 }
 .display {
   width: 20%;
@@ -740,7 +744,11 @@ p.full-name {
   }
 #note-report{
     list-style: none;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 54aaed0c880b9e39218fefa057662877a5512ddd
 }
 #note-report li span {
     height: 15px;
@@ -769,3 +777,4 @@ p.full-name {
 .note-age li:last-child span {
     background: #ffc870 !important;
 }
+

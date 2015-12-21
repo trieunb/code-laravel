@@ -175,9 +175,8 @@ Report User
     ];
     var myPieChart;
 
-
     var responseAge = {!! $chart_age !!};
-    console.log(responseAge);
+
     var data_age = [
         {
             value: responseAge[0].count,
