@@ -26,7 +26,7 @@ Detail User: {{ $user->present()->name }}
 			<li><strong>Mobile phone</strong> : <i>{{ $user->mobile_phone }}</i></li>
 			<li><strong>Birthday</strong> : <i>{{ $user->dob }}</i></li>
 			<li><strong>Email</strong> : <i>{{ $user->email }}</i></li>
-			<li><strong>Avatar</strong> : <i><img src=" @if($user->avatar) {{ asset($user->avatar['thumb']) }} @else {{ asset('uploads/origin/avatar.jpg') }}  @endif" ></i></li>
+			<li><strong>Avatar</strong> : <i><img src=" @if($user->avatar != null && isset($user->avatar['thumb'])) {{ asset($user->avatar['thumb']) }} @else {{ asset('uploads/origin/avatar.jpg') }}  @endif" ></i></li>
 			<li><strong>Link Profile</strong> : <i><a href="{{ $user->link_profile }}">{{ $user->link_profile }}</a></i></li>
 			<li><strong>Infomation</strong> : <i>{{ $user->infomation }}</i></li>
 		</ul>
