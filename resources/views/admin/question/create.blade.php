@@ -43,7 +43,6 @@ $(function() {
         rules: {
             content : {
                 required : true,
-                minlength: 6,
                 maxlength: 150,
                 noSpace: true
             },

@@ -53,6 +53,7 @@ class QuestionsController extends Controller
      */
     public function store(CreateQuestionFormRequest $request)
     {
+        $request->merge(array_map('trim', $request->all()));
         return $this->question->saveFromAdminArea($request)
             ? redirect()->route('admin.question.get.index')->with('message', 'Create Question successfully!')
             : redirect()->back()->with('message', 'Error when create question!');

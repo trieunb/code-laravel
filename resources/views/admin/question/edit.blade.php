@@ -1,5 +1,4 @@
 
-
 @extends('admin.layout')
 
 @section('title')
@@ -9,7 +8,9 @@
 @section('page-header')
 Edit Question
 @stop
-
+@section('style')
+<link rel="stylesheet" type="text/css" href="{{asset('css/toastr.css')}}">
+@endsection
 @section('content')
 <div id="ajax-message"></div>
 <form method="post" enctype="multipart/form-data" role="form" id="form-update" action="{{ route('api.question.post.editAdmin') }}">
@@ -42,6 +43,7 @@ Edit Question
 @section('script')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
+<script src="{{ asset('js/toastr.js') }}"></script>
 <script>
     jQuery.validator.addMethod("noSpace", function(value, element) { 
       return this.optional(element) || value.replace(/\s/g,"") || value.trim();
@@ -53,7 +55,6 @@ $('#form-update').validate({
     rules: {
         content: {
             required: true,
-            minlength: 6,
             maxlength: 150,
             noSpace: true
         }
@@ -73,33 +74,6 @@ $('#form-update').validate({
             error.insertAfter(element);
         }
     },
-    submitHandler : function(form) {
-       event.preventDefault();
-
-        if (isBusy) return;
-
-        var data = {
-                token: $('input[name=_token]').val(),
-                id: $('input[name=id]').val(),
-                content: $('#content').val()
-            };
-        if (document.getElementById('publish').checked) data.publish = 'on';
-        isBusy = true;
-        $.ajax({
-            url: $('#form-update').attr('action'),
-            type: 'POST',
-            data: data,
-            success: function(result) {
-                window.location.replace({{ route('admin.question.get.index') }});
-                var message = result.status == true
-                    ? '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Update successfully.</strong> </div>'
-                    : '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error when update!</strong></div>';
-                $('#ajax-message').html(message);
-            }
-        }).always(function() {
-            isBusy = false;
-        });
-    }
  });
 </script>
 @endsection

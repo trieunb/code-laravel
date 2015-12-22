@@ -33,8 +33,8 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
             })
             ->addColumn('publish', function($question) {
                 return ($question->publish)
-                    ? '<span>Publish</span>'
-                    : '<span>Block</span>';
+                    ? '<span>Yes</span>'
+                    : '<span>No</span>';
             })
             ->make(true);
 	}

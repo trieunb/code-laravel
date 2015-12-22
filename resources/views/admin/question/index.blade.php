@@ -22,23 +22,11 @@ Question List
 			<th>Action</th>
 		</thead>
 	</table>
-
-	<div class="modal fade" id="modal-admin">
-        <div class="modal-dialog  modal-lg">
-            <div class="modal-content">
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 @stop
 
 @section('script')
 	<script>
 		$(document).ready(function() {
-			$('body').on('hidden.bs.modal', '.modal', function() {
-				$(this).removeData('bs.modal');
-			});
-
 			var questionDataTable = $('#questions-table').DataTable({
 		        processing: true,
 		        serverSide: true,
