@@ -137,6 +137,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     public function dataTableTemplate()
     {
         $templates = $this->model->select('*');
+
         return \Datatables::of($templates)
             ->addColumn('checkbox', function($template) {
                 return '<input type="checkbox" value="'.$template->id.'"/>';
@@ -153,7 +154,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
                     ? '<a class="status-data btn btn-success" data-src="' .route('admin.template.status', $template->id) . '">Publish</a>'
                     : '<a class="status-data btn btn-warning" data-src="' .route('admin.template.status', $template->id) . '">Pending</a>';
             })
-        ->make(true);
+            ->make(true);
     }
 
     /**
@@ -165,5 +166,26 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     public function publishOrPendingMultiRecord($status, $ids)
     {
        return $this->model->whereIn('id', $ids)->update(['status' => $status]);
+    }
+
+    /*
+     * Report Template in Admin area
+     * @param  int $year 
+     * @return array       
+     */
+    public function reportTemplate($year = null)
+    {
+        $templates = $this->model->select('id', 
+                \DB::raw('MONTH(created_at) as month'),
+                \DB::raw('COUNT(id) AS count')
+            )
+            ->groupBy('month')
+            ->orderBy('month');
+
+        $templates = ! is_null($year) 
+            ? $templates->whereYear('created_at', '=', $year)->get()
+            : $templates->get();
+
+        return getCountDataOfMonth($templates);
     }
 }

@@ -197,12 +197,6 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany(Question::class,'user_questions', 'user_id', 'question_id')->withPivot('point', 'content');
     }
 
-
-    public function user_questions()
-    {
-        return $this->hasMany(UserQuestion::class);
-    }
-
     /**
      * Rename Image after upload 
      * @param  mixed $request 

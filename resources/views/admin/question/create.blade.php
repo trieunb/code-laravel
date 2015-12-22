@@ -14,6 +14,7 @@ Create Question
             <div class="form-group">
                 <label for="content">Content</label>
                 <input type="text" class="form-control" name="content" id="content" placeholder="Content">
+                <!-- <div class="has-error"><strong class="has-error">{{$errors->first('content')}} </strong></div> -->
             </div>
             <div class="checkbox">
                 <label>
@@ -33,13 +34,17 @@ Create Question
   
 $(function() {
     
- 
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+      return value.indexOf(" ") < 0 && value != ""; 
+    }, "No space please and don't leave it empty");
+
     var isBusy = false;
     $('form').validate({
         rules: {
             content : {
                 required : true,
-                minlength: 6
+                minlength: 6,
+                noSpace: true
             },
         },
         highlight: function(element) {

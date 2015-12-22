@@ -44,4 +44,11 @@ interface TemplateMarketInterface extends Repository
 	 * @return mixed         
 	 */
 	public function publishOrPendingMultiRecord($status, $ids);
+
+	/*
+	 * Report Template in Admin area
+	 * @param  int $year 
+	 * @return array       
+	 */
+	public function reportTemplate($year = null);
 }

@@ -127,4 +127,13 @@ abstract class AbstractRepository
 	{
 		return $this->model->where($field, $operator, $value)->first();
 	}
+
+	/**
+	 * Get first record
+	 * @return mixed 
+	 */
+	public function first()
+	{
+		return $this->model->first();
+	}
 }

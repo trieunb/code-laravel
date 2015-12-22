@@ -2,6 +2,7 @@
 
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery-ui.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}">
 <style>
     .ui-datepicker-calendar {
         display: none;
@@ -56,6 +57,7 @@ Report Template
 
 @section('script')
     <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){ 
@@ -92,29 +94,18 @@ Report Template
                         strokeColor: "rgba(220,220,220,0.8)",
                         highlightFill: "rgba(220,220,220,0.75)",
                         highlightStroke: "rgba(220,220,220,1)",
-                        data: tmp2
-                        
+                        data: tmp2    
                     }
                 ]
             };
             var myBarChart = new Chart(ctx).Bar(data, options);
         });
+        $('#year').select2({
+            placeholder: "Select a state"
+        });
         $('#year').change(function() {
             var year = $(this).find('option:selected').val();
             window.location.href = '/admin/report/template?year='+year;
         });
-       /* $('#datepicker').datepicker({
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'yy'
-        }).focus(function() {
-            var thisCalendar = $(this);
-            $('.ui-datepicker-calendar').detach();
-            $('.ui-datepicker-close').click(function() {
-                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                thisCalendar.datepicker('setDate', new Date(year, 1, 1));
-                window.location.href = '/admin/report/template?year='+year;
-            });
-        });*/
     </script>
 @endsection
