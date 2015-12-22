@@ -11,6 +11,10 @@ use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
+use Khill\Lavacharts\Lavacharts;
+use Lava;
+use App\Models\TemplateMarket;
+use DB;
 
 
 
@@ -85,6 +89,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }, 'user_work_histories' => function($q) {
                 $q->orderBy('position');
             }, 'questions' => function($q) {
+            }, 'user_skills' => function($q) {
+                $q->orderBy('position');
             }, 'references' => function($q) {
                 $q->orderBy('position');
             }, 'objectives' => function($q) {
@@ -360,13 +366,14 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function dataTable()
     {
         return \Datatables::of($this->model->select([
-            'id', 'firstname', 'lastname', 'address', 'email',
+            'id', 'firstname', 'lastname', 'address', 'email','dob',
             'created_at', 'updated_at'
             ]))
             ->addColumn('action', function($user) {
-                return '<div class="btn-group" role="group" aria-label="...">
-                    <a class="btn btn-primary" href="'.route('admin.user.get.answer', $user->id).'">Answer Of User</a>
-                </div>';
+                /*return '<div class="btn-group" role="group" aria-label="...">
+                <a class="delete-user btn btn-xs btn-danger" data-src="'.route('admin.user.delete',$user->id).'"><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                </div>';*/
+                return '';
             })
             ->editColumn('firstname', function($user) {
                 return $user->firstname . ' ' . $user->lastname;
@@ -443,8 +450,107 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 return json_encode(['data' => $this->getById($id)->mobile_phone]);
                 break;
             default:
-                return json_encode(['data' =>$this->getById($id)->pluck($section)]);
+                return json_encode(['data' =>$this->getById($id)->$section]);
                 break;
         }
+    }
+
+    public function updateUserLogin($user, $token)
+    {
+        
+        $this->model->update(['token' => $token], $user->id);
+        return \Auth::login($user);
+    }
+
+    /**
+     * Report user by month
+     */
+    public function reportUserMonth($year = null)
+    {
+        $user = $this->model->select('*', 
+                    DB::raw('MONTH(created_at) as month'), 
+                    DB::raw('COUNT(id) AS count'))
+                ->groupBy('month')
+                ->orderBy('created_at', 'ASC');
+        return is_null($year)
+            ? $user->get()
+            : $user->whereYear('created_at', '=', $year)->get();
+    }
+
+    public function reportUserGender()
+    {
+        $gender = ['Male' => 0, 'Female' => 0, 'Other' => 0];
+        $users = $this->model->select(DB::raw('COUNT(*) as `count`,
+            CASE WHEN gender = 0 THEN "Male"
+               WHEN gender = 1 THEN "Female"
+               WHEN gender = 2 OR gender is null THEN "Other"     
+               END as "gender_user"')
+            )
+            ->groupBy('gender_user')
+            ->get();
+        $response = [];
+
+        foreach ($users as $user) {
+            $response[$user->gender_user] = (int)$user->count;
+        }
+
+        $genderDiff = array_diff_key($gender, $response);
+
+        return array_merge($response, $genderDiff);
+    }
+
+    public function reportUserAge()
+    {
+        return $this->model->select(DB::raw('COUNT(*) as count, CASE 
+                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds" 
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Above 30 olds"
+                END as "group_age"'
+            ))
+            ->groupBy('group_age')
+            ->get();
+    }
+
+    public function reportUserRegion()
+    {
+        $lava = new Lavacharts;
+        $userTable = $lava->DataTable();
+        $userTable->addStringColumn('Region')
+                    ->addNumberColumn('Users');
+
+        $users = User::select('*', DB::raw('COUNT(id) as count'))
+                ->groupBy('country')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+        $user_count = User::count();
+        foreach ($users as  $user) {
+            $region = '';
+            switch ($user->country) {
+                case '':
+                    $region = 'Other';
+                    break;
+                case $user->country:
+                    $region = $user->country;
+                    break;
+                default:
+                    $region = 'Other';
+                    break;
+            }
+
+            $rowData = array(
+                $region, $user->count/count($user_count)
+            );
+            $userTable->addRow($rowData);
+
+        }
+
+        $chart_region = $lava->PieChart('UserChart')
+                    ->setOptions([
+                        'datatable' => $userTable,
+                        'is3D' => true,
+                        'width' => 988,
+                        'height' => 350
+                    ]);
+        return $lava->render('PieChart', 'UserChart', 'chart_region', true);
     }
 }

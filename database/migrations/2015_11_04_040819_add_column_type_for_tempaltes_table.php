@@ -13,7 +13,7 @@ class AddColumnTypeForTempaltesTable extends Migration
     public function up()
     {
         Schema::table('templates', function($table) {
-            $table->tinyInteger('type')->after('price')->nullable()->default(0);
+            $table->tinyInteger('type')->nullable()->default(0);
         });
     }
 

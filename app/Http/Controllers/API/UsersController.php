@@ -104,11 +104,6 @@ class UsersController extends Controller
 		$this->qualification = $qualification;
 	}
 
-	public function dataTable()
-	{
-		return $this->user->dataTable();
-	}
-
 	public function getProfile(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));

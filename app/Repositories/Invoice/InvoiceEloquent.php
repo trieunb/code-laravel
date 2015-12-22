@@ -72,4 +72,21 @@ class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 
 		return $result;
 	}
+
+	/**
+	 * Report for Admin
+	 * @return mixed
+	 */
+	public function report($year = null)
+	{
+		$invoices = $this->model->select('id', \DB::raw('MONTH(paid_at) as month'), \DB::raw('COUNT(id) as count'))
+			->groupBy('month')
+			->orderBy('month');
+			
+		$invoices = is_null($year) 
+			? $invoices->get()
+			: $invoices->whereYear('created_at', '=', $year)->get();
+
+		return getCountDataOfMonth($invoices);
+	}
 }

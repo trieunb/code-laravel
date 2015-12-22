@@ -27,7 +27,8 @@
         "yajra/laravel-datatables-oracle": "~5.0",
         "elibyy/laravel-tcpdf": "0.*",
         "barryvdh/laravel-snappy": "dev-master",
-        "h4cc/wkhtmltopdf-i386": "0.12.x"
+        "khill/lavacharts" : "2.5.*",
+        "davibennun/laravel-push-notification": "dev-laravel5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -35,6 +36,12 @@
         "phpunit/phpunit": "~4.0",
         "phpspec/phpspec": "~2.1"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/nWidart/Elasticquent"
+        }
+    ],
     "autoload": {
         "classmap": [
             "database"

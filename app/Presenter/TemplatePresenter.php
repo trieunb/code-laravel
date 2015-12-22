@@ -6,8 +6,9 @@ use App\Models\Qualification;
 use App\Models\Reference;
 use App\Models\User;
 use App\Models\UserEducation;
-use App\Models\UserWorkHistory;
 use App\Models\UserQuestion;
+use App\Models\UserSkill;
+use App\Models\UserWorkHistory;
 use Laracasts\Presenter\Presenter;
 
 class TemplatePresenter extends Presenter
@@ -33,10 +34,17 @@ class TemplatePresenter extends Presenter
 
 	                return $html;
 	                break;
+                case 'skill': 
+                	foreach (UserSkill::whereUserId($id)->get() as $key => $skill) {
+                		$html .= '<optgroup label="Skills .'.($key + 1).'">"';
+	            		$html .= '<option>Name:'.$skill->name.'</option>';
+	            		$html .= '<option>Experience:'.$skill->experience.'</option>';
+	            		$html .= '</optgroup>';
+                	}
 	            case 'personal_test':
 	            	foreach (UserQuestion::whereUserId($id)->get() as $key => $personal_test) {
-	            		$html .= '<optgroup label="Skills .'.($key + 1).'">"';
-	            		$html .= '<option>Name:'.$personal_test->content.'</option>';
+	            		$html .= '<optgroup label="Personal Test .'.($key + 1).'">"';
+	            		$html .= '<option>Content:'.$personal_test->content.'</option>';
 	            		$html .= '<option>Point:'.$personal_test->point.'</option>';
 	            		$html .= '</optgroup>';
 	            	}
@@ -122,7 +130,7 @@ class TemplatePresenter extends Presenter
 	                break;
 	            default:
 	            	$html .= '<optgroup label="'.ucfirst($section).'">';
-	                $html .= '<option>'.User::findOrFail($id)->pluck($section).'</option>';
+	                $html .= '<option>'.User::findOrFail($id)->$section.'</option>';
 	        		$html .= '</optgroup>';
 
 	                return $html;

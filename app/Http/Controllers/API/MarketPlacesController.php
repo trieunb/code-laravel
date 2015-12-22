@@ -36,7 +36,7 @@ class MarketPlacesController extends Controller
         return response()->json([
             'status_code' => 200,
             'status' => true,
-            'data' => $this->template_market->getAllTemplateMarket($request->get('sortby'), $request->get('order'), $request->get('page'), $request->get('search'))
+            'data' => json_decode($this->template_market->getAllTemplateMarket($request->get('sortby'), $request->get('order'), $request->get('page'), $request->get('search')), true)
         ]);
 
     }
@@ -56,16 +56,7 @@ class MarketPlacesController extends Controller
     {
         $template = $this->template_market->getDetailTemplateMarket($id);
         $content = preg_replace('/contenteditable="true"|contenteditable=\'true\'/', '', $template->content);
-        $content = str_replace("contenteditable='true'", '', $template->content);
 
         return view('api.market.view', compact('content'));
-    }
-
-    public function search(Request $request)
-    {        
-        return response()->json([
-            'status_code' => 200,
-            'data' => $this->template_market->search($request->get('search'))]
-        );
     }
 }

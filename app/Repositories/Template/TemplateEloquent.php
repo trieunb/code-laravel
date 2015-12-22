@@ -6,6 +6,12 @@ use App\Models\Template;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
 use App\Repositories\Template\TemplateInterface;
+use Khill\Lavacharts\Lavacharts;
+use Lava;
+use App\Models\User;
+use App\Models\TemplateMarket;
+use Carbon\Carbon;
+use DB;
 
 class TemplateEloquent extends AbstractDefineMethodRepository implements TemplateInterface
 {
@@ -125,12 +131,12 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             foreach (\Setting::get('user_status') as $status) {
                 if ($status['id'] == $request->get('content'))
                     $tmp = $template->type == 2 
-                        ? '<div class="availability content-box" contenteditable="true">'
+                        ? '<div lang="availability" class="availability content-box" contenteditable="true">'
                             .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
                             .'<span>Availability</span></div>'
                             .'<div class="box" style="background: #f3f3f3;padding: 15px;border-top: 3px solid #D8D8D8;border-bottom: 3px solid #D8D8D8;">'
                             .'<p>'.$status['value'].'</p></div></div>'
-                        : '<div class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';
+                        : '<div lang="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';
             }
 
             $user = \App\Models\User::find($user_id);
@@ -168,7 +174,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         if ( !$user->save()) return;
         
         $data = editSection('photo', 
-            '<div class="photo"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
+            '<div lang="photo"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
             $template->content);
         $sec = $template->section;
 
@@ -189,7 +195,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template = $this->model->whereUserId($user_id)
             ->whereType('2')
             ->first();
-
         if ( ! $template) {
             $template = new Template();
             $template->user_id = $user_id;
@@ -294,5 +299,76 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                 ->get();
     }
 
+    public function reportTemplateMonth($year = null)
+    {
+        $templates = $this->model->select('id', 
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(id) AS count')
+            )
+            ->groupBy('month')
+            ->orderBy('month');
+
+        $templates = ! is_null($year) 
+            ? $templates->whereYear('created_at', '=', $year)->get()
+            : $templates->get();
+
+        $data = getCountDataOfMonth($templates);
+        
+        return $data;
+    }
+
+    public function reportTemplateGender()
+    {
+        $lava = new Lavacharts;
+        $templateTable = $lava->DataTable();
+        $templateTable->addStringColumn('Gender')
+                    ->addNumberColumn('Templates');
+
+        $templates_gender = User::select('*', DB::raw('COUNT(id) AS count'))
+                      ->whereNotNull('gender')
+                      ->with('templates')
+                      ->groupBy('gender')
+                      ->orderBy('created_at', 'ASC')
+                      ->get();
+        foreach ($templates_gender as $temp_m) {
+
+            $count_template = Template::with(['user' => function($q) use ($temp_m) {
+                $q->whereGender($temp_m->gender);
+            }])->get();
+
+            $count = 0;
+            foreach ($count_template as $value) {
+                if(!is_null($value->user)) $count ++;   
+            }
+
+            $gender = ''; 
+            switch ($temp_m->gender) {
+                case 0:
+                    $gender = 'Male';
+                    break;
+                case 1:
+                    $gender = 'Female';
+                    break;
+                case 2:
+                    $gender = 'Other';
+                    break;
+                
+                default:
+                    $gender = 'Other';
+                    break;
+            }
+            $rowData = array(
+                $gender, $count
+            );
+            
+            $templateTable->addRow($rowData);
+        }
+        $chart_gender = $lava->ColumnChart('TemplateChart')->setOptions([
+                'datatable' => $templateTable,
+                'width' => 988
+            ]);
+
+        return $lava->render('ColumnChart', 'TemplateChart', 'chart_gender', true);
+    }
     
 }

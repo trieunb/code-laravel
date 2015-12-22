@@ -12,7 +12,9 @@ use App\Models\Template;
 use App\Models\TemplateMarket;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
+use App\Models\UserQuestion;
 use App\Models\UserWorkHistory;
+use App\Models\Device;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 use Bican\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Auth\Authenticatable;
@@ -25,6 +27,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Laracasts\Presenter\PresentableTrait;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract,                                    
                                     CanResetPasswordContract,
@@ -107,7 +110,7 @@ class User extends Model implements AuthenticatableContract,
     public $path = 'uploads/';
 
     public $img_width_thumb = 400;
-    public $img_height_thumb = 300;
+    public $img_height_thumb = 600;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -194,6 +197,12 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany(Question::class,'user_questions', 'user_id', 'question_id')->withPivot('point', 'content');
     }
 
+
+    public function user_questions()
+    {
+        return $this->hasMany(UserQuestion::class);
+    }
+
     /**
      * Rename Image after upload 
      * @param  mixed $request 
@@ -236,5 +245,18 @@ class User extends Model implements AuthenticatableContract,
     public function roles()
     {
         return $this->belongsToMany('App\Models\Role');
+    }
+
+    public function device()
+    {
+        return $this->hasOne(Device::class);
+    }
+
+    public function getAgeAttribute() {
+    // do an age calculation on $this->dateOfBirth here
+        $age = ($this->dob != "0000-00-00")
+            ? Carbon::createFromFormat("Y-m-d", $this->dob)->age
+            : null;
+        return $age;
     }
 }

@@ -13,7 +13,7 @@ class AddSoftSkillColumnUserTable extends Migration
     public function up()
     {
         Schema::table('users', function($table) {
-            $table->json('soft_skill')->after('address');
+            $table->json('soft_skill')->nullable()->after('address');
         });
     }
 

@@ -165,6 +165,8 @@ return [
         yajra\Datatables\DatatablesServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class
     ],
 
     /*
@@ -223,7 +225,8 @@ return [
         'Setting'   => Thetispro\Setting\Facades\Setting::class,
         'Datatables'=> yajra\Datatables\Datatables::class,
         // 'PDF'       => Barryvdh\DomPDF\Facade::class,
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'PDF'       => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'PushNotification' => Davibennun\LaravelPushNotification\Facades\PushNotification::class
     ],
 
 ];

@@ -71,9 +71,18 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function createOrUpdateTemplateByManage($request, $data, $user_id)
     {
-        $template = $request->has('id') 
+        $template = $request->has('id')
             ? $this->getById($request->get('id')) 
             : new TemplateMarket;
+       /* if ($request->has('id') &&
+            $template->content !=  $request->get('content')
+        ) {
+            $template = new TemplateMarket;
+            $template_old = $this->getById($request->get('id'));
+            $template_old->updated_version = 1;
+            $template_old->save();
+        }*/
+
         $template->title = $request->get('title');
         $template->user_id = $user_id;
         $template->cat_id = $request->get('cat_id');
@@ -101,10 +110,10 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             if (\File::exists($template->source_file_pdf)) {
                 \File::delete($template->source_file_pdf, $template->image['origin'], $template->image['thumb']);
             }
-            return event(new RenderFileWhenCreateTemplateMarket($template->slug, $template->content, $template->id));
+            event(new RenderFileWhenCreateTemplateMarket($template->slug, $template->content, $template->id));
         }
-        
-        return false;
+    
+        return $result ? $template : false;
     }
 
     /**
@@ -129,14 +138,12 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     {
         $templates = $this->model->select('*');
         return \Datatables::of($templates)
-            ->editColumn('image', function($template) {
-                return '<a class="fancybox" href="'.asset($template->image['origin']).'"><img src="'.asset($template->image['origin']).'"/></a>';
-            })
+           
             ->addColumn('action', function ($template) {
                 return '<div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-default" href="' .route('admin.template.get.view', $template->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
                     <a class="btn btn-primary edit" href="' .route('admin.template.get.edit', $template->id) . '"><i class="glyphicon glyphicon-edit"></i></a>
                     <a class="delete-data btn btn-danger" data-src="' .route('admin.template.delete', $template->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
-                  
                 </div>';
             })
             ->addColumn('status', function($template) {

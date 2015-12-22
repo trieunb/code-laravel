@@ -20,7 +20,8 @@
 			<th>Id</th>
 			<th>Fullname</th>
 			<th>Address</th>
-			<th>Email</th>
+            <th>Email</th>
+			<th>Birthday</th>
 			<th>Created At</th>
 			<th>Updated At</th>
 			<th>Action</th>
@@ -30,7 +31,7 @@
 
 @section('script')
 	<script>
-		$('#users-table').DataTable({
+		var userDatatable = $('#users-table').DataTable({
 		        processing: true,
 		        serverSide: true,
 		        responsive: true,
@@ -40,10 +41,35 @@
 		            {data: 'firstname', name: 'firstname'},
 		            {data: 'address', name: 'address'},
 		            {data: 'email', name: 'email'},
+                    {data: 'dob', name: 'dob'},
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'updated_at', name: 'updated_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false}
-		        ]
+		        ],
+		        order: [[5, 'DESC']]
 		    });
+
+			var isBusy = false;
+            $(document).on('click', '.delete-user', function(e) {
+                e.preventDefault();
+                
+                if (isBusy) return;
+                var answer = confirm('Are you sure you want to delete?');
+                if ( ! answer) return;
+                isBusy = true;
+
+                $.ajax({
+                    url: $(this).data('src'),
+                    type: 'GET',
+                    success: function(result) {
+                        if (result.status == true) {
+                            console.log(result.status);
+                            userDatatable.ajax.reload();
+                        }
+                    }
+                }).always(function() {
+                    isBusy = false;
+                });
+            });
 	</script>
 @stop

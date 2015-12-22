@@ -95,7 +95,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->user->delete($id)
+            ? response()->json(['status' => true])
+            : response()->json(['status' => false]);
     }
 
 
@@ -108,5 +110,10 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('message', $e->getMessage());
         }
+    }
+
+    public function dataTable()
+    {
+        return $this->user->dataTable();
     }
 }
