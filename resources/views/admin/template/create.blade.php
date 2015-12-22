@@ -146,7 +146,12 @@ $(function() {
     $('form').validate({
         rules: {
             title : {
-                required: true,
+                required: {
+                    depends: function() {
+                        $(this).val($.trim($(this).val()));
+                        return true;
+                    }
+                },
             /*remote : {
                 url: '{{ route("admin.template.check") }}',
                 type: 'GET',
