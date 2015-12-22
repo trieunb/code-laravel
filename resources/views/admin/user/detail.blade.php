@@ -1,15 +1,5 @@
 @extends('admin.layout')
 
-@section('style')
-	<style>
-		#content ul, #content ul li {
-			list-style: none;
-			font-size: 18px;
-			padding: 5px;
-		}		
-	</style>
-@stop
-
 @section('title')
 Detail User
 @stop
@@ -21,6 +11,8 @@ Detail User: {{ $user->present()->name }}
 @section('content')
 	<div id="content">
 		<ul>
+			<li><strong>First Name</strong> : <i>{{ $user->firstname }}</i></li>
+			<li><strong>Last Name</strong> : <i>{{ $user->lastname }}</i></li>
 			<li><strong>Address</strong> : <i>{{ $user->address }}</i></li>
 			<li><strong>Country</strong> : <i>{{ $user->country }}</i></li>
 			<li><strong>Mobile phone</strong> : <i>{{ $user->mobile_phone }}</i></li>
@@ -30,7 +22,7 @@ Detail User: {{ $user->present()->name }}
 			<li><strong>Link Profile</strong> : <i><a href="{{ $user->link_profile }}">{{ $user->link_profile }}</a></i></li>
 			<li><strong>Infomation</strong> : <i>{{ $user->infomation }}</i></li>
 		</ul>
-		<a href="{{ route('admin.user.get.index') }}" class="btn btn-default">Go to Back!</a>
+		<a href="{{ route('admin.user.get.index') }}" class="btn btn-default">Go to list</a>
 	</div>
 @stop
 
@@ -39,5 +31,5 @@ Detail User: {{ $user->present()->name }}
 	$(document).ready(function() {
 		$('input').attr('disabled', true);
 	});
-</script>	
+</script>
 @endsection
