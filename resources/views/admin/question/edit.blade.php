@@ -1,49 +1,62 @@
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-    </button>
-    <h4 class="modal-title">Edit Question: {{$question->id}}</h4>
-    <div id="ajax-message"></div>
-</div>
-<div class="modal-body">
-    <form class="form-horizontal" method="post" enctype="multipart/form-data" role="form" id="form-update" action="{{ route('api.question.post.editAdmin') }}">
-        <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="hidden" name="id" value="{{$question->id}}">
 
-        <div class="form-group">
-            <label for="content" class="col-sm-2 control-label">Content</label>
-            <div class="col-sm-10">
-                <input type="text" name="content" value="{{ $question->content }}" class="form-control" id="content" placeholder="Content">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                  <div class="checkbox">
-                    <label>
-                      <input id="publish" type="checkbox" name="publish" @if ($question->publish == 1) checked @endif> Publish
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button typ e="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary update">Save changes</button>
-            </div>
-        </div>
-       
-     </form>
-</div>
+@extends('admin.layout')
 
+@section('title')
+    Create Question
+@stop
+
+@section('page-header')
+Edit Question
+@stop
+@section('style')
+<link rel="stylesheet" type="text/css" href="{{asset('css/toastr.css')}}">
+@endsection
+@section('content')
+<div id="ajax-message"></div>
+<form method="post" enctype="multipart/form-data" role="form" id="form-update" action="{{ route('api.question.post.editAdmin') }}">
+<input type="hidden" name="_token" value="{{csrf_token()}}">
+<input type="hidden" name="id" value="{{$question->id}}">
+
+<div class="form-group">
+    <label for="content" class="control-label">Content</label>
+    <div>
+        <textarea rows="3" name="content" class="form-control" id="content">{{ $question->content }}</textarea>
+    </div>
+</div>
+<div class="form-group">
+    <div class="">
+          <div class="checkbox">
+            <label>
+              <input id="publish" type="checkbox" name="publish" @if ($question->publish == 1) checked @endif> Publish
+            </label>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div>
+        <a href="{{ route('admin.question.get.index') }}" class="btn btn-default">Cancel</a>
+        <button type="submit" class="btn btn-primary update">Save changes</button>
+    </div>
+</div>
+</form>
+@endsection
+@section('script')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
-
+<script src="{{ asset('js/toastr.js') }}"></script>
 <script>
-var isBusy = false;
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+      return this.optional(element) || value.replace(/\s/g,"") || value.trim();
+    }, "No space please and don't leave it empty");
+
+ var isBusy = false;
 $('#form-update').validate({
+
     rules: {
         content: {
             required: true,
-            minlength: 6
+            maxlength: 150,
+            noSpace: true
         }
     },
     highlight: function(element) {
@@ -61,31 +74,6 @@ $('#form-update').validate({
             error.insertAfter(element);
         }
     },
-    submitHandler : function(form) {
-       event.preventDefault();
-
-        if (isBusy) return;
-
-        var data = {
-                token: $('input[name=_token]').val(),
-                id: $('input[name=id]').val(),
-                content: $('#content').val()
-            };
-        if (document.getElementById('publish').checked) data.publish = 'on';
-        isBusy = true;
-        $.ajax({
-            url: $('#form-update').attr('action'),
-            type: 'POST',
-            data: data,
-            success: function(result) {
-                var message = result.status == true
-                    ? '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Update successfully.</strong> </div>'
-                    : '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error when update!</strong></div>';
-                $('#ajax-message').html(message);
-            }
-        }).always(function() {
-            isBusy = false;
-        });
-    }
  });
 </script>
+@endsection

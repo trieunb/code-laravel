@@ -145,12 +145,13 @@ class QuestionsController extends Controller
 
     public function postEditAdmin(Request $request)
     {
+        $request->merge(array_map('trim', $request->all()));
         $ids = $request->get('id');
         UserQuestion::where('question_id', $ids)
                 ->update(['content' => $request->content]);
         return $this->question->saveFromAdminArea($request)
-            ? response()->json(['status' => true])
-            : response()->json(['status' => false]);
+            ? redirect()->route('admin.question.get.index')->with('message', 'Updated Question successfully!')
+            : redirect()->back()->with('message', 'Error when update question!');
     }
 
     public function postAnswerOfUser(Request $request)
