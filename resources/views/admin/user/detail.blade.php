@@ -22,7 +22,7 @@ Detail User: {{ $user->present()->name }}
 			<li><strong>Link Profile</strong> : <i><a href="{{ $user->link_profile }}">{{ $user->link_profile }}</a></i></li>
 			<li><strong>Infomation</strong> : <i>{{ $user->infomation }}</i></li>
 		</ul>
-		<a href="{{ route('admin.user.get.index') }}" class="btn btn-default">Go to list</a>
+		<a href="{{ route('admin.user.get.index') }}" class="btn btn-default">Back</a>
 	</div>
 @stop
 
