@@ -93,10 +93,10 @@
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Report<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level collapse in" aria-expanded="true">
                                     <li>
-                                        <a href="{{ route('admin.report.user.month') }}">report user</a>
+                                        <a href="{{ route('admin.report.user.month') }}">Report User</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('admin.report.template') }}">report template</a>
+                                        <a href="{{ route('admin.report.template') }}">Report Template</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->

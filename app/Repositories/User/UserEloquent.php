@@ -467,11 +467,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
      */
     public function reportUserMonth($year = null)
     {
-        $user = $this->model->select('*', 
-                    DB::raw('MONTH(created_at) as month'), 
+        $user = $this->model->select(DB::raw('MONTH(created_at) as month'), 
                     DB::raw('COUNT(id) AS count'))
                 ->groupBy('month')
                 ->orderBy('created_at', 'ASC');
+                
         return is_null($year)
             ? $user->get()
             : $user->whereYear('created_at', '=', $year)->get();
@@ -479,7 +479,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function reportUserGender()
     {
-        return $this->model->select(DB::raw('COUNT(*) as `count`,
+        $gender = ['Male' => 0, 'Female' => 0, 'Other' => 0];
+        $users = $this->model->select(DB::raw('COUNT(*) as `count`,
             CASE WHEN gender = 0 THEN "Male"
                WHEN gender = 1 THEN "Female"
                WHEN gender = 2 OR gender is null THEN "Other"     
@@ -487,11 +488,22 @@ class UserEloquent extends AbstractRepository implements UserInterface
             )
             ->groupBy('gender_user')
             ->get();
+        $response = [];
+
+        foreach ($users as $user) {
+            $response[$user->gender_user] = (int)$user->count;
+        }
+
+        $genderDiff = array_diff_key($gender, $response);
+
+        return array_merge($response, $genderDiff);
     }
 
     public function reportUserAge()
     {
-        return $this->model->select(DB::raw('COUNT(*) as count, CASE 
+        $response = [];
+        $groupAge = ['Under 20 olds' => 0, '20-30 olds' => 0, 'Above 30 olds' => 0];
+        $users = $this->model->select(DB::raw('COUNT(*) as count, CASE 
                 WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds" 
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Above 30 olds"
@@ -499,6 +511,14 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ))
             ->groupBy('group_age')
             ->get();
+
+        foreach ($users as $user) {
+            $response[$user->group_age] = $user->count;
+        }
+
+        $arrayDiff = array_diff_key($groupAge, $response);
+
+        return array_merge($response, $arrayDiff);
     }
 
     public function reportUserRegion()
@@ -508,10 +528,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $userTable->addStringColumn('Region')
                     ->addNumberColumn('Users');
 
-        $users = User::select('*', DB::raw('COUNT(id) as count'))
+
+
+        $users = User::select('country',DB::raw('COUNT(id) as count'))
                 ->groupBy('country')
                 ->orderBy('created_at', 'DESC')
                 ->get();
+      
         $user_count = User::count();
         foreach ($users as  $user) {
             $region = '';
@@ -527,20 +550,17 @@ class UserEloquent extends AbstractRepository implements UserInterface
                     break;
             }
 
-            $rowData = array(
-                $region, $user->count/count($user_count)
-            );
+            $rowData = [$region, (int)$user->count];
             $userTable->addRow($rowData);
-
         }
 
-        $chart_region = $lava->PieChart('UserChart')
+        $chart_region = $lava->PieChart('Chart')
                     ->setOptions([
                         'datatable' => $userTable,
                         'is3D' => true,
                         'width' => 988,
                         'height' => 350
                     ]);
-        return $lava->render('PieChart', 'UserChart', 'chart_region', true);
+        return $lava->render('PieChart', 'Chart', 'chart_region', true);
     }
 }

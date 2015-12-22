@@ -37,4 +37,10 @@ interface TemplateMarketInterface extends Repository
 	 */
 	public function search($name);
 
+	/**
+	 * Report Template in Admin area
+	 * @param  int $year 
+	 * @return array       
+	 */
+	public function reportTemplate($year = null);
 }

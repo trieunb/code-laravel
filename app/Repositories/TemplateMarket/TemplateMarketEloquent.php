@@ -153,4 +153,27 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             })
         ->make(true);
     }
+
+    /**
+     * Report Template in Admin area
+     * @param  int $year 
+     * @return array       
+     */
+    public function reportTemplate($year = null)
+    {
+        $templates = $this->model->select('id', 
+                \DB::raw('MONTH(created_at) as month'),
+                \DB::raw('COUNT(id) AS count')
+            )
+            ->groupBy('month')
+            ->orderBy('month');
+
+        $templates = ! is_null($year) 
+            ? $templates->whereYear('created_at', '=', $year)->get()
+            : $templates->get();
+
+        $data = getCountDataOfMonth($templates);
+        
+        return $data;
+    }
 }
