@@ -1,10 +1,11 @@
 <?php
 namespace App\Repositories\UserQuestion;
 
+use App\Models\Question;
+use App\Models\UserQuestion;
 use App\Repositories\AbstractRepository;
 use App\Repositories\UserQuestion\UserQuestionInterface;
-use App\Models\UserQuestion; 
-use App\Models\Question;
+use Khill\Lavacharts\Lavacharts;
 class UserQuestionEloquent extends AbstractRepository implements UserQuestionInterface
 {
     /**
@@ -63,8 +64,26 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
         foreach ($questions as $question) {
             $response[$question->level] = $question->count;    
         }
+
         $diffArray = array_diff_key($levels, $response);
-        
-        return array_merge($response, $diffArray);
+        $responses = array_merge($response, $diffArray);
+
+        $lavaChart = new Lavacharts;
+        $reason = $lavaChart->DataTable()
+                ->addStringColumn('Reasons')
+                ->addNumberColumn('Percent');        
+        foreach ($responses as $name => $value) {
+            $reason->addRow([$name, (int)$value]);
+        }
+
+        $pieChart = $lavaChart->PieChart('Chart')
+            ->setOptions([
+                'datatable' => $reason,
+                'is3D' => true,
+                'width' => 988,
+                'height' => 350
+            ]);
+
+        return $lavaChart->render('PieChart', 'Chart', 'chart_skill', true);
     }
 }
