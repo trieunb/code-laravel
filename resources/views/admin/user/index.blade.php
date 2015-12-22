@@ -42,7 +42,7 @@
 		        columns: [
 		            {data: 'id', name: 'id'},
 		            {data: 'firstname', name: 'firstname'},
-		            {data: 'address', name: 'address'},
+		            {data: 'address', name: 'address', width: "20%"},
 		            {data: 'email', name: 'email'},
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false}
