@@ -1,5 +1,13 @@
 @extends('admin.layout')
 
+@section('style')
+	<style>
+		.btn-group a {
+			margin-left: 20px !important;
+		}
+	</style>
+@stop
+
 @section('title')
 	List User
 @stop
