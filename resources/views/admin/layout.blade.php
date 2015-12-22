@@ -78,6 +78,18 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
+                                <a href="#"><i class="glyphicon glyphicon-th-list"></i> Category<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{{ route('admin.category.get.create') }}">Create Category</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.category.get.index') }}">Category List</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
                                 <a href="#"><i class="fa fa-question fa-fw"></i> Question<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>

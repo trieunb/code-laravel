@@ -166,7 +166,8 @@ return [
         Elibyy\TCPDF\ServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
-        Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class
+        Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class,
+        Baum\Providers\BaumServiceProvider::class,
     ],
 
     /*

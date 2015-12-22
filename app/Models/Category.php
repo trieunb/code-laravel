@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\TemplateMarket;
 use App\Models\User;
+use Baum\Node;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Category extends Node
 {
 	/**
 	 * Table name

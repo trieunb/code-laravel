@@ -33,21 +33,13 @@ class CategoryEloquent extends AbstractRepository implements CategoryInterface
 			'meta_description' => $request->get('meta_description'),
 			'meta_keyword' => $request->get('meta_keyword')
 		]);
-		$category->type = $request->get('type');
 		$category->parent_id = $request->get('parent_id');
-		
-		if ($id) {
-			$category->path = Category::getPathParent($request->get('parent_id')).$id;
-		} 
-
-		$result = $category->save();
-
-		if ($result && !$id) {
-			event(new UpdatePathWhenSaved($result->id, $result->parent_id));
-		}
 
 		return $result;
 	}
 
-	
+	public function datatable()
+	{
+		
+	}
 }

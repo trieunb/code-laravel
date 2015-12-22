@@ -125,7 +125,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     /**
      * Category Route
      */
-    get('category', ['as' => 'admin.category.get.index', 'CategoriesController@index']);
+    get('category', ['as' => 'admin.category.get.index', 'uses' => 'CategoriesController@index']);
+    get('category/create', ['as' => 'admin.category.get.create', 'uses' => 'CategoriesController@create']);
+
+    post('category/checkname', ['as' => 'admin.category.post.checkname', 'uses' => 'CategoriesController@checkName']);
 });
 
 
