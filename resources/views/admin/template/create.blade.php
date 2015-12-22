@@ -35,17 +35,16 @@ Create Template
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" name="description" class="form-control" id="description" placeholder="Description">
+                <textarea  name="description" class="form-control" id="description" placeholder="Description"></textarea>
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
-                <input name="version" type="text" class="form-control" id="version" placeholder="Version">
+                <input name="version" type="text" value="1" class="form-control" id="version" placeholder="Version">
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
                 <select name="status" id="status" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1">Pending</option>
+                    <option value="1" selected>Pending</option>
                     <option value="2">Publish</option>
                 </select>
             </div>
@@ -146,7 +145,13 @@ $(function() {
     $('form').validate({
         rules: {
             title : {
-                required: true,
+                required: {
+                    depends: function() {
+                        $(this).val($.trim($(this).val()));
+                        return true;
+                    }
+                },
+                maxlength: 225,
             /*remote : {
                 url: '{{ route("admin.template.check") }}',
                 type: 'GET',
@@ -157,14 +162,24 @@ $(function() {
                 }   
             }*/
         },
+        price: {
+            required: true,
+            number: true,
+            number: true,
+            min: 0
+        },
         cat_id : {
             required : true
         },
         version : {
-            required: true
+            required: true,
+            maxlength: 10
         },
         status : {
             required : true
+        },
+        description: {
+            maxlength: 1000
         }
     },
     messages : {

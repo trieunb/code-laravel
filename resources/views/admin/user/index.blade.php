@@ -1,23 +1,19 @@
 @extends('admin.layout')
 
-@section('title')
-	List User
-@stop
-
 @section('style')
 	<style>
-		table tbody input[type="checkbox"] {
-	        margin-left: 9px !important;
-	    }
-	    #option-action {
-	        margin-bottom: 10px;
-	        padding-right: 0;
-	    }
+		.btn-group a {
+			margin-left: 10px !important;
+		}
 	</style>
 @stop
 
+@section('title')
+	User List
+@stop
+
 @section('page-header')
-	List User
+	User List
 @stop
 
 @section('content')
@@ -27,23 +23,14 @@
 		    <strong>{{ \Session::get('message') }}</strong>
 	    </div>
 	@endif
-	<div class="col-xs-4 pull-right" id="option-action">
-	    <select class="form-control" id="action">
-	        <option selected disabled value="">Choose Option</option>
-	        <option value="delete">Delete</option>
-	    </select>
-	</div>
-	
+
 	<table class="table table-striped table-bordered table-hover dt-responsive nowrap" id="users-table">
 		<thead>
-			<th><input type="checkbox" id="check_all"></th>
 			<th>Id</th>
 			<th>Fullname</th>
 			<th>Address</th>
-			<th>Country</th>
             <th>Email</th>
-			<th>Birthday</th>
-			<th>Created At</th>
+			<th>Registerd date</th>
 			<th>Action</th>
 		</thead>
 	</table>
@@ -61,22 +48,19 @@
 		        responsive: true,
 		        ajax: '{{ route("api.admin.user.get.dataTable") }}',
 		        columns: [
-		        	{data: 'checkbox', name: 'checkbox', searchable: false, orderable: false},
 		            {data: 'id', name: 'id'},
 		            {data: 'firstname', name: 'firstname'},
-		            {data: 'address', name: 'address'},
-		            {data: 'country', name: 'country'},
+		            {data: 'address', name: 'address', width: "20%"},
 		            {data: 'email', name: 'email'},
-                    {data: 'dob', name: 'dob'},
 		            {data: 'created_at', name: 'created_at'},
-		            {data: 'action', name: 'action', orderable: false, searchable: false}
+		            {data: 'action', name: 'action', orderable: false, searchable: false, width: "5%"}
 		        ],
 		        order: [[5, 'DESC']]
 		    });
 
         $(document).on('click', '.delete-user', function(e) {
             e.preventDefault();
-            
+
             if (isBusy) return;
             var answer = confirm('Are you sure you want to delete?');
             if ( ! answer) return;

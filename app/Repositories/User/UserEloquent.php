@@ -29,9 +29,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * Create or Update data
-	 * @param  mixed $data 
-	 * @param  int $user_id   
-	 * @return mixed      
+	 * @param  mixed $data
+	 * @param  int $user_id
+	 * @return mixed
 	 */
 	public function saveFromApi($data, $user_id = null)
 	{
@@ -68,18 +68,18 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->state = $data['state'];
 		if (isset($data['country']))
 			$user->country = $data['country'];
-		
+
 		if (array_key_exists('password', $data)) {
 			$user->password = bcrypt($data['password']);
 		}
-		
+
 		return $user->save();
 	}
 
 	/**
 	 * Get profile
-	 * @param  int $user_id 
-	 * @return mixed     
+	 * @param  int $user_id
+	 * @return mixed
 	 */
 	public function getProfile($user_id)
 	{
@@ -109,7 +109,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			if ($v['id'] == $data->status)
 				$status = $v;
 		}
-		
+
 
 		$data->status = $data->status != 0 && $data->status != null ? $status : null;
 
@@ -118,9 +118,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * save data Register user
-	 * @param  mixed $request 
-	 * @param  string $token 
-	 * @return void       
+	 * @param  mixed $request
+	 * @param  string $token
+	 * @return void
 	 */
 	public function registerUser($request, $token)
 	{
@@ -139,9 +139,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * Create User get inforation to Oauth2
-	 * @param  array $data  
-	 * @param  string $token 
-	 * @return mixed        
+	 * @param  array $data
+	 * @param  string $token
+	 * @return mixed
 	 */
 	public function createUserFromOAuth($data, $token)
 	{
@@ -210,7 +210,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
         return $user->save();
     }
-    
+
     /**
 	 * Get template for user id
 	 * @param  int $id
@@ -232,28 +232,28 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * Upload avatar
-	 * @param  mixed $file    
-	 * @param  int $user_id 
-	 * @return mixed          
+	 * @param  mixed $file
+	 * @param  int $user_id
+	 * @return mixed
 	 */
 	public function uploadImage($file, $user_id)
 	{
 		$user = $this->getById($user_id);
 		$user->avatar = User::uploadAvatar($file);
 
-		$image = [ 
+		$image = [
 			'origin' => asset($user->avatar['origin']),
 			'thumb' => asset($user->avatar['thumb'])
 		];
-		
+
 		return $user->save() ? $image : '';
 	}
 
 	/**
 	 * Edit Status
-	 * @param  int $id     
-	 * @param  int $status 
-	 * @return bool         
+	 * @param  int $id
+	 * @param  int $status
+	 * @return bool
 	 */
 	public function editStatus($id, $status)
 	{
@@ -263,7 +263,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		$user = $this->getById($id);
 		$user->status = $status;
 		$result = $user->save();
-		
+
 		if ($result) {
 			$status = null;
 			foreach (\Setting::get('user_status') as $k => $v) {
@@ -271,13 +271,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
 					$status = $v;
 			}
 		}
-		
+
 		return $user->save() ? $status : null;
 	}
     /**
      * Remove photo
-     * @param  int $id 
-     * @return bool     
+     * @param  int $id
+     * @return bool
      */
     public function removePhoto($id)
     {
@@ -355,13 +355,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
-        
+
         return $user->save();
     }
 
     /**
      * Get datatable of user
-     * @return mixed 
+     * @return mixed
      */
     public function dataTable()
     {
@@ -370,11 +370,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'created_at'
             ]))
             ->addColumn('action', function($user) {
-                return '<div class="btn-group" role="group" aria-label="...">
-                <a class="btn btn-xs btn-default" href="'.route('admin.user.get.detail',$user->id).'"><i class="glyphicon glyphicon-eye-open"></i> View</a>
-                <a class="delete-user btn btn-xs btn-danger" data-src="'.route('admin.user.delete',$user->id).'"><i class="glyphicon glyphicon-remove"></i> Delete</a>
+               return '<div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-default" href="' .route('admin.user.get.detail', $user->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
+                    <a class="delete-data btn btn-danger" data-src="' .route('admin.user.delete', $user->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
                 </div>';
-                return '';
             })
             ->editColumn('dob', function($user){
                 return (!is_null($user->dob))
@@ -396,8 +395,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     /**
      * Get Answers For User
-     * @param  id $id 
-     * @return Illuminate\Database\Eloquent\Collection     
+     * @param  id $id
+     * @return Illuminate\Database\Eloquent\Collection
      */
     public function answerForUser($id)
     {
@@ -405,8 +404,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
     }
 
     /**
-     * Create Or Update point of Question 
-     * @param int $id   
+     * Create Or Update point of Question
+     * @param int $id
      * @throw \Exception
      */
     public function setPointForAnswer($id, $data)
@@ -437,7 +436,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             case 'objective':
                 return json_encode(['data' => ['objective' => Objective::whereUserId($id)->get()]]);
                 break;
-            case 'name': 
+            case 'name':
                 return json_encode(['data' => $this->getById($id)->present()->name()]);
                 break;
             case 'profile_website':
@@ -463,7 +462,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function updateUserLogin($user, $token)
     {
-        
+
         $this->model->update(['token' => $token], $user->id);
         return \Auth::login($user);
     }
@@ -473,11 +472,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
      */
     public function reportUserMonth($year = null)
     {
-        $user = $this->model->select(DB::raw('MONTH(created_at) as month'), 
+        $user = $this->model->select(DB::raw('MONTH(created_at) as month'),
                     DB::raw('COUNT(id) AS count'))
                 ->groupBy('month')
                 ->orderBy('created_at', 'ASC');
-                
+
         return is_null($year)
             ? $user->get()
             : $user->whereYear('created_at', '=', $year)->get();
@@ -489,7 +488,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $users = $this->model->select(DB::raw('COUNT(*) as `count`,
             CASE WHEN gender = 0 THEN "Male"
                WHEN gender = 1 THEN "Female"
-               WHEN gender = 2 OR gender is null THEN "Other"     
+               WHEN gender = 2 OR gender is null THEN "Other"
                END as "gender_user"')
             )
             ->groupBy('gender_user')
@@ -509,8 +508,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
     {
         $response = [];
         $groupAge = ['Under 20 olds' => 0, '20-30 olds' => 0, 'Above 30 olds' => 0];
-        $users = $this->model->select(DB::raw('COUNT(*) as count, CASE 
-                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds" 
+        $users = $this->model->select(DB::raw('COUNT(*) as count, CASE
+                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds"
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Above 30 olds"
                 END as "group_age"'
@@ -540,7 +539,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 ->groupBy('country')
                 ->orderBy('created_at', 'DESC')
                 ->get();
-      
+
         $user_count = User::count();
         foreach ($users as  $user) {
             $region = '';

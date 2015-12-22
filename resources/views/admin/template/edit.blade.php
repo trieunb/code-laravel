@@ -99,46 +99,6 @@ Edit Template
         return false;
     }
 
-
-
-    // TinyMCE init
-  /*  tinymce.init({
-        selector: "#content",
-        height : 500,
-        // plugins: "table,code, image, link, media",
-        relative_urls: false,
-        remove_script_host: false,
-        style_formats: [
-        { title: 'Activitie', block: 'div', attributes: {lang: 'activitie'} , styles: { color: '#0000' } },
-        { title: 'Address', block: 'div', attributes:{lang: 'address'}, styles: { color: '#00000' } },
-        { title: 'Availability', block: 'div', attributes: {lang: 'availability'}, styles: { color: '#0000' } },
-        { title: 'Education', block: 'div', attributes: {lang: 'education'}, styles: { color: '#0000' } },
-        { title: 'Email', block: 'div', attributes: {lang: 'email'}, styles: { color: '#0000' } },
-        { title: 'Infomation', block: 'div', attributes: {lang: 'infomation'}, styles: { color: '#0000' } },
-        { title: 'Qualification', block: 'div', attributes: {lang: 'key_qualification'}, styles: { color: '#0000' } },
-        { title: 'Linkedin', block: 'div', attributes: {lang: 'linkedin'}, styles: { color: '#0000' } },
-        { title: 'Mobile Phone number', block: 'div', attributes: {lang: 'phone'}, styles: { color: '#0000' } },
-        { title: 'Name', block: 'div', attributes: {lang: 'name'}, styles: { color: '#000000' } },
-        { title: 'Objective', block: 'div', attributes: {lang: 'objective'}, styles: { color: '#0000' } },
-        { title: 'Personal Test', block: 'div', attributes: {lang: 'personal_test'}, styles: { color: '#0000' } },
-        { title: 'Photo', block: 'div', attributes: {lang: 'photo'}, styles: { color: '#0000' } },
-        { title: 'Profile Website', block: 'div', attributes: {lang: 'profile_website'}, styles: { color: '#0000' } },
-        { title: 'Reference', block: 'div', attributes: {lang: 'reference'}, styles: { color: '#0000' } },
-        { title: 'Skill', block: 'div', attributes:{lang: 'skill'}, styles: { color: '#0000' } },
-        { title: 'Work Experience', block: 'div', attributes:{lang: 'work'}, styles: { color: '#0000' } }
-        ],
-        plugins: [
-        "advlist autolink autosave image lists charmap print preview hr  pagebreak spellchecker",
-        " code fullscreen  nonbreaking",
-        "table contextmenu directionality textcolor paste textcolor colorpicker textpattern"
-        ],
-
-        toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect |cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat | fullscreen | ltr rtl | spellchecker |   nonbreaking pagebreak",
-
-        menubar: false,
-        toolbar_items_size: 'small',
-        file_picker_callback : elFinderBrowser
-    });*/
    tinymce.init({
       selector: "#content",
       height : 500,
@@ -175,14 +135,17 @@ Edit Template
         file_picker_callback : elFinderBrowser,
 
     });
-    /*CKEDITOR.replace('content', {
-        format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name'
-    });*/
+
     var isBusy = false;
     $('form').validate({
         rules: {
             title : {
-                required: true,
+                required: {
+                    depends: function() {
+                        $(this).val($.trim($(this).val()));
+                        return true;
+                    }
+                },
                /* remote : {
                     url: '{{ route("admin.template.check") }}',
                     type: 'GET',
@@ -196,6 +159,12 @@ Edit Template
                     }   
                 }*/
             },
+            price: {
+                required: true,
+                number: true,
+                number: true,
+                min: 0
+            },
             cat_id : {
                 required : true
             },
@@ -204,6 +173,9 @@ Edit Template
             },
             status : {
                 required : true
+            },
+            description: {
+                maxlength: 1000
             }
         },
         highlight: function(element) {
