@@ -3,17 +3,17 @@
 @section('style')
 	<style>
 		.btn-group a {
-			margin-left: 20px !important;
+			margin-left: 10px !important;
 		}
 	</style>
 @stop
 
 @section('title')
-	List User
+	User List
 @stop
 
 @section('page-header')
-	List User
+	User List
 @stop
 
 @section('content')
@@ -53,7 +53,7 @@
 		            {data: 'address', name: 'address', width: "20%"},
 		            {data: 'email', name: 'email'},
 		            {data: 'created_at', name: 'created_at'},
-		            {data: 'action', name: 'action', orderable: false, searchable: false}
+		            {data: 'action', name: 'action', orderable: false, searchable: false, width: "5%"}
 		        ],
 		        order: [[5, 'DESC']]
 		    });

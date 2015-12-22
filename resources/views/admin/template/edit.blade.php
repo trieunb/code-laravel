@@ -159,6 +159,12 @@ Edit Template
                     }   
                 }*/
             },
+            price: {
+                required: true,
+                number: true,
+                number: true,
+                min: 0
+            },
             cat_id : {
                 required : true
             },
@@ -167,6 +173,9 @@ Edit Template
             },
             status : {
                 required : true
+            },
+            description: {
+                maxlength: 1000
             }
         },
         highlight: function(element) {

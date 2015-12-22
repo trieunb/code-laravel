@@ -53,12 +53,7 @@ Report User
 <div class="tab-content">
     <div id="chart_month" class="tab-pane fade <?php if(is_null($question_id)) echo "in active"; ?>">
     <br>
-        <div class="row">
-            <ul id="note-report">
-                <li><span id="template"></span> Template created monthly</li>
-                <li><span id="bought"></span> Template bougth monthly</li>
-            </ul>
-        </div>
+      
         <div class="row">
             <div class="col-xs-4 pull-right">
                  {!! Form::selectYear('question', 2000, 2020, is_null($year) ?  \Carbon\Carbon::now()->year : $year, ['class' => 'form-control', 'id' => 'year']) !!}
