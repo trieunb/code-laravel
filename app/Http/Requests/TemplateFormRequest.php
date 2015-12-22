@@ -27,6 +27,9 @@ class TemplateFormRequest extends Request
 
         return [
             'title' => 'required',
+            'description' => 'max:1000',
+            'price' => 'required|numeric|min:0',
+            'version' => 'required'
         ];
     }
 }
