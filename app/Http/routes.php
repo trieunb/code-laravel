@@ -114,10 +114,15 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     post('question/create', ['as' => 'admin.question.post.create', 'uses' => 'QuestionsController@store']);
 
     /**
-     * Report
+     * Report Route
      */
     get('report/user', ['as' => 'admin.report.user.month', 'uses' => 'ReportController@reportUserByMonth']);
     get('report/template', ['as' => 'admin.report.template', 'uses' => 'ReportController@reportTemplate']);
+
+    /**
+     * Category Route
+     */
+    get('category', ['as' => 'admin.category.get.index', 'CategoriesController@index']);
 });
 
 

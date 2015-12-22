@@ -49,12 +49,5 @@ class CategoryEloquent extends AbstractRepository implements CategoryInterface
 		return $result;
 	}
 
-	/**
-	 * Get first record
-	 * @return mixed 
-	 */
-	public function getFirst()
-	{
-		return $this->model->first();
-	}
+	
 }
