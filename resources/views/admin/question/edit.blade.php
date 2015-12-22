@@ -55,7 +55,6 @@ $('#form-update').validate({
     rules: {
         content: {
             required: true,
-            maxlength: 150,
             noSpace: true
         }
     },
