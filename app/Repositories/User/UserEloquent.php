@@ -375,6 +375,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 </div>';*/
                 return '';
             })
+            ->editColumn('dob', function($user){
+                return (!is_null($user->dob))
+                    ? $user->dob
+                    : 'N/A';
+            })
             ->editColumn('firstname', function($user) {
                 return $user->firstname . ' ' . $user->lastname;
             })
