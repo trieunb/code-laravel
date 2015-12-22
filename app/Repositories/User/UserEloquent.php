@@ -366,23 +366,24 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function dataTable()
     {
         return \Datatables::of($this->model->select([
-            'id', 'firstname', 'lastname', 'address', 'email','dob',
-            'created_at', 'updated_at'
+            'id', 'firstname', 'lastname', 'address', 'country', 'mobile_phone', 'email','dob',
+            'created_at'
             ]))
             ->addColumn('action', function($user) {
-                /*return '<div class="btn-group" role="group" aria-label="...">
+                return '<div class="btn-group" role="group" aria-label="...">
+                <a class="btn btn-xs btn-default" href="'.route('admin.user.get.detail',$user->id).'"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                 <a class="delete-user btn btn-xs btn-danger" data-src="'.route('admin.user.delete',$user->id).'"><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                </div>';*/
+                </div>';
                 return '';
             })
             ->editColumn('firstname', function($user) {
-                return $user->firstname . ' ' . $user->lastname;
+                return $user->present()->name();
+            })
+            ->addColumn('checkbox', function($user) {
+                return '<input type="checkbox" value="'.$user->id.'" />';
             })
             ->editColumn('created_at', function($user) {
                 return $user->created_at->format('Y-m-d');
-            })
-            ->editColumn('updated_at', function($user) {
-                return $user->updated_at->format('Y-m-d');
             })
             ->removeColumn('lastname')
             ->make(true);

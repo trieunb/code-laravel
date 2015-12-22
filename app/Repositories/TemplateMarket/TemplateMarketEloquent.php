@@ -138,7 +138,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     {
         $templates = $this->model->select('*');
         return \Datatables::of($templates)
-           
+            ->addColumn('checkbox', function($template) {
+                return '<input type="checkbox" value="'.$template->id.'"/>';
+            })
             ->addColumn('action', function ($template) {
                 return '<div class="btn-group" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.template.get.view', $template->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -152,5 +154,16 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
                     : '<a class="status-data btn btn-warning" data-src="' .route('admin.template.status', $template->id) . '">Pending</a>';
             })
         ->make(true);
+    }
+
+    /**
+     * Publish or Pending template multi record
+     * @param  int $status 
+     * @param  array $ids    
+     * @return mixed         
+     */
+    public function publishOrPendingMultiRecord($status, $ids)
+    {
+       return $this->model->whereIn('id', $ids)->update(['status' => $status]);
     }
 }

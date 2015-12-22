@@ -37,4 +37,11 @@ interface TemplateMarketInterface extends Repository
 	 */
 	public function search($name);
 
+	/**
+	 * Publish or Pending template multi record
+	 * @param  int $status 
+	 * @param  array $ids    
+	 * @return mixed         
+	 */
+	public function publishOrPendingMultiRecord($status, $ids);
 }

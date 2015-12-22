@@ -61,7 +61,8 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+    	$user = $this->user->getById($id);
+        return view('admin.user.detail', compact('user', $user));
     }
 
     /**
@@ -115,5 +116,12 @@ class UsersController extends Controller
     public function dataTable()
     {
         return $this->user->dataTable();
+    }
+
+    public function postDelete(Request $request)
+    {
+        return $this->user->deleteMultiRecords($request->get('ids'))
+            ? response()->json(['status_code' => 200])
+            : response()->json(['status_code' => 400]);
     }
 }
