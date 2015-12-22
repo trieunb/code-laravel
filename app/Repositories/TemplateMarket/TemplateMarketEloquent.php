@@ -137,8 +137,11 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     public function dataTableTemplate()
     {
         $templates = $this->model->select('*');
+
         return \Datatables::of($templates)
-           
+            ->addColumn('checkbox', function($template) {
+                return '<input type="checkbox" value="'.$template->id.'"/>';
+            })
             ->addColumn('action', function ($template) {
                 return '<div class="btn-group" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.template.get.view', $template->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -151,10 +154,21 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
                     ? '<a class="status-data btn btn-success" data-src="' .route('admin.template.status', $template->id) . '">Publish</a>'
                     : '<a class="status-data btn btn-warning" data-src="' .route('admin.template.status', $template->id) . '">Pending</a>';
             })
-        ->make(true);
+            ->make(true);
     }
 
     /**
+     * Publish or Pending template multi record
+     * @param  int $status 
+     * @param  array $ids    
+     * @return mixed         
+     */
+    public function publishOrPendingMultiRecord($status, $ids)
+    {
+       return $this->model->whereIn('id', $ids)->update(['status' => $status]);
+    }
+
+    /*
      * Report Template in Admin area
      * @param  int $year 
      * @return array       
@@ -172,8 +186,6 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             ? $templates->whereYear('created_at', '=', $year)->get()
             : $templates->get();
 
-        $data = getCountDataOfMonth($templates);
-        
-        return $data;
+        return getCountDataOfMonth($templates);
     }
 }
