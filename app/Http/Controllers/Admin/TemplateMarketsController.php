@@ -104,11 +104,6 @@ class TemplateMarketsController extends Controller
         }
     }
 
-    public function postUploadFiles(Request $request)
-    {
-        
-    }
-
     public function browseImage(Request $request)
     {
         $test = $request->get('CKEditorFuncNum');
@@ -134,4 +129,18 @@ class TemplateMarketsController extends Controller
         return view('admin.template.view', ['title' => $template->title, 'content' => $template->content]);
     }
 
+    public function postAction(Request $request)
+    {
+        try {
+            if ($request->get('action') == 'delete') {
+                $this->template_market->deleteMultiRecords($request->get('ids'));
+            } else {
+                $this->template_market->publishOrPendingMultiRecord($request->get('action'), $request->get('ids'));
+            }
+
+            return response()->json(['status_code' => 200]);
+        } catch (\Exception $e) {
+            return response()->json(['status_code' => 400]);
+        }    
+    }
 }
