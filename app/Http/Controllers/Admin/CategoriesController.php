@@ -36,10 +36,27 @@ class CategoriesController extends Controller
     		: redirect()->back()->with('message', 'Failed when create Category!!!');
     }
 
+    public function edit($id)
+    {
+        $category = $this->category->getById($id);
+
+        return view('admin.category.edit', compact('category'));
+    }
+
+    public function postEdit(CategoryFormRequest $request)
+    {
+        
+    }
+
     public function checkName(Request $request)
     {
-    	return $this->category->getFirstDataWhereClause('name', '=', $request->get('name'))
+    	return $this->category->checkName($request->get('name'), $request->get('id'))
     		? 'false'
     		: 'true';
+    }
+
+    public function datatable()
+    {
+        return $this->category->datatable();
     }
 }

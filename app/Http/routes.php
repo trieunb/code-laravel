@@ -127,8 +127,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
      */
     get('category', ['as' => 'admin.category.get.index', 'uses' => 'CategoriesController@index']);
     get('category/create', ['as' => 'admin.category.get.create', 'uses' => 'CategoriesController@create']);
+    get('category/edit/{id}', ['as' => 'admin.category.get.edit', 'uses' => 'CategoriesController@edit']);
+    get('category/detail/{id}', ['as' => 'admin.category.get.detail', 'uses' => 'CategoriesController@detail']);
+    get('category/datatable', ['as' => 'admin.category.get.datatable', 'uses' => 'CategoriesController@datatable']);
 
     post('category/checkname', ['as' => 'admin.category.post.checkname', 'uses' => 'CategoriesController@checkName']);
+    post('category/create', ['as' => 'admin.category.post.create', 'uses' => 'CategoriesController@postCreate']);
+    post('category/edit', ['as' => 'admin.category.post.edit', 'uses' => 'CategoriesController@postEdit']);
 });
 
 

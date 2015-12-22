@@ -47,4 +47,23 @@ class Category extends Node
     {
         return $this->findOrFail($cat_id)->path;
     }
+
+    /**
+     * Make Slug Category
+     * @param  mixed $category 
+     * @return void           
+     */
+    public static function makeSlug($category)
+    {
+        $category->slug = str_slug($category->name);
+        $latestSlug = static::whereRaw("slug RLIKE '^{$category->slug}(-[0-9]*)?$'")
+            ->latest('id')
+            ->pluck('slug');
+
+        if ($latestSlug) {
+            $pieces = explode('-', $latestSlug);
+            $number = intval(end($pieces));
+            $category->slug .= '-'. ($number + 1);
+        }
+    }
 }

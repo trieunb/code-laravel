@@ -1,11 +1,11 @@
 @extends('admin.layout')
 
 @section('title')
-Create Category
+Edit Category
 @stop
 
 @section('page-header')
-Create Category
+Edit Category: {{ $category->name }}
 @stop
 
 @section('content')
@@ -13,35 +13,36 @@ Create Category
     <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
     @endif
 
-<form class="form-horizontal" method="post" action="{{ route('admin.category.post.create') }}">
+<form class="form-horizontal" method="post" action="{{ route('admin.category.post.edit') }}">
+	<input type="hidden" name="id" id="id" value="{{ $category->id }}"/>
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">Name</label>
 		<div class="col-sm-10">
-			<input type="text" name="name" class="form-control" id="name" placeholder="Name">
+			<input type="text" value="{{ $category->name }}" name="name" class="form-control" id="name" placeholder="Name">
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="description" class="col-sm-2 control-label">Description</label>
 		<div class="col-sm-10">
-			<input type="text" name="description" class="form-control" id="description" placeholder="Description">
+			<input type="text" value="{{ $category->meta['description'] }}" name="description" class="form-control" id="description" placeholder="Description">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="keyword" class="col-sm-2 control-label">Keyword</label>
 		<div class="col-sm-10">
-			<input type="text" name="keyword" class="form-control" id="description" placeholder="Keyword">
+			<input type="text" value="{{ $category->meta['keyword'] }}" name="keyword" class="form-control" id="description" placeholder="Keyword">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="description" class="col-sm-2 control-label">Parent Id</label>
 		<div class="col-sm-10">
-			{!! Form::select('parent_id', $list_category, null, ['class' => 'form-control', 'placeholder' => 'Parent']) !!}
+			{!! Form::select('parent_id', $list_category, $category->id, ['class' => 'form-control', 'placeholder' => 'Parent']) !!}
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
-			<button type="submit" class="btn btn-primary">Create</button>
+			<button type="submit" class="btn btn-primary">Edit</button>
 			<a class="btn btn-default" href="{{ route('admin.category.get.index') }}">Cancel</a>
 		</div>
 	</div>
@@ -67,7 +68,9 @@ Create Category
 							name: function(){
 								return $('#name').val();
 							},
-							id: null
+							id: function() {
+								return $('#id').val()
+							}
 						}
 					}
 				}
