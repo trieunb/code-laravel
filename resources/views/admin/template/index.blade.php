@@ -14,8 +14,6 @@
         padding-right: 0;
     }
 </style>
-<link rel="stylesheet" type="text/css" href="{{ asset('fancybox/source/jquery.fancybox.css?') }}">
-<link rel="stylesheet" href="{{ asset('fancybox/source/helpers/jquery.fancybox-thumbs.css') }}" type="text/css" media="screen" />
 @stop
 
 @section('page-header')
@@ -50,7 +48,6 @@ Template List
 </table>
 @endsection
 @section('script')
-    <script src="{{ asset('fancybox/lib/jquery.mousewheel-3.0.6.pack.js') }}"></script>
     <script src="{{ asset('js/action_admin.js') }}"></script>
     <script type="text/javascript">
         var isBusy = false;
@@ -96,7 +93,7 @@ Template List
                     {data: 'status', name: 'status', orderable: false, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
-                order: [[3, 'DESC']]
+                order: [[4, 'DESC']]
             });
 
             var isBusy = false;

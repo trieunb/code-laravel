@@ -10,7 +10,7 @@ abstract class AbstractRepository
 	 */
 	public function getAll()
 	{
-		return $this->model->all();
+		return $this->model->orderBy('created_at', 'desc')->get();
 	}
 
 	/**

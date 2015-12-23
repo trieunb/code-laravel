@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\TemplateMarket;
 use App\Models\User;
+use Baum\Node;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Category extends Node
 {
 	/**
 	 * Table name
@@ -45,5 +46,24 @@ class Category extends Model
     public static function getPathParent($cat_id)
     {
         return $this->findOrFail($cat_id)->path;
+    }
+
+    /**
+     * Make Slug Category
+     * @param  mixed $category 
+     * @return void           
+     */
+    public static function makeSlug($category)
+    {
+        $category->slug = str_slug($category->name);
+        $latestSlug = static::whereRaw("slug RLIKE '^{$category->slug}(-[0-9]*)?$'")
+            ->latest('id')
+            ->pluck('slug');
+
+        if ($latestSlug) {
+            $pieces = explode('-', $latestSlug);
+            $number = intval(end($pieces));
+            $category->slug .= '-'. ($number + 1);
+        }
     }
 }

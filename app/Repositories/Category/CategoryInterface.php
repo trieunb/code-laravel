@@ -6,8 +6,15 @@ use App\Repositories\Repository;
 interface CategoryInterface extends Repository
 {
 	/**
-	 * Get first record
-	 * @return mixed 
+	 * Create or Update data
+	 * @param  mixed $data 
+	 * @return mixed      
 	 */
-	public function getFrist();
+	public function save($request);
+
+	/**
+	 * Get DataTable
+	 * @return mixex
+	 */
+	public function datatable();
 }

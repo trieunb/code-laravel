@@ -18,43 +18,69 @@ class CategoryEloquent extends AbstractRepository implements CategoryInterface
 	/**
 	 * Create or Update data
 	 * @param  mixed $data 
-	 * @param  int $id  if $id == null => create else update
 	 * @return mixed      
 	 */
-	public function save($request, $id = null)
+	public function save($request)
 	{
-		$category = $id ? $this->getById($id) : new Category;
 
-		if ( !$id) $category->user_id = \Auth::user()->id;
+		$category = $request->has('id') ? $this->getById($request->get('id')) : new Category;
+
+		if ( ! $request->has('id')) $category->user_id = \Auth::user()->id;
 
 		$category->name = $request->get('name');
-		$category->slug = toSlug($request->get('name'));
-		$category->meta = json_encode([
-			'meta_description' => $request->get('meta_description'),
-			'meta_keyword' => $request->get('meta_keyword')
-		]);
-		$category->type = $request->get('type');
-		$category->parent_id = $request->get('parent_id');
-		
-		if ($id) {
-			$category->path = Category::getPathParent($request->get('parent_id')).$id;
-		} 
+		Category::makeSlug($category);
+		$category->meta = [
+			'description' => $request->get('description'),
+			'keyword' => $request->get('keyword')
+		];
+		$category->parent_id = $request->get('parent_id') != 0 
+			? $request->get('parent_id') 
+			: null;
 
-		$result = $category->save();
-
-		if ($result && !$id) {
-			event(new UpdatePathWhenSaved($result->id, $result->parent_id));
-		}
-
-		return $result;
+		return $category->save();
 	}
 
-	/**
-	 * Get first record
-	 * @return mixed 
-	 */
-	public function getFirst()
+	public function checkName($name = null, $id = null)
 	{
-		return $this->model->first();
+		return is_null($id)
+			? $this->getFirstDataWhereClause('name', '=', $name)
+			: $this->model->whereName($name)->where('id', '!=', $id)->first();
+	}
+
+	public function datatable()
+	{
+		return \Datatables::of($this->model->select('*'))
+            ->addColumn('description', function($category) {
+            	return $category->meta['description'];
+            })
+            ->addColumn('keyword', function($category) {
+            	return $category->meta['keyword'];
+            })
+            ->addColumn('action', function ($category) {
+                return '<div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-default" href="' .route('admin.category.get.detail', $category->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
+                    <a class="btn btn-primary edit" href="' .route('admin.category.get.edit', $category->id) . '"><i class="glyphicon glyphicon-edit"></i></a>
+                </div>';
+            })
+            ->make(true);
+	}
+
+	public function listParent($key, $value, $id)
+	{
+		$node = $this->getById($id);
+		$childrens = $node->getDescendants();
+		$ids = [$id];
+
+		foreach ($childrens as $children) {
+			$ids[] = $children->id;
+		}
+
+		return $this->model->whereNotIn('id', $ids)->lists($key, $value);
+	}
+
+	public function paginate()
+	{
+		return $this->model->orderBy('created_at', 'DESC')
+			->paginate(config('paginate.offset'));
 	}
 }

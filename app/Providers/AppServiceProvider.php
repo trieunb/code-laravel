@@ -16,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
         \Validator::extend('alpha_spaces', function($attributes, $value, $parameter, $validator) {
             return preg_match('/^[\pL\pM\s]+$/u', $value);
         });
+        \Validator::extend('max_length_numeric', function($attributes, $value, $parameter, $validator) {
+            return strlen($value) <= $parameter[0];
+        });
     }
 
     /**
