@@ -66,32 +66,10 @@ Report User
         <div class="title-char text-center"><h3>Registered users</h3></div>
     </div>
     <div id="chart_gender" class="tab-pane fade">
-        <div class="row">
-            <ul id="note-report" class="note-report-user note-age">
-                <li><span></span> Male</li>
-                <li><span></span> Female</li>
-                <li><span></span> Other</li>
-            </ul>
-        </div>
-        <canvas id="report-gender" style="width:100%; height:300px"></canvas>
-        @if(count($chart_gender) == 0)
-            <h3>Not Found Data</h3>
-        @endif
-        <div class="title-char text-center"><h3>Registered users by gender</h3></div>
+       {!! $chart_gender !!}
     </div>
     <div id="chart_age" class="tab-pane fade">
-        <div class="row">
-            <ul id="note-report" class="note-report-user">
-                <li><span></span> Under 20 olds</li>
-                <li><span></span> 20-30 olds</li>
-                <li><span></span> Above 30 olds</li>
-            </ul>
-        </div>
-        <canvas id="report-age" style="width:100%; height:300px"></canvas>
-        @if(count($chart_age) == 0)
-            <h3>Not Found Data</h3>
-        @endif
-        <div class="title-char text-center"><h3>Registered users by age group</h3></div>
+        {!! $chart_age !!}
     </div>
     <div id="chart_region" class="tab-pane fade">
         {!! $chart_region !!}
@@ -174,61 +152,12 @@ Report User
     };
 
 
-    var ctx_1 = document.getElementById('report-gender').getContext('2d');
-    var responseGender =   {!! json_encode($chart_gender) !!};
-
-    var data_gender = [
-        {
-            value: responseGender.Male,
-            color:"#46BFBD",
-            highlight: "#5AD3D1",
-            label:  'Male'
-        },
-        {
-            value: responseGender.Female,
-            color:"#F7464A",
-            highlight: "#FF5A5E",
-           
-            label:  'Female'
-        },
-        {
-            value: responseGender.Other,
-            color:"#FDB45C",
-            highlight: "#FFC870",
-            label: 'Other'
-        }
-    ];
-    var myPieChart;
-     var responseAge = {!! json_encode($chart_age) !!};
-
-    var data_age = new Array;
-    $.each(responseAge, function(key, val) {
-        var object = {};
-        if (key == 'Under 20 olds') {
-            object.color = "#FDB45C";
-            object.highlight = "#FFC870";
-            object.label = 'Under 20 olds';
-        } else if (key == '20-30 olds') {
-            object.color = "#F7464A";
-            object.highlight = "#FF5A5E";
-            object.label = '20-30 olds';
-        } else {
-            object.color = "#46BFBD";
-            object.highlight = "#5AD3D1";
-            object.label = 'Above 30 olds';
-        }
-        object.value = val;
-        data_age.push(object);
-        
-    });
-
-    var ctx_2 =  document.getElementById('report-age').getContext('2d');
-    var ageChart;
+   
 
     $('#register').on('shown.bs.tab', function (e) {
-        if (typeof(myPieChart) != 'undefined')
+       /* if (typeof(myPieChart) != 'undefined')
             myPieChart.destroy();
-        console.log(chart);
+        console.log(chart);*/
         register_report = new Chart(ctx).Line(chart, {
             bezierCurve : false,
             scaleGridLineColor : "rgba(0,0,0,.05)",
@@ -236,23 +165,6 @@ Report User
         });
     });
 
-    $('#gender').on('shown.bs.tab', function (e) {
-        if (typeof(ageChart) != 'undefined') {
-            ageChart.destroy();
-        }
-        if (typeof(register_report) != 'undefined')
-            register_report.destroy();
-        myPieChart = new Chart(ctx_1).Pie(data_gender, {responsive: true});
-    });
-
-    $('#age').on('shown.bs.tab', function (e) {
-        if (typeof(register_report) != 'undefined')
-            register_report.destroy();
-        if (typeof(myPieChart) != 'undefined') {
-            myPieChart.destroy();
-        }
-        ageChart = new Chart(ctx_2).Pie(data_age, {responsive: true});
-    });
 
 });
 </script>
