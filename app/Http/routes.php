@@ -11,11 +11,6 @@
 |
 */
 
-get('pdf', function() {
-      $snappy = \App::make('snappy.pdf');
-       $snappy->generateFromHtml( $this->content, public_path('abc.pdf'));
-});
-
 /*get('test', function() {
     $job = \App\JobTest::find(1);
      $skills = []; 
