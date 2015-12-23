@@ -612,7 +612,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
             $rowData = [$region, (int)$user->count];
             $userTable->addRow($rowData);*/
-            $userTable->addRow([$user->region, $user->count]);
+            $userTable->addRow([$user->region, (int)$user->count]);
         }
 
         $chart_region = $lava->PieChart('Chart')
