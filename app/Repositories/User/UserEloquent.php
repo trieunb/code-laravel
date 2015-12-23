@@ -366,18 +366,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function dataTable()
     {
         $users = $this->model
-            ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
-            ->leftJoin('roles', 'role_user.role_id', '=', 'roles.id')
-            ->select('users.id', 
-                'users.firstname', 
-                'users.lastname', 
-                'users.email',
-                'users.created_at', 
-                'role_user.user_id', 
-                'roles.slug')
-            ->where(function ($query) {
-                $query->where('roles.slug', '<>', 'admin')
-                    ->orwhereNull('roles.slug');
+            ->whereDoesntHave('roles' , function($q) {
+                $q->where('roles.slug', '=', 'admin');
             })->get();
         return \Datatables::of($users)
             ->addColumn('action', function($user) {
