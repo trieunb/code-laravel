@@ -37,7 +37,7 @@ Edit Category: {{ $category->name }}
 	<div class="form-group">
 		<label for="description" class="col-sm-2 control-label">Parent Id</label>
 		<div class="col-sm-10">
-			{!! Form::select('parent_id', $list_category, $category->id, ['class' => 'form-control', 'placeholder' => 'Parent']) !!}
+			{!! Form::select('parent_id', $parents, $category->parent_id, ['class' => 'form-control', 'placeholder' => 'Parent']) !!}
 		</div>
 	</div>
 	<div class="form-group">

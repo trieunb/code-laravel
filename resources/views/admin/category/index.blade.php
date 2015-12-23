@@ -15,19 +15,36 @@
 
 	<table class="table table-striped table-bordered table-hover" id="categories-table">
 	    <thead>
-	        <th><input type="checkbox" id="check_all"></th>
 	        <th>Id</th>
 	        <th>Name</th>
 	        <th>Description</th>
 	        <th>Keyword</th>
 	        <th>Created At</th>
+	        <th>Action</th>
 	    </thead>
+	    <tbody>
+	    	@foreach ($categories as $category)
+				<tr>
+					<td>{{ $category->id }}</td>
+					<td>{{ $category->name }}</td>
+					<td>{{ $category->meta['description'] }}</td>
+					<td>{{ $category->meta['keyword'] }}</td>
+					<td>{{ $category->created_at }}</td>
+					<td>
+						<div class="btn-group" role="group" aria-label="...">
+		                    <a class="btn btn-primary edit" href="{{ route('admin.category.get.edit', $category->id)}}"><i class="glyphicon glyphicon-edit"></i></a>
+		                </div>
+                	</td>
+				</tr>
+	    	@endforeach
+	    </tbody>
 	</table>
+	{!! $categories->render() !!}
 @stop
 
 @section('script')
 	<script>
-	var categoryDataTable = $('#categories-table').DataTable({
+	/*var categoryDataTable = $('#categories-table').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
@@ -41,7 +58,7 @@
                     {data: 'action', name: 'action',orderable: false, searchable: true}
                 ],
                 order: [[4, 'DESC']]
-            });
+            });*/
 
 	</script>
 @endsection

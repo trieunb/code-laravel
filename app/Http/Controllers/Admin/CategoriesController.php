@@ -19,7 +19,7 @@ class CategoriesController extends Controller
 
 	public function index()
 	{
-		$categories = $this->category->getAll();
+		$categories = $this->category->paginate();
 
 		return view('admin.category.index', compact('categories'));
 	}
@@ -39,17 +39,21 @@ class CategoriesController extends Controller
     public function edit($id)
     {
         $category = $this->category->getById($id);
+        $parents = $this->category->listParent('name', 'id', $id);
 
-        return view('admin.category.edit', compact('category'));
+        return view('admin.category.edit', compact('category', 'parents'));
     }
 
     public function postEdit(CategoryFormRequest $request)
     {
-        
+        return $this->category->save($request)
+            ? redirect()->route('admin.category.get.index')->with('message', 'Edit Category successfully!')
+            : redirect()->back()->with('message', 'Error when edit Category!!!');
     }
 
     public function checkName(Request $request)
     {
+        // dd($this->category->checkName($request->get('name'), $request->get('id')));
     	return $this->category->checkName($request->get('name'), $request->get('id'))
     		? 'false'
     		: 'true';

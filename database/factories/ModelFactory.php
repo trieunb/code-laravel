@@ -36,9 +36,7 @@ $factory->define(App\Models\Category::class, function(Faker\Generator $faker) {
         'user_id' => rand(1, 10),
         'name' => $faker->name,
         'slug' => $faker->name,
-        'meta' => json_encode(['a', 'b', 'c', 'd', 'e']),
-        'parent_id' => null,
-        'path' => $faker->name
+        'parent_id' => null
     ];
 });
 

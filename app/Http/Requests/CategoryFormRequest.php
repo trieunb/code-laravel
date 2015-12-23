@@ -25,7 +25,7 @@ class CategoryFormRequest extends Request
     {
         $name = 'required|max:30';
 
-        if ($this->has('id')) $name .= '|unique:categories,name,'.$this->has('id');
+        if ($this->has('id')) $name .= '|unique:categories,name,'.$this->get('id');
 
         return [
             'name' => $name

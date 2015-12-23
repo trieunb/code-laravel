@@ -18,15 +18,14 @@ class CategoryEloquent extends AbstractRepository implements CategoryInterface
 	/**
 	 * Create or Update data
 	 * @param  mixed $data 
-	 * @param  int $id  if $id == null => create else update
 	 * @return mixed      
 	 */
-	public function save($request, $id = null)
+	public function save($request)
 	{
 
-		$category = $id ? $this->getById($id) : new Category;
+		$category = $request->has('id') ? $this->getById($request->get('id')) : new Category;
 
-		if ( !$id) $category->user_id = \Auth::user()->id;
+		if ( ! $request->has('id')) $category->user_id = \Auth::user()->id;
 
 		$category->name = $request->get('name');
 		Category::makeSlug($category);
@@ -60,9 +59,28 @@ class CategoryEloquent extends AbstractRepository implements CategoryInterface
             ->addColumn('action', function ($category) {
                 return '<div class="btn-group" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.category.get.detail', $category->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
-                    <a class="btn btn-primary edit" href="' .route('admin.template.get.edit', $category->id) . '"><i class="glyphicon glyphicon-edit"></i></a>
+                    <a class="btn btn-primary edit" href="' .route('admin.category.get.edit', $category->id) . '"><i class="glyphicon glyphicon-edit"></i></a>
                 </div>';
             })
             ->make(true);
+	}
+
+	public function listParent($key, $value, $id)
+	{
+		$node = $this->getById($id);
+		$childrens = $node->getDescendants();
+		$ids = [$id];
+
+		foreach ($childrens as $children) {
+			$ids[] = $children->id;
+		}
+
+		return $this->model->whereNotIn('id', $ids)->lists($key, $value);
+	}
+
+	public function paginate()
+	{
+		return $this->model->orderBy('created_at', 'DESC')
+			->paginate(config('paginate.offset'));
 	}
 }
