@@ -41,24 +41,3 @@
 	</table>
 	{!! $categories->render() !!}
 @stop
-
-@section('script')
-	<script>
-	/*var categoryDataTable = $('#categories-table').DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                ajax: '{{ route("admin.category.get.datatable") }}',
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'description', name: 'description'},
-                    {data: 'keyword', name: 'keyword'},
-                    {data: 'created_at', name: 'created_at',orderable: false, searchable: true},
-                    {data: 'action', name: 'action',orderable: false, searchable: true}
-                ],
-                order: [[4, 'DESC']]
-            });*/
-
-	</script>
-@endsection

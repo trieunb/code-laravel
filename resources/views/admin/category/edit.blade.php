@@ -54,7 +54,6 @@ Edit Category: {{ $category->name }}
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script>
 	$(document).ready(function() {
-		// $('select option:first-child').val('1');
 		$('form').validate({
 			rules: {
 				name: {

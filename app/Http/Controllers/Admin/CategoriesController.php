@@ -53,7 +53,6 @@ class CategoriesController extends Controller
 
     public function checkName(Request $request)
     {
-        // dd($this->category->checkName($request->get('name'), $request->get('id')));
     	return $this->category->checkName($request->get('name'), $request->get('id'))
     		? 'false'
     		: 'true';
