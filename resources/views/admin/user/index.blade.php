@@ -55,7 +55,7 @@
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false, width: "5%"}
 		        ],
-		        order: [[5, 'DESC']]
+		        order: [[4, 'DESC']]
 		    });
 
         $(document).on('click', '.delete-user', function(e) {
