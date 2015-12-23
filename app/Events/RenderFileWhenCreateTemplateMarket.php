@@ -24,26 +24,15 @@ class RenderFileWhenCreateTemplateMarket extends Event
      */
     public function __construct($slug, $content, $template_id)
     {
-        $this->slug = $slug;
+        $this->slug = md5(str_random(40).uniqid());
         $this->content = $content;
         $this->template_id = $template_id;
     }
 
     public function render(TemplateMarketInterface $template)
     {
-        /*\PDF::loadView('admin.template.render', ['content' => $this->content])
-            ->save(public_path('pdf/'.$this->slug.'.pdf'));*/
-       /* $pdf_settings = \Config::get('laravel-tcpdf');
-        $pdf = new \Elibyy\TCPDF\TCPdf($pdf_settings['page_orientation'], $pdf_settings['page_units'], $pdf_settings['page_format'], true, 'UTF-8', false);
-        $pdf->SetPrintHeader(false);
-        $pdf->SetPrintFooter(false);
-        $pdf->AddPage();
-        $pdf->writeHTML(view('admin.template.render', ['content' => $this->content])->render());
-        $pdf->output(public_path('pdf/'.$this->slug.'.pdf'), 'F');*/
         $snappy = \App::make('snappy.pdf');
-        if (\File::exists(public_path('pdf/'.$this->slug.'.pdf'))) {
-            \File::delete(public_path('pdf/'.$this->slug.'.pdf'));
-        }
+
         $snappy->generateFromHtml( $this->content, public_path('pdf/'.$this->slug.'.pdf'));
 
         $filename = $this->convertPDFToIMG($this->slug);
@@ -51,7 +40,7 @@ class RenderFileWhenCreateTemplateMarket extends Event
     }
 
     public function convertPDFToIMG($filename, $width = 500, $height = 700) {
-        $imageFile = str_random(20).uniqid();
+        $imageFile = md5(str_random(40).uniqid());
         $img = new \Imagick(public_path('pdf/'.$filename.'.pdf'));
         $this->pageNumb = $img->getNumberImages();
         for ($i = 0; $i < $this->pageNumb; $i++) {

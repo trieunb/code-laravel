@@ -117,20 +117,6 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     }
 
     /**
-     * Search template In Market Area
-     * @param  string $name 
-     * @return        
-     */
-    public function search($name)
-    {
-        dd($name);
-        return $this->model
-            ->whereStatus(2)
-            ->where('slug', 'LIKE', "%{$name}%")->get();
-        return $this->getDataWhereClause('slug', 'LIKE', "%{$name}%");
-    }
-
-    /**
      * Get data with DataTable
      * @return mixed 
      */

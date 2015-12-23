@@ -1,5 +1,15 @@
 @extends('admin.layout')
 
+@section('style')
+	<style>
+		img {
+			width: 200px;
+			height: 200px;
+		}
+	</style>
+@stop
+
+
 @section('title')
 Detail User
 @stop

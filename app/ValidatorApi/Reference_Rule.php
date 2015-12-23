@@ -8,8 +8,8 @@ class Reference_Rule extends AbstractValidator
 	protected function rules($params)
 	{
 		return [
-			'reference' => 'required|min:3',
-			'content' => 'required|min:3',
+			'reference' => 'required',
+			'content' => 'required',
 			'position' => 'required'
 		];
 	}
