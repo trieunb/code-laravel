@@ -365,30 +365,35 @@ class UserEloquent extends AbstractRepository implements UserInterface
      */
     public function dataTable()
     {
-        return \Datatables::of($this->model->select([
-            'id', 'firstname', 'lastname', 'address', 'country', 'mobile_phone', 'email','dob',
-            'created_at'
-            ]))
+        $users = DB::table('users')
+            ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
+            ->leftJoin('roles', 'role_user.role_id', '=', 'roles.id')
+            ->select('users.id', 
+                'users.firstname', 
+                'users.lastname', 
+                'users.email',
+                'users.created_at', 
+                'role_user.user_id', 
+                'roles.slug')
+            ->where(function ($query) {
+                $query->where('roles.slug', '<>', 'admin')
+                    ->orwhereNull('roles.slug');
+            });
+        return \Datatables::of($users)
             ->addColumn('action', function($user) {
                return '<div class="btn-group text-center" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.user.get.detail', $user->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
                 </div>';
             })
-            ->editColumn('dob', function($user){
-                return (!is_null($user->dob))
-                    ? $user->dob
-                    : 'N/A';
-            })
             ->editColumn('firstname', function($user) {
-                return $user->present()->name();
+                return $user->firstname . ' '. $user->lastname;
             })
             ->addColumn('checkbox', function($user) {
                 return '<input type="checkbox" value="'.$user->id.'" />';
             })
             ->editColumn('created_at', function($user) {
-                return $user->created_at->format('Y-m-d');
+                return Date('Y-m-d', strtotime($user->created_at));
             })
-            ->removeColumn('lastname')
             ->make(true);
     }
 
