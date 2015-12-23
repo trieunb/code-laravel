@@ -12,7 +12,7 @@
             @endif
             <div class="text-info" >
                 <div class="info-basic" 
-                    style="@if($user_info->avatar['origin'])position: absolute; bottom: 10px; @endif 
+                    style="@if($user_info->avatar['origin'])position: absolute; bottom: 0px; @endif 
                     margin-bottom:10px;
                     text-align: center;
                     width: 100%;">
