@@ -76,15 +76,7 @@ Report User
         <div class="title-char text-center"><h3>Registered users by region</h3></div>
     </div>
     <div id="chart_skill" class="tab-pane fade <?php if( ! is_null($question_id)) echo 'in active'; ?>">
-
-        <div class="col-xs-4">
-            
-        </div>
-        <br>
-
-           <div class="title-char text-center"><h3>Registered users by test skill</h3></div>
-                {!! $chart_skill !!}
-
+        {!! $chart_skill !!}
     </div>
 
 </div>
@@ -146,26 +138,13 @@ Report User
         }else $('#option').hide();
     });
 
-    var line_chart_options = {
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        responsive: true
-    };
-
-
-   
-
     $('#register').on('shown.bs.tab', function (e) {
-       /* if (typeof(myPieChart) != 'undefined')
-            myPieChart.destroy();
-        console.log(chart);*/
         register_report = new Chart(ctx).Line(chart, {
             bezierCurve : false,
             scaleGridLineColor : "rgba(0,0,0,.05)",
             responsive: true
         });
     });
-
-
 });
 </script>
 @endsection

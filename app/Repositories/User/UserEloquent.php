@@ -492,6 +492,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
             )
             ->groupBy('gender_user')
             ->get();
+
+        if (count($users) ==0) return '<h3>Not found data</h3>';
+        
         $response = [];
 
         foreach ($users as $user) {
@@ -533,7 +536,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ))
             ->groupBy('group_age')
             ->get();
-      
+        
+        if (count($users) ==0) return '<h3>Not found data</h3>';
+
         foreach ($users as $user) {
             $response[$user->group_age] = intval($user->count);
         }
@@ -575,6 +580,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 ->orderBy('created_at', 'DESC')
                 ->get();
 
+        if (count($users) ==0) return '<h3>Not found data</h3>';
+        
         $user_count = User::count();
         foreach ($users as  $user) {
             $region = '';
