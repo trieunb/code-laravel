@@ -28,9 +28,8 @@
 		<thead>
 			<th>Id</th>
 			<th>Fullname</th>
-			<th>Address</th>
             <th>Email</th>
-			<th>Registerd date</th>
+			<th>Registered date</th>
 			<th>Action</th>
 		</thead>
 	</table>
@@ -50,12 +49,11 @@
 		        columns: [
 		            {data: 'id', name: 'id'},
 		            {data: 'firstname', name: 'firstname'},
-		            {data: 'address', name: 'address', width: "20%"},
-		            {data: 'email', name: 'email'},
+                    {data: 'email', name: 'email'},
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false, width: "5%"}
 		        ],
-		        order: [[4, 'DESC']]
+		        order: [[3, 'DESC']]
 		    });
 
         $(document).on('click', '.delete-user', function(e) {
