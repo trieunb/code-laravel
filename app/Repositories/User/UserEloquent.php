@@ -371,11 +371,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ->select('users.id', 
                 'users.firstname', 
                 'users.lastname', 
-                'users.address', 
-                'users.country', 
-                'users.mobile_phone', 
                 'users.email',
-                'users.dob',
                 'users.created_at', 
                 'role_user.user_id', 
                 'roles.slug')
@@ -388,11 +384,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
                return '<div class="btn-group text-center" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.user.get.detail', $user->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
                 </div>';
-            })
-            ->editColumn('dob', function($user){
-                return (!is_null($user->dob))
-                    ? $user->dob
-                    : 'N/A';
             })
             ->editColumn('firstname', function($user) {
                 return $user->firstname . ' '. $user->lastname;
