@@ -386,13 +386,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 </div>';
             })
             ->editColumn('firstname', function($user) {
-                return $user->firstname . ' '. $user->lastname;
+                return $user->present()->name();;
             })
             ->addColumn('checkbox', function($user) {
                 return '<input type="checkbox" value="'.$user->id.'" />';
             })
             ->editColumn('created_at', function($user) {
-                return Date('Y-m-d', strtotime($user->created_at));
+                return $user->created_at->format('Y-m-d');
             })
             ->make(true);
     }
