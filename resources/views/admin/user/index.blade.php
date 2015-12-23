@@ -30,6 +30,7 @@
 			<th>Fullname</th>
 			<th>Address</th>
             <th>Email</th>
+            <th>Birthday</th>
 			<th>Registerd date</th>
 			<th>Action</th>
 		</thead>
@@ -51,7 +52,8 @@
 		            {data: 'id', name: 'id'},
 		            {data: 'firstname', name: 'firstname'},
 		            {data: 'address', name: 'address', width: "20%"},
-		            {data: 'email', name: 'email'},
+                    {data: 'email', name: 'email'},
+		            {data: 'dob', name: 'dob'},
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false, width: "5%"}
 		        ],
