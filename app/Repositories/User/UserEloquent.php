@@ -529,7 +529,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 'datatable' => $reason,
                 'is3D' => true,
                 'width' => 988,
-                'height' => 350
+                'height' => 350,
+                'title' => 'Report Gender'
             ]);
 
         return $lavaChart->render('PieChart', 'Chart', 'chart_gender', true);
@@ -571,7 +572,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 'datatable' => $reason,
                 'is3D' => true,
                 'width' => 988,
-                'height' => 350
+                'height' => 350,
+                'title' => 'Report Group Age'
             ]);
 
         return $lavaChart->render('PieChart', 'Chart', 'chart_age', true);
@@ -617,7 +619,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                         'datatable' => $userTable,
                         'is3D' => true,
                         'width' => 988,
-                        'height' => 350
+                        'height' => 350,
+                        'title' => 'Report Region'
                     ]);
         return $lava->render('PieChart', 'Chart', 'chart_region', true);
     }
