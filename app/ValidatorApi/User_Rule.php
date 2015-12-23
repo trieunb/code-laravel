@@ -19,9 +19,9 @@ class User_Rule extends AbstractValidator
 	{
             $rules = [];
             if (isset($this->request->get('user')['firstname']))
-                  $rules['firstname'] = 'required|min:1';
+                  $rules['firstname'] = 'required';
             if (isset($this->request->get('user')['lastname']))
-                  $rules['lastname'] = 'required|min:1';
+                  $rules['lastname'] = 'required';
             if (isset($this->request->get('user')['email']))
                   $rules['email'] = 'required|email|unique:users,email,'.$params;
             if (isset($this->request->get('user')['mobile_phone'])) 

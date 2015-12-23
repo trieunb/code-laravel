@@ -10,6 +10,65 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+get('test', function() {
+    return App\Models\User::whereDoesntHave('roles')->get();
+});
+/*get('test', function() {
+    $job = \App\JobTest::find(1);
+     $skills = []; 
+    foreach ($job->skill as $skill)
+        $skills[] = $skill['skill'];
+    $userIds = [];
+    $queryWork = \DB::table('user_work_histories')->select('user_id')
+        ->WhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->job_description.','.$job->job_title]);
+    $querySkill = \DB::table('user_skills')->select('user_id')
+        ->whereRaw('MATCH (skill_name, experience) AGAINST (?)', [implode(',', $skills)]);
+    $data = \DB::table('users')
+        ->selectRaw('id')
+        // ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
+        // ->join('user_work_histories', 'user_work_histories.user_id', '=', 'users.id')
+        ->whereIn('id', function($query) use($job, $skills, $last_query) {
+            $query->select('user_id')
+                ->from('user_skills')
+                ->whereRaw('MATCH (skill_name, experience) AGAINST (?) UNION (SELECT user_id FROM user_work_histories '.
+                    'MATCH (company, job_title, job_description) AGAINST(?))', [implode(',', $skills), $job->job_description.','.$job->job_title]);
+
+        })
+        
+        ->WhereIn('users.id', function($query) use ($job){
+            $query->select('user_id')
+                ->from('user_work_histories')
+                ->WhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->job_description.','.$job->job_title]);
+        })
+        // ->orWhereRaw('MATCH (school_name, degree, result) AGAINST (?)', [$job->education])
+        // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [implode(',', $skills)])
+        // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->description.','.$job->title])
+        ->toSql();
+        $t =$job->job_description.','.$job->job_title;
+        dd($data, $t);
+    $dataUsers = [];
+    foreach ($data as $value) {
+        $userIds[] = $value->id;
+    }
+    dd($data);
+    $data = \DB::table('users')
+        ->selectRaw('DISTINCT users.id')
+        ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
+        ->whereNotIn('users.id', [implode(',', $userIds)])
+        ->get();
+
+    $users = \App\Models\User::whereNotIn('id', [implode(',', $userIds)])->get();
+
+    foreach ($users as $user) {
+
+        if ($user->location != null)
+            $dataUsers[$user->id] = $user->location;
+    }
+
+
+        dd($dataUsers, $data);
+});*/
+>>>>>>> Stashed changes
 
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
