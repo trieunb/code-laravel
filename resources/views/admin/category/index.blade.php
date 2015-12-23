@@ -27,8 +27,8 @@
 				<tr>
 					<td>{{ $category->id }}</td>
 					<td>{{ $category->name }}</td>
-					<td>{{ $category->meta['description'] }}</td>
-					<td>{{ $category->meta['keyword'] }}</td>
+					<td>{{ $category->meta['description'] or '' }}</td>
+					<td>{{ $category->meta['keyword'] or '' }}</td>
 					<td>{{ $category->created_at }}</td>
 					<td>
 						<div class="btn-group" role="group" aria-label="...">

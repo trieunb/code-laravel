@@ -25,13 +25,13 @@ Edit Category: {{ $category->name }}
 	<div class="form-group">
 		<label for="description" class="col-sm-2 control-label">Description</label>
 		<div class="col-sm-10">
-			<input type="text" value="{{ $category->meta['description'] }}" name="description" class="form-control" id="description" placeholder="Description">
+			<input type="text" value="{{ $category->meta['description'] or '' }}" name="description" class="form-control" id="description" placeholder="Description">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="keyword" class="col-sm-2 control-label">Keyword</label>
 		<div class="col-sm-10">
-			<input type="text" value="{{ $category->meta['keyword'] }}" name="keyword" class="form-control" id="description" placeholder="Keyword">
+			<input type="text" value="{{ $category->meta['keyword'] or ''}}" name="keyword" class="form-control" id="description" placeholder="Keyword">
 		</div>
 	</div>
 	<div class="form-group">

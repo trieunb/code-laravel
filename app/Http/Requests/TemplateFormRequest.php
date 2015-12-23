@@ -23,13 +23,24 @@ class TemplateFormRequest extends Request
      */
     public function rules()
     {
+        $inputs = array_map('trim', $this->all());
+        $this->replace($inputs);
         $title = $this->has('id') ? ','.$this->get('id') : '';
 
+
         return [
-            'title' => 'required',
+            'title' => 'required|max:255',
+            'cat_id' => 'required',
             'description' => 'max:1000',
-            'price' => 'required|numeric|min:0',
-            'version' => 'required'
+            'price' => 'required|max_length_numeric:10|numeric|min:0',
+            'version' => 'required|max:255'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'price.max_length_numeric' => 'The :attribute may not be greater than 10 characters.'
         ];
     }
 }
