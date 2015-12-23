@@ -492,6 +492,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
             )
             ->groupBy('gender_user')
             ->get();
+
+        if (count($users) ==0) return '<h3>Not found data</h3>';
+        
         $response = [];
 
         foreach ($users as $user) {
@@ -500,7 +503,25 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
         $genderDiff = array_diff_key($gender, $response);
 
-        return array_merge($response, $genderDiff);
+        $responses = array_merge($response, $genderDiff);
+        
+        $lavaChart = new Lavacharts;
+        $reason = $lavaChart->DataTable()
+                ->addStringColumn('Reasons')
+                ->addNumberColumn('Percent');        
+        foreach ($responses as $name => $value) {
+            $reason->addRow([$name, (int)$value]);
+        }
+
+        $pieChart = $lavaChart->PieChart('Chart')
+            ->setOptions([
+                'datatable' => $reason,
+                'is3D' => true,
+                'width' => 988,
+                'height' => 350
+            ]);
+
+        return $lavaChart->render('PieChart', 'Chart', 'chart_gender', true);
     }
 
     public function reportUserAge()
@@ -508,21 +529,41 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $response = [];
         $groupAge = ['Under 20 olds' => 0, '20-30 olds' => 0, 'Above 30 olds' => 0];
         $users = $this->model->select(DB::raw('COUNT(*) as count, CASE
-                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob = "0000-00-00" THEN "Under 20 olds"
+                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob is null OR dob = "0000-00-00" THEN "Under 20 olds"
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Above 30 olds"
                 END as "group_age"'
             ))
             ->groupBy('group_age')
             ->get();
+        
+        if (count($users) ==0) return '<h3>Not found data</h3>';
 
         foreach ($users as $user) {
-            $response[$user->group_age] = $user->count;
+            $response[$user->group_age] = intval($user->count);
         }
 
         $arrayDiff = array_diff_key($groupAge, $response);
+        
+        $responses = array_merge($response, $arrayDiff);
+         
+        $lavaChart = new Lavacharts;
+        $reason = $lavaChart->DataTable()
+                ->addStringColumn('Reasons')
+                ->addNumberColumn('Percent');        
+        foreach ($responses as $name => $value) {
+            $reason->addRow([$name, (int)$value]);
+        }
 
-        return array_merge($response, $arrayDiff);
+        $pieChart = $lavaChart->PieChart('Chart')
+            ->setOptions([
+                'datatable' => $reason,
+                'is3D' => true,
+                'width' => 988,
+                'height' => 350
+            ]);
+
+        return $lavaChart->render('PieChart', 'Chart', 'chart_age', true);
     }
 
     public function reportUserRegion()
@@ -539,6 +580,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 ->orderBy('created_at', 'DESC')
                 ->get();
 
+        if (count($users) ==0) return '<h3>Not found data</h3>';
+        
         $user_count = User::count();
         foreach ($users as  $user) {
             $region = '';
