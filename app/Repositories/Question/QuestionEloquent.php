@@ -31,6 +31,9 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
                   	<a class="delete-data btn btn-danger" data-src="' . route('api.question.get.deleteAdmin', $question->id) . '"><i class="glyphicon glyphicon-remove"></i></a>
                 </div>';
             })
+            ->editColumn('content', function($user) {
+                return str_limit($user->content, $limit = 150, $end = '...');
+            })
             ->addColumn('publish', function($question) {
                 return ($question->publish)
                     ? '<span>Yes</span>'

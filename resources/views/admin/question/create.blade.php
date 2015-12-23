@@ -13,8 +13,7 @@ Create Question
     {!! csrf_field() !!}
     <div class="form-group">
         <label for="content">Content</label>
-        <input type="text" class="form-control" name="content" id="content" placeholder="Content">
-        <!-- <div class="has-error"><strong class="has-error">{{$errors->first('content')}} </strong></div> -->
+        <textarea rows="3" class="form-control" name="content" id="content" placeholder="Content"></textarea>
     </div>
     <div class="checkbox">
         <label>
@@ -43,7 +42,6 @@ $(function() {
         rules: {
             content : {
                 required : true,
-                maxlength: 150,
                 noSpace: true
             },
         },
