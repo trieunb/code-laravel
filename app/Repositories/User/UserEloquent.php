@@ -1,20 +1,21 @@
 <?php
 namespace App\Repositories\User;
 
+use App\Events\GetCountryAndRegionFromLocationUser;
 use App\Models\Objective;
 use App\Models\Qualification;
 use App\Models\Question;
 use App\Models\Reference;
+use App\Models\TemplateMarket;
 use App\Models\User;
 use App\Models\UserEducation;
 use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
+use DB;
 use Khill\Lavacharts\Lavacharts;
 use Lava;
-use App\Models\TemplateMarket;
-use DB;
 
 
 
@@ -73,7 +74,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->password = bcrypt($data['password']);
 		}
 
-		return $user->save();
+        $result = $user->save();
+        
+		if ($result && $user->location != null) 
+            event(new GetCountryAndRegionFromLocationUser($user));
+        
+        return $result;
 	}
 
 	/**

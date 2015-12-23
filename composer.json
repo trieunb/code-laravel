@@ -29,7 +29,8 @@
         "barryvdh/laravel-snappy": "dev-master",
         "khill/lavacharts" : "2.5.*",
         "davibennun/laravel-push-notification": "dev-laravel5",
-        "baum/baum": "~1.1"
+        "baum/baum": "~1.1",
+        "alexpechkarev/google-geocoder": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

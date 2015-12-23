@@ -168,6 +168,7 @@ return [
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class,
         Baum\Providers\BaumServiceProvider::class,
+        Alexpechkarev\GoogleGeocoder\GoogleGeocoderServiceProvider::class,
     ],
 
     /*
@@ -227,7 +228,8 @@ return [
         'Datatables'=> yajra\Datatables\Datatables::class,
         // 'PDF'       => Barryvdh\DomPDF\Facade::class,
         'PDF'       => Barryvdh\Snappy\Facades\SnappyPdf::class,
-        'PushNotification' => Davibennun\LaravelPushNotification\Facades\PushNotification::class
+        'PushNotification' => Davibennun\LaravelPushNotification\Facades\PushNotification::class,
+        'GoogleGeocoder' => Alexpechkarev\GoogleGeocoder\Facades\GoogleGeocoderFacade::class,
     ],
 
 ];
