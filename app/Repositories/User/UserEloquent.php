@@ -365,7 +365,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
      */
     public function dataTable()
     {
-        $users = DB::table('users')
+        $users = $this->model
             ->leftJoin('role_user', 'users.id', '=', 'role_user.user_id')
             ->leftJoin('roles', 'role_user.role_id', '=', 'roles.id')
             ->select('users.id', 
@@ -378,7 +378,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ->where(function ($query) {
                 $query->where('roles.slug', '<>', 'admin')
                     ->orwhereNull('roles.slug');
-            });
+            })->get();
         return \Datatables::of($users)
             ->addColumn('action', function($user) {
                return '<div class="btn-group text-center" role="group" aria-label="...">
