@@ -16,6 +16,13 @@ class TemplateFormRequest extends Request
         return true;
     }
 
+    public function formatInput()
+    {
+        
+
+        return $this->all();
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,13 +30,17 @@ class TemplateFormRequest extends Request
      */
     public function rules()
     {
+        $inputs = array_map('trim', $this->all());
+        $this->replace($inputs);
         $title = $this->has('id') ? ','.$this->get('id') : '';
 
+
         return [
-            'title' => 'required',
+            'title' => 'required|max:255',
+            'cat_id' => 'required',
             'description' => 'max:1000',
             'price' => 'required|numeric|min:0',
-            'version' => 'required'
+            'version' => 'required|max:255'
         ];
     }
 }

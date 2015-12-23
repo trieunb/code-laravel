@@ -6,6 +6,7 @@ Edit Template
 @stop
 
 @section('content')
+@include('partial.notifications')
 <div class="row">
     @if (\Session::has('message'))
         <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
@@ -136,63 +137,5 @@ Edit Template
 
     });
 
-    var isBusy = false;
-    $('form').validate({
-        rules: {
-            title : {
-                required: {
-                    depends: function() {
-                        $(this).val($.trim($(this).val()));
-                        return true;
-                    }
-                },
-               /* remote : {
-                    url: '{{ route("admin.template.check") }}',
-                    type: 'GET',
-                    data: {
-                        title: function() {
-                            return $("#title" ).val();
-                        },
-                        id : function(){
-                            return $('#template_id').val();   
-                        }
-                    }   
-                }*/
-            },
-            price: {
-                required: true,
-                number: true,
-                number: true,
-                min: 0
-            },
-            cat_id : {
-                required : true
-            },
-            version : {
-                required: true
-            },
-            status : {
-                required : true
-            },
-            description: {
-                maxlength: 1000
-            }
-        },
-        highlight: function(element) {
-            $(element).closest('.form-group').addClass('has-error');
-        },
-        unhighlight: function(element) {
-            $(element).closest('.form-group').removeClass('has-error');
-        },
-        errorElement: 'span',
-        errorClass: 'help-block',
-        errorPlacement: function(error, element) {
-            if(element.parent('.input-group').length) {
-                error.insertAfter(element.parent());
-            } else {
-                error.insertAfter(element);
-            }
-        }
-    });
 </script>
 @endsection

@@ -28,6 +28,7 @@ class TemplateMarketsController extends Controller
 
     public function postCreate(TemplateFormRequest $request)
     {
+        dd($request->all());
         $sections = createClassSection();
         $result = createSection($request->get('content'), $sections);
         $response = $this->template_market->createOrUpdateTemplateByManage($request, $result, \Auth::user()->id);

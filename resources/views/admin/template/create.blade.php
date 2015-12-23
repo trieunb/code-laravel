@@ -6,6 +6,7 @@ Create Template
 @stop
 
 @section('content')
+@include('partial.notifications')
 <div class="row">
     @if (\Session::has('message'))
     <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
@@ -16,22 +17,22 @@ Create Template
             {!! csrf_field() !!}
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+                <input type="text" value="{{ old('title') }}" class="form-control" name="title" id="title" placeholder="Title">
             </div>
             <div class="form-group">
                 <label for="cat_id">Category</label>
                 <select name="cat_id" id="cat_id" class="form-control" >
-                    <option value="">Select</option>
+                    <option value="" disabled selected>Select</option>
                     <option value="1">Category</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
-                <input type="text" name="price" class="form-control" id="price" placeholder="Price">
+                <input type="text" name="price" value="{{ old('price') }}" class="form-control" id="price" placeholder="Price">
             </div>
 
             <div class="form-group">
-                <textarea id="content" name="content"></textarea> 
+                <textarea id="content" name="content">{{ old('content') }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
@@ -141,68 +142,6 @@ return false;
 
 $(function() {
 
-    var isBusy = false;
-    $('form').validate({
-        rules: {
-            title : {
-                required: {
-                    depends: function() {
-                        $(this).val($.trim($(this).val()));
-                        return true;
-                    }
-                },
-                maxlength: 225,
-            /*remote : {
-                url: '{{ route("admin.template.check") }}',
-                type: 'GET',
-                data: {
-                    title: function() {
-                        return $( "#title" ).val();
-                    }
-                }   
-            }*/
-        },
-        price: {
-            required: true,
-            number: true,
-            number: true,
-            min: 0
-        },
-        cat_id : {
-            required : true
-        },
-        version : {
-            required: true,
-            maxlength: 10
-        },
-        status : {
-            required : true
-        },
-        description: {
-            maxlength: 1000
-        }
-    },
-    messages : {
-        title: {
-            remote : 'Title exists, please change title'
-        }
-    },
-    highlight: function(element) {
-        $(element).closest('.form-group').addClass('has-error');
-    },
-    unhighlight: function(element) {
-        $(element).closest('.form-group').removeClass('has-error');
-    },
-    errorElement: 'span',
-    errorClass: 'help-block',
-    errorPlacement: function(error, element) {
-        if(element.parent('.input-group').length) {
-            error.insertAfter(element.parent());
-        } else {
-            error.insertAfter(element);
-        }
-    }
-});
 });
 
 
