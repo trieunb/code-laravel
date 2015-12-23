@@ -588,8 +588,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 
 
-        $users = User::select('country',DB::raw('COUNT(id) as count'))
-                ->groupBy('country')
+        $users = User::select('region',DB::raw('COUNT(id) as count'))
+                ->groupBy('region')
                 ->orderBy('created_at', 'DESC')
                 ->get();
 
@@ -597,7 +597,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         
         $user_count = User::count();
         foreach ($users as  $user) {
-            $region = '';
+          /*  $region = '';
             switch ($user->country) {
                 case '':
                     $region = 'Other';
@@ -611,7 +611,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }
 
             $rowData = [$region, (int)$user->count];
-            $userTable->addRow($rowData);
+            $userTable->addRow($rowData);*/
+            $userTable->addRow([$user->region, $user->count]);
         }
 
         $chart_region = $lava->PieChart('Chart')
