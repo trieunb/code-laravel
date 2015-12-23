@@ -14,7 +14,9 @@ class ComposerServiceProvider extends ServiceProvider
 		\View::composer('admin.report.report_user', QuestionComposer::class);
 		\View::composer([
 			'admin.category.create',
-			'admin.category.edit'
+			'admin.category.edit',
+			'admin.template.create',
+			'admin.template.edit'
 		], CategoryComposer::class);
 	}
 

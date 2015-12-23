@@ -16,13 +16,6 @@ class TemplateFormRequest extends Request
         return true;
     }
 
-    public function formatInput()
-    {
-        
-
-        return $this->all();
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -39,8 +32,15 @@ class TemplateFormRequest extends Request
             'title' => 'required|max:255',
             'cat_id' => 'required',
             'description' => 'max:1000',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|max_length_numeric:10|numeric|min:0',
             'version' => 'required|max:255'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'price.max_length_numeric' => 'The :attribute may not be greater than 10 characters.'
         ];
     }
 }

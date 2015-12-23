@@ -22,11 +22,7 @@ Edit Template
             </div>
             <div class="form-group">
                 <label for="cat_id">Category</label>
-                <select name="cat_id" id="cat_id" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1" selected>Category</option>
-                </select>
-
+                {!! Form::select('cat_id', $list_category, $template->cat_id, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
@@ -60,6 +56,9 @@ Edit Template
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
 <script>
+    $(document).ready(function() {
+        $('#categories option:first-child').attr('disabled', true);
+    });
      function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.open({
             file: "{{ asset('tinymce/plugins/elfinder/elfinder.html') }}",// use an absolute path!
