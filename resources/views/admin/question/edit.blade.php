@@ -20,7 +20,7 @@ Edit Question
 <div class="form-group">
     <label for="content" class="control-label">Content</label>
     <div>
-        <textarea rows="3" name="content" class="form-control" id="content">{{ $question->content }}</textarea>
+        <textarea rows="3" name="content" class="form-control" id="content">{{ old('content') ? old('content') : $question->content }}</textarea>
     </div>
 </div>
 <div class="form-group">

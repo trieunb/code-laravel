@@ -13,7 +13,7 @@ Create Question
     {!! csrf_field() !!}
     <div class="form-group">
         <label for="content">Content</label>
-        <textarea rows="3" class="form-control" name="content" id="content" placeholder="Content"></textarea>
+        <textarea rows="3" class="form-control" name="content" id="content" placeholder="Content">{{ old('content') }}</textarea>
     </div>
     <div class="checkbox">
         <label>

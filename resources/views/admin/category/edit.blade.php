@@ -18,26 +18,26 @@ Edit Category: {{ $category->name }}
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">Name</label>
 		<div class="col-sm-10">
-			<input type="text" value="{{ $category->name }}" name="name" class="form-control" id="name" placeholder="Name">
+			<input type="text" value="{{ old('name') != null ? old('name') : $category->name }}" name="name" class="form-control" id="name" placeholder="Name">
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="description" class="col-sm-2 control-label">Description</label>
 		<div class="col-sm-10">
-			<input type="text" value="{{ $category->meta['description'] or '' }}" name="description" class="form-control" id="description" placeholder="Description">
+		<textarea name="description" class="form-control" id="description" placeholder="Description">{{ old('description') ? old('description') : isset($category->meta['description']) ? $category->meta['description'] : '' }}</textarea>
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="keyword" class="col-sm-2 control-label">Keyword</label>
 		<div class="col-sm-10">
-			<input type="text" value="{{ $category->meta['keyword'] or ''}}" name="keyword" class="form-control" id="description" placeholder="Keyword">
+			<textarea name="keyword" class="form-control" id="keyword" placeholder="Keyword">{{ old('keyword') ? old('keyword') : isset($category->meta['keyword']) ? $category->meta['keyword'] : '' }}</textarea>
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="description" class="col-sm-2 control-label">Parent Id</label>
+		<label for="parent_id" class="col-sm-2 control-label">Parent Id</label>
 		<div class="col-sm-10">
-			{!! Form::select('parent_id', $parents, $category->parent_id, ['class' => 'form-control', 'placeholder' => 'Parent']) !!}
+			{!! Form::select('parent_id', $parents, old('parent_id') ? old('parent_id') : $category->parent_id, ['class' => 'form-control', 'placeholder' => 'Parent']) !!}
 		</div>
 	</div>
 	<div class="form-group">
