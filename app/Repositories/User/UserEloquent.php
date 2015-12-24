@@ -594,7 +594,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         foreach ($users as  $user) {
             if ($user->region != null)
                 $userTable->addRow([$user->region, (int)$user->count]);
-            else $userTable->addRow(['Unknow', (int)$user->count]);
+            else $userTable->addRow(['Unknown', (int)$user->count]);
         }
 
         $chart_region = $lava->PieChart('Chart')

@@ -22,7 +22,7 @@ Create Template
             <div class="form-group">
                 <label for="cat_id">Category</label>
                 
-                {!! Form::select('cat_id', $list_category, null, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
+                {!! Form::select('cat_id', $list_category, old('cat_id') ? old('cat_id') : null, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
                 <label for="price">Price ($)</label>
@@ -34,11 +34,11 @@ Create Template
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea  name="description" class="form-control" id="description" placeholder="Description"></textarea>
+                <textarea  name="description" class="form-control" id="description" value="{{ old('description') }}" placeholder="Description"></textarea>
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
-                <input name="version" type="text" value="1" class="form-control" id="version" placeholder="Version">
+                <input name="version" type="text" value="{{ old('version') ? old('version') : 1 }}" class="form-control" id="version" placeholder="Version">
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
