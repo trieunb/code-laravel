@@ -25,8 +25,8 @@ Edit Template
                 {!! Form::select('cat_id', $list_category, $template->cat_id, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" name="price" class="form-control" value="{{ $template->price }}" id="price" placeholder="Price">
+                <label for="price">Price ($)</label>
+                <input type="text" name="price" class="form-control" value="{{ $template->price }}" id="price" placeholder="$">
             </div>
             <div class="form-group">
                 <textarea id="content" name="content">{{ $template->present()->contentPresent }}</textarea> 

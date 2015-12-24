@@ -25,8 +25,8 @@ Create Template
                 {!! Form::select('cat_id', $list_category, null, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" name="price" value="{{ old('price') }}" class="form-control" id="price" placeholder="Price">
+                <label for="price">Price ($)</label>
+                <input type="text" name="price" value="{{ old('price') }}" class="form-control" id="price" placeholder="$">
             </div>
 
             <div class="form-group">
