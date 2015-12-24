@@ -32,7 +32,7 @@ class QuestionEloquent extends AbstractRepository implements QuestionInterface
                 </div>';
             })
             ->editColumn('content', function($user) {
-                return str_limit($user->content, $limit = 150, $end = '...');
+                return wordwrap(str_limit($user->content, $limit = 150, $end = '...'), 50, "<br />\n", true);
             })
             ->addColumn('publish', function($question) {
                 return ($question->publish)
