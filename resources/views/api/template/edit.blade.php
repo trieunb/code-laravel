@@ -171,12 +171,12 @@
                                 $('#content').html(temp);
                             }
                         } else {
-                            var check = 0;
+                           /* var check = 0;
                             if ($(parrentNode).html().indexOf(replace) != -1) {
                                 var replaceContent = $(parrentNode).html().replace(new RegExp(replace, "g"), $('select option:selected').val());
                                 parrentNode.innerHTML = replaceContent;
                                 check = 1;
-                            } 
+                            } */
                             if (parrentNode.innerHTML == replace) {
                                 replaceContent = $(parrentNode).html().replace(replace, $('select option:selected').val());
                                  parrentNode.innerHTML = replaceContent;
