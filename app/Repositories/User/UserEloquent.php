@@ -63,7 +63,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->home_phone = $data['home_phone'];
 		if (isset($data['city']))
 			$user->city = $data['city'];
-		if (isset($data['location']) && $data['location']['longitude"'] != null)
+		if (isset($data['location']) && $data['location']['longitude'] != null)
 			$user->location = $data['location'];
 		if (isset($data['state']))
 			$user->state = $data['state'];

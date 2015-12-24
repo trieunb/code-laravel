@@ -27,8 +27,8 @@ class GetCountryAndRegionFromLocationUser extends Event
         $lastlng = implode(',', $this->user->location);
         $response = \GoogleGeocoder::geocode('json', ['latlng' => $lastlng]);
         $response = json_decode($response);
-
-        if ($response->status != 200) return;
+           
+        if ($response->status != "OK") return;
         
         $country = $response->results[count($response->results) - 1]->address_components[0]->short_name;
         $this->user->country = $country;
