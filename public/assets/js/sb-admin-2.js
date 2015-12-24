@@ -1,7 +1,5 @@
 $(function() {
-
     $('#side-menu').metisMenu();
-
 });
 
 //Loads the correct sidebar on window load,
@@ -27,7 +25,6 @@ $(function() {
     });
 
     var currentHref = window.location.href;
-    console.log(currentHref);
     var $menuElm = $('ul.nav a').filter(function() {
         return this.href == currentHref;
     });
