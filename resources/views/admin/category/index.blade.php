@@ -26,8 +26,8 @@
 				<tr>
 					<td>{{ $category->id }}</td>
 					<td>{{  wordwrap(str_limit($category->name, 150), 150, "\n") }}</td>
-					<td>{{ $category->meta['description'] != null ? wordwrap(str_limit($category->meta['description'], 150), 150, "\n") : '' }}</td>
-					<td>{{ $category->meta['keyword'] != null ? wordwrap(str_limit($category->meta['keyword'], 150), 150, "\n") : '' }}</td>
+					<td class="break-lines">{{ $category->meta['description'] != null ? wordwrap(str_limit($category->meta['description'], 150), 150, "\n") : '' }}</td>
+					<td class="break-lines">{{ $category->meta['keyword'] != null ? wordwrap(str_limit($category->meta['keyword'], 150), 150, "\n") : '' }}</td>
 					<td>{{ $category->created_at }}</td>
 					<td>
 						<div class="btn-group" role="group" aria-label="...">
