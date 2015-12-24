@@ -268,13 +268,6 @@ class UsersController extends Controller
 		}
 	}
 
-	public function removePhoto($id)
-	{
-		return $this->user->removePhoto($id)
-			? response()->json(['status_code' => 200])
-			: response()->json(['status_code' => 400]);
-	}
-
 	public function getStatus(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));

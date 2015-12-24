@@ -245,14 +245,20 @@ class UserEloquent extends AbstractRepository implements UserInterface
 	public function uploadImage($file, $user_id)
 	{
 		$user = $this->getById($user_id);
-		$user->avatar = User::uploadAvatar($file);
+		$user->avatar = $file->getClientOriginalName() == '' || $file->getClientOriginalName() == null
+            ? null 
+            : User::uploadAvatar($file);
 
 		$image = [
 			'origin' => asset($user->avatar['origin']),
 			'thumb' => asset($user->avatar['thumb'])
 		];
 
-		return $user->save() ? $image : '';
+        if ( ! $user->save()) {
+            return null;
+        }
+
+        return $user->avatar != null ? $image : null;
 	}
 
 	/**

@@ -52,43 +52,4 @@ Create Category
 @section('script')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
-<script>
-	$(document).ready(function() {
-		// $('select option:first-child').val('1');
-		$('form').validate({
-			rules: {
-				name: {
-					required: true,
-					maxlength: 30,
-					remote: {
-						url: "{{ route('admin.category.post.checkname') }}",
-						type: 'POST',
-						data: {
-							token: "{{ csrf_token() }}",
-							name: function(){
-								return $('#name').val();
-							},
-							id: null
-						}
-					}
-				}
-			},
-			highlight: function(element) {
-				$(element).closest('.form-group').addClass('has-error');
-			},
-			unhighlight: function(element) {
-				$(element).closest('.form-group').removeClass('has-error');
-			},
-			errorElement: 'span',
-			errorClass: 'help-block',
-			errorPlacement: function(error, element) {
-				if(element.parent('.input-group').length) {
-					error.insertAfter(element.parent());
-				} else {
-					error.insertAfter(element);
-				}
-			}
-		});
-	});
-</script>
 @endsection
