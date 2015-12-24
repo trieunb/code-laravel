@@ -6,7 +6,7 @@
         <div class='image-avatar' style="position: relative; overflow:hidden;">
             @if ( ($user_info->avatar['origin']))
             <div lang="photo" onclick="eventChangeClick()">
-                <img style="width:100%; height: auto;" 
+                <img style="height: auto;" 
                 src="{!! asset($user_info->avatar['origin']) !!}" >
             </div>
             @endif
