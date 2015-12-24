@@ -42,32 +42,34 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
     {
         $questions = \App\Models\UserQuestion::select(\DB::raw('CASE
                     WHEN point = 1 or point = 0 or point = 2 THEN "LOW"
-                    WHEN point = 3 or point = 4 THEN "ALOW AVERAGE"
-                    WHEN point = 5 or point = 6 THEN "AVERAGE"
-                    WHEN point = 7 or point = 8 THEN "ABOVE AVERAGE"
-                    WHEN point = 9 or point = 10 THEN "HIGH"
+                    WHEN point = 3 or point = 4 THEN "Alow Average"
+                    WHEN point = 5 or point = 6 THEN "Average"
+                    WHEN point = 7 or point = 8 THEN "Above Average"
+                    WHEN point = 9 or point = 10 THEN "High"
                     END as "level",
                     COUNT(*) as "count"'))
                 ->where('question_id', $question_id)
                 ->groupBy(\DB::raw('CASE 
-                    WHEN point = 1 or point = 0 or point = 2 THEN "LOW"
-                        WHEN point = 3 or point = 4 THEN "ALOW AVERAGE"
-                        WHEN point = 5 or point = 6 THEN "AVERAGE"
-                        WHEN point = 7 or point = 8 THEN "ABOVE AVERAGE"
-                        WHEN point = 9 or point = 10 THEN "HIGH"
+                    WHEN point = 1 or point = 0 or point = 2 THEN "Low"
+                        WHEN point = 3 or point = 4 THEN "Alow Average"
+                        WHEN point = 5 or point = 6 THEN "Average"
+                        WHEN point = 7 or point = 8 THEN "above Average"
+                        WHEN point = 9 or point = 10 THEN "high"
                     END'))
                 ->get();
         
-        $levels = ['LOW' => 0, 'ALOW AVERAGE' => 0, 'AVERAGE' => 0, 'ABOVE AVERAGE' => 0, 'HIGH' => 0];
+        $levels = ['Low' => 0, 'Alow Average' => 0, 'Average' => 0, 'above Average' => 0, 'high' => 0];
         $response = [];
 
         foreach ($questions as $question) {
-            $response[$question->level] = $question->count;    
+            $response[$question->level] = (int)$question->count;  
         }
 
         $diffArray = array_diff_key($levels, $response);
         $responses = array_merge($response, $diffArray);
 
+        if (count($questions) == 0) return '<h3>Not found data</h3>';
+        
         $lavaChart = new Lavacharts;
         $reason = $lavaChart->DataTable()
                 ->addStringColumn('Reasons')
@@ -82,7 +84,7 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
                 'is3D' => true,
                 'width' => 988,
                 'height' => 350,
-                'title' => 'Report Point Skill'
+                'title' => 'Skills test'
             ]);
 
         return $lavaChart->render('PieChart', 'Chart', 'chart_skill', true);

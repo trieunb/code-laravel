@@ -288,17 +288,17 @@ class TemplatesController extends Controller
             $result = is_string($data)
                 ? apply_data_for_section_infomation($section, $data, $template->content)
                 :apply_data_for_other($section, $template->content, $user_id);
-
-            $response = $this->template->applyForInfo($template, $section, $result);
+            
+           /* $response = $this->template->applyForInfo($template, $section, $result);
             
             event(new RenderImageAfterCreateTemplate(
                 $response['template']->id,
                 $response['template']->content, 
                 $response['template']->slug)
-            );
+            );*/
             
-            return $response
-                ? response()->json(['status_code' => 200, 'data' => $response['section']])
+            return $result
+                ? response()->json(['status_code' => 200, 'data' => $result['section']])
                 : response()->json(['status_code' => 400]);
         } catch (\Exception $e) {
             return response()->json(['status_code' => 400]);

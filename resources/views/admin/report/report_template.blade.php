@@ -101,7 +101,7 @@ Report Template
             var myBarChart = new Chart(ctx).Bar(data, options);
         });
         $('#year').select2({
-            placeholder: "Select a state"
+            placeholder: "Select a Year"
         });
         $('#year').change(function() {
             var year = $(this).find('option:selected').val();

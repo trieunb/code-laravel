@@ -1,5 +1,18 @@
 <?php
 
+if (!function_exists('custom_format_money')) {
+    /**
+     * Format money
+     * @param  string $format 
+     * @param  mixed $money  
+     * @return [type]         
+     */
+    function custom_format_money($money, $format = '$') {
+        return $format.sprintf('%0.2f', $money);
+    }
+
+}
+
 if ( !function_exists('show_selected_option')) {
     function show_selected_option($categories, $selected_id = 0, $class = 'form-control', $dataAtrribute = null) {
         $html = '';
@@ -348,8 +361,6 @@ if (!function_exists('apply_data_for_other')) {
 
         switch ($section) {
             case 'reference':
-                $tmp .= '<h3 style="font-weight:600">References</h3>';
-
                 foreach (\App\Models\Reference::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->reference.'</li>';
@@ -363,8 +374,6 @@ if (!function_exists('apply_data_for_other')) {
 
                 break;
             case 'objective':
-                $tmp .= '<h3 style="font-weight:600">Objectives</h3>';
-               
                 foreach (\App\Models\Objective::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li style="font-weight:600">'.$v->title.'</li>';
@@ -377,8 +386,6 @@ if (!function_exists('apply_data_for_other')) {
 
                 break;
             case 'work':
-                $tmp .= '<h3 style="font-weight:600">Work Experience</h3>';
-               
                 foreach (\App\Models\UserWorkHistory::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->job_title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
@@ -393,8 +400,6 @@ if (!function_exists('apply_data_for_other')) {
 
                 break;
             case 'education':
-                $tmp .= '<h3 style="font-weight:600">Education</h3>'; 
-                
                 foreach (\App\Models\UserEducation::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<label style="font-weight:600;">'.$v->title.'</label>';
                     $tmp .= '<ul style="list-style:none">';
@@ -410,7 +415,6 @@ if (!function_exists('apply_data_for_other')) {
 
                 break;
             case 'key_qualification':
-                $tmp .= '<h3 style="font-weight:600">Qualifications</h3>'; 
                 $tmp .= '<ul style="list-style:none">';
 
                 foreach (\App\Models\Qualification::whereUserId($user_id)->get() as $v) {
@@ -423,7 +427,6 @@ if (!function_exists('apply_data_for_other')) {
 
                 break;
             case 'skill':
-                $tmp .= '<h3 style="font-weight:600">Skill</h3>'; 
 
                 foreach (\App\Models\UserSkill::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
@@ -437,7 +440,6 @@ if (!function_exists('apply_data_for_other')) {
 
                 break;
             case 'personal_test':
-                $tmp .= '<h3 style="font-weight:600">Personal Test</h3>'; 
                 foreach (\App\Models\UserQuestion::whereUserId($user_id)->get() as $v) {
                     $tmp .= '<ul style="list-style:none">';
                     $tmp .= '<li><label style="font-weight:600">Content: </label>'.$v->content.'</li>';

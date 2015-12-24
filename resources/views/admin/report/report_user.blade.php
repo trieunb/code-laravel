@@ -2,6 +2,7 @@
 
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery-ui.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}">
 <style>
     .ui-datepicker-calendar {
         display: none;
@@ -71,9 +72,11 @@ Report User
                  {!! Form::selectYear('question', 2000, 2020, is_null($year) ?  \Carbon\Carbon::now()->year : $year, ['class' => 'form-control', 'id' => 'year']) !!}
             </div>
         </div>
-        <canvas id="report-month" style="width:100%; height:300px"></canvas>
+       
         @if (count($count_arr) == 0)
             <h3 class="text-center">Not Found Data </h3>
+        @else 
+            <canvas id="report-month" style="width:100%; height:300px"></canvas>
         @endif
         <div class="title-char text-center"><h3>Registered users</h3></div>
     </div>
@@ -96,9 +99,28 @@ Report User
 @section('script')
 <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
 <script type="text/javascript">
   $(function() {
     'use strict';
+
+    $('#myTab li a').on('shown.bs.tab', function(e) {
+
+        localStorage.setItem('lastTab', $(this).attr('href'));
+    });
+
+    var lastTab = localStorage.getItem('lastTab');
+
+    if (lastTab) {
+        $('[href="'+lastTab+'"').tab('show');
+
+    }
+
+    $('#year').select2({
+        placeholder: "Select a Year"
+    });
+
+    $('#questions').select2();
 
     $('#year').change(function() {
         var year = $(this).find('option:selected').val();
