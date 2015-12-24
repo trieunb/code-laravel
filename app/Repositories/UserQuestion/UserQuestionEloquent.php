@@ -41,7 +41,7 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
     public function reportSkill($question_id)
     {
         $questions = \App\Models\UserQuestion::select(\DB::raw('CASE
-                    WHEN point = 1 or point = 0 or point = 2 THEN "LOW"
+                    WHEN point = 1 or point = 0 or point = 2 THEN "Low"
                     WHEN point = 3 or point = 4 THEN "Alow Average"
                     WHEN point = 5 or point = 6 THEN "Average"
                     WHEN point = 7 or point = 8 THEN "Above Average"
@@ -53,12 +53,12 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
                     WHEN point = 1 or point = 0 or point = 2 THEN "Low"
                         WHEN point = 3 or point = 4 THEN "Alow Average"
                         WHEN point = 5 or point = 6 THEN "Average"
-                        WHEN point = 7 or point = 8 THEN "above Average"
-                        WHEN point = 9 or point = 10 THEN "high"
+                        WHEN point = 7 or point = 8 THEN "Above Average"
+                        WHEN point = 9 or point = 10 THEN "High"
                     END'))
                 ->get();
         
-        $levels = ['Low' => 0, 'Alow Average' => 0, 'Average' => 0, 'above Average' => 0, 'high' => 0];
+        $levels = ['Low' => 0, 'Alow Average' => 0, 'Average' => 0, 'Above Average' => 0, 'High' => 0];
         $response = [];
 
         foreach ($questions as $question) {
