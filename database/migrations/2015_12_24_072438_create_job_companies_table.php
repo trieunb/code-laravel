@@ -20,7 +20,7 @@ class CreateJobCompaniesTable extends Migration
             $table->string('website')->nullable();
             $table->json('logo')->nullable();
             $table->text('description')->nullable();
-            $table->timestamps()
+            $table->timestamps();
         });
     }
 
@@ -31,6 +31,6 @@ class CreateJobCompaniesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('job_companies');
     }
 }

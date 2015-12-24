@@ -22,8 +22,7 @@ class CreateJobsTable extends Migration
             $table->string('experience')->nullable();
             $table->text('description')->nullable();
             $table->integer('min_salary')->nullable()->default(0);
-            $table->json('images')->nullable();
-            $table->timestamps()
+            $table->timestamps();
             
         });
     }
