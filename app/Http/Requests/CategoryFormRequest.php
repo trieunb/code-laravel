@@ -31,7 +31,9 @@ class CategoryFormRequest extends Request
         if ($this->has('id')) $name .= '|unique:categories,name,'.$this->get('id');
 
         return [
-            'name' => $name
+            'name' => $name,
+            'description' => 'max:255',
+            'keyword' => 'max:255'
         ];
     }
 }

@@ -24,13 +24,13 @@ Create Category
 	<div class="form-group">
 		<label for="description" class="col-sm-2 control-label">Description</label>
 		<div class="col-sm-10">
-			<input type="text" name="description" class="form-control" id="description" placeholder="Description">
+			<textarea name="description" class="form-control" id="description" placeholder="Description"></textarea>
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="keyword" class="col-sm-2 control-label">Keyword</label>
 		<div class="col-sm-10">
-			<input type="text" name="keyword" class="form-control" id="description" placeholder="Keyword">
+			<textarea name="keyword" class="form-control" id="description" placeholder="Keyword"></textarea>
 		</div>
 	</div>
 	<div class="form-group">

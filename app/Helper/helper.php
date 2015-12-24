@@ -1,5 +1,18 @@
 <?php
 
+if (!function_exists('custom_format_money')) {
+    /**
+     * Format money
+     * @param  string $format 
+     * @param  mixed $money  
+     * @return [type]         
+     */
+    function custom_format_money($money, $format = '$') {
+        return $format.sprintf('%0.2f', $money);
+    }
+
+}
+
 if ( !function_exists('show_selected_option')) {
     function show_selected_option($categories, $selected_id = 0, $class = 'form-control', $dataAtrribute = null) {
         $html = '';

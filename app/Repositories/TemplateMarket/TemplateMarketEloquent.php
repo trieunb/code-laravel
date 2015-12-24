@@ -128,6 +128,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             ->addColumn('checkbox', function($template) {
                 return '<input type="checkbox" value="'.$template->id.'"/>';
             })
+            ->editColumn('price', function($template) {
+                return custom_format_money($template->price);
+            })
             ->addColumn('action', function ($template) {
                 return '<div class="btn-group" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.template.get.view', $template->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
