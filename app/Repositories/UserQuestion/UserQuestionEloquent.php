@@ -62,12 +62,14 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
         $response = [];
 
         foreach ($questions as $question) {
-            $response[$question->level] = $question->count;    
+            $response[$question->level] = (int)$question->count;  
         }
 
         $diffArray = array_diff_key($levels, $response);
         $responses = array_merge($response, $diffArray);
 
+        if (count($questions) == 0) return '<h3>Not found data</h3>';
+        
         $lavaChart = new Lavacharts;
         $reason = $lavaChart->DataTable()
                 ->addStringColumn('Reasons')
