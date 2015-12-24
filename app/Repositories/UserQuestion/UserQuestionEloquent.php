@@ -68,7 +68,7 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
             }
         }
       
-        if (count($questions) == 0) return '<h3>Not found data</h3>';
+        if (count($questions) == 0) return null;
         
         $lavaChart = new Lavacharts;
         $reason = $lavaChart->DataTable()
@@ -87,6 +87,6 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
                 'sliceVisibilityThreshold' => 0
             ]);
 
-        return $lavaChart->render('PieChart', 'Chart', 'chart_skill', true);
+        return $lavaChart;
     }
 }

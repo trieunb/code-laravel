@@ -500,7 +500,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ->groupBy('gender_user')
             ->get();
 
-        if (count($users) ==0) return '<h3>Not found data</h3>';
+        if (count($users) ==0) return null;
         
         $response = [];
 
@@ -529,7 +529,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 'sliceVisibilityThreshold' => 0
             ]);
 
-        return $lavaChart->render('PieChart', 'Chart', 'chart_gender', true);
+        return $lavaChart;
     }
 
     public function reportUserAge()
@@ -545,7 +545,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ->groupBy('group_age')
             ->get();
         
-        if (count($users) ==0) return '<h3>Not found data</h3>';
+        if (count($users) ==0) return null;
 
         foreach ($users as $user) {
             if (array_key_exists($user->group_age, $groupAge)) {
@@ -571,7 +571,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 'sliceVisibilityThreshold' => 0
             ]);
 
-        return $lavaChart->render('PieChart', 'Chart', 'chart_age', true);
+        return $lavaChart;
     }
 
     public function reportUserRegion()
@@ -588,7 +588,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 ->orderBy('created_at', 'DESC')
                 ->get();
 
-        if (count($users) ==0) return '<h3>Not found data</h3>';
+        if (count($users) ==0) return null;
         
         $user_count = User::count();
         foreach ($users as  $user) {
@@ -605,6 +605,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
                         'height' => 350,
                         'sliceVisibilityThreshold' => 0
                     ]);
-        return $lava->render('PieChart', 'Chart', 'chart_region', true);
+        return $lava;
     }
 }
