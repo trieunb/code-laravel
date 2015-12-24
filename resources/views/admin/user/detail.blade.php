@@ -28,7 +28,5 @@ User profile
                 </ul>
             </div>
         </div>
-
-        <a href="{{ route('admin.user.get.index') }}" class="btn btn-default btn-sm">Back to list</a>
     </div>
 @stop
