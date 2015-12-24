@@ -15,7 +15,7 @@ class AlterColumnPriceForMarketTemplateTable extends Migration
         Schema::table('template_markets', function($table) {
             $table->dropColumn('price');
         });
-        Schema::table('users', function($table) {
+        Schema::table('template_markets', function($table) {
             $table->double('price', 15, 8)->nullable()->after('content');
         });
     }
