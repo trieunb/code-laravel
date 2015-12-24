@@ -63,7 +63,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->home_phone = $data['home_phone'];
 		if (isset($data['city']))
 			$user->city = $data['city'];
-		if (isset($data['location']))
+		if (isset($data['location']) && $data['location']['longitude"'] != null)
 			$user->location = $data['location'];
 		if (isset($data['state']))
 			$user->state = $data['state'];
@@ -535,11 +535,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function reportUserAge()
     {
         $response = [];
-        $groupAge = ['Under 20 olds' => 0, '20-30 olds' => 0, 'Above 30 olds' => 0];
+        $groupAge = ['Younger than 20 years' => 0, '20 - 30 years' => 0, 'Older than 30 years' => 0];
         $users = $this->model->select(DB::raw('COUNT(*) as count, CASE
-                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob is null OR dob = "0000-00-00" THEN "Under 20 olds"
-                WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20-30 olds"
-                WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Above 30 olds"
+                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob is null OR dob = "0000-00-00" THEN "Younger than 20 years"
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20 - 30 years"
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Older than 30 years"
                 END as "group_age"'
             ))
             ->groupBy('group_age')
@@ -548,18 +548,17 @@ class UserEloquent extends AbstractRepository implements UserInterface
         if (count($users) ==0) return '<h3>Not found data</h3>';
 
         foreach ($users as $user) {
-            $response[$user->group_age] = intval($user->count);
+            if (array_key_exists($user->group_age, $groupAge)) {
+                $groupAge[$user->group_age] = (int)$user->count;
+            }
         }
 
-        $arrayDiff = array_diff_key($groupAge, $response);
-        
-        $responses = array_merge($response, $arrayDiff);
 
         $lavaChart = new Lavacharts;
         $reason = $lavaChart->DataTable()
                 ->addStringColumn('Reasons')
                 ->addNumberColumn('Percent');        
-        foreach ($responses as $name => $value) {
+        foreach ($groupAge as $name => $value) {
             $reason->addRow([$name, (int)$value]);
         }
 
@@ -593,21 +592,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
         
         $user_count = User::count();
         foreach ($users as  $user) {
-          /*  $region = '';
-            switch ($user->country) {
-                case '':
-                    $region = 'Other';
-                    break;
-                case $user->country:
-                    $region = $user->country;
-                    break;
-                default:
-                    $region = 'Other';
-                    break;
-            }
-
-            $rowData = [$region, (int)$user->count];
-            $userTable->addRow($rowData);*/
             if ($user->region != null)
                 $userTable->addRow([$user->region, (int)$user->count]);
             else $userTable->addRow(['Unknow', (int)$user->count]);

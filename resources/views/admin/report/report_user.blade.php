@@ -55,9 +55,9 @@ Report User
 
     <li id="register" @if(is_null($question_id)) class="active" @endif><a data-toggle="pill" href="#chart_month">Registered users</a></li>
     <li id="gender"><a data-toggle="pill" href="#chart_gender">Gender</a></li>
-    <li id="age"><a data-toggle="pill" href="#chart_age">Age Group</a></li>
+    <li id="age"><a data-toggle="pill" href="#chart_age">Age Groups</a></li>
     <li><a data-toggle="pill" href="#chart_region">Region</a></li>
-    <li @unless (is_null($question_id)) class="active" @endunless id="skill"><a data-toggle="pill" href="#chart_skill">Skills test</a></li>
+    <li @unless (is_null($question_id)) class="active" @endunless id="skill"><a data-toggle="pill" href="#chart_skill">Skill tests</a></li>
     <li id="option" class="pull-right">
         {!! Form::select('question', $list_questions, $question_id, ['class' => 'form-control', 'id' => 'questions', 'placeholder' => 'Choose Question']) !!}
     </li>
