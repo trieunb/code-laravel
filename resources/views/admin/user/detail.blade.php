@@ -1,45 +1,34 @@
 @extends('admin.layout')
 
-@section('style')
-	<style>
-		img {
-			width: 200px;
-			height: 200px;
-		}
-	</style>
-@stop
-
-
 @section('title')
-Detail User
+User profile
 @stop
 
 @section('page-header')
-Detail User: {{ $user->present()->name }}
+{{ $user->present()->name }}'s profile
 @stop
 
 @section('content')
-	<div id="content">
-		<ul>
-			<li><strong>First Name</strong> : <i>{{ $user->firstname }}</i></li>
-			<li><strong>Last Name</strong> : <i>{{ $user->lastname }}</i></li>
-			<li><strong>Address</strong> : <i>{{ $user->address }}</i></li>
-			<li><strong>Country</strong> : <i>{{ $user->country }}</i></li>
-			<li><strong>Mobile phone</strong> : <i>{{ $user->mobile_phone }}</i></li>
-			<li><strong>Birthday</strong> : <i>{{ $user->dob }}</i></li>
-			<li><strong>Email</strong> : <i>{{ $user->email }}</i></li>
-			<li><strong>Avatar</strong> : <i><img src=" @if($user->avatar != null && isset($user->avatar['thumb'])) {{ asset($user->avatar['thumb']) }} @else {{ asset('images/avatar.jpg') }}  @endif" ></i></li>
-			<li><strong>Link Profile</strong> : <i><a href="{{ $user->link_profile }}">{{ $user->link_profile }}</a></i></li>
-			<li><strong>Infomation</strong> : <i>{{ $user->infomation }}</i></li>
-		</ul>
-		<a href="{{ route('admin.user.get.index') }}" class="btn btn-default">Back</a>
-	</div>
-@stop
+    <div id="content">
+        <div class="row">
+            <div class="col-md-2">
+                <img class="img-responsive" src="@if($user->avatar != null && isset($user->avatar['thumb'])) {{ asset($user->avatar['thumb']) }} @else {{ asset('images/avatar.jpg') }}  @endif" >
+            </div>
+            <div class="col-md-9">
+                <ul>
+                    <li><strong>First Name</strong>: <i>{{ $user->firstname }}</i></li>
+                    <li><strong>Last Name</strong>: <i>{{ $user->lastname }}</i></li>
+                    <li><strong>Address</strong>: <i>{{ $user->address }}</i></li>
+                    <li><strong>Country</strong>: <i>{{ $user->country }}</i></li>
+                    <li><strong>Mobile phone</strong>: <i>{{ $user->mobile_phone }}</i></li>
+                    <li><strong>Birthday</strong>: <i>{{ $user->dob }}</i></li>
+                    <li><strong>Email</strong>: <i>{{ $user->email }}</i></li>
+                    <li><strong>Link Profile</strong>: <i><a href="{{ $user->link_profile }}">{{ $user->link_profile }}</a></i></li>
+                    <li><strong>Information</strong>: <i>{{ $user->infomation }}</i></li>
+                </ul>
+            </div>
+        </div>
 
-@section('script')
-<script>
-	$(document).ready(function() {
-		$('input').attr('disabled', true);
-	});
-</script>
-@endsection
+        <a href="{{ route('admin.user.get.index') }}" class="btn btn-default btn-sm">Back to list</a>
+    </div>
+@stop
