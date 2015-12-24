@@ -8,8 +8,8 @@ class Objective_Rule extends AbstractValidator
 	protected function rules($params)
 	{
 		return [
-			'title' => 'required|min:3',
-			'content' => 'required|min:3',
+			'title' => 'required',
+			'content' => 'required',
 			'position' => 'required'
 		];
 	}

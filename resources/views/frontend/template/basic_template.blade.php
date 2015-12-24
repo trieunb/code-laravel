@@ -4,20 +4,17 @@
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
         <div class='image-avatar' style="position: relative; overflow:hidden;">
+            @if ( ($user_info->avatar['origin']))
             <div lang="photo" onclick="eventChangeClick()">
-                @if ( is_null($user_info->avatar['origin']))
-                    <img style="width: 100%; height: auto;"
-                    src="{!! asset('uploads/origin/avatar.jpg') !!}">
-                @else
-                    <img style="width:100%; height: auto;" 
-                    src="{!! asset($user_info->avatar['origin']) !!}" >
-                @endif
+                <img style="width:100%; height: auto;" 
+                src="{!! asset($user_info->avatar['origin']) !!}" >
             </div>
+            @endif
             <div class="text-info" >
                 <div class="info-basic" 
-                    style="position: absolute;
+                    style="@if($user_info->avatar['origin'])position: absolute; bottom: 0px; @endif 
+                    margin-bottom:10px;
                     text-align: center;
-                    bottom: 10px;
                     width: 100%;">
                 <div lang="name" >
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>

@@ -31,13 +31,6 @@ interface TemplateMarketInterface extends Repository
 	public function createOrUpdateTemplateByManage($request, $data, $user_id);
 
 	/**
-	 * Search template In Market Area
-	 * @param  string $name 
-	 * @return        
-	 */
-	public function search($name);
-
-	/**
 	 * Publish or Pending template multi record
 	 * @param  int $status 
 	 * @param  array $ids    

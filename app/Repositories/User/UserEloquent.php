@@ -1,20 +1,21 @@
 <?php
 namespace App\Repositories\User;
 
+use App\Events\GetCountryAndRegionFromLocationUser;
 use App\Models\Objective;
 use App\Models\Qualification;
 use App\Models\Question;
 use App\Models\Reference;
+use App\Models\TemplateMarket;
 use App\Models\User;
 use App\Models\UserEducation;
 use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
+use DB;
 use Khill\Lavacharts\Lavacharts;
 use Lava;
-use App\Models\TemplateMarket;
-use DB;
 
 
 
@@ -73,7 +74,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->password = bcrypt($data['password']);
 		}
 
-		return $user->save();
+        $result = $user->save();
+        
+		if ($result && $user->location != null) 
+            event(new GetCountryAndRegionFromLocationUser($user));
+        
+        return $result;
 	}
 
 	/**
@@ -513,7 +519,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 'datatable' => $reason,
                 'is3D' => true,
                 'width' => 988,
-                'height' => 350
+                'height' => 350,
+                'title' => 'Report Gender'
             ]);
 
         return $lavaChart->render('PieChart', 'Chart', 'chart_gender', true);
@@ -555,7 +562,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 'datatable' => $reason,
                 'is3D' => true,
                 'width' => 988,
-                'height' => 350
+                'height' => 350,
+                'title' => 'Report Group Age'
             ]);
 
         return $lavaChart->render('PieChart', 'Chart', 'chart_age', true);
@@ -570,8 +578,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 
 
-        $users = User::select('country',DB::raw('COUNT(id) as count'))
-                ->groupBy('country')
+        $users = User::select('region',DB::raw('COUNT(id) as count'))
+                ->groupBy('region')
                 ->orderBy('created_at', 'DESC')
                 ->get();
 
@@ -579,7 +587,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         
         $user_count = User::count();
         foreach ($users as  $user) {
-            $region = '';
+          /*  $region = '';
             switch ($user->country) {
                 case '':
                     $region = 'Other';
@@ -593,7 +601,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }
 
             $rowData = [$region, (int)$user->count];
-            $userTable->addRow($rowData);
+            $userTable->addRow($rowData);*/
+            $userTable->addRow([$user->region, (int)$user->count]);
         }
 
         $chart_region = $lava->PieChart('Chart')
@@ -601,7 +610,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
                         'datatable' => $userTable,
                         'is3D' => true,
                         'width' => 988,
-                        'height' => 350
+                        'height' => 350,
+                        'title' => 'Report Region'
                     ]);
         return $lava->render('PieChart', 'Chart', 'chart_region', true);
     }

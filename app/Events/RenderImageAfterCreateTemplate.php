@@ -39,7 +39,7 @@ class RenderImageAfterCreateTemplate extends Event
     { 
         $this->template_id = $template_id;
         $this->content = $content;
-        $this->filename = $slug;
+        $this->filename = md5(str_random(40).uniqid());
         \Log::info('test thoi', [$this->filename]);
     }
 
@@ -52,9 +52,7 @@ class RenderImageAfterCreateTemplate extends Event
             // ->save(public_path('pdf/'.$this->filename.'.pdf'));
            //  \App::make('dompdf.wrapper')->loadView('api.template.index', ['content' => $this->content])
            // ->save(public_path('pdf/'.$this->filename.'.pdf'));
-            if (\File::exists(public_path('pdf/'.$this->filename.'.pdf'))) {
-                \File::delete(public_path('pdf/'.$this->filename.'.pdf'));
-            }
+      
             $snappy = \App::make('snappy.pdf');
             $snappy->generateFromHtml($this->content, 
                 public_path('pdf/'.$this->filename.'.pdf')

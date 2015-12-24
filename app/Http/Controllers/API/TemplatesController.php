@@ -210,9 +210,9 @@ class TemplatesController extends Controller
         \Log::info('test sendmail', [$id, $user->id, \File::exists($sourcePDF), $sourcePDF]);
         if ( ! \File::exists($sourcePDF)) {
             $snappy = \App::make('snappy.pdf');
-            $snappy->generateFromHtml( $template->content, public_path('pdf/'.$template->slug.'.pdf'));
-            // \PDF::loadView('api.template.index', ['content' => $template->content])
-            // ->save(public_path('pdf/'.$template->slug.'.pdf'));
+            $snappy->generateFromHtml($template->content, 
+                public_path('pdf/'.md5(str_random(40).uniqid()).'.pdf')
+            );
             $sourcePDF = public_path('pdf/'.$template->slug.'.pdf');
         }
       

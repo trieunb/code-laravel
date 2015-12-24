@@ -25,6 +25,18 @@
     #myTab li:last-child {
         width: 300px !important;
     }
+    /* bootstrap hack: fix content width inside hidden tabs */
+    .tab-content > .tab-pane,
+    .pill-content > .pill-pane {
+        display: block;    /* undo display:none          */
+        height: 0;          /* height:0 is also invisible */ 
+        overflow-y: hidden; /* no-overflow                */
+    }
+    .tab-content > .active,
+    .pill-content > .active {
+        height: auto;       /* let the content decide it  */
+        overflow:hidden;
+    } /* bootstrap hack end */
 </style>
 @stop
 
