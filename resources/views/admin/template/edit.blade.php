@@ -18,30 +18,30 @@ Edit Template
             <input type="hidden" id="template_id" name="id" value="{{ $template->id }}" placeholder="">
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" value="{{ $template->title }}" id="title" placeholder="Title">
+                <input type="text" class="form-control" name="title" value=" {{ old('title') != null ? old('title') : $template->title }}" id="title" placeholder="Title">
             </div>
             <div class="form-group">
                 <label for="cat_id">Category</label>
-                {!! Form::select('cat_id', $list_category, $template->cat_id, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
+                {!! Form::select('cat_id', $list_category, old('cat_id') != null ? old('cat_id') : $template->cat_id, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
                 <label for="price">Price ($)</label>
-                <input type="text" name="price" class="form-control" value="{{ $template->price }}" id="price" placeholder="$">
+                <input type="text" name="price" class="form-control" value="{{ old('price') ? old('price') : $template->price }}" id="price" placeholder="$">
             </div>
             <div class="form-group">
-                <textarea id="content" name="content">{{ $template->present()->contentPresent }}</textarea> 
+                <textarea id="content" name="content">{{ old('content') ? old('content') :  $template->present()->contentPresent }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" name="description" class="form-control" value="{{ $template->description }}" id="description" placeholder="Description">
+                <textarea name="description" class="form-control" id="description" placeholder="Description">{{ old('description') ? old('description') : $template->description }}</textarea>
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
-                <input name="version" type="text" value="{{ $template->version }}" class="form-control" id="version" placeholder="Version">
+                <input name="version" type="text" value="{{ old('version') ? old('version') : $template->version }}" class="form-control" id="version" placeholder="Version">
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                {!! Form::select('status', [1 => 'Pending', 2=> 'Publish', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
+                {!! Form::select('status', [1 => 'Pending', 2=> 'Publish', 0 => 'Block',] , old('status') ? old('status') : $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save</button>
