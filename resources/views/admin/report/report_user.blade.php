@@ -53,11 +53,11 @@ Report User
 
 <ul class="nav nav-pills" id="myTab">
 
-    <li id="register" @if(is_null($question_id)) class="active" @endif><a data-toggle="pill" href="#chart_month">Month</a></li>
+    <li id="register" @if(is_null($question_id)) class="active" @endif><a data-toggle="pill" href="#chart_month">Registered users</a></li>
     <li id="gender"><a data-toggle="pill" href="#chart_gender">Gender</a></li>
-    <li id="age"><a data-toggle="pill" href="#chart_age">Age</a></li>
+    <li id="age"><a data-toggle="pill" href="#chart_age">Age Group</a></li>
     <li><a data-toggle="pill" href="#chart_region">Region</a></li>
-    <li @unless (is_null($question_id)) class="active" @endunless id="skill"><a data-toggle="pill" href="#chart_skill">User skill</a></li>
+    <li @unless (is_null($question_id)) class="active" @endunless id="skill"><a data-toggle="pill" href="#chart_skill">Skills test</a></li>
     <li id="option" class="pull-right">
         {!! Form::select('question', $list_questions, $question_id, ['class' => 'form-control', 'id' => 'questions', 'placeholder' => 'Choose Question']) !!}
     </li>
@@ -78,7 +78,6 @@ Report User
         @else 
             <canvas id="report-month" style="width:100%; height:300px"></canvas>
         @endif
-        <div class="title-char text-center"><h3>Registered users</h3></div>
     </div>
     <div id="chart_gender" class="tab-pane fade">
        {!! $chart_gender !!}

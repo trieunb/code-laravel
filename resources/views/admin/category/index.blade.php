@@ -12,7 +12,6 @@
 	@if (\Session::has('message'))
 	    <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
 	@endif
-
 	<table class="table table-striped table-bordered table-hover" id="categories-table">
 	    <thead>
 	        <th>Id</th>
