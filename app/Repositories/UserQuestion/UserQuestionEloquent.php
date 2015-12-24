@@ -83,8 +83,7 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
                 'datatable' => $reason,
                 'is3D' => true,
                 'width' => 988,
-                'height' => 350,
-                'title' => 'Skills test'
+                'height' => 350
             ]);
 
         return $lavaChart->render('PieChart', 'Chart', 'chart_skill', true);
