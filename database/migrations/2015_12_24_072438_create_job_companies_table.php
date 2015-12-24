@@ -17,10 +17,8 @@ class CreateJobCompaniesTable extends Migration
             $table->string('name');
             $table->string('country')->nullable();
             $table->string('address')->nullable();
-            $table->string('amount_people', 100)->nullable();
             $table->string('website')->nullable();
             $table->json('logo')->nullable();
-            $table->json('images')->nullable()           
             $table->text('description')->nullable();
             $table->timestamps()
         });

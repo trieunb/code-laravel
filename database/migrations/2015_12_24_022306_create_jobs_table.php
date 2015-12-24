@@ -17,12 +17,11 @@ class CreateJobsTable extends Migration
             $table->integer('job_cat_id');
             $table->integer('company_id');
             $table->string('title');
-            $table->string('slug');
             $table->string('country')->nullable();
-            $table->string('address')->nullable();
+            $table->string('location')->nullable();
             $table->string('experience')->nullable();
             $table->text('description')->nullable();
-            $table->string('salary', 100)->nullable();
+            $table->integer('min_salary')->nullable()->default(0);
             $table->json('images')->nullable();
             $table->timestamps()
             
