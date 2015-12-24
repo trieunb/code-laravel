@@ -16,9 +16,9 @@
 	<table class="table table-striped table-bordered table-hover" id="categories-table">
 	    <thead>
 	        <th>Id</th>
-	        <th>Name</th>
-	        <th>Description</th>
-	        <th>Keyword</th>
+	        <th width="20%">Name</th>
+	        <th width="30%">Description</th>
+	        <th width="25%">Keyword</th>
 	        <th>Created At</th>
 	        <th>Action</th>
 	    </thead>
@@ -26,9 +26,9 @@
 	    	@foreach ($categories as $category)
 				<tr>
 					<td>{{ $category->id }}</td>
-					<td>{{ $category->name }}</td>
-					<td>{{ $category->meta['description'] or '' }}</td>
-					<td>{{ $category->meta['keyword'] or '' }}</td>
+					<td>{{  wordwrap(str_limit($category->name, 150), 150, "\n") }}</td>
+					<td>{{ $category->meta['description'] != null ? wordwrap(str_limit($category->meta['description'], 150), 150, "\n") : '' }}</td>
+					<td>{{ $category->meta['keyword'] != null ? wordwrap(str_limit($category->meta['keyword'], 150), 150, "\n") : '' }}</td>
 					<td>{{ $category->created_at }}</td>
 					<td>
 						<div class="btn-group" role="group" aria-label="...">
