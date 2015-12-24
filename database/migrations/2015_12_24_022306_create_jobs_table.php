@@ -21,6 +21,7 @@ class CreateJobsTable extends Migration
             $table->string('company_name');
             $table->string('skill');
             $table->string('country');
+            $table->string('location')->nullable();
             $table->string('experience')->nullable();
             $table->text('description')->nullable();
             $table->string('salary')->nullable();
