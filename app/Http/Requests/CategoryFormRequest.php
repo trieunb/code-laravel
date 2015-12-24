@@ -23,6 +23,9 @@ class CategoryFormRequest extends Request
      */
     public function rules()
     {
+        $inputs = array_map('trim', $this->all());
+        $this->replace($inputs);
+        
         $name = 'required|max:30';
 
         if ($this->has('id')) $name .= '|unique:categories,name,'.$this->get('id');
