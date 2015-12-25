@@ -4,22 +4,47 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\User\UserInterface;
+use App\Repositories\TemplateMarket\TemplateMarketInterface;
+use App\Repositories\Template\TemplateInterface;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Template;
 use Auth;
 use Validator;
 
 class DashBoardsController extends Controller
 {
-    public function __construct()
+    private $user;
+    private $template;
+    private $resume;
+
+    public function __construct(UserInterface $user, 
+        TemplateMarketInterface $template, 
+        TemplateInterface $resume)
     {
         $this->middleware('csrf');
         // $this->middleware('role:admin');
+        $this->user = $user;
+        $this->template = $template;
+        $this->resume = $resume;
     }
 
 	public function index(Request $request)
 	{
-		return view('admin.dashboard.index');
+        $users = User::whereDoesntHave('roles', function($q) {
+            $q->where('roles.slug', 'admin');
+        })->orderBy('created_at', 'DESC')->get();
+        $templates = $this->template->getAll();
+        $resumes = Template::where('type', '<>', 2)
+        ->orderBy('created_at', 'DESC')->get();
+		return view('admin.dashboard.index', compact('users', 'templates', 'resumes'));
 	}
+
+    public function getDetailResume($id)
+    {
+        $resume = $this->resume->getById($id);
+        return view('admin.resume.detail', compact('resume'));
+    }
 
     public function getLogin()
     {
