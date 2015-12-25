@@ -12,6 +12,7 @@ use App\Models\UserEducation;
 use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
+use App\Services\Report\Report;
 use Carbon\Carbon;
 use DB;
 use Khill\Lavacharts\Lavacharts;
@@ -491,120 +492,49 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function reportUserGender()
     {
         $gender = ['Male' => 0, 'Female' => 0, 'Other' => 0];
-        $users = $this->model->select(DB::raw('COUNT(*) as `count`,
-            CASE WHEN gender = 0 THEN "Male"
+        $sql = 'CASE WHEN gender = 0 THEN "Male"
                WHEN gender = 1 THEN "Female"
                WHEN gender = 2 OR gender is null THEN "Other"
-               END as "gender_user"')
-            )
-            ->groupBy('gender_user')
-            ->get();
-
-        if (count($users) ==0) return null;
-        
-        $response = [];
-
-        foreach ($users as $user) {
-            $response[$user->gender_user] = (int)$user->count;
-        }
-
-        $genderDiff = array_diff_key($gender, $response);
-
-        $responses = array_merge($response, $genderDiff);
-        
-        $lavaChart = new Lavacharts;
-        $reason = $lavaChart->DataTable()
-                ->addStringColumn('Reasons')
-                ->addNumberColumn('Percent');        
-        foreach ($responses as $name => $value) {
-            $reason->addRow([$name, (int)$value]);
-        }
-
-        $pieChart = $lavaChart->PieChart('Chart')
-            ->setOptions([
-                'datatable' => $reason,
-                'is3D' => true,
-                'width' => 988,
-                'height' => 350,
-                'sliceVisibilityThreshold' => 0
-            ]);
-
-        return $lavaChart;
+               END as "gender_user"';
+        $report = new Report($this->model, $sql, 'gender_user');
+       
+        $options = [
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
+        ];
+        return $report->prepareRender('gender_user', $gender, 'Reasons', 'Percent', $options);
     }
 
     public function reportUserAge()
     {
         $response = [];
         $groupAge = ['Younger than 20 years' => 0, '20 - 30 years' => 0, 'Older than 30 years' => 0];
-        $users = $this->model->select(DB::raw('COUNT(*) as count, CASE
+        $sql = 'CASE
                 WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob is null OR dob = "0000-00-00" THEN "Younger than 20 years"
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20 - 30 years"
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Older than 30 years"
-                END as "group_age"'
-            ))
-            ->groupBy('group_age')
-            ->get();
-        
-        if (count($users) ==0) return null;
+                END as "group_age"';
+        $report = new Report($this->model, $sql, 'group_age');
 
-        foreach ($users as $user) {
-            if (array_key_exists($user->group_age, $groupAge)) {
-                $groupAge[$user->group_age] = (int)$user->count;
-            }
-        }
-
-
-        $lavaChart = new Lavacharts;
-        $reason = $lavaChart->DataTable()
-                ->addStringColumn('Reasons')
-                ->addNumberColumn('Percent');        
-        foreach ($groupAge as $name => $value) {
-            $reason->addRow([$name, (int)$value]);
-        }
-
-        $pieChart = $lavaChart->PieChart('Chart')
-            ->setOptions([
-                'datatable' => $reason,
-                'is3D' => true,
+        $options = [
+             'is3D' => true,
                 'width' => 988,
                 'height' => 350,
                 'sliceVisibilityThreshold' => 0
-            ]);
-
-        return $lavaChart;
+        ];
+        return $report->prepareRender('group_age', $groupAge, 'Reasons', 'Percent', $options);
     }
 
     public function reportUserRegion()
     {
-        $lava = new Lavacharts;
-        $userTable = $lava->DataTable();
-        $userTable->addStringColumn('Region')
-                    ->addNumberColumn('Users');
-
-
-
-        $users = User::select('region',DB::raw('COUNT(id) as count'))
-                ->groupBy('region')
-                ->orderBy('created_at', 'DESC')
-                ->get();
-
-        if (count($users) ==0) return null;
+        $report = new Report($this->model, 'region', 'region');
         
-        $user_count = User::count();
-        foreach ($users as  $user) {
-            if ($user->region != null)
-                $userTable->addRow([$user->region, (int)$user->count]);
-            else $userTable->addRow(['Unknown', (int)$user->count]);
-        }
-
-        $chart_region = $lava->PieChart('Chart')
-                    ->setOptions([
-                        'datatable' => $userTable,
-                        'is3D' => true,
+        $options = [ 'is3D' => true,
                         'width' => 988,
                         'height' => 350,
-                        'sliceVisibilityThreshold' => 0
-                    ]);
-        return $lava;
+                        'sliceVisibilityThreshold' => 0];
+        return $report->prepareRender('region', [], 'Reasons', 'Percent', $options);
     }
 }
