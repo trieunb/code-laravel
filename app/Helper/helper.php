@@ -29,7 +29,7 @@ if ( ! function_exists('create_lists')) {
                 $children = create_lists($data, $value['id']);
               
                 if ($children) {
-                    $value['children'] = $children;
+                    $value['childs'] = $children;
                 }
                 
                 $response[] = $value;

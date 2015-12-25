@@ -15,9 +15,9 @@ class JobsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(JobRepository $job)
     {
-        
+        // dd($job->seachJob('Victor', ''))
     }
 
     public function getListJobCategory(JobCategoryRepository $job_category)

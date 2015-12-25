@@ -23,7 +23,6 @@ class CreateJobsTable extends Migration
             $table->text('description')->nullable();
             $table->integer('min_salary')->nullable()->default(0);
             $table->timestamps();
-            
         });
     }
 
