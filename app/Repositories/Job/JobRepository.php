@@ -12,6 +12,4 @@ class JobRepository extends AbstractRepository
 	{
 		$this->model = $model;
 	}
-
-
 }
