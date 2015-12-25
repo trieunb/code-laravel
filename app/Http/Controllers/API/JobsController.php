@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\JobCategory\JobCategoryRepository;
 use App\Repositories\JobSkill\JobSkillRepository;
+use App\Repositories\Job\JobRepository;
 use Illuminate\Http\Request;
 
 class JobsController extends Controller
@@ -15,9 +16,9 @@ class JobsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(JobRepository $job)
     {
-        
+        dd($job->seachJob('Victor', 'Liechtenstein', 0));
     }
 
     public function getListJobCategory(JobCategoryRepository $job_category)

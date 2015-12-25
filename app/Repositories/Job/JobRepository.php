@@ -15,6 +15,17 @@ class JobRepository extends AbstractRepository
 
 	public function seachJob($keyword, $countryCode, $salary, $cat_id)
 	{
-		// \DB::table('jobs')->select('')
+		$jobs = \DB::table('jobs')->select('*')
+			->join('job_companies', 'job_companies.id', 'jobs.company_id')
+            ->whereRaw('MATCH (jobs.title, jobs.experience, jobs.description) AGAINST (?)', [$keyword])
+            ->orWhereRaw('MATCH (job_companies.name, job_companies.description) AGAINST (?)', [$keyword])
+            ->where('jobs.min_salary', '>=', $salary)
+            ->get();
+
+        /*$companies = \DB::table('job_companies')->select('*')
+        	->join('jobs', 'jobs.company_id', '=', 'job_companies.id')
+        	->whereRaw('MATCH (name, description) AGAINST (?)', [$keyword])
+        	->where('jobs.min_salary', '>=', $salary);*/
 	}
+
 }

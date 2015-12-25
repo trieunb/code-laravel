@@ -15,8 +15,6 @@ class JobCategoryRepository extends AbstractRepository
 
 	public function getAll()
 	{
-		$data = create_lists($this->model->select(['id', 'name', 'parent_id'])->get()->toArray());
-
-		return array_merge([['id' => 0, 'name' => 'All Specializations']], $data);
+		return create_lists($this->model->select(['id', 'name', 'parent_id'])->get()->toArray());
 	}
 }
