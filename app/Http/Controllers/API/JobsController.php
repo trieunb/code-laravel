@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\JobCategory\JobCategoryRepository;
 use App\Repositories\JobSkill\JobSkillRepository;
+use App\Repositories\Job\JobRepository;
 use Illuminate\Http\Request;
 
 class JobsController extends Controller
