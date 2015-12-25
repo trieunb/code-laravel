@@ -23,12 +23,16 @@ class JobsController extends Controller
 
     public function getListJobCategory(JobCategoryRepository $job_category)
     {
-        return response()->json($job_category->getAll(), 200, [], JSON_NUMERIC_CHECK);
+        return $job_category->getAll() != null
+            ? response()->json(['status_code' => 200, 'data' => $job_category->getAll()], 200, [], JSON_NUMERIC_CHECK)
+            : response()->json(['status_code' => 400, 'message' => 'Data not found!']);
     }
 
     public function getListJobSkill(JobSkillRepository $job_skill)
     {
-        return response()->json($job_skill->getAll());
+        return count($job_skill->getAll()) != 0
+            ? response()->json(['status_code' => 200, 'data' => $job_skill->getAll()])
+            : response()->jon(['status_code' => 400, 'message' => 'Data not found!']);
     }
 
     /**
