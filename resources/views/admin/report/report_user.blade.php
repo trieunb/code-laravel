@@ -74,24 +74,24 @@ Report User
         </div>
        
         @if (count($count_arr) == 0)
-            <h3 class="text-center">Not Found Data </h3>
+            <h3 class="text-center">Data not available </h3>
         @else 
             <canvas id="report-month" style="width:100%; height:300px"></canvas>
         @endif
     </div>
     <div id="chart_gender" class="tab-pane fade">
 
-       {!! $chart_gender != null ? $chart_gender->render('PieChart', 'Chart', 'chart_gender', true) : '<h3 class="text-center">Data not avaible</h3>' !!}
+       {!! $chart_gender != null ? $chart_gender->render('PieChart', 'Chart', 'chart_gender', true) : '<h3 class="text-center">Data not available</h3>' !!}
     </div>
     <div id="chart_age" class="tab-pane fade">
-        {!! $chart_age != null ? $chart_age->render('PieChart', 'Chart', 'chart_age', true) : '<h3 class="text-center">Data not avaible</h3>' !!}
+        {!! $chart_age != null ? $chart_age->render('PieChart', 'Chart', 'chart_age', true) : '<h3 class="text-center">Data not available</h3>' !!}
     </div>
     <div id="chart_region" class="tab-pane fade">
-        {!! $chart_region != null ? $chart_region->render('PieChart', 'Chart', 'chart_region', true) : '<h3 class="text-center">Data not avaible</h3>' !!}
+        {!! $chart_region != null ? $chart_region->render('PieChart', 'Chart', 'chart_region', true) : '<h3 class="text-center">Data not available</h3>' !!}
         <div class="title-char text-center"><h3>Registered users by region</h3></div>
     </div>
     <div id="chart_skill" class="tab-pane fade <?php if( ! is_null($question_id)) echo 'in active'; ?>">
-        {!! $chart_skill != null ? $chart_skill->render('PieChart', 'Chart', 'chart_skill', true) : '<h3 class="text-center">Data not avaible</h3>' !!}
+        {!! $chart_skill != null ? $chart_skill->render('PieChart', 'Chart', 'chart_skill', true) : '<h3 class="text-center">Data not available</h3>' !!}
     </div>
 
 </div>

@@ -5,6 +5,7 @@ use App\Models\Question;
 use App\Models\UserQuestion;
 use App\Repositories\AbstractRepository;
 use App\Repositories\UserQuestion\UserQuestionInterface;
+use App\Services\Report\Report;
 use Khill\Lavacharts\Lavacharts;
 class UserQuestionEloquent extends AbstractRepository implements UserQuestionInterface
 {
@@ -40,7 +41,22 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
      */
     public function reportSkill($question_id)
     {
-        $questions = \App\Models\UserQuestion::select(\DB::raw('CASE
+        $sql = 'CASE
+                    WHEN point = 1 or point = 0 or point = 2 THEN "Low"
+                    WHEN point = 3 or point = 4 THEN "Below Average"
+                    WHEN point = 5 or point = 6 THEN "Average"
+                    WHEN point = 7 or point = 8 THEN "Above Average"
+                    WHEN point = 9 or point = 10 THEN "High"
+                    END as "level"';
+        $groupBy = \DB::raw('CASE 
+                    WHEN point = 1 or point = 0 or point = 2 THEN "Low"
+                        WHEN point = 3 or point = 4 THEN "Below Average"
+                        WHEN point = 5 or point = 6 THEN "Average"
+                        WHEN point = 7 or point = 8 THEN "Above Average"
+                        WHEN point = 9 or point = 10 THEN "High"
+                    END');
+        $report = new Report($this->model, $sql, $groupBy, null, [['field' => 'question_id', 'operator' => '=', 'value' => $question_id]]);
+        /*$questions = \App\Models\UserQuestion::select(\DB::raw('CASE
                     WHEN point = 1 or point = 0 or point = 2 THEN "Low"
                     WHEN point = 3 or point = 4 THEN "Below Average"
                     WHEN point = 5 or point = 6 THEN "Average"
@@ -56,37 +72,16 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
                         WHEN point = 7 or point = 8 THEN "Above Average"
                         WHEN point = 9 or point = 10 THEN "High"
                     END'))
-                ->get();
+                ->get();*/
         
         $levels = ['Low' => 0, 'Below Average' => 0, 'Average' => 0, 'Above Average' => 0, 'High' => 0];
-        $response = [];
-
-        foreach ($questions as $question) {
-            if (array_key_exists($question->level, $levels)) {
-                $levels[$question->level] = (int)$question->count;
-
-            }
-        }
       
-        if (count($questions) == 0) return null;
-        
-        $lavaChart = new Lavacharts;
-        $reason = $lavaChart->DataTable()
-                ->addStringColumn('Reasons')
-                ->addNumberColumn('Percent');        
-        foreach ($levels as $name => $value) {
-            $reason->addRow([$name, (int)$value]);
-        }
-
-        $pieChart = $lavaChart->PieChart('Chart')
-            ->setOptions([
-                'datatable' => $reason,
-                'is3D' => true,
+        $options = [
+        'is3D' => true,
                 'width' => 988,
                 'height' => 350,
                 'sliceVisibilityThreshold' => 0
-            ]);
-
-        return $lavaChart;
+        ];
+        return $report->prepareRender('level', $levels, 'Reasons', 'Percent', $options);
     }
 }
