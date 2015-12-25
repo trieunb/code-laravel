@@ -101,3 +101,27 @@ $factory->define(App\Models\Question::class, function(Faker\Generator $faker) {
         'content' => $faker->name
     ];
 });
+
+$factory->define(App\Models\JobCompany::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->company,
+        'country' => $faker->country,
+        'address' => $faker->address,
+        'logo' => $faker->imageUrl(200, 200),
+        'website' => $faker->url,
+        'description' => $faker->text
+    ];
+});
+
+$factory->define(App\Models\Job::class, function(Faker\Generator $faker) {
+    return [
+        'job_cat_id' => rand(1, 21),
+        'company_id' => rand(1, 20),
+        'title' => $faker->name,
+        'country' => $faker->country,
+        'location' => $faker->address,
+        'experience' => join("\n\n", $faker->paragraphs(mt_rand(3, 6))),
+        'description' => $faker->text,
+        'min_salary' => $faker->numberBetween($min = 100, $max = 9000)
+    ];
+});
