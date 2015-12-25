@@ -56,7 +56,7 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
                         WHEN point = 9 or point = 10 THEN "High"
                     END');
         $report = new Report($this->model, $sql, $groupBy, null, [['field' => 'question_id', 'operator' => '=', 'value' => $question_id]]);
-        $report->setReportNotdAdmin(true);
+
         $levels = ['Low' => 0, 'Below Average' => 0, 'Average' => 0, 'Above Average' => 0, 'High' => 0];
       
         $options = [
