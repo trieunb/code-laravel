@@ -482,7 +482,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $user = $this->model->select(DB::raw('MONTH(created_at) as month'),
                     DB::raw('COUNT(id) AS count'))
                 ->groupBy('month')
-                ->orderBy('created_at', 'ASC');
+                ->orderBy('created_at', 'ASC')
+                ->whereDoesntHave('roles');
 
         return is_null($year)
             ? $user->get()
@@ -497,7 +498,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                WHEN gender = 2 OR gender is null THEN "Other"
                END as "gender_user"';
         $report = new Report($this->model, $sql, 'gender_user');
-       
+        $report->setReportNotdAdmin(true);
         $options = [
             'is3D' => true,
             'width' => 988,
@@ -517,7 +518,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Older than 30 years"
                 END as "group_age"';
         $report = new Report($this->model, $sql, 'group_age');
-
+        $report->setReportNotdAdmin(true);
         $options = [
              'is3D' => true,
                 'width' => 988,
@@ -530,7 +531,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function reportUserRegion()
     {
         $report = new Report($this->model, 'region', 'region');
-        
+        $report->setReportNotdAdmin(true);
         $options = [ 'is3D' => true,
                         'width' => 988,
                         'height' => 350,

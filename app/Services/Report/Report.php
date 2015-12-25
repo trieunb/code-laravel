@@ -11,7 +11,7 @@ class Report
 	private $orderBy;
 	private $whereClause;
 	private $query;
-
+	private $reportNotAdmin;
 	public function __construct($model, $sqlClause, $groupBy, $orderBy = [], $whereClause = null)
 	{
 		$this->model = $model;
@@ -19,6 +19,13 @@ class Report
 		$this->groupBy = $groupBy;
 		$this->orderBy = $orderBy;
 		$this->whereClause = $whereClause;
+	}
+
+	public function setReportNotdAdmin($report)
+	{
+		$this->reportNotAdmin = $report;
+
+		return $this;
 	}
 
 	private function groupByPrepareReport()
@@ -38,8 +45,13 @@ class Report
 			}
 		}
 
+		if ( $this->reportNotAdmin != null) {
+			$query = $query->whereDoesntHave('roles');
+		}
+
 		return $query;
 	}	
+
 
 	private function orderByPreprareReport()
 	{
