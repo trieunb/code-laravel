@@ -14,22 +14,22 @@ class JobSkillSeeder extends Seeder
     {
         JobSkill::truncate();
         $data = [
-            'java',
-            'c#',
-            'php',
-            '.net',
-            'c++',
-            'object c',
-            'oracle',
-            'amazon service',
-            'mysql',
-            'ruby',
-            'english',
-            'sql',
-            'ios',
-            'android',
-            'windowphone',
-            'other'
+            'Java',
+            'C#',
+            'Php',
+            '.Net',
+            'C++',
+            'Object c',
+            'Oracle',
+            'Amazon service',
+            'Mysql',
+            'Ruby',
+            'English',
+            'SQL',
+            'IOS',
+            'Android',
+            'Windowphone',
+            'Other'
         ];
 
         foreach ($data as $key => $value) {
