@@ -18,7 +18,7 @@ class JobsController extends Controller
      */
     public function index(JobRepository $job)
     {
-        dd($job->seachJob('Victor', 'Liechtenstein', 0));
+        dd($job->seachJob('dino', 'Liechtenstein', 0, 0));
     }
 
     public function getListJobCategory(JobCategoryRepository $job_category)
