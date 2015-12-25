@@ -12,7 +12,7 @@ Edit Category: {{ $category->name }}
  @if (\Session::has('message'))
     <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
     @endif
-
+@include('partial.notifications')
 <form class="form-horizontal" method="post" action="{{ route('admin.category.post.edit') }}">
 	<input type="hidden" name="id" id="id" value="{{ $category->id }}"/>
 	<div class="form-group">
