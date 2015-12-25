@@ -13,5 +13,8 @@ class JobRepository extends AbstractRepository
 		$this->model = $model;
 	}
 
-
+	public function seachJob($keyword, $countryCode, $salary, $cat_id)
+	{
+		// \DB::table('jobs')->select('')
+	}
 }
