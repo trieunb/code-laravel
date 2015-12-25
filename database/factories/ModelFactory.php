@@ -118,7 +118,7 @@ $factory->define(App\Models\Job::class, function(Faker\Generator $faker) {
         'job_cat_id' => rand(1, 21),
         'company_id' => rand(1, 20),
         'title' => $faker->name,
-        'country' => $faker->country,
+        'country' => $faker->country_code,
         'location' => $faker->address,
         'experience' => join("\n\n", $faker->paragraphs(mt_rand(3, 6))),
         'description' => $faker->text,

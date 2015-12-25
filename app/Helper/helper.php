@@ -10,7 +10,34 @@ if (!function_exists('custom_format_money')) {
     function custom_format_money($money, $format = '$') {
         return $format.sprintf('%0.2f', $money);
     }
+}
 
+if ( ! function_exists('create_lists')) {
+    /**
+     * Create list data parent/children array
+     * @param  array  $data      
+     * @param  int $parent_id 
+     * @return array            
+     */
+    function create_lists(array $data, $parent_id = null) {
+        if (count($data) == 0) return null;
+
+        $response = [];
+        foreach ($data as $key => $value) {
+            if ($value['parent_id'] == $parent_id) {
+                unset($value['parent_id']);
+                $children = create_lists($data, $value['id']);
+              
+                if ($children) {
+                    $value['children'] = $children;
+                }
+                
+                $response[] = $value;
+            }
+        }
+
+        return $response;
+    }
 }
 
 if ( !function_exists('show_selected_option')) {
