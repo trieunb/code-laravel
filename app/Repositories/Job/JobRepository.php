@@ -30,7 +30,7 @@ class JobRepository extends AbstractRepository
         if ($salary != null && $salary != '') {
             $jobs = $jobs->where('jobs.min_salary', '>=', $salary);
         }
-        $keyword = 'PHP';
+        
         if ($cat_id != '' && $cat_id != null) {
             $jobs = $jobs->whereJobCatId($cat_id);
         }
