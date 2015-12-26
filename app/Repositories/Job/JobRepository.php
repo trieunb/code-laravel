@@ -23,7 +23,7 @@ class JobRepository extends AbstractRepository
 
 		$jobs = \DB::table('jobs')->select(['jobs.*', 'job_companies.name', 'job_companies.address', 'job_companies.website', 'job_companies.logo'])
             ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
-            ->where('jobs.country', '=', 'VN');
+            ->where('jobs.country', '=', $countryCode);
 
         if ($salary != null && $salary != '') {
             $jobs = $jobs->where('jobs.min_salary', '>=', $salary);
@@ -38,7 +38,7 @@ class JobRepository extends AbstractRepository
         }
         
         $jobs = $jobs->get();
-        
+
         if (count($jobs) > 0) {
             foreach ($jobs as $key => $job) {
                 $ids[] = $job->id;
