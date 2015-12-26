@@ -41,12 +41,15 @@ class JobRepository extends AbstractRepository
                 ['%'.$keyword.'%', '%'.$keyword.'%', '%'.$keyword.'%']
              );
         }
-        
+
         $offset = ($currentPage - 1) * config('paginate.limit');
         $tmpJobs = $jobs;
         $count = count($jobs->get());
 
-        $jobs = $tmpJobs->skip($offset)->take(config('paginate.limit'))->get();
+        $jobs = $tmpJobs->skip($offset)
+            ->take(config('paginate.limit'))
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
         return ['jobs' => $jobs, 'total' => $count, 'currentPage' => is_null($currentPage) ? 1 : $currentPage];
     }
