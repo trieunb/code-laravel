@@ -4,6 +4,8 @@ namespace App\Repositories\Job;
 use App\Models\Job;
 use App\Repositories\AbstractRepository;
 use Baum\Extensions\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use yajra\Datatables\keyword;
 
 class JobRepository extends AbstractRepository
 {
@@ -14,7 +16,7 @@ class JobRepository extends AbstractRepository
 		$this->model = $model;
 	}
 
-	public function seachJob($keyword, $countryCode, $salary, $cat_id)
+	public function seachJob($keyword, $countryCode, $salary, $cat_id, $currentPage = null)
 	{
         $response = [];
         $ids = [];
@@ -78,11 +80,18 @@ class JobRepository extends AbstractRepository
                 $response[$key]['logo'] = $job->job_company->logo;
             }
         }
-    
+        $currentPage = is_null($currentPage) ? 1 : $currentPage;
 
-        return array_values(
-            Collection::make($response)->sortByDesc('updated_at')->toArray()
-        );
+        $response = Collection::make($response)->sortByDesc('updated_at')->toArray();
+        $offset = ($currentPage * config('paginate.limit')) - config('paginate.limit');
+        $itemsForCurrentPage = array_slice($response, $offset, config('paginate.limit'), true);
+
+        $pagination = new LengthAwarePaginator($itemsForCurrentPage, count($response), config('paginate.limit'), $currentPage);
+
+        $result = $pagination->toArray(); 
+        $result['data'] = array_values($result['data']);
+
+        return $result;
     }
 
 }
