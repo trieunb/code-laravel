@@ -68,7 +68,7 @@ class ReportController extends Controller
         return view('admin.report.report_user', 
             compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region', 'chart_skill'))
              ->with('year' , $request->get('year'))
-             ->with('question_id' , $request->get('question_id'));
+             ->with('question_id' , $question_id);
     }
 
 
