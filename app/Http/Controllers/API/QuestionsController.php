@@ -37,8 +37,7 @@ class QuestionsController extends Controller
      */
     public function index(Request $request)
     {
-        $user = \JWTAuth::toUser($request->get('token'));
-        
+        $user = \JWTAuth::toUser($request->get('token'));  
         $user_answers = $this->user_question->getDataWhereClause('user_id', '=', $user->id);
         if (count($user_answers) > 0) {
             return response()->json([
@@ -48,26 +47,12 @@ class QuestionsController extends Controller
             ]);
         } else {
             $questions = $this->question->getQuestions();
-            foreach ($questions as $value) {
-                $data[] = [
-                    'question_id' => $value['id'],
-                    'user_id' => $user->id,
-                    'content' => $value['content'],
-                    'point' => 0
-                ] ;
-                $ids[] = $value['id'];
-            }
-            $this->user_question->saveUserAnswer($data, $user->id);
-            $user_answers = UserQuestion::where('user_id', $user->id)
-                ->whereIn('question_id', $ids)
-                ->get();
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
-                'data' => $user_answers
+                'data' => $questions
             ]);
-        }
-        
+        }  
     }
 
     /**
@@ -157,19 +142,26 @@ class QuestionsController extends Controller
     public function postAnswerOfUser(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-
-        foreach ($request->get('answers') as $value) {
-            $question_id = [
-                'question_id' => $value['question_id']
-            ];
-            $data = [
-                'point' => $value['point'],
-            ];
-            UserQuestion::where('question_id', $question_id)
-                ->where('user_id', $user->id)
-                ->update($data);
+        $user_answers = $this->user_question->getDataWhereClause('user_id', '=', $user->id);
+        if (count($user_answers) > 0) {
+            foreach ($request->get('answers') as $value) {
+                $question_id = [
+                    'question_id' => $value['question_id']
+                ];
+                UserQuestion::where('question_id', $question_id)
+                    ->where('user_id', $user->id)
+                    ->update(['point' => $value['point']]);
+            }
+        } else {
+            foreach ($request->get('answers') as $value) {
+                $data[] = [
+                    'question_id' => $value['question_id'],
+                    'user_id' => $user->id,
+                    'point' => $value['point'],
+                ] ;
+            }
+            $this->user_question->saveUserAnswer($data, $user->id);
         }
-        
         return response()->json([ 'status_code' => 200, 'status' => true ]);
     }
 }
