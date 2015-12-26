@@ -41,6 +41,9 @@ class JobCategorySeeder extends Seeder
         foreach ($data as $key => $value) {
             $cat = new JobCategory;
             $cat->name = $value;
+            if ($key != 0 && $key % 5 != 0) {
+                $cat->parent_id = $key;
+            }
             $cat->save();
         }
     }
