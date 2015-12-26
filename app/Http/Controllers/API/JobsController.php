@@ -21,7 +21,7 @@ class JobsController extends Controller
         try {
             return response()->json([
                 'status_code' => 200, 
-                'data' => $job->seachJob('aabbcc', $request->get('country'), $request->get('salary'), $request->get('cat_id'), $request->get('page'))
+                'data' => $job->seachJob($request->get('keyword'), $request->get('country'), $request->get('salary'), $request->get('cat_id'), $request->get('page'))
             ]);
         } catch (Exception $e) {
             return response()->json(['status_code' => 400, 'message' => 'Data not found!']);

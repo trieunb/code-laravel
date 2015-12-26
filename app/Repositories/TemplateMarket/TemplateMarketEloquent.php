@@ -25,7 +25,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function getAllTemplateMarket($sortby, $order, $page,$search)
     {
-        $offset = ($page -1 ) * 10;
+        $offset = ($page -1 ) * config('paginate.limit');
         $query = $this->model->whereStatus(2);
 
         if ($search != null && $search != '') {
@@ -37,7 +37,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             : $query->orderBy('price');
             
         return $query->skip($offset)
-            ->take(10)
+            ->take(config('paginate.limit'))
             ->get();
     }
 
