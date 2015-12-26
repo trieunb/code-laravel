@@ -3,6 +3,7 @@ namespace App\Repositories\Job;
 
 use App\Models\Job;
 use App\Repositories\AbstractRepository;
+use Baum\Extensions\Eloquent\Collection;
 
 class JobRepository extends AbstractRepository
 {
@@ -15,17 +16,73 @@ class JobRepository extends AbstractRepository
 
 	public function seachJob($keyword, $countryCode, $salary, $cat_id)
 	{
-		$jobs = \DB::table('jobs')->select('*')
-			->join('job_companies', 'job_companies.id', 'jobs.company_id')
-            ->whereRaw('MATCH (jobs.title, jobs.experience, jobs.description) AGAINST (?)', [$keyword])
-            ->orWhereRaw('MATCH (job_companies.name, job_companies.description) AGAINST (?)', [$keyword])
-            ->where('jobs.min_salary', '>=', $salary)
-            ->get();
+        $response = [];
+        $ids = [];
 
-        /*$companies = \DB::table('job_companies')->select('*')
-        	->join('jobs', 'jobs.company_id', '=', 'job_companies.id')
-        	->whereRaw('MATCH (name, description) AGAINST (?)', [$keyword])
-        	->where('jobs.min_salary', '>=', $salary);*/
-	}
+		$jobs = \DB::table('jobs')->select(['jobs.*', 'job_companies.name', 'job_companies.address', 'job_companies.website', 'job_companies.logo'])
+            ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id');
+
+        if ($salary != null && $salary != '') {
+            $jobs = $jobs->where('jobs.min_salary', '>=', $salary);
+        }
+        if ($cat_id != '' && $cat_id != null) {
+            $jobs = $jobs->whereJobCatId($cat_id);
+        }
+        if ($keyword != null && $keyword != '') {
+            $jobs = $jobs->whereRaw('MATCH (jobs.title, jobs.experience, jobs.description) AGAINST (?)', [$keyword]);
+            $jobs = $jobs->orWhereRaw('MATCH (job_companies.name, job_companies.description) AGAINST (?)', [$keyword]);
+        }
+        
+        $jobs = $jobs->get();
+
+        if (count($jobs) > 0) {
+            foreach ($jobs as $key => $job) {
+                $ids[] = $job->id;
+                $response[$key]['id'] = $job->id;
+                $response[$key]['title'] = $job->title;
+                $response[$key]['country'] = $job->country;
+                $response[$key]['location'] = $job->location;
+                $response[$key]['experience'] = $job->experience;
+                $response[$key]['description'] = $job->description;
+                $response[$key]['min_salary'] = $job->min_salary;
+                $response[$key]['updated_at'] = $job->updated_at;
+                $response[$key]['company_name'] = $job->name;
+                $response[$key]['address'] = $job->address;
+                $response[$key]['website'] = $job->website;
+                $response[$key]['logo'] = $job->logo;
+            }
+        }
+
+        $key = count($jobs);
+        $jobsSecond =  $this->model->whereHas('job_skills', function($q) use($keyword){
+                return $q->where('title', '=', $keyword);
+            })->whereNotIn('id', $ids)->with('job_company');
+        $jobsSecond =  $cat_id != '' && $cat_id != null 
+            ? $jobsSecond->JobCatId($cat_id)->get()
+            : $jobsSecond->get();
+   
+        if (count($jobsSecond) > 0) {
+            foreach ($jobsSecond as $job) {
+                $key += 1;
+                $response[$key]['id'] = $job->id;
+                $response[$key]['title'] = $job->title;
+                $response[$key]['country'] = $job->country;
+                $response[$key]['location'] = $job->location;
+                $response[$key]['experience'] = $job->experience;
+                $response[$key]['description'] = $job->description;
+                $response[$key]['min_salary'] = $job->min_salary;
+                $response[$key]['updated_at'] = $job->updated_at->toDateTimeString();
+                $response[$key]['company_name'] = $job->job_company->name;
+                $response[$key]['address'] = $job->job_company->address;
+                $response[$key]['website'] = $job->job_company->website;
+                $response[$key]['logo'] = $job->job_company->logo;
+            }
+        }
+    
+
+        return array_values(
+            Collection::make($response)->sortByDesc('updated_at')->toArray()
+        );
+    }
 
 }
