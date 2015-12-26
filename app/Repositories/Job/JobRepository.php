@@ -17,27 +17,23 @@ class JobRepository extends AbstractRepository
 	public function seachJob($keyword, $countryCode, $salary, $cat_id)
 	{
         $response = [];
+        $ids = [];
+
 		$jobs = \DB::table('jobs')->select(['jobs.*', 'job_companies.name', 'job_companies.address', 'job_companies.website', 'job_companies.logo'])
             ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id');
 
-        if ($keyword != null && $keyword != '') {
-            $jobs = $cat_id != '' && $cat_id != null 
-                ? $jobs->whereRaw('MATCH (jobs.title, jobs.experience, jobs.description) AGAINST (?)', [$keyword])
-                    ->whereJobCatId($cat_id)
-                : $jobs->whereRaw('MATCH (jobs.title, jobs.experience, jobs.description) AGAINST (?)', [$keyword]);
-            $jobs = $cat_id != '' && $cat_id != null 
-                ? $jobs->orWhereRaw('MATCH (job_companies.name, job_companies.description) AGAINST (?)', [$keyword])
-                    ->whereJobCatId($cat_id)
-                : $jobs->orWhereRaw('MATCH (job_companies.name, job_companies.description) AGAINST (?)', [$keyword]);
-        }
-            
         if ($salary != null && $salary != '') {
             $jobs = $jobs->where('jobs.min_salary', '>=', $salary);
         }
+        if ($cat_id != '' && $cat_id != null) {
+            $jobs = $jobs->whereJobCatId($cat_id);
+        }
+        if ($keyword != null && $keyword != '') {
+            $jobs = $jobs->whereRaw('MATCH (jobs.title, jobs.experience, jobs.description) AGAINST (?)', [$keyword]);
+            $jobs = $jobs->orWhereRaw('MATCH (job_companies.name, job_companies.description) AGAINST (?)', [$keyword]);
+        }
         
         $jobs = $jobs->get();
-   
-        $ids = [];
 
         if (count($jobs) > 0) {
             foreach ($jobs as $key => $job) {
