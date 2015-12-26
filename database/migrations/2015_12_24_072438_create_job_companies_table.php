@@ -31,6 +31,10 @@ class CreateJobCompaniesTable extends Migration
      */
     public function down()
     {
+        Schema::table('job_companies', function($table) {
+            $table->dropIndex('search');
+        });
+        
         Schema::drop('job_companies');
     }
 }
