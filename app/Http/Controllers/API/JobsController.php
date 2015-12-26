@@ -16,9 +16,16 @@ class JobsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(JobRepository $job)
+    public function search(Request $request, JobRepository $job)
     {
-        dd($job->seachJob('dino', 'Liechtenstein', 0, 0));
+        try {
+            return response()->json([
+                'status_code' => 200, 
+                'data' => $job->seachJob('aabbcc', $request->get('country'), $request->get('salary'), $request->get('cat_id'))
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['status_code' => 400, 'message' => 'Data not found!']);
+        }
     }
 
     public function getListJobCategory(JobCategoryRepository $job_category)
@@ -29,71 +36,5 @@ class JobsController extends Controller
     public function getListJobSkill(JobSkillRepository $job_skill)
     {
         return response()->json($job_skill->getAll());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
