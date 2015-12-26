@@ -37,12 +37,14 @@ class JobCategorySeeder extends Seeder
             'Internet/Online Media',
             'Other'
         ];
-
+        $tmp = 1;
         foreach ($data as $key => $value) {
             $cat = new JobCategory;
             $cat->name = $value;
-            if ($key != 0 && $key % 5 != 0) {
-                $cat->parent_id = $key;
+            if ($key != 1 && $key % 5 != 0) {
+                $cat->parent_id = $tmp;
+            } else {
+                $tmp = $key;
             }
             $cat->save();
         }
