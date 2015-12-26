@@ -170,5 +170,13 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
     post('answers/', 'QuestionsController@postAnswerOfUser');
+
+    /**
+     * Job Route
+     */
+    
+    get('job/search', 'JobsController@search');
+    get('shared/job-categories', 'JobsController@getListJobCategory');
+    get('shared/job-skills', 'JobsController@getListJobSkill');
 });
 

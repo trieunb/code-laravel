@@ -1,4 +1,5 @@
 <?php
 return [
-	'offset' => 10
+    'offset' => 10,
+	'limit' => 10
 ];
