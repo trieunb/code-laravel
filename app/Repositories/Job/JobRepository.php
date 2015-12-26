@@ -3,6 +3,7 @@ namespace App\Repositories\Job;
 
 use App\Models\Job;
 use App\Repositories\AbstractRepository;
+use Baum\Extensions\Eloquent\Collection;
 
 class JobRepository extends AbstractRepository
 {
@@ -74,15 +75,18 @@ class JobRepository extends AbstractRepository
                 $response[$key]['experience'] = $job->experience;
                 $response[$key]['description'] = $job->description;
                 $response[$key]['min_salary'] = $job->min_salary;
-                $response[$key]['updated_at'] = $job->updated_at;
+                $response[$key]['updated_at'] = $job->updated_at->toDateTimeString();
                 $response[$key]['company_name'] = $job->job_company->name;
                 $response[$key]['address'] = $job->job_company->address;
                 $response[$key]['website'] = $job->job_company->website;
                 $response[$key]['logo'] = $job->job_company->logo;
             }
         }
-        
-        return $response;
+    
+
+        return array_values(
+            Collection::make($response)->sortByDesc('updated_at')->toArray()
+        );
     }
 
 }
