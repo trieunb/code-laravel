@@ -30,7 +30,6 @@ class JobsController extends Controller
 
     public function getListJobCategory(JobCategoryRepository $job_category)
     {
-        dd($job_category->getAll());
         return response()->json($job_category->getAll(), 200, [], JSON_NUMERIC_CHECK);
     }
 
