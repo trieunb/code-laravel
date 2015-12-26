@@ -2,6 +2,7 @@
 namespace App\Repositories\Job;
 
 use App\Models\Job;
+use App\Models\JobCategory;
 use App\Repositories\AbstractRepository;
 use Baum\Extensions\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -24,15 +25,30 @@ class JobRepository extends AbstractRepository
 		$jobs = \DB::table('jobs')->distinct()->select(['jobs.*',  'job_companies.name', 'job_companies.address', 'job_companies.website', 'job_companies.logo'])
             ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
             ->leftJoin('job_skill_pivot', 'job_skill_pivot.job_id', '=', 'jobs.id')
-            ->leftJoin('job_skills', 'job_skills.id', '=', 'job_skill_pivot.job_skill_id')
-            ->where('jobs.country', '=', $countryCode);
+            ->leftJoin('job_skills', 'job_skills.id', '=', 'job_skill_pivot.job_skill_id');
+        if ($countryCode != null && $countryCode != '')
+            $jobs = $jobs->where('jobs.country', '=', $countryCode);
         
         if ($salary != null && $salary != '') {
             $jobs = $jobs->where('jobs.min_salary', '>=', $salary);
         }
-        
+
         if ($cat_id != '' && $cat_id != null) {
-            $jobs = $jobs->whereJobCatId($cat_id);
+            $category = JobCategory::find($cat_id);
+
+            $childrenCategory = JobCategory::where('parent_id', '=', $cat_id)->get();
+            if (count($childrenCategory) > 0) {
+                $childrenIds = [];    
+                foreach ($childrenCategory as $children) {
+                    $childrenIds[] = $children->id;
+                }
+                
+                $jobs = $jobs->whereIn('job_cat_id', $childrenIds);
+           
+            } else {
+                 $jobs = $jobs->whereJobCatId($cat_id);
+            }
+
         }
         if ($keyword != null && $keyword != '') {
             $jobs = $jobs->whereRaw('(jobs.title LIKE ? 
