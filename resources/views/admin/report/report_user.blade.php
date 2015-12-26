@@ -136,7 +136,8 @@ Report User
     });
 
     var options = {responsive: true};
-    var ctx = document.getElementById('report-month').getContext('2d');
+    if ($('#report-month').length > 0)
+        var ctx = document.getElementById('report-month').getContext('2d');
     var chart = {
         labels: {!! json_encode($lables) !!},
         datasets: [
