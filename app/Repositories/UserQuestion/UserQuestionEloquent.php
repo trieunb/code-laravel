@@ -1,10 +1,12 @@
 <?php
 namespace App\Repositories\UserQuestion;
 
+use App\Models\Question;
+use App\Models\UserQuestion;
 use App\Repositories\AbstractRepository;
 use App\Repositories\UserQuestion\UserQuestionInterface;
-use App\Models\UserQuestion; 
-use App\Models\Question;
+use App\Services\Report\Report;
+use Khill\Lavacharts\Lavacharts;
 class UserQuestionEloquent extends AbstractRepository implements UserQuestionInterface
 {
     /**
@@ -39,32 +41,30 @@ class UserQuestionEloquent extends AbstractRepository implements UserQuestionInt
      */
     public function reportSkill($question_id)
     {
-        $questions = \App\Models\UserQuestion::select(\DB::raw('CASE
-                    WHEN point = 1 or point = 0 or point = 2 THEN "LOW"
-                    WHEN point = 3 or point = 4 THEN "ALOW AVERAGE"
-                    WHEN point = 5 or point = 6 THEN "AVERAGE"
-                    WHEN point = 7 or point = 8 THEN "ABOVE AVERAGE"
-                    WHEN point = 9 or point = 10 THEN "HIGH"
-                    END as "level",
-                    COUNT(*) as "count"'))
-                ->where('question_id', $question_id)
-                ->groupBy(\DB::raw('CASE 
-                    WHEN point = 1 or point = 0 or point = 2 THEN "LOW"
-                        WHEN point = 3 or point = 4 THEN "ALOW AVERAGE"
-                        WHEN point = 5 or point = 6 THEN "AVERAGE"
-                        WHEN point = 7 or point = 8 THEN "ABOVE AVERAGE"
-                        WHEN point = 9 or point = 10 THEN "HIGH"
-                    END'))
-                ->get();
-        
-        $levels = ['LOW' => 0, 'ALOW AVERAGE' => 0, 'AVERAGE' => 0, 'ABOVE AVERAGE' => 0, 'HIGH' => 0];
-        $response = [];
+        $sql = 'CASE
+                    WHEN point = 1 or point = 0 or point = 2 THEN "Low"
+                    WHEN point = 3 or point = 4 THEN "Below Average"
+                    WHEN point = 5 or point = 6 THEN "Average"
+                    WHEN point = 7 or point = 8 THEN "Above Average"
+                    WHEN point = 9 or point = 10 THEN "High"
+                    END as "level"';
+        $groupBy = \DB::raw('CASE 
+                    WHEN point = 1 or point = 0 or point = 2 THEN "Low"
+                        WHEN point = 3 or point = 4 THEN "Below Average"
+                        WHEN point = 5 or point = 6 THEN "Average"
+                        WHEN point = 7 or point = 8 THEN "Above Average"
+                        WHEN point = 9 or point = 10 THEN "High"
+                    END');
+        $report = new Report($this->model, $sql, $groupBy, null, [['field' => 'question_id', 'operator' => '=', 'value' => $question_id]]);
 
-        foreach ($questions as $question) {
-            $response[$question->level] = $question->count;    
-        }
-        $diffArray = array_diff_key($levels, $response);
-        
-        return array_merge($response, $diffArray);
+        $levels = ['Low' => 0, 'Below Average' => 0, 'Average' => 0, 'Above Average' => 0, 'High' => 0];
+      
+        $options = [
+        'is3D' => true,
+                'width' => 988,
+                'height' => 350,
+                'sliceVisibilityThreshold' => 0
+        ];
+        return $report->prepareRender('level', $levels, 'Reasons', 'Percent', $options);
     }
 }

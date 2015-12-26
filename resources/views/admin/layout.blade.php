@@ -57,53 +57,7 @@
                 <!-- /.navbar-top-links -->
 
                 <div class="navbar-default sidebar" role="navigation">
-                    <div class="sidebar-nav navbar-collapse">
-                        <ul class="nav" id="side-menu">
-                            <li>
-                                <a href="{{URL::to('/admin')}}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.user.get.index') }}"><i class="fa fa-user fa-fw"></i> User Management</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-file-text fa-fw"></i> Market Place<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="{{ route('admin.template.get.create') }}">Create Template</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.template.get.index') }}">Template List</a>
-                                    </li>
-                                </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-question fa-fw"></i> Question<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="{{ route('admin.question.get.create') }}">Create Question</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.question.get.index') }}">Question List</a>
-                                    </li>
-                                </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Report<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level collapse in" aria-expanded="true">
-                                    <li>
-                                        <a href="{{ route('admin.report.user.month') }}">Report User</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.report.template') }}">Report Template</a>
-                                    </li>
-                                </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- /.sidebar-collapse -->
+                    @include('admin.partials.sidebar')
                 </div>
                 <!-- /.navbar-static-side -->
             </nav>
@@ -111,7 +65,7 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">@yield('page-header')</h1>
+                        <h3 class="page-header">@yield('page-header')</h3>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>

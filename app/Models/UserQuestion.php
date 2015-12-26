@@ -27,10 +27,4 @@ class UserQuestion extends Model
         'content',
         'point'
     ];
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
-    
 }

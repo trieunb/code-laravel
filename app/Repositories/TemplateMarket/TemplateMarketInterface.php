@@ -31,10 +31,17 @@ interface TemplateMarketInterface extends Repository
 	public function createOrUpdateTemplateByManage($request, $data, $user_id);
 
 	/**
-	 * Search template In Market Area
-	 * @param  string $name 
-	 * @return        
+	 * Publish or Pending template multi record
+	 * @param  int $status 
+	 * @param  array $ids    
+	 * @return mixed         
 	 */
-	public function search($name);
+	public function publishOrPendingMultiRecord($status, $ids);
 
+	/*
+	 * Report Template in Admin area
+	 * @param  int $year 
+	 * @return array       
+	 */
+	public function reportTemplate($year = null);
 }

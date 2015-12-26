@@ -25,7 +25,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      */
     public function getAllTemplateMarket($sortby, $order, $page,$search)
     {
-        $offset = ($page -1 ) * 10;
+        $offset = ($page -1 ) * config('paginate.limit');
         $query = $this->model->whereStatus(2);
 
         if ($search != null && $search != '') {
@@ -37,7 +37,7 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             : $query->orderBy('price');
             
         return $query->skip($offset)
-            ->take(10)
+            ->take(config('paginate.limit'))
             ->get();
     }
 
@@ -117,28 +117,20 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
     }
 
     /**
-     * Search template In Market Area
-     * @param  string $name 
-     * @return        
-     */
-    public function search($name)
-    {
-        dd($name);
-        return $this->model
-            ->whereStatus(2)
-            ->where('slug', 'LIKE', "%{$name}%")->get();
-        return $this->getDataWhereClause('slug', 'LIKE', "%{$name}%");
-    }
-
-    /**
      * Get data with DataTable
      * @return mixed 
      */
     public function dataTableTemplate()
     {
         $templates = $this->model->select('*');
+
         return \Datatables::of($templates)
-           
+            ->addColumn('checkbox', function($template) {
+                return '<input type="checkbox" value="'.$template->id.'"/>';
+            })
+            ->editColumn('price', function($template) {
+                return custom_format_money($template->price);
+            })
             ->addColumn('action', function ($template) {
                 return '<div class="btn-group" role="group" aria-label="...">
                     <a class="btn btn-default" href="' .route('admin.template.get.view', $template->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -151,6 +143,38 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
                     ? '<a class="status-data btn btn-success" data-src="' .route('admin.template.status', $template->id) . '">Publish</a>'
                     : '<a class="status-data btn btn-warning" data-src="' .route('admin.template.status', $template->id) . '">Pending</a>';
             })
-        ->make(true);
+            ->make(true);
+    }
+
+    /**
+     * Publish or Pending template multi record
+     * @param  int $status 
+     * @param  array $ids    
+     * @return mixed         
+     */
+    public function publishOrPendingMultiRecord($status, $ids)
+    {
+       return $this->model->whereIn('id', $ids)->update(['status' => $status]);
+    }
+
+    /*
+     * Report Template in Admin area
+     * @param  int $year 
+     * @return array       
+     */
+    public function reportTemplate($year = null)
+    {
+        $templates = $this->model->select('id', 
+                \DB::raw('MONTH(created_at) as month'),
+                \DB::raw('COUNT(id) AS count')
+            )
+            ->groupBy('month')
+            ->orderBy('month');
+
+        $templates = ! is_null($year) 
+            ? $templates->whereYear('created_at', '=', $year)->get()
+            : $templates->get();
+
+        return getCountDataOfMonth($templates);
     }
 }

@@ -146,14 +146,14 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $age = ($user_info->dob != "0000-00-00")
+        $age = (!is_null($user_info->dob))
             ? Carbon::createFromFormat("Y-m-d", $user_info->dob)->age
             : null;
         $content = view('frontend.template.basic_template', ['user_info' => $user_info, 'age' => $age])->render();
         $sections = createClassSection();
         $data = createSection($content, $sections);
         $template = $this->template->createTemplateBasic($user_info->id, $data);
-        // return $template->content;
+        
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }
@@ -210,9 +210,9 @@ class TemplatesController extends Controller
         \Log::info('test sendmail', [$id, $user->id, \File::exists($sourcePDF), $sourcePDF]);
         if ( ! \File::exists($sourcePDF)) {
             $snappy = \App::make('snappy.pdf');
-            $snappy->generateFromHtml( $template->content, public_path('pdf/'.$template->slug.'.pdf'));
-            // \PDF::loadView('api.template.index', ['content' => $template->content])
-            // ->save(public_path('pdf/'.$template->slug.'.pdf'));
+            $snappy->generateFromHtml($template->content, 
+                public_path('pdf/'.md5(str_random(40).uniqid()).'.pdf')
+            );
             $sourcePDF = public_path('pdf/'.$template->slug.'.pdf');
         }
       
@@ -288,17 +288,17 @@ class TemplatesController extends Controller
             $result = is_string($data)
                 ? apply_data_for_section_infomation($section, $data, $template->content)
                 :apply_data_for_other($section, $template->content, $user_id);
-
-            $response = $this->template->applyForInfo($template, $section, $result);
+            
+           /* $response = $this->template->applyForInfo($template, $section, $result);
             
             event(new RenderImageAfterCreateTemplate(
                 $response['template']->id,
                 $response['template']->content, 
                 $response['template']->slug)
-            );
+            );*/
             
-            return $response
-                ? response()->json(['status_code' => 200, 'data' => $response['section']])
+            return $result
+                ? response()->json(['status_code' => 200, 'data' => $result['section']])
                 : response()->json(['status_code' => 400]);
         } catch (\Exception $e) {
             return response()->json(['status_code' => 400]);

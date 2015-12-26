@@ -11,67 +11,6 @@
 |
 */
 
-get('pdf', function() {
-      $snappy = \App::make('snappy.pdf');
-       $snappy->generateFromHtml( $this->content, public_path('abc.pdf'));
-});
-
-/*get('test', function() {
-    $job = \App\JobTest::find(1);
-     $skills = []; 
-    foreach ($job->skill as $skill)
-        $skills[] = $skill['skill'];
-    $userIds = [];
-    $queryWork = \DB::table('user_work_histories')->select('user_id')
-        ->WhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->job_description.','.$job->job_title]);
-    $querySkill = \DB::table('user_skills')->select('user_id')
-        ->whereRaw('MATCH (skill_name, experience) AGAINST (?)', [implode(',', $skills)]);
-    $data = \DB::table('users')
-        ->selectRaw('id')
-        // ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
-        // ->join('user_work_histories', 'user_work_histories.user_id', '=', 'users.id')
-        ->whereIn('id', function($query) use($job, $skills, $last_query) {
-            $query->select('user_id')
-                ->from('user_skills')
-                ->whereRaw('MATCH (skill_name, experience) AGAINST (?) UNION (SELECT user_id FROM user_work_histories '.
-                    'MATCH (company, job_title, job_description) AGAINST(?))', [implode(',', $skills), $job->job_description.','.$job->job_title]);
-
-        })
-        
-        ->WhereIn('users.id', function($query) use ($job){
-            $query->select('user_id')
-                ->from('user_work_histories')
-                ->WhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->job_description.','.$job->job_title]);
-        })
-        // ->orWhereRaw('MATCH (school_name, degree, result) AGAINST (?)', [$job->education])
-        // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [implode(',', $skills)])
-        // ->orWhereRaw('MATCH (company, job_title, job_description) AGAINST(?)', [$job->description.','.$job->title])
-        ->toSql();
-        $t =$job->job_description.','.$job->job_title;
-        dd($data, $t);
-    $dataUsers = [];
-    foreach ($data as $value) {
-        $userIds[] = $value->id;
-    }
-    dd($data);
-    $data = \DB::table('users')
-        ->selectRaw('DISTINCT users.id')
-        ->join('user_educations', 'user_educations.user_id', '=', 'users.id')
-        ->whereNotIn('users.id', [implode(',', $userIds)])
-        ->get();
-
-    $users = \App\Models\User::whereNotIn('id', [implode(',', $userIds)])->get();
-
-    foreach ($users as $user) {
-
-        if ($user->location != null)
-            $dataUsers[$user->id] = $user->location;
-    }
-
-
-        dd($dataUsers, $data);
-});*/
-
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
 
@@ -85,7 +24,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('user', ['as' => 'admin.user.get.index', 'uses' => 'UsersController@index']);
     get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
     get('user/delete/{id}', ['as' => 'admin.user.delete', 'uses' => 'UsersController@destroy']);
+    get('user/detail/{id}', ['as' => 'admin.user.get.detail', 'uses' => 'UsersController@show']);
     
+    post('user/delete', ['as' => 'admin.user.post.delete', 'uses' => 'UsersController@postDelete']);
     /**
      * Template Route
      */
@@ -103,6 +44,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit/{id}', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
     post('template/define', ['as' => 'admin.template.post.define', 'uses' => 'TemplateMarketsController@postDefine']);
+    post('template/action', ['as' => 'admin.template.post.action', 'uses' => 'TemplateMarketsController@postAction']);
     /**
      * Question Route
      */
@@ -114,10 +56,23 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     post('question/create', ['as' => 'admin.question.post.create', 'uses' => 'QuestionsController@store']);
 
     /**
-     * Report
+     * Report Route
      */
     get('report/user', ['as' => 'admin.report.user.month', 'uses' => 'ReportController@reportUserByMonth']);
     get('report/template', ['as' => 'admin.report.template', 'uses' => 'ReportController@reportTemplate']);
+
+    /**
+     * Category Route
+     */
+    get('category', ['as' => 'admin.category.get.index', 'uses' => 'CategoriesController@index']);
+    get('category/create', ['as' => 'admin.category.get.create', 'uses' => 'CategoriesController@create']);
+    get('category/edit/{id}', ['as' => 'admin.category.get.edit', 'uses' => 'CategoriesController@edit']);
+    get('category/detail/{id}', ['as' => 'admin.category.get.detail', 'uses' => 'CategoriesController@detail']);
+    get('category/datatable', ['as' => 'admin.category.get.datatable', 'uses' => 'CategoriesController@datatable']);
+
+    post('category/checkname', ['as' => 'admin.category.post.checkname', 'uses' => 'CategoriesController@checkName']);
+    post('category/create', ['as' => 'admin.category.post.create', 'uses' => 'CategoriesController@postCreate']);
+    post('category/edit', ['as' => 'admin.category.post.edit', 'uses' => 'CategoriesController@postEdit']);
 });
 
 
@@ -210,5 +165,13 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
     post('answers/', 'QuestionsController@postAnswerOfUser');
+
+    /**
+     * Job Route
+     */
+    
+    get('job/search', 'JobsController@search');
+    get('shared/job-categories', 'JobsController@getListJobCategory');
+    get('shared/job-skills', 'JobsController@getListJobSkill');
 });
 

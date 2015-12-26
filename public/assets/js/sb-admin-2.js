@@ -1,7 +1,5 @@
 $(function() {
-
     $('#side-menu').metisMenu();
-
 });
 
 //Loads the correct sidebar on window load,
@@ -26,11 +24,13 @@ $(function() {
         }
     });
 
-    var url = window.location;
-    var element = $('ul.nav a').filter(function() {
-        return this.href == url || url.href.indexOf(this.href) == 0;
-    }).addClass('active').parent().parent().addClass('in').parent();
-    if (element.is('li')) {
-        element.addClass('active');
+    var currentHref = window.location.href;
+    var $menuElm = $('ul.nav a').filter(function() {
+        return this.href == currentHref;
+    });
+    if ($menuElm.length) {
+        $menuElm.addClass('active');
+        $menuElm.parents('li').addClass('active');
+        $menuElm.parents('ul').removeClass('collapse');
     }
 });

@@ -6,6 +6,7 @@ Create Template
 @stop
 
 @section('content')
+@include('partial.notifications')
 <div class="row">
     @if (\Session::has('message'))
     <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
@@ -16,36 +17,33 @@ Create Template
             {!! csrf_field() !!}
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+                <input type="text" value="{{ old('title') }}" class="form-control" name="title" id="title" placeholder="Title">
             </div>
             <div class="form-group">
                 <label for="cat_id">Category</label>
-                <select name="cat_id" id="cat_id" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1">Category</option>
-                </select>
+                
+                {!! Form::select('cat_id', $list_category, old('cat_id') ? old('cat_id') : null, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" name="price" class="form-control" id="price" placeholder="Price">
+                <label for="price">Price ($)</label>
+                <input type="text" name="price" value="{{ old('price') }}" class="form-control" id="price" placeholder="$">
             </div>
 
             <div class="form-group">
-                <textarea id="content" name="content"></textarea> 
+                <textarea id="content" name="content">{{ old('content') }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" name="description" class="form-control" id="description" placeholder="Description">
+                <textarea  name="description" class="form-control" id="description" value="{{ old('description') }}" placeholder="Description"></textarea>
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
-                <input name="version" type="text" class="form-control" id="version" placeholder="Version">
+                <input name="version" type="text" value="{{ old('version') ? old('version') : 1 }}" class="form-control" id="version" placeholder="Version">
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
                 <select name="status" id="status" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1">Pending</option>
+                    <option value="1" selected>Pending</option>
                     <option value="2">Publish</option>
                 </select>
             </div>
@@ -62,6 +60,9 @@ Create Template
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
 <script>
+    $(document).ready(function() {
+        $('#categories option:first-child').attr('disabled', true);
+    });
     function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.open({
             file: "{{ asset('tinymce/plugins/elfinder/elfinder.html') }}",// use an absolute path!
@@ -142,52 +143,6 @@ return false;
 
 $(function() {
 
-    var isBusy = false;
-    $('form').validate({
-        rules: {
-            title : {
-                required: true,
-            /*remote : {
-                url: '{{ route("admin.template.check") }}',
-                type: 'GET',
-                data: {
-                    title: function() {
-                        return $( "#title" ).val();
-                    }
-                }   
-            }*/
-        },
-        cat_id : {
-            required : true
-        },
-        version : {
-            required: true
-        },
-        status : {
-            required : true
-        }
-    },
-    messages : {
-        title: {
-            remote : 'Title exists, please change title'
-        }
-    },
-    highlight: function(element) {
-        $(element).closest('.form-group').addClass('has-error');
-    },
-    unhighlight: function(element) {
-        $(element).closest('.form-group').removeClass('has-error');
-    },
-    errorElement: 'span',
-    errorClass: 'help-block',
-    errorPlacement: function(error, element) {
-        if(element.parent('.input-group').length) {
-            error.insertAfter(element.parent());
-        } else {
-            error.insertAfter(element);
-        }
-    }
-});
 });
 
 

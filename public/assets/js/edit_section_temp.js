@@ -21,7 +21,9 @@
       $("#loading").show();
       var url = window.location.href;
       var token = url.split('=');
+      $('#content div').removeClass('highlight');
       var content = $('#content').html();
+
       content = content.replace(/\t|\n+/g, '');
       $.ajax({
         url: window.location.href,

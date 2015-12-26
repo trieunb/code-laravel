@@ -6,6 +6,7 @@ Edit Template
 @stop
 
 @section('content')
+@include('partial.notifications')
 <div class="row">
     @if (\Session::has('message'))
         <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
@@ -17,34 +18,30 @@ Edit Template
             <input type="hidden" id="template_id" name="id" value="{{ $template->id }}" placeholder="">
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" value="{{ $template->title }}" id="title" placeholder="Title">
+                <input type="text" class="form-control" name="title" value=" {{ old('title') != null ? old('title') : $template->title }}" id="title" placeholder="Title">
             </div>
             <div class="form-group">
                 <label for="cat_id">Category</label>
-                <select name="cat_id" id="cat_id" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1" selected>Category</option>
-                </select>
-
+                {!! Form::select('cat_id', $list_category, old('cat_id') != null ? old('cat_id') : $template->cat_id, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" name="price" class="form-control" value="{{ $template->price }}" id="price" placeholder="Price">
+                <label for="price">Price ($)</label>
+                <input type="text" name="price" class="form-control" value="{{ old('price') ? old('price') : $template->price }}" id="price" placeholder="$">
             </div>
             <div class="form-group">
-                <textarea id="content" name="content">{{ $template->present()->contentPresent }}</textarea> 
+                <textarea id="content" name="content">{{ old('content') ? old('content') :  $template->present()->contentPresent }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" name="description" class="form-control" value="{{ $template->description }}" id="description" placeholder="Description">
+                <textarea name="description" class="form-control" id="description" placeholder="Description">{{ old('description') ? old('description') : $template->description }}</textarea>
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
-                <input name="version" type="text" value="{{ $template->version }}" class="form-control" id="version" placeholder="Version">
+                <input name="version" type="text" value="{{ old('version') ? old('version') : $template->version }}" class="form-control" id="version" placeholder="Version">
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                {!! Form::select('status', [1 => 'Pending', 2=> 'Publish', 0 => 'Block',] , $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
+                {!! Form::select('status', [1 => 'Pending', 2=> 'Publish', 0 => 'Block',] , old('status') ? old('status') : $template->status, [ 'class' =>  'form-control', 'id' => 'status'])!!}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save</button>
@@ -59,6 +56,9 @@ Edit Template
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
 <script>
+    $(document).ready(function() {
+        $('#categories option:first-child').attr('disabled', true);
+    });
      function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.open({
             file: "{{ asset('tinymce/plugins/elfinder/elfinder.html') }}",// use an absolute path!
@@ -99,46 +99,6 @@ Edit Template
         return false;
     }
 
-
-
-    // TinyMCE init
-  /*  tinymce.init({
-        selector: "#content",
-        height : 500,
-        // plugins: "table,code, image, link, media",
-        relative_urls: false,
-        remove_script_host: false,
-        style_formats: [
-        { title: 'Activitie', block: 'div', attributes: {lang: 'activitie'} , styles: { color: '#0000' } },
-        { title: 'Address', block: 'div', attributes:{lang: 'address'}, styles: { color: '#00000' } },
-        { title: 'Availability', block: 'div', attributes: {lang: 'availability'}, styles: { color: '#0000' } },
-        { title: 'Education', block: 'div', attributes: {lang: 'education'}, styles: { color: '#0000' } },
-        { title: 'Email', block: 'div', attributes: {lang: 'email'}, styles: { color: '#0000' } },
-        { title: 'Infomation', block: 'div', attributes: {lang: 'infomation'}, styles: { color: '#0000' } },
-        { title: 'Qualification', block: 'div', attributes: {lang: 'key_qualification'}, styles: { color: '#0000' } },
-        { title: 'Linkedin', block: 'div', attributes: {lang: 'linkedin'}, styles: { color: '#0000' } },
-        { title: 'Mobile Phone number', block: 'div', attributes: {lang: 'phone'}, styles: { color: '#0000' } },
-        { title: 'Name', block: 'div', attributes: {lang: 'name'}, styles: { color: '#000000' } },
-        { title: 'Objective', block: 'div', attributes: {lang: 'objective'}, styles: { color: '#0000' } },
-        { title: 'Personal Test', block: 'div', attributes: {lang: 'personal_test'}, styles: { color: '#0000' } },
-        { title: 'Photo', block: 'div', attributes: {lang: 'photo'}, styles: { color: '#0000' } },
-        { title: 'Profile Website', block: 'div', attributes: {lang: 'profile_website'}, styles: { color: '#0000' } },
-        { title: 'Reference', block: 'div', attributes: {lang: 'reference'}, styles: { color: '#0000' } },
-        { title: 'Skill', block: 'div', attributes:{lang: 'skill'}, styles: { color: '#0000' } },
-        { title: 'Work Experience', block: 'div', attributes:{lang: 'work'}, styles: { color: '#0000' } }
-        ],
-        plugins: [
-        "advlist autolink autosave image lists charmap print preview hr  pagebreak spellchecker",
-        " code fullscreen  nonbreaking",
-        "table contextmenu directionality textcolor paste textcolor colorpicker textpattern"
-        ],
-
-        toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect |cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat | fullscreen | ltr rtl | spellchecker |   nonbreaking pagebreak",
-
-        menubar: false,
-        toolbar_items_size: 'small',
-        file_picker_callback : elFinderBrowser
-    });*/
    tinymce.init({
       selector: "#content",
       height : 500,
@@ -175,52 +135,6 @@ Edit Template
         file_picker_callback : elFinderBrowser,
 
     });
-    /*CKEDITOR.replace('content', {
-        format_section : 'PersonalityTest;Objectives;KeyQuanlifications;WorkExperience;OtherActivities;Educations;References;Photos;Address;PhoneNumber;Email;MyProfileWebsite;MyLinkedInProfile;Name'
-    });*/
-    var isBusy = false;
-    $('form').validate({
-        rules: {
-            title : {
-                required: true,
-               /* remote : {
-                    url: '{{ route("admin.template.check") }}',
-                    type: 'GET',
-                    data: {
-                        title: function() {
-                            return $("#title" ).val();
-                        },
-                        id : function(){
-                            return $('#template_id').val();   
-                        }
-                    }   
-                }*/
-            },
-            cat_id : {
-                required : true
-            },
-            version : {
-                required: true
-            },
-            status : {
-                required : true
-            }
-        },
-        highlight: function(element) {
-            $(element).closest('.form-group').addClass('has-error');
-        },
-        unhighlight: function(element) {
-            $(element).closest('.form-group').removeClass('has-error');
-        },
-        errorElement: 'span',
-        errorClass: 'help-block',
-        errorPlacement: function(error, element) {
-            if(element.parent('.input-group').length) {
-                error.insertAfter(element.parent());
-            } else {
-                error.insertAfter(element);
-            }
-        }
-    });
+
 </script>
 @endsection
