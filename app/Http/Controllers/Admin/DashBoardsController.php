@@ -9,6 +9,7 @@ use App\Repositories\Template\TemplateInterface;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Template;
+use App\Models\TemplateMarket;
 use Auth;
 use Validator;
 
@@ -33,11 +34,16 @@ class DashBoardsController extends Controller
 	{
         $users = User::whereDoesntHave('roles', function($q) {
             $q->where('roles.slug', 'admin');
-        })->orderBy('created_at', 'DESC')->get();
-        $templates = $this->template->getAll();
+        });
+
+        $last_users = $users->orderBy('created_at', 'DESC')->take(5)->get();
+        $count = $users->count();
+
+        $templates = TemplateMarket::count();
         $resumes = Template::where('type', '<>', 2)
-        ->orderBy('created_at', 'DESC')->get();
-		return view('admin.dashboard.index', compact('users', 'templates', 'resumes'));
+        ->orderBy('created_at', 'DESC')->take(5)->get();
+        
+		return view('admin.dashboard.index', compact('count','last_users', 'templates', 'resumes'));
 	}
 
     public function getDetailResume($id)

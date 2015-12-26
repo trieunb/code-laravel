@@ -10,7 +10,7 @@
                         <i class="fa fa-users fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{{count($users)}}</div>
+                        <div class="huge">{{$count}}</div>
                         <div>Registered Users</div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                         <i class="fa fa-tasks fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{{count($templates)}}</div>
+                        <div class="huge">{{$templates}}</div>
                         <div>Created Templates</div>
                     </div>
                 </div>
@@ -100,10 +100,8 @@
             </div>
             <div class="panel-body">
                 <ul>
-                    @foreach($users as $key => $user)
-                        @if ($key < 5)
+                    @foreach($last_users as $key => $user)
                         <li><a href="{{route('admin.user.get.detail', $user->id)}}">{{$user->present()->name()}}</a></li>
-                        @endif
                     @endforeach
                 </ul>
             </div>
@@ -117,9 +115,7 @@
             <div class="panel-body">
                 <ul>
                     @foreach($resumes as $key => $resume)
-                        @if ($key < 5)
                         <li><a href="{{route('admin.resume.detail', $resume->id)}}">{{$resume->title}}</a></li>
-                        @endif
                     @endforeach
                 </ul>
             </div>
