@@ -19,13 +19,18 @@ class JobRepository extends AbstractRepository
 
     public function seachJob(array $filters)
     {
-        $jobs = \DB::table('jobs')->distinct()->select(['jobs.*',  'job_companies.name', 'job_companies.address', 'job_companies.website', 'job_companies.logo'])
+        $jobs = \DB::table('jobs')->distinct()
+            ->select([
+                'jobs.*', 'job_companies.name','job_companies.address',
+                'job_companies.website', 'job_companies.logo'
+            ])
             ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
             ->leftJoin('job_skill_pivot', 'job_skill_pivot.job_id', '=', 'jobs.id')
             ->leftJoin('job_skills', 'job_skills.id', '=', 'job_skill_pivot.job_skill_id');
+
         if ($filters['country'])
             $jobs = $jobs->where('jobs.country', '=', $filters['country']);
-        
+
         if ($filters['salary']) {
             $jobs = $jobs->where('jobs.min_salary', '>=', $filters['salary']);
         }
@@ -55,9 +60,9 @@ class JobRepository extends AbstractRepository
         }
 
         $offset = ($filters['page'] - 1) * config('paginate.limit');
-
         $tmpJobs = $jobs;
         $count = ceil(count($jobs->get()) / config('paginate.limit'));
+
         $jobs = $tmpJobs->skip($offset)
             ->take(config('paginate.limit'))
             ->orderBy('updated_at', 'desc')
