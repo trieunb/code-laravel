@@ -53,29 +53,28 @@ class JobRepository extends AbstractRepository
             ->leftJoin('job_skill_pivot', 'job_skill_pivot.job_id', '=', 'jobs.id')
             ->leftJoin('job_skills', 'job_skills.id', '=', 'job_skill_pivot.job_skill_id');
 
-        if ($filters['country']){
+        if (isset($filters['country']) && $filters['country']){
             $jobs = $jobs->where('jobs.country', '=', $filters['country']);
         }
-        if ($filters['salary']) {
+        if (isset($filters['salary']) && $filters['salary']) {
             $jobs = $jobs->where('jobs.min_salary', '>=', $filters['salary']);
         }
-        if ($filters['cat_id']) {
 
-            $childrenCategory = JobCategory::where('parent_id', '=', $filters['cat_id'])->get();
+        if (isset($filters['cat_id']) && $filters['cat_id']) {
+
+            $childrenCategory = JobCategory::where('parent_id', '=', $filters['cat_id'])->get()->pluck('id');
+    
             if (count($childrenCategory) > 0) {
-                $childrenIds = [];
-                foreach ($childrenCategory as $children) {
-                    $childrenIds[] = $children->id;
-                }
+                $childrenCategory->prepend($filters['cat_id']);
 
-                $jobs = $jobs->whereIn('job_cat_id', $childrenIds);
+                $jobs = $jobs->whereIn('job_cat_id', $childrenCategory);
 
             } else {
                 $jobs = $jobs->whereJobCatId($filters['cat_id']);
             }
 
         }
-        if ($filters['keyword']) {
+        if (isset($filters['keyword']) && $filters['keyword']) {
             $jobs = $jobs->whereRaw('(jobs.title LIKE ? 
                 OR job_companies.name LIKE ?
                 OR job_skills.title LIKE ?)',
