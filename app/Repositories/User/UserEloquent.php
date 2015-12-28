@@ -381,7 +381,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $users = $this->model
             ->whereDoesntHave('roles' , function($q) {
                 $q->where('roles.slug', '=', 'admin');
-            })->get();
+            });
         return \Datatables::of($users)
             ->addColumn('action', function($user) {
                return '<div class="btn-group text-center" role="group" aria-label="...">
@@ -389,7 +389,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 </div>';
             })
             ->editColumn('firstname', function($user) {
-                return $user->present()->name();;
+                return $user->present()->name();
             })
             ->addColumn('checkbox', function($user) {
                 return '<input type="checkbox" value="'.$user->id.'" />';

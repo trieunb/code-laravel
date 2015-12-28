@@ -68,6 +68,13 @@ class JobRepository extends AbstractRepository
             ->orderBy('updated_at', 'desc')
             ->get();
 
+        foreach ($jobs as $job) {
+            $job->id = (int)$job->id;
+            $job->job_cat_id = (int)$job->job_cat_id;
+            $job->company_id = (int)$job->company_id;
+            $job->min_salary = (double)$job->min_salary;
+        }
+
         return ['jobs' => $jobs, 'totalPage' => $count, 'currentPage' => $filters['page']];
     }
 

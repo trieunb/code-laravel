@@ -136,7 +136,9 @@ Report User
     });
 
     var options = {responsive: true};
-    var ctx = document.getElementById('report-month').getContext('2d');
+    if ($('#report-month').length > 0) {
+        var ctx = document.getElementById('report-month').getContext('2d');
+    } 
     var chart = {
         labels: {!! json_encode($lables) !!},
         datasets: [
@@ -158,11 +160,13 @@ Report User
         $('#chart_month').removeClass('active');
         $('#option').show();
     } else {
-        register_report = new Chart(ctx).Line(chart, {
-        bezierCurve : false,
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        responsive: true
-    });
+        if ($('#report-month').length > 0) {
+            register_report = new Chart(ctx).Line(chart, {
+                bezierCurve : false,
+                scaleGridLineColor : "rgba(0,0,0,.05)",
+                responsive: true
+            });
+        }
     }
     $('#myTab li').click(function() {
         if ($(this).attr('id') == 'option') return;
@@ -173,11 +177,13 @@ Report User
     });
 
     $('#register').on('shown.bs.tab', function (e) {
-        register_report = new Chart(ctx).Line(chart, {
-            bezierCurve : false,
-            scaleGridLineColor : "rgba(0,0,0,.05)",
-            responsive: true
-        });
+        if ($('#report-month').length > 0) {
+            register_report = new Chart(ctx).Line(chart, {
+                bezierCurve : false,
+                scaleGridLineColor : "rgba(0,0,0,.05)",
+                responsive: true
+            });
+        }
     });
 });
 </script>

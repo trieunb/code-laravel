@@ -55,7 +55,8 @@ $('#form-update').validate({
     rules: {
         content: {
             required: true,
-            noSpace: true
+            noSpace: true,
+            maxlength: 255
         }
     },
     highlight: function(element) {
