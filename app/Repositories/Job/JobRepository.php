@@ -24,12 +24,11 @@ class JobRepository extends AbstractRepository
                 'job_companies.website', 'job_companies.logo'
             ];
 
-        $countItem = $this->querySearchJob('COUNT(distinct jobs.id) as count', $filters, true)
+        $countItem = (int)$this->querySearchJob('COUNT(distinct jobs.id) as count', $filters, true)
             ->first()
             ->count;
 
         $offset = ($filters['page'] - 1) * config('paginate.limit');
-        $count = ceil($countItem / config('paginate.limit'));
         $jobs = $this->querySearchJob($sql, $filters, false)->skip($offset)
             ->take(config('paginate.limit'))
             ->orderBy('updated_at', 'desc')
@@ -42,7 +41,7 @@ class JobRepository extends AbstractRepository
             $job->min_salary = (double)$job->min_salary;
         }
 
-        return ['jobs' => $jobs, 'totalPage' => $count, 'currentPage' => $filters['page']];
+        return ['jobs' => $jobs, 'total' => $countItem, 'currentPage' => $filters['page']];
     }
 
     private function querySearchJob($sql, $filters, $count)
@@ -75,10 +74,10 @@ class JobRepository extends AbstractRepository
 
         }
         if (isset($filters['keyword']) && $filters['keyword']) {
-            $jobs = $jobs->whereRaw('(jobs.title LIKE :key 
-                OR job_companies.name LIKE :key
-                OR job_skills.title LIKE :key)',
-                ['key' => '%'.$filters['keyword'].'%']
+            $jobs = $jobs->whereRaw('(jobs.title LIKE ? 
+                OR job_companies.name LIKE ?
+                OR job_skills.title LIKE ?)',
+                ['%'.$filters['keyword'].'%', '%'.$filters['keyword'].'%', '%'.$filters['keyword'].'%']
             );
         }
 
