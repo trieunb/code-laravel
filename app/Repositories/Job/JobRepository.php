@@ -19,22 +19,46 @@ class JobRepository extends AbstractRepository
 
     public function seachJob(array $filters)
     {
-        $jobs = \DB::table('jobs')->distinct()
-            ->select([
+        $sql = [
                 'jobs.*', 'job_companies.name','job_companies.address',
                 'job_companies.website', 'job_companies.logo'
-            ])
-            ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
+            ];
+
+        $countItem = $this->querySearchJob('COUNT(distinct jobs.id) as count', $filters, true)
+            ->first()
+            ->count;
+
+        $offset = ($filters['page'] - 1) * config('paginate.limit');
+        $count = ceil($countItem / config('paginate.limit'));
+        $jobs = $this->querySearchJob($sql, $filters, false)->skip($offset)
+            ->take(config('paginate.limit'))
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        foreach ($jobs as $job) {
+            $job->id = (int)$job->id;
+            $job->job_cat_id = (int)$job->job_cat_id;
+            $job->company_id = (int)$job->company_id;
+            $job->min_salary = (double)$job->min_salary;
+        }
+
+        return ['jobs' => $jobs, 'totalPage' => $count, 'currentPage' => $filters['page']];
+    }
+
+    private function querySearchJob($sql, $filters, $count)
+    {
+        $jobs = \DB::table('jobs');
+        $jobs = !$count ? $jobs->distinct()->select($sql) : $jobs->select(\DB::raw($sql));
+        $jobs = $jobs->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
             ->leftJoin('job_skill_pivot', 'job_skill_pivot.job_id', '=', 'jobs.id')
             ->leftJoin('job_skills', 'job_skills.id', '=', 'job_skill_pivot.job_skill_id');
 
-        if ($filters['country'])
+        if ($filters['country']){
             $jobs = $jobs->where('jobs.country', '=', $filters['country']);
-
+        }
         if ($filters['salary']) {
             $jobs = $jobs->where('jobs.min_salary', '>=', $filters['salary']);
         }
-
         if ($filters['cat_id']) {
 
             $childrenCategory = JobCategory::where('parent_id', '=', $filters['cat_id'])->get();
@@ -59,23 +83,6 @@ class JobRepository extends AbstractRepository
             );
         }
 
-        $offset = ($filters['page'] - 1) * config('paginate.limit');
-        $tmpJobs = $jobs;
-        $count = ceil(count($jobs->get()) / config('paginate.limit'));
-
-        $jobs = $tmpJobs->skip($offset)
-            ->take(config('paginate.limit'))
-            ->orderBy('updated_at', 'desc')
-            ->get();
-
-        foreach ($jobs as $job) {
-            $job->id = (int)$job->id;
-            $job->job_cat_id = (int)$job->job_cat_id;
-            $job->company_id = (int)$job->company_id;
-            $job->min_salary = (double)$job->min_salary;
-        }
-
-        return ['jobs' => $jobs, 'totalPage' => $count, 'currentPage' => $filters['page']];
+        return $jobs;
     }
-
 }
