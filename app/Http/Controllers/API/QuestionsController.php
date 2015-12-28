@@ -46,11 +46,18 @@ class QuestionsController extends Controller
                 'data' => $user_answers
             ]);
         } else {
-            $questions = $this->question->getQuestions();
+            foreach ($this->question->getQuestions() as  $question) {
+                $data[] = [
+                    'question_id' => $question['id'],
+                    'user_id' => $user->id,
+                    'content' => $question['content'],
+                    'point' => $question['point']
+                ];
+            }
             return response()->json([
                 'status_code' => 200,
                 'status' => true,
-                'data' => $questions
+                'data' => $data
             ]);
         }  
     }
@@ -143,15 +150,15 @@ class QuestionsController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_answers = $this->user_question->getDataWhereClause('user_id', '=', $user->id);
-        if (count($user_answers) > 0) {
-            foreach ($request->get('answers') as $value) {
-                $question_id = [
-                    'question_id' => $value['question_id']
-                ];
-                UserQuestion::where('question_id', $question_id)
-                    ->where('user_id', $user->id)
-                    ->update(['point' => $value['point']]);
-            }
+       if (count($user_answers) > 0) {
+        foreach ($request->get('answers') as $value) {
+            $question_id = [
+                'question_id' => $value['question_id']
+            ];
+            UserQuestion::where('question_id', $question_id)
+                ->where('user_id', $user->id)
+                ->update(['point' => $value['point']]);
+        }
         } else {
             foreach ($request->get('answers') as $value) {
                 $data[] = [
@@ -162,6 +169,6 @@ class QuestionsController extends Controller
             }
             $this->user_question->saveUserAnswer($data, $user->id);
         }
-        return response()->json([ 'status_code' => 200, 'status' => true ]);
+        return response()->json([ 'status_code' => 200, 'status' => true ]); 
     }
 }
