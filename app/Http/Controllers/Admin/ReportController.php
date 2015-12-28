@@ -13,6 +13,7 @@ use App\Repositories\TemplateMarket\TemplateMarketInterface;
 use App\Repositories\Template\TemplateInterface;
 use App\Repositories\UserQuestion\UserQuestionInterface;
 use App\Repositories\User\UserInterface;
+use App\Repositories\Device\DeviceInterface;
 use Carbon\Carbon;
 use DB;
 use Date;
@@ -27,18 +28,21 @@ class ReportController extends Controller
     private $user_question;
     private $template_market;
     private $question;
+    private $device;
 
     public function __construct(UserInterface $user,
         InvoiceInterface $invoice,
         UserQuestionInterface $user_question,
         TemplateMarketInterface $template_market,
-        QuestionInterface $question
+        QuestionInterface $question,
+        DeviceInterface $device
     ){
         $this->user = $user;
         $this->invoice = $invoice;
         $this->user_question = $user_question;
         $this->template_market = $template_market;
         $this->question = $question;
+        $this->device = $device;
     }
 
     public function reportUserByMonth(Request $request)
@@ -65,8 +69,9 @@ class ReportController extends Controller
 
         $chart_skill = $this->user_question->reportSkill($question_id);
 
+        $chart_device = $this->user->reportUserOs();
         return view('admin.report.report_user', 
-            compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region', 'chart_skill'))
+            compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region', 'chart_skill', 'chart_device'))
              ->with('year' , $request->get('year'))
              ->with('question_id' , $question_id);
     }
