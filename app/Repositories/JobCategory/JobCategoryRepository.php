@@ -15,6 +15,8 @@ class JobCategoryRepository extends AbstractRepository
 
 	public function getAll()
 	{
-		return create_lists($this->model->select(['id', 'name', 'parent_id'])->get()->toArray());
+		$job_categories = create_lists($this->model->select(['id', 'name', 'parent_id'])->get()->toArray());
+
+        return sort_lists($job_categories);
 	}
 }
