@@ -134,11 +134,3 @@ $factory->define(App\Models\Job::class, function(Faker\Generator $faker) {
         'min_salary' => $faker->numberBetween($min = 100, $max = 9000)
     ];
 });
-
-
-$factory->define(App\Models\Device::class, function(Faker\Generator $faker) {
-    return [
-        'user_id' => rand(1, 6),
-        ''
-    ];
-});
