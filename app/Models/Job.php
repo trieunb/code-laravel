@@ -9,11 +9,19 @@ use App\Models\JobSkill;
 
 class Job extends Model
 {
+
     /**
      * Table name
      * @var $table
      */
     protected $table = 'jobs';
+
+    protected $casts = [
+        'id' => 'integer',
+        'min_salary' => 'double',
+        'job_cat_id' => 'integer',
+        'company_id' => 'integer'
+    ];
 
     public function job_company()
     {
