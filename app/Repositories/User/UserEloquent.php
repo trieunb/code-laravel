@@ -541,16 +541,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
     public function reportUserOs()
     {
-        // return $this->model
-        //     ->select('*', DB::raw('COUNT(*) AS count'))
-        //     ->groupBy('platform')
-        //     ->leftjoin('devices', 'users.id', '=', 'devices.user_id')
-        //     ->orderBy('platform', 'DESC')
-        //     ->get();
-
+        
         $os = ['IOS' => 0, 'Android' => 0];
         $with = 'devices';
-        $report = new Report($this->model, 'platform', 'platform', $with);
+        $report = new Report($this->model, 'platform', $with);
         $report->setReportNotdAdmin(true);
         $options = [
              'is3D' => true,
