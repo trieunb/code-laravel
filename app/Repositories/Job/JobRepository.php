@@ -10,16 +10,16 @@ use yajra\Datatables\keyword;
 
 class JobRepository extends AbstractRepository
 {
-	private $model;
+    private $model;
 
-	public function __construct(Job $model)
-	{
-		$this->model = $model;
-	}
+    public function __construct(Job $model)
+    {
+        $this->model = $model;
+    }
 
-	public function seachJob(array $filters)
-	{
-		$jobs = \DB::table('jobs')->distinct()->select(['jobs.*',  'job_companies.name', 'job_companies.address', 'job_companies.website', 'job_companies.logo'])
+    public function seachJob(array $filters)
+    {
+        $jobs = \DB::table('jobs')->distinct()->select(['jobs.*',  'job_companies.name', 'job_companies.address', 'job_companies.website', 'job_companies.logo'])
             ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
             ->leftJoin('job_skill_pivot', 'job_skill_pivot.job_id', '=', 'jobs.id')
             ->leftJoin('job_skills', 'job_skills.id', '=', 'job_skill_pivot.job_skill_id');
