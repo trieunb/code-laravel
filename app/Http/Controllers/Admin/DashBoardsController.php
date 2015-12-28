@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Template;
 use App\Models\TemplateMarket;
+use App\Models\Job;
 use Auth;
 use Validator;
 
@@ -36,14 +37,22 @@ class DashBoardsController extends Controller
             $q->where('roles.slug', 'admin');
         });
 
-        $last_users = $users->orderBy('created_at', 'DESC')->take(5)->get();
-        $count = $users->count();
+        $last_users = $users->orderBy('created_at', 'DESC')->take(10)->get();
+        $count_user = $users->count();
 
-        $templates = TemplateMarket::count();
+        $count_template = TemplateMarket::count();
         $resumes = Template::where('type', '<>', 2)
-        ->orderBy('created_at', 'DESC')->take(5)->get();
+        ->orderBy('created_at', 'DESC')->take(10)->get();
+        $count_resume = Template::count();
+        $count_job = Job::count();
         
-		return view('admin.dashboard.index', compact('count','last_users', 'templates', 'resumes'));
+		return view('admin.dashboard.index', 
+            compact('count_user', 
+                'last_users', 
+                'count_template', 
+                'resumes', 
+                'count_resume', 
+                'count_job'));
 	}
 
     public function getDetailResume($id)
