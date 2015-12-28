@@ -14,13 +14,14 @@ class Report
 	private $query;
 	private $reportNotAdmin;
 	
-	public function __construct($model, $sqlClause, $groupBy, $orderBy = [], $whereClause = null)
+	public function __construct($model, $sqlClause, $groupBy, $with = null, $orderBy = [], $whereClause = null)
 	{
 		$this->model = $model;
 		$this->sqlClause = $sqlClause;
 		$this->groupBy = $groupBy;
 		$this->orderBy = $orderBy;
 		$this->whereClause = $whereClause;
+		$this->with = $with;
 	}
 
 	public function setReportNotdAdmin($report)
@@ -45,6 +46,10 @@ class Report
 			foreach ($this->whereClause as $where) {
 				$query = $query->where($where['field'], $where['operator'], $where['value']);
 			}
+		}
+
+		if ($this->with != null) {
+			$query = $query->leftjoin($this->with, 'users.id', '=', $this->with.'.'.'user_id');
 		}
 
 		if ( $this->reportNotAdmin != null) {

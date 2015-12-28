@@ -68,8 +68,8 @@ class ReportController extends Controller
             : $request->get('question_id');
 
         $chart_skill = $this->user_question->reportSkill($question_id);
-
-        $chart_device = $this->device->reportUserOs();
+        $chart_device = $this->user->reportUserOs();
+        
         return view('admin.report.report_user', 
             compact('count_arr', 'lables', 'chart_gender', 'chart_age', 'chart_region', 'chart_skill', 'chart_device'))
              ->with('year' , $request->get('year'))
