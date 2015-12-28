@@ -16,28 +16,17 @@ Question List
 		<thead>
 			<th>Id</th>
 			<th>Question</th>
+			<th>Publish</th>
 			<th>Created At</th>
 			<th>Updated At</th>
 			<th>Action</th>
 		</thead>
 	</table>
-
-	<div class="modal fade" id="modal-admin">
-        <div class="modal-dialog  modal-lg">
-            <div class="modal-content">
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 @stop
 
 @section('script')
 	<script>
 		$(document).ready(function() {
-			$('body').on('hidden.bs.modal', '.modal', function() {
-				$(this).removeData('bs.modal');
-			});
-
 			var questionDataTable = $('#questions-table').DataTable({
 		        processing: true,
 		        serverSide: true,
@@ -46,6 +35,7 @@ Question List
 		        columns: [
 		            {data: 'id', name: 'id'},
 		            {data: 'content', name: 'content'},
+		            {data: 'publish', name: 'publish', orderable: false, searchable: false},
 		            {data: 'created_at', name: 'created_at'},
 		            {data: 'updated_at', name: 'updated_at'},
 		            {data: 'action', name: 'action', orderable: false, searchable: false}

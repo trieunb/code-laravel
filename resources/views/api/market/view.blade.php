@@ -4,10 +4,10 @@
 	<meta http-equiv="Content-Type" content="charset=utf-8" />
 	<meta charset="UTF-8">
 	<title></title>
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/fonts.css">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 	<style>
 		* {
 		    -webkit-touch-callout: none;
@@ -21,10 +21,20 @@
 </head>
 <body>
 	<div class="container">
-		{!! $content !!}
+		<div class="col-xs-12">
+			{!!  $content !!}
+		</div>
 	</div>
-	<script src="js/jquery-2.1.4.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+	<script src="{{ asset('js/jquery-2.1.4.js') }}"></script>
+	<script src="{{ asset('js/bootstrap.js') }}"></script>
+	<script>
+	$(document).ready(function() {
+		$('div').removeAttr('contenteditable');
+		$('table').removeAttr('width');
+		$('table').css('width', 'auto');
+		$('table').css('margin', 'auto');
+	});
+</script>
 </body>
 </html>
 		

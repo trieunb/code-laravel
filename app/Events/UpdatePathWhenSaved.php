@@ -29,8 +29,8 @@ class UpdatePathWhenSaved extends Event
     {
         $category = $categoryInterface->getById($this->cat_id);
 
-        if ($categoryInterface->getFirst()) {
-            $parent = $categoryInterface->getById($parent_id);
+        if ($categoryInterface->first()) {
+            $parent = $categoryInterface->getById($this->parent_id);
             $category->path = $parent->path.$this->cat_id;
         } else {
             $category->path = '0-'.$this->cat_id;

@@ -1,16 +1,22 @@
 <?php
 namespace App\Repositories\User;
 
+use App\Events\GetCountryAndRegionFromLocationUser;
 use App\Models\Objective;
 use App\Models\Qualification;
 use App\Models\Question;
 use App\Models\Reference;
+use App\Models\TemplateMarket;
 use App\Models\User;
 use App\Models\UserEducation;
 use App\Models\UserWorkHistory;
 use App\Repositories\AbstractRepository;
 use App\Repositories\User\UserInterface;
+use App\Services\Report\Report;
 use Carbon\Carbon;
+use DB;
+use Khill\Lavacharts\Lavacharts;
+use Lava;
 
 
 
@@ -25,9 +31,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * Create or Update data
-	 * @param  mixed $data 
-	 * @param  int $user_id   
-	 * @return mixed      
+	 * @param  mixed $data
+	 * @param  int $user_id
+	 * @return mixed
 	 */
 	public function saveFromApi($data, $user_id = null)
 	{
@@ -58,24 +64,29 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			$user->home_phone = $data['home_phone'];
 		if (isset($data['city']))
 			$user->city = $data['city'];
-		if (isset($data['location']))
+		if (isset($data['location']) && $data['location']['longitude'] != null)
 			$user->location = $data['location'];
 		if (isset($data['state']))
 			$user->state = $data['state'];
 		if (isset($data['country']))
 			$user->country = $data['country'];
-		
+
 		if (array_key_exists('password', $data)) {
 			$user->password = bcrypt($data['password']);
 		}
-		
-		return $user->save();
+
+        $result = $user->save();
+        
+		if ($result && $user->location != null) 
+            event(new GetCountryAndRegionFromLocationUser($user));
+        
+        return $result;
 	}
 
 	/**
 	 * Get profile
-	 * @param  int $user_id 
-	 * @return mixed     
+	 * @param  int $user_id
+	 * @return mixed
 	 */
 	public function getProfile($user_id)
 	{
@@ -85,6 +96,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }, 'user_work_histories' => function($q) {
                 $q->orderBy('position');
             }, 'questions' => function($q) {
+            }, 'user_skills' => function($q) {
+                $q->orderBy('position');
             }, 'references' => function($q) {
                 $q->orderBy('position');
             }, 'objectives' => function($q) {
@@ -103,7 +116,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 			if ($v['id'] == $data->status)
 				$status = $v;
 		}
-		
+
 
 		$data->status = $data->status != 0 && $data->status != null ? $status : null;
 
@@ -112,9 +125,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * save data Register user
-	 * @param  mixed $request 
-	 * @param  string $token 
-	 * @return void       
+	 * @param  mixed $request
+	 * @param  string $token
+	 * @return void
 	 */
 	public function registerUser($request, $token)
 	{
@@ -133,9 +146,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * Create User get inforation to Oauth2
-	 * @param  array $data  
-	 * @param  string $token 
-	 * @return mixed        
+	 * @param  array $data
+	 * @param  string $token
+	 * @return mixed
 	 */
 	public function createUserFromOAuth($data, $token)
 	{
@@ -204,7 +217,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
         return $user->save();
     }
-    
+
     /**
 	 * Get template for user id
 	 * @param  int $id
@@ -226,28 +239,34 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
 	/**
 	 * Upload avatar
-	 * @param  mixed $file    
-	 * @param  int $user_id 
-	 * @return mixed          
+	 * @param  mixed $file
+	 * @param  int $user_id
+	 * @return mixed
 	 */
 	public function uploadImage($file, $user_id)
 	{
 		$user = $this->getById($user_id);
-		$user->avatar = User::uploadAvatar($file);
+		$user->avatar = $file->getClientOriginalName() == '' || $file->getClientOriginalName() == null
+            ? null 
+            : User::uploadAvatar($file);
 
-		$image = [ 
+		$image = [
 			'origin' => asset($user->avatar['origin']),
 			'thumb' => asset($user->avatar['thumb'])
 		];
-		
-		return $user->save() ? $image : '';
+
+        if ( ! $user->save()) {
+            return null;
+        }
+
+        return $user->avatar != null ? $image : null;
 	}
 
 	/**
 	 * Edit Status
-	 * @param  int $id     
-	 * @param  int $status 
-	 * @return bool         
+	 * @param  int $id
+	 * @param  int $status
+	 * @return bool
 	 */
 	public function editStatus($id, $status)
 	{
@@ -257,7 +276,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
 		$user = $this->getById($id);
 		$user->status = $status;
 		$result = $user->save();
-		
+
 		if ($result) {
 			$status = null;
 			foreach (\Setting::get('user_status') as $k => $v) {
@@ -265,13 +284,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
 					$status = $v;
 			}
 		}
-		
+
 		return $user->save() ? $status : null;
 	}
     /**
      * Remove photo
-     * @param  int $id 
-     * @return bool     
+     * @param  int $id
+     * @return bool
      */
     public function removePhoto($id)
     {
@@ -349,42 +368,42 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
-        
+
         return $user->save();
     }
 
     /**
      * Get datatable of user
-     * @return mixed 
+     * @return mixed
      */
     public function dataTable()
     {
-        return \Datatables::of($this->model->select([
-            'id', 'firstname', 'lastname', 'address', 'email',
-            'created_at', 'updated_at'
-            ]))
+        $users = $this->model
+            ->whereDoesntHave('roles' , function($q) {
+                $q->where('roles.slug', '=', 'admin');
+            });
+        return \Datatables::of($users)
             ->addColumn('action', function($user) {
-                return '<div class="btn-group" role="group" aria-label="...">
-                    <a class="btn btn-primary" href="'.route('admin.user.get.answer', $user->id).'">Answer Of User</a>
+               return '<div class="btn-group text-center" role="group" aria-label="...">
+                    <a class="btn btn-default" href="' .route('admin.user.get.detail', $user->id) . '"><i class="glyphicon glyphicon-eye-open"></i></a>
                 </div>';
             })
             ->editColumn('firstname', function($user) {
-                return $user->firstname . ' ' . $user->lastname;
+                return $user->present()->name();
+            })
+            ->addColumn('checkbox', function($user) {
+                return '<input type="checkbox" value="'.$user->id.'" />';
             })
             ->editColumn('created_at', function($user) {
                 return $user->created_at->format('Y-m-d');
             })
-            ->editColumn('updated_at', function($user) {
-                return $user->updated_at->format('Y-m-d');
-            })
-            ->removeColumn('lastname')
             ->make(true);
     }
 
     /**
      * Get Answers For User
-     * @param  id $id 
-     * @return Illuminate\Database\Eloquent\Collection     
+     * @param  id $id
+     * @return Illuminate\Database\Eloquent\Collection
      */
     public function answerForUser($id)
     {
@@ -392,8 +411,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
     }
 
     /**
-     * Create Or Update point of Question 
-     * @param int $id   
+     * Create Or Update point of Question
+     * @param int $id
      * @throw \Exception
      */
     public function setPointForAnswer($id, $data)
@@ -424,7 +443,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             case 'objective':
                 return json_encode(['data' => ['objective' => Objective::whereUserId($id)->get()]]);
                 break;
-            case 'name': 
+            case 'name':
                 return json_encode(['data' => $this->getById($id)->present()->name()]);
                 break;
             case 'profile_website':
@@ -443,8 +462,80 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 return json_encode(['data' => $this->getById($id)->mobile_phone]);
                 break;
             default:
-                return json_encode(['data' =>$this->getById($id)->pluck($section)]);
+                return json_encode(['data' =>$this->getById($id)->$section]);
                 break;
         }
+    }
+
+    public function updateUserLogin($user, $token)
+    {
+
+        $this->model->update(['token' => $token], $user->id);
+        return \Auth::login($user);
+    }
+
+    /**
+     * Report user by month
+     */
+    public function reportUserMonth($year = null)
+    {
+        $user = $this->model->select(DB::raw('MONTH(created_at) as month'),
+                    DB::raw('COUNT(id) AS count'))
+                ->groupBy('month')
+                ->orderBy('created_at', 'ASC')
+                ->whereDoesntHave('roles');
+
+        return is_null($year)
+            ? $user->get()
+            : $user->whereYear('created_at', '=', $year)->get();
+    }
+
+    public function reportUserGender()
+    {
+        $gender = ['Male' => 0, 'Female' => 0, 'Other' => 0];
+        $sql = 'CASE WHEN gender = 0 THEN "Male"
+               WHEN gender = 1 THEN "Female"
+               WHEN gender = 2 OR gender is null THEN "Other"
+               END as "gender_user"';
+        $report = new Report($this->model, $sql, 'gender_user');
+        $report->setReportNotdAdmin(true);
+        $options = [
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
+        ];
+        return $report->prepareRender('gender_user', $gender, 'Reasons', 'Percent', $options);
+    }
+
+    public function reportUserAge()
+    {
+        $response = [];
+        $groupAge = ['Younger than 20 years' => 0, '20 - 30 years' => 0, 'Older than 30 years' => 0];
+        $sql = 'CASE
+                WHEN FLOOR(DATEDIFF(now(), dob ) / 365) < 20 OR dob is null OR dob = "0000-00-00" THEN "Younger than 20 years"
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) >= 20 AND FLOOR(DATEDIFF(now(), dob) / 365) <= 30 THEN "20 - 30 years"
+                WHEN FLOOR(DATEDIFF(now(), dob) / 365) > 30 THEN "Older than 30 years"
+                END as "group_age"';
+        $report = new Report($this->model, $sql, 'group_age');
+        $report->setReportNotdAdmin(true);
+        $options = [
+             'is3D' => true,
+                'width' => 988,
+                'height' => 350,
+                'sliceVisibilityThreshold' => 0
+        ];
+        return $report->prepareRender('group_age', $groupAge, 'Reasons', 'Percent', $options);
+    }
+
+    public function reportUserRegion()
+    {
+        $report = new Report($this->model, 'region', 'region');
+        $report->setReportNotdAdmin(true);
+        $options = [ 'is3D' => true,
+                        'width' => 988,
+                        'height' => 350,
+                        'sliceVisibilityThreshold' => 0];
+        return $report->prepareRender('region', [], 'Reasons', 'Percent', $options);
     }
 }

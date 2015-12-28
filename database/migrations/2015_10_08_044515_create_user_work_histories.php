@@ -13,6 +13,7 @@ class CreateUserWorkHistories extends Migration
     public function up()
     {
         Schema::create('user_work_histories', function(Blueprint $table) {
+            $table->engine = 'MyISAM';
             $table->increments('id');
             $table->integer('user_id');
             $table->text('company');

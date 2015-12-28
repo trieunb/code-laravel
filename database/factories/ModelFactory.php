@@ -32,75 +32,105 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Models\Category::class, function(Faker\Generator $faker) {
-	return [
-		'user_id' => rand(1, 10),
-		'name' => $faker->name,
-		'slug' => $faker->name,
-		'meta' => json_encode(['a', 'b', 'c', 'd', 'e']),
-		'parent_id' => null,
-		'path' => $faker->name
-	];
+    return [
+        'user_id' => rand(1, 10),
+        'name' => $faker->name,
+        'slug' => $faker->name,
+        'parent_id' => null
+    ];
 });
 
 $factory->define(App\Models\Role::class, function(Faker\Generator $faker) {
-	return [
-		'name' => $faker->name,
-		'slug' => $faker->name
-	];
+    return [
+        'name' => $faker->name,
+        'slug' => $faker->name
+    ];
 });
 
 $factory->define(App\Models\UserEducation::class, function(Faker\Generator $faker) {
-	return [
-		'user_id' => rand(1, 10),
-		'school_name' => $faker->company,
-		'title' => $faker->name,
-		'sub_title' => $faker->name,
-		'start' => $faker->name,
-		'end' => $faker->name,
-		'degree' => $faker->text,
-		'result' => $faker->text
-	];
+    return [
+        'user_id' => rand(1, 10),
+        'school_name' => $faker->company,
+        'title' => $faker->name,
+        'start' => $faker->name,
+        'end' => $faker->name,
+        'degree' => $faker->text,
+        'result' => $faker->text
+    ];
 });
 
 $factory->define(App\Models\UserSkill::class, function(Faker\Generator $faker) {
-	return [
-		'user_id' => rand(1, 10),
-		'skill_name' => $faker->name,
-		'skill_test' => $faker->name,
-		'skill_test_point' => $faker->randomDigit(),
-		'experience' => $faker->name
-	];
+    return [
+        'user_id' => rand(1, 10),
+        'skill_name' => $faker->name,
+        'skill_test' => $faker->name,
+        'skill_test_point' => $faker->randomDigit(),
+        'experience' => $faker->name
+    ];
 });
 
 $factory->define(App\Models\UserWorkHistory::class, function(Faker\Generator $faker) {
-	return [
-		'user_id' => rand(1, 10),
-		'company' => $faker->company,
-		'start' => $faker->name,
-		'end' => $faker->name,
-		'job_title' => $faker->name,
-		'job_description' => $faker->text
-	];
+    return [
+        'user_id' => rand(1, 10),
+        'company' => $faker->company,
+        'start' => $faker->name,
+        'end' => $faker->name,
+        'job_title' => $faker->name,
+        'job_description' => $faker->text
+    ];
 });
 
 $factory->define(App\Models\Objective::class, function(Faker\Generator $faker) {
-	return [
-		'user_id' => rand(1, 10),
-		'title' => $faker->name,
-		'content' => $faker->text
-	];
+    return [
+        'user_id' => rand(1, 10),
+        'title' => $faker->name,
+        'content' => $faker->text
+    ];
 });
 
 $factory->define(App\Models\Reference::class, function(Faker\Generator $faker) {
-	return [
-		'user_id' => rand(1, 10),
-		'reference' => $faker->name,
-		'content' => $faker->text
-	];
+    return [
+        'user_id' => rand(1, 10),
+        'reference' => $faker->name,
+        'content' => $faker->text
+    ];
 });
 
 $factory->define(App\Models\Question::class, function(Faker\Generator $faker) {
-	return [
-		'content' => $faker->name
-	];
+    return [
+        'content' => $faker->name
+    ];
+});
+
+$factory->define(App\Models\JobCompany::class, function(Faker\Generator $faker) {
+    return [
+        'name' => $faker->company,
+        'country' => $faker->countryCode,
+        'address' => $faker->address,
+        'logo' => $faker->imageUrl(100, 100),
+        'website' => $faker->url,
+        'description' => $faker->text
+    ];
+});
+
+$factory->define(App\Models\Job::class, function(Faker\Generator $faker) {
+    $job_titles = ['Node.JS / Javascript Developer', 'Front-end Developer Up to $900', 'C/C++ Agile Developer',
+        '02 Mobile Developers (iOS,Android)', 'Senior Fontend Wordpress Developer', 'Tuyển gấp Senior PHP Developer tại Hà Nội',
+        'Full-stack PHP engineer -EC/OnlineMarketing System', 'Senior C# .NET Developer', 'Experienced Web Designer',
+        'Experienced Web Designer', 'iOS Developers (Mobile Apps, Objective C)', 'Software Bridge Engineer (Japanese N2)',
+        'C/C++ Programmer', 'Product Tech Leader (PHP)', '02 Senior Xamarin Programmer', '15 Senior iOs Developers - Salary up to $800',
+        'Senior Software Testing Engineer', 'Team Leader of Software Engineer (Java, .NET)'
+    ];
+    $k = array_rand($job_titles);
+ 
+    return [
+        'job_cat_id' => rand(1, 21),
+        'company_id' => rand(1, 20),
+        'title' => $job_titles[$k],
+        'country' => $faker->countryCode,
+        'location' => $faker->address,
+        'experience' => join("\n\n", $faker->paragraphs(mt_rand(3, 6))),
+        'description' => $faker->text,
+        'min_salary' => $faker->numberBetween($min = 100, $max = 9000)
+    ];
 });

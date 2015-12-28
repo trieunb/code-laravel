@@ -61,7 +61,8 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+    	$user = $this->user->getById($id);
+        return view('admin.user.detail', compact('user', $user));
     }
 
     /**
@@ -95,7 +96,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->user->delete($id)
+            ? response()->json(['status' => true])
+            : response()->json(['status' => false]);
     }
 
 
@@ -108,5 +111,17 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('message', $e->getMessage());
         }
+    }
+
+    public function dataTable()
+    {
+        return $this->user->dataTable();
+    }
+
+    public function postDelete(Request $request)
+    {
+        return $this->user->deleteMultiRecords($request->get('ids'))
+            ? response()->json(['status_code' => 200])
+            : response()->json(['status_code' => 400]);
     }
 }

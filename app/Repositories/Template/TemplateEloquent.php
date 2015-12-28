@@ -6,6 +6,12 @@ use App\Models\Template;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\SaveFromApiTrait;
 use App\Repositories\Template\TemplateInterface;
+use Khill\Lavacharts\Lavacharts;
+use Lava;
+use App\Models\User;
+use App\Models\TemplateMarket;
+use Carbon\Carbon;
+use DB;
 
 class TemplateEloquent extends AbstractDefineMethodRepository implements TemplateInterface
 {
@@ -125,12 +131,12 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             foreach (\Setting::get('user_status') as $status) {
                 if ($status['id'] == $request->get('content'))
                     $tmp = $template->type == 2 
-                        ? '<div class="availability content-box" contenteditable="true">'
+                        ? '<div lang="availability" class="availability content-box" contenteditable="true">'
                             .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
                             .'<span>Availability</span></div>'
                             .'<div class="box" style="background: #f3f3f3;padding: 15px;border-top: 3px solid #D8D8D8;border-bottom: 3px solid #D8D8D8;">'
                             .'<p>'.$status['value'].'</p></div></div>'
-                        : '<div class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';
+                        : '<div lang="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';
             }
 
             $user = \App\Models\User::find($user_id);
@@ -168,7 +174,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         if ( !$user->save()) return;
         
         $data = editSection('photo', 
-            '<div class="photo"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
+            '<div lang="photo"><img src="'.asset($user->avatar['origin']).'" width="100%"></div>',
             $template->content);
         $sec = $template->section;
 
@@ -189,7 +195,6 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template = $this->model->whereUserId($user_id)
             ->whereType('2')
             ->first();
-
         if ( ! $template) {
             $template = new Template();
             $template->user_id = $user_id;
@@ -293,6 +298,4 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
                 ->take(10)
                 ->get();
     }
-
-    
 }

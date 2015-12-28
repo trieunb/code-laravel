@@ -6,6 +6,7 @@ Create Template
 @stop
 
 @section('content')
+@include('partial.notifications')
 <div class="row">
     @if (\Session::has('message'))
     <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>{{ \Session::get('message') }}</strong></div>
@@ -16,36 +17,33 @@ Create Template
             {!! csrf_field() !!}
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+                <input type="text" value="{{ old('title') }}" class="form-control" name="title" id="title" placeholder="Title">
             </div>
             <div class="form-group">
                 <label for="cat_id">Category</label>
-                <select name="cat_id" id="cat_id" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1">Category</option>
-                </select>
+                
+                {!! Form::select('cat_id', $list_category, old('cat_id') ? old('cat_id') : null, ['class' => 'form-control', 'id' => 'categories', 'placeholder' => 'Choose Category']) !!}
             </div>
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" name="price" class="form-control" id="price" placeholder="Price">
+                <label for="price">Price ($)</label>
+                <input type="text" name="price" value="{{ old('price') }}" class="form-control" id="price" placeholder="$">
             </div>
 
             <div class="form-group">
-                <textarea id="content" name="content"></textarea> 
+                <textarea id="content" name="content">{{ old('content') }}</textarea> 
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <input type="text" name="description" class="form-control" id="description" placeholder="Description">
+                <textarea  name="description" class="form-control" id="description" value="{{ old('description') }}" placeholder="Description"></textarea>
             </div>
             <div class="form-group">
                 <label for="version">Version</label>
-                <input name="version" type="text" class="form-control" id="version" placeholder="Version">
+                <input name="version" type="text" value="{{ old('version') ? old('version') : 1 }}" class="form-control" id="version" placeholder="Version">
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
                 <select name="status" id="status" class="form-control" >
-                    <option value="">Select</option>
-                    <option value="1">Pending</option>
+                    <option value="1" selected>Pending</option>
                     <option value="2">Publish</option>
                 </select>
             </div>
@@ -61,11 +59,10 @@ Create Template
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/additional-methods.min.js') }}"></script>
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.svg.min.js') }}"></script>
-<script src="{{ asset('js/html2canvas.js') }}"></script>
-<script src="{{ asset('js/jspdf.debug.js') }}"></script>
 <script>
+    $(document).ready(function() {
+        $('#categories option:first-child').attr('disabled', true);
+    });
     function elFinderBrowser (callback, value, meta) {
         tinymce.activeEditor.windowManager.open({
             file: "{{ asset('tinymce/plugins/elfinder/elfinder.html') }}",// use an absolute path!
@@ -104,96 +101,48 @@ Create Template
             }
         });
 return false;
-    }
-
+}
 
 
     // TinyMCE init
-   tinymce.init({
-  selector: "#content",
-        height : 500,
-        // plugins: "table,code, image, link, media",
+    tinymce.init({
+      selector: "#content",
+      height : 500,
         relative_urls: false,
         remove_script_host: false,
         style_formats: [
-        { title: 'Name', block: 'div', classes: 'name', styles: { color: '#000000' } },
-        { title: 'Address', block: 'div', classes:'address', styles: { color: '#00000' } },
-        { title: 'Email', block: 'div', classes: 'email', styles: { color: '#0000' } },
-        { title: 'Profile Website', block: 'div', classes: 'profile_website', styles: { color: '#0000' } },
-        { title: 'Linkedin', block: 'div', classes: 'linkedin', styles: { color: '#0000' } },
-        { title: 'Reference', block: 'div', classes: 'reference', styles: { color: '#0000' } },
-        { title: 'Objective', block: 'div', classes: 'objective', styles: { color: '#0000' } },
-        { title: 'Activitie', block: 'div', classes: 'activitie', styles: { color: '#0000' } },
-        { title: 'Work Experience', block: 'div', classes: 'work', styles: { color: '#0000' } },
-        { title: 'Education', block: 'div', classes: 'education', styles: { color: '#0000' } },
-        { title: 'Photo', block: 'div', classes: 'photo', styles: { color: '#0000' } },
-        { title: 'Qualification', block: 'div', classes: 'key_qualification', styles: { color: '#0000' } },
-        { title: 'Availability', block: 'div', classes: 'availability', styles: { color: '#0000' } },
-        { title: 'Infomation', block: 'div', classes: 'infomation', styles: { color: '#0000' } }
+        { title: 'Activitie', block: 'div', attributes: {lang: 'activitie'} , styles: { color: '#0000' } },
+        { title: 'Address', block: 'div', attributes:{lang: 'address'}, styles: { color: '#00000' } },
+        { title: 'Availability', block: 'div', attributes: {lang: 'availability'}, styles: { color: '#0000' } },
+        { title: 'Education', block: 'div', attributes: {lang: 'education'}, styles: { color: '#0000' } },
+        { title: 'Email', block: 'div', attributes: {lang: 'email'}, styles: { color: '#0000' } },
+        { title: 'Infomation', block: 'div', attributes: {lang: 'infomation'}, styles: { color: '#0000' } },
+        { title: 'Qualification', block: 'div', attributes: {lang: 'key_qualification'}, styles: { color: '#0000' } },
+        { title: 'Linkedin', block: 'div', attributes: {lang: 'linkedin'}, styles: { color: '#0000' } },
+        { title: 'Mobile Phone number', block: 'div', attributes: {lang: 'phone'}, styles: { color: '#0000' } },
+        { title: 'Name', block: 'div', attributes: {lang: 'name'}, styles: { color: '#000000' } },
+        { title: 'Objective', block: 'div', attributes: {lang: 'objective'}, styles: { color: '#0000' } },
+        { title: 'Personal Test', block: 'div', attributes: {lang: 'personal_test'}, styles: { color: '#0000' } },
+        { title: 'Photo', block: 'div', attributes: {lang: 'photo'}, styles: { color: '#0000' } },
+        { title: 'Profile Website', block: 'div', attributes: {lang: 'profile_website'}, styles: { color: '#0000' } },
+        { title: 'Reference', block: 'div', attributes: {lang: 'reference'}, styles: { color: '#0000' } },
+        { title: 'Skill', block: 'div', attributes:{lang: 'skill'}, styles: { color: '#0000' } },
+        { title: 'Work Experience', block: 'div', attributes:{lang: 'work'}, styles: { color: '#0000' } }
         ],
-  visualblocks_default_state: true,
-  end_container_on_empty_block: true,
-  plugins: [
-        " image,preview,hr,wordcount,code,table,colorpicker,textcolor"
+        // visualblocks_default_state: true,
+        // end_container_on_empty_block: true,
+        plugins: [
+        " image,preview,hr,code,table,colorpicker,textcolor"
         ],
-         toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
+        toolbar1: "newdocument | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect colorpicker|cut copy paste  | bullist numlist | outdent indent blockquote | undo redo | image code |  preview | forecolor backcolor |table | hr removeformat  | ltr rtl ",
 
-    menubar :false,
-    file_picker_callback : elFinderBrowser,
-  content_css: [
-    
-  ]
- });
+        menubar :false,
+        file_picker_callback : elFinderBrowser,
 
+    });
 
 $(function() {
 
-var isBusy = false;
-$('form').validate({
-    rules: {
-        title : {
-            required: true,
-            remote : {
-                url: '{{ route("admin.template.check") }}',
-                type: 'GET',
-                data: {
-                    title: function() {
-                        return $( "#title" ).val();
-                    }
-                }   
-            }
-        },
-        cat_id : {
-            required : true
-        },
-        version : {
-            required: true
-        },
-        status : {
-            required : true
-        }
-    },
-    messages : {
-        title: {
-            remote : 'Title exists, please change title'
-        }
-    },
-    highlight: function(element) {
-        $(element).closest('.form-group').addClass('has-error');
-    },
-    unhighlight: function(element) {
-        $(element).closest('.form-group').removeClass('has-error');
-    },
-    errorElement: 'span',
-    errorClass: 'help-block',
-    errorPlacement: function(error, element) {
-        if(element.parent('.input-group').length) {
-            error.insertAfter(element.parent());
-        } else {
-            error.insertAfter(element);
-        }
-    }
-});
 });
 
 

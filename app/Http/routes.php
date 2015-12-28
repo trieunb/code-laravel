@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Question;
-use App\Models\User;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -13,28 +10,11 @@ use App\Models\User;
 | and give it the controller to call when that URI is requested.
 |
 */
-get('test', function() {
-    $array = ['name', 'address', 'phone',
-        'email', 'profile_website', 'linkedin',
-        'reference', 'objective', 'activitie',
-        'work', 'education', 'photo', 'personal_test',
-        'key_qualification', 'availability', 'infomation'
-    ];
-    sort($array);
-    dd($array);
-    dd(base_path('vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'));
-	return view('admin.template.render');
-});
-Route::pattern('id', '[0-9]+');
 
-get('/', function() {
-    return view('welcome');
-});
-//, 'middleware' => 'role:admin|member'
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'role:admin'], function() {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
     
@@ -42,8 +22,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
      * User Route
      */
     get('user', ['as' => 'admin.user.get.index', 'uses' => 'UsersController@index']);
+    get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
+    get('user/delete/{id}', ['as' => 'admin.user.delete', 'uses' => 'UsersController@destroy']);
+    get('user/detail/{id}', ['as' => 'admin.user.get.detail', 'uses' => 'UsersController@show']);
     
-    // post('user/answer/{id}', ['as' => 'admin.user.post.answer', 'uses' => 'UsersController@postAnswer']);
+    post('user/delete', ['as' => 'admin.user.post.delete', 'uses' => 'UsersController@postDelete']);
     /**
      * Template Route
      */
@@ -54,10 +37,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     get('template/detail/{id}', ['as' => 'admin.template.get.detail', 'uses' => 'TemplateMarketsController@detail']);
     get('template/delete/{id}', ['as' => 'admin.template.delete', 'uses' => 'TemplateMarketsController@delete']);
     get('template/datatable', ['as' => 'api.template.get.dataTable', 'uses' => 'TemplateMarketsController@showDatatableTemplate']);
-    
+    get('template/view/{id}', ['as' => 'admin.template.get.view', 'uses' => 'TemplateMarketsController@getView']);
+    get('template/{id}/define', ['as' => 'admin.template.get.define', 'uses' => 'TemplateMarketsController@getDefine']);
+    get('template/status/{id}', ['as' => 'admin.template.status', 'uses' => 'TemplateMarketsController@changeStatus']);
+
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit/{id}', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
-    get('template/status/{id}', ['as' => 'admin.template.status', 'uses' => 'TemplateMarketsController@changeStatus']);
+    post('template/define', ['as' => 'admin.template.post.define', 'uses' => 'TemplateMarketsController@postDefine']);
+    post('template/action', ['as' => 'admin.template.post.action', 'uses' => 'TemplateMarketsController@postAction']);
     /**
      * Question Route
      */
@@ -67,6 +54,30 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin' , 'middleware' => 'rol
     get('question/answer/{id}', ['as' => 'admin.question.get.answer', 'uses' => 'QuestionsController@answer']);
     
     post('question/create', ['as' => 'admin.question.post.create', 'uses' => 'QuestionsController@store']);
+
+    /**
+     * Report Route
+     */
+    get('report/user', ['as' => 'admin.report.user.month', 'uses' => 'ReportController@reportUserByMonth']);
+    get('report/template', ['as' => 'admin.report.template', 'uses' => 'ReportController@reportTemplate']);
+
+    /**
+     * Category Route
+     */
+    get('category', ['as' => 'admin.category.get.index', 'uses' => 'CategoriesController@index']);
+    get('category/create', ['as' => 'admin.category.get.create', 'uses' => 'CategoriesController@create']);
+    get('category/edit/{id}', ['as' => 'admin.category.get.edit', 'uses' => 'CategoriesController@edit']);
+    get('category/detail/{id}', ['as' => 'admin.category.get.detail', 'uses' => 'CategoriesController@detail']);
+    get('category/datatable', ['as' => 'admin.category.get.datatable', 'uses' => 'CategoriesController@datatable']);
+
+    post('category/checkname', ['as' => 'admin.category.post.checkname', 'uses' => 'CategoriesController@checkName']);
+    post('category/create', ['as' => 'admin.category.post.create', 'uses' => 'CategoriesController@postCreate']);
+    post('category/edit', ['as' => 'admin.category.post.edit', 'uses' => 'CategoriesController@postEdit']);
+
+    /**
+     * resume route (buy template from market)
+     */
+    get('resume/detail/{id}', ['as' => 'admin.resume.detail', 'uses' => 'DashBoardsController@getDetailResume']);
 });
 
 
@@ -98,7 +109,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * User Route
      */
-    get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
     get('user/profile', 'UsersController@getProfile');
     get('user/status', 'UsersController@getStatus');
     get('user/removephoto/{id}', 'UsersController@removePhoto');
@@ -123,7 +133,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/{id}/section', 'TemplatesController@getSections');
     get('template/menu/{id}', ['as' => 'api.template.get.menu', 'uses' => 'TemplatesController@menu']);
     get('template/apply/{id}/{section}', ['as' => 'api.template.get.profile.section', 'uses' => 'TemplatesController@apply']);
-
+    
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
@@ -137,7 +147,6 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
-    // get('market/search', 'MarketPlacesController@search');
     
     /**
      * Cart Route
@@ -161,5 +170,14 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
 
     post('question/edit/admin', ['as' => 'api.question.post.editAdmin', 'uses' => 'QuestionsController@postEditAdmin']);
     post('answers/', 'QuestionsController@postAnswerOfUser');
+
+    /**
+     * Job Route
+     */
+    get('job/search', 'JobsController@search');
+   
 });
+
+get('shared/job-categories', 'API\JobsController@getListJobCategory');
+get('shared/job-skills', 'API\JobsController@getListJobSkill');
 

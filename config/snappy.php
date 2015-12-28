@@ -1,11 +1,10 @@
 <?php
 
-return array(
-    'pdf' => array(
+return [
+    'pdf' => [
         'enabled' => true,
-        'binary' => base_path('vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386'),
-        // 'binary' => '/usr/local/bin/wkhtmltopdf',
+        'binary' => env('WKHTMLTOPDF_BIN_PATH', '/usr/bin/wkhtmltopdf'),
         'timeout' => false,
-        'options' => array(),
-    )
-);
+        'options' => [],
+    ],
+];

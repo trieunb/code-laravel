@@ -9,7 +9,9 @@
 	<link rel="stylesheet" href="css/fonts.css">
 	<link rel="stylesheet" href="css/style.css">
 	<style>
-		body{font-family: 'dejavu sans';}
+		body{
+			font-family: 'dejavu sans';
+		}
 	</style>
 </head>
 <body>

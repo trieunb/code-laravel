@@ -104,11 +104,6 @@ class UsersController extends Controller
 		$this->qualification = $qualification;
 	}
 
-	public function dataTable()
-	{
-		return $this->user->dataTable();
-	}
-
 	public function getProfile(Request $request)
 	{
 		$user = \JWTAuth::toUser($request->get('token'));
@@ -271,13 +266,6 @@ class UsersController extends Controller
 		} catch(UploadException $e) {
 			return response()->json(['status_code' => 500, 'status' => false, 'message' => $e->getErrorMessage()]);
 		}
-	}
-
-	public function removePhoto($id)
-	{
-		return $this->user->removePhoto($id)
-			? response()->json(['status_code' => 200])
-			: response()->json(['status_code' => 400]);
 	}
 
 	public function getStatus(Request $request)

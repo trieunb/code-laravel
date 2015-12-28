@@ -11,6 +11,9 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\Role::class, 10)->create();
+        App\Models\Role::create([
+            'name' => 'Admin',
+            'slug' => 'Admin'
+        ]);
     }
 }

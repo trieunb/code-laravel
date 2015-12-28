@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserEducation;
 use App\Models\UserSkill;
 use App\Models\UserWorkHistory;
+use App\Models\Device;
 use App\Repositories\Category\CategoryEloquent;
 use App\Repositories\Category\CategoryInterface;
 use App\Repositories\Invoice\InvoiceEloquent;
@@ -46,6 +47,8 @@ use App\Repositories\UserWorkHistory\UserWorkHistoryEloquent;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserEloquent;
 use App\Repositories\User\UserInterface;
+use App\Repositories\Device\DeviceEloquent;
+use App\Repositories\Device\DeviceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -115,6 +118,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
 		$this->app->bind(UserQuestionInterface::class, function() {
 			return new UserQuestionEloquent(new UserQuestion);
+		});
+
+		$this->app->bind(DeviceInterface::class, function() {
+			return new DeviceEloquent(new Device);
 		});
 	}
 }

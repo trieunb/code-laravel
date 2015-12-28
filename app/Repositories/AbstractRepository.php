@@ -10,7 +10,7 @@ abstract class AbstractRepository
 	 */
 	public function getAll()
 	{
-		return $this->model->all();
+		return $this->model->orderBy('created_at', 'desc')->get();
 	}
 
 	/**
@@ -126,5 +126,14 @@ abstract class AbstractRepository
 	public function getFirstDataWhereClause($field, $operator, $value)
 	{
 		return $this->model->where($field, $operator, $value)->first();
+	}
+
+	/**
+	 * Get first record
+	 * @return mixed 
+	 */
+	public function first()
+	{
+		return $this->model->first();
 	}
 }

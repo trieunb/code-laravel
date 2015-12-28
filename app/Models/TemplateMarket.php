@@ -22,6 +22,11 @@ class TemplateMarket extends Model
         'price' => 'double',
         'status' => 'int',
     ];
+
+    /**
+     * Fillable 
+     */
+    protected $fillable = ['status'];
 	/**
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
