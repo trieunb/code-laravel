@@ -20,7 +20,7 @@ class JobRepository extends AbstractRepository
     public function seachJob(array $filters)
     {
         $sql = [
-                'jobs.*', 'job_companies.name','job_companies.address',
+                'jobs.*', 'job_companies.name as company_name','job_companies.address',
                 'job_companies.website', 'job_companies.logo'
             ];
 
@@ -75,7 +75,6 @@ class JobRepository extends AbstractRepository
         }
         if (isset($filters['keyword']) && $filters['keyword']) {
             $jobs = $jobs->whereRaw('(jobs.title LIKE ?
-
                 OR job_companies.name LIKE ?
                 OR job_skills.title LIKE ?)',
                 ['%'.$filters['keyword'].'%', '%'.$filters['keyword'].'%', '%'.$filters['keyword'].'%']
