@@ -31,10 +31,6 @@
          #manual -child a {
             text-indent: 6px;
         }
-        #content img{
-            width: 100% !important;
-            height: 200px !important;
-        }
         .mobile{
             overflow: hidden;
         }

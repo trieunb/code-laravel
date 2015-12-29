@@ -3,7 +3,7 @@
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow:hidden;">
+        <div class='image-avatar text-center' style="position: relative; overflow:hidden;">
             @if ( ($user_info->avatar['origin']))
             <div lang="photo" onclick="eventChangeClick()">
                 <img style="height: auto;" 
