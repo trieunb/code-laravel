@@ -57,11 +57,13 @@ class JobRepository extends AbstractRepository
         $page = (int) $filters['page'];
         $offset = ($page - 1) * config('paginate.limit');
         $total = $jobsQuery->count('jobs.id');
-        $jobs = $jobsQuery->distinct()
+
+        $jobs = $jobsQuery
             ->skip($offset)
             ->orderBy('jobs.updated_at', 'DESC')
             ->take(config('paginate.limit'))
             ->get();
+
         return [
             'jobs'     => $jobs,
             'total'    => $total,

@@ -6,7 +6,7 @@
         <div class='image-avatar' style="position: relative; overflow:hidden;">
             @if ( ($user_info->avatar['origin']))
             <div lang="photo" onclick="eventChangeClick()">
-                <img style="width:100%;height: auto;" 
+                <img style="height: auto;" 
                 src="{!! asset($user_info->avatar['origin']) !!}" >
             </div>
             @endif
@@ -14,8 +14,7 @@
                 <div class="info-basic" 
                     style="@if($user_info->avatar['origin'])position: absolute; bottom: 0px; @endif 
                     margin-bottom:10px;
-                    text-align: center;
-                    width: 100%;">
+                    text-align: center;">
                 <div lang="name" >
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
                 </div>
