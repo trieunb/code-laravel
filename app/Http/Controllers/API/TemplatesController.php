@@ -108,7 +108,7 @@ class TemplatesController extends Controller
         if (!$result) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
         
-        $render = event(new RenderImageAfterCreateTemplate($result->id, $result->content, $result->slug));
+        $render = event(new RenderImageAfterCreateTemplate($result->id, $result->content));
         
         return $render
             ? response()->json(['status_code' => 200, 'message' => 'Edit template successfully'])
@@ -132,7 +132,7 @@ class TemplatesController extends Controller
         if ( !$response) 
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when save file.']);
         if (\File::delete(public_path($response['template']->source_file_pdf)))
-            event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content, $response['template']->slug));
+            event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content));
         \Log::info('response edit photo', ['img' => $response['template']->image, 'pdf' => $response['template']->source_file_pdf]);
         
         
@@ -158,7 +158,7 @@ class TemplatesController extends Controller
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }
         
-        $render = event(new RenderImageAfterCreateTemplate($template->id, $template->content, $template->slug));
+        $render = event(new RenderImageAfterCreateTemplate($template->id, $template->content));
         if ( !$render) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when render pdf']);
         }
@@ -208,15 +208,16 @@ class TemplatesController extends Controller
         $template = $this->template->getById($id);
         $sourcePDF = public_path($template->source_file_pdf);
         \Log::info('test sendmail', [$id, $user->id, \File::exists($sourcePDF), $sourcePDF]);
-        if ( ! \File::exists($sourcePDF)) {
+        /*if ( ! \File::exists($sourcePDF)) {
+            $filename = md5(str_random(40).uniqid());
             $snappy = \App::make('snappy.pdf');
             $snappy->generateFromHtml($template->content, 
-                public_path('pdf/'.md5(str_random(40).uniqid()).'.pdf')
+                public_path('pdf/'.$filename.'.pdf')
             );
-            $sourcePDF = public_path('pdf/'.$template->slug.'.pdf');
-        }
+            $sourcePDF = public_path('pdf/'.$filename.'.pdf');
+        }*/
       
-        event(new sendMailAttachFile($user, '', $sourcePDF));
+        event(new sendMailAttachFile($user, $sourcePDF));
 
         return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
     }

@@ -19,17 +19,15 @@ class sendMailAttachFile extends Event
      *
      * @return void
      */
-    public function __construct($user, $pathFileWord, $pathFilePDF)
+    public function __construct($user, $pathFilePDF)
     {
         $this->user = $user;
-        $this->pathFileWord = $pathFileWord;
         $this->pathFilePDF = $pathFilePDF;
     }
 
     public function send()
     {
         $user = $this->user;
-        $pathFileWord = $this->pathFileWord;
         $pathFilePDF = $this->pathFilePDF;
        \Log::info('send mail', [$pathFilePDF]);
         \Mail::queue('emails.send_attach_file', compact('user'), function($message) use($user, $pathFileWord, $pathFilePDF){
