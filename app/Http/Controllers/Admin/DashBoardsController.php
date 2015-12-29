@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Template;
 use App\Models\TemplateMarket;
+use App\Models\Invoice;
 use App\Models\Job;
 use Auth;
 use Validator;
@@ -44,7 +45,7 @@ class DashBoardsController extends Controller
         $resumes = Template::where('type', '<>', 2);
         
         $last_resume = $resumes->orderBy('created_at', 'DESC')->take(10)->get();
-        $count_resume = $resumes->count();
+        $count_resume = Invoice::count();
         $count_job = Job::count();
         
 		return view('admin.dashboard.index', 

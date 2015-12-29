@@ -160,7 +160,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'linkedin_id' => $data['id'],
             'firstname' => $data['firstName'],
             'lastname' => $data['lastName'],
-            'email' => $data['emailAddress'],
+            'email' => isset($data['emailAddress']) ? $data['emailAddress'] : $data['id'].'@linkedin.com',
             'avatar' => $avatar,
             'country' => $data['location']['name'],
             'link_profile' => $data['publicProfileUrl'],
