@@ -525,10 +525,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $report = new Report($this->model, $sql, 'group_age');
         $report->setReportNotdAdmin(true);
         $options = [
-             'is3D' => true,
-                'width' => 988,
-                'height' => 350,
-                'sliceVisibilityThreshold' => 0
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
         ];
         return $report->prepareRender('group_age', $groupAge, 'Reasons', 'Percent', $options);
     }
@@ -537,26 +537,29 @@ class UserEloquent extends AbstractRepository implements UserInterface
     {
         $report = new Report($this->model, 'region', 'region');
         $report->setReportNotdAdmin(true);
-        $options = [ 'is3D' => true,
-                        'width' => 988,
-                        'height' => 350,
-                        'sliceVisibilityThreshold' => 0];
+        $options = [ 
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
+        ];
+
         return $report->prepareRender('region', [], 'Reasons', 'Percent', $options);
     }
 
     public function reportUserOs()
     {
-
         $os = ['IOS' => 0, 'Android' => 0];
-        $with = 'devices';
-        $report = new Report($this->model, 'platform', 'platform', $with);
+        $report = new Report($this->model, 'platform', 'platform');
+        $report->setWith('devices');
         $report->setReportNotdAdmin(true);
         $options = [
-             'is3D' => true,
-                'width' => 988,
-                'height' => 350,
-                'sliceVisibilityThreshold' => 0
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
         ];
+
         return $report->prepareRender('platform', $os, 'Reasons', 'Percent', $options);
     }
 }
