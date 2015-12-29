@@ -92,7 +92,9 @@ class Report
 		}
 
 		if ( $this->reportNotAdmin != null) {
-			$query = $query->whereDoesntHave('roles');
+			$query = $query->whereDoesntHave('roles', function($q) {
+				$q->where('roles.slug', 'admin');
+			});
 		}
 
 		return $query;
