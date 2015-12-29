@@ -379,9 +379,11 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function dataTable()
     {
         $users = $this->model
+            ->select('users.id', 'users.firstname', 'users.lastname', 'users.created_at', 'users.email', 'devices.platform')
+            ->leftjoin('devices', 'users.id', '=', 'devices.user_id')
             ->whereDoesntHave('roles' , function($q) {
                 $q->where('roles.slug', '=', 'admin');
-            });
+            })->get();
         return \Datatables::of($users)
             ->addColumn('action', function($user) {
                return '<div class="btn-group text-center" role="group" aria-label="...">
@@ -396,6 +398,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
             })
             ->editColumn('created_at', function($user) {
                 return $user->created_at->format('Y-m-d');
+            })
+            ->editColumn('os', function($user) {
+                return $user->platform;
             })
             ->make(true);
     }
