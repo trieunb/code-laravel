@@ -109,11 +109,11 @@
                 Recent Templates Bought
             </div>
             <div class="panel-body">
-                @if (count($resumes) <= 0)
+                @if (count($last_resume) <= 0)
                     <span>No data available in table</span>
                 @else
                 <ul>
-                    @foreach($resumes as $key => $resume)
+                    @foreach($last_resume as $key => $resume)
                         <li><a href="{{route('admin.resume.detail', $resume->id)}}">{{$resume->title . ' - ' . $resume->created_at->format('Y-m-d')}}</a></li>
                     @endforeach
                 </ul>
