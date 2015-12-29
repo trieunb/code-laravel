@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Template;
 use App\Models\TemplateMarket;
+use App\Models\Invoice;
 use App\Models\Job;
 use Auth;
 use Validator;
@@ -25,7 +26,6 @@ class DashBoardsController extends Controller
         TemplateInterface $resume)
     {
         $this->middleware('csrf');
-        // $this->middleware('role:admin');
         $this->user = $user;
         $this->template = $template;
         $this->resume = $resume;
@@ -39,20 +39,20 @@ class DashBoardsController extends Controller
 
         $last_users = $users->orderBy('created_at', 'DESC')->take(10)->get();
         $count_user = $users->count();
-
         $count_template = TemplateMarket::count();
-        $resumes = Template::where('type', '<>', 2)
-        ->orderBy('created_at', 'DESC')->take(10)->get();
-        $count_resume = Template::count();
+        $resumes = Template::where('type', '<>', 2);
+        $last_resume = $resumes->orderBy('created_at', 'DESC')->take(10)->get();
+        $count_resume = Invoice::count();
         $count_job = Job::count();
         
 		return view('admin.dashboard.index', 
             compact('count_user', 
                 'last_users', 
                 'count_template', 
-                'resumes', 
+                'last_resume', 
                 'count_resume', 
-                'count_job'));
+                'count_job')
+            );
 	}
 
     public function getDetailResume($id)
@@ -77,11 +77,12 @@ class DashBoardsController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             return redirect()->route('admin.dashboard');
-        } else {
-            return redirect('admin/login')
-                    ->withErrors(['message' => 'Wrong email or password.'])
-                    ->withInput();
         }
+
+        return redirect('admin/login')
+            ->withErrors(['message' => 'Wrong email or password.'])
+            ->withInput();
+        
     }
 
     public function getLogout(Request $request)
