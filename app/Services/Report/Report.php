@@ -10,10 +10,11 @@ class Report
 	private $groupBy;
 	private $orderBy;
 	private $whereClause;
+	private $with;
 	private $query;
 	private $reportNotAdmin;
-	private $with;
-	public function __construct($model, $sqlClause, $groupBy, $with, $orderBy = [], $whereClause = null)
+	
+	public function __construct($model, $sqlClause, $groupBy, $with = null, $orderBy = [], $whereClause = null)
 	{
 		$this->model = $model;
 		$this->sqlClause = $sqlClause;
@@ -48,7 +49,7 @@ class Report
 		}
 
 		if ($this->with != null) {
-			$query = $query->leftjoin('devices', 'users.id', '=', 'devices.user_id');
+			$query = $query->leftjoin($this->with, 'users.id', '=', $this->with.'.'.'user_id');
 		}
 
 		if ( $this->reportNotAdmin != null) {

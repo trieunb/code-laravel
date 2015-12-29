@@ -29,7 +29,8 @@
 			<th>Id</th>
 			<th>Fullname</th>
             <th>Email</th>
-			<th>Registered date</th>
+            <th>Registered date</th>
+			<th>OS</th>
 			<th>Action</th>
 		</thead>
 	</table>
@@ -50,7 +51,8 @@
 		            {data: 'id', name: 'id'},
 		            {data: 'firstname', name: 'firstname'},
                     {data: 'email', name: 'email'},
-		            {data: 'created_at', name: 'created_at'},
+                    {data: 'created_at', name: 'created_at'},
+		            {data: 'os', name: 'os', orderable: false},
 		            {data: 'action', name: 'action', orderable: false, searchable: false, width: "5%"}
 		        ],
 		        order: [[3, 'DESC']]

@@ -35,7 +35,7 @@ class RenderImageAfterCreateTemplate extends Event
      *
      * @return void
      */
-    public function __construct($template_id, $content, $slug)
+    public function __construct($template_id, $content)
     { 
         $this->template_id = $template_id;
         $this->content = $content;
