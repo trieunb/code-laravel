@@ -41,16 +41,17 @@ class DashBoardsController extends Controller
         $count_user = $users->count();
 
         $count_template = TemplateMarket::count();
-        $resumes = Template::where('type', '<>', 2)
-        ->orderBy('created_at', 'DESC')->take(10)->get();
-        $count_resume = Template::count();
+        $resumes = Template::where('type', '<>', 2);
+        
+        $last_resume = $resumes->orderBy('created_at', 'DESC')->take(10)->get();
+        $count_resume = $resumes->count();
         $count_job = Job::count();
         
 		return view('admin.dashboard.index', 
             compact('count_user', 
                 'last_users', 
                 'count_template', 
-                'resumes', 
+                'last_resume', 
                 'count_resume', 
                 'count_job'));
 	}
