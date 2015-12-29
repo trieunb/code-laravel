@@ -122,14 +122,20 @@ $factory->define(App\Models\Job::class, function(Faker\Generator $faker) {
         'Senior Software Testing Engineer', 'Team Leader of Software Engineer (Java, .NET)'
     ];
     $k = array_rand($job_titles);
- 
+    $expExpectations = [
+        'Min 3 Years',
+        '1 Year',
+        'Min 5 Years',
+        '2 Years',
+        '3 Years'
+    ];
     return [
         'job_cat_id' => rand(1, 21),
         'company_id' => rand(1, 20),
         'title' => $job_titles[$k],
         'country' => $faker->countryCode,
         'location' => $faker->address,
-        'experience' => join("\n\n", $faker->paragraphs(mt_rand(3, 6))),
+        'experience' => $expExpectations[array_rand($expExpectations)],
         'description' => $faker->text,
         'min_salary' => $faker->numberBetween($min = 100, $max = 9000)
     ];
