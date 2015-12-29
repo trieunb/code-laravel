@@ -17,70 +17,55 @@ class JobRepository extends AbstractRepository
         $this->model = $model;
     }
 
-    public function seachJob(array $filters)
+    public function search(array $filters)
     {
-        $sql = [
-                'jobs.*', 'job_companies.name','job_companies.address',
-                'job_companies.website', 'job_companies.logo'
-            ];
-
-        $countItem = (int)$this->querySearchJob('COUNT(distinct jobs.id) as count', $filters, true)
-            ->first()
-            ->count;
-
-        $offset = ($filters['page'] - 1) * config('paginate.limit');
-        $jobs = $this->querySearchJob($sql, $filters, false)->skip($offset)
-            ->take(config('paginate.limit'))
-            ->orderBy('updated_at', 'desc')
-            ->get();
-
-        foreach ($jobs as $job) {
-            $job->id = (int)$job->id;
-            $job->job_cat_id = (int)$job->job_cat_id;
-            $job->company_id = (int)$job->company_id;
-            $job->min_salary = (double)$job->min_salary;
-        }
-
-        return ['jobs' => $jobs, 'total' => $countItem, 'currentPage' => $filters['page']];
-    }
-
-    private function querySearchJob($sql, $filters, $count)
-    {
-        $jobs = \DB::table('jobs');
-        $jobs = !$count ? $jobs->distinct()->select($sql) : $jobs->select(\DB::raw($sql));
-        $jobs = $jobs->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
+        // Build query
+        $jobsQuery = $this->model
+            ->select('jobs.*')
+            ->distinct()
+            ->with('company', 'category')
+            ->join('job_companies', 'job_companies.id', '=', 'jobs.company_id')
             ->leftJoin('job_skill_pivot', 'job_skill_pivot.job_id', '=', 'jobs.id')
             ->leftJoin('job_skills', 'job_skills.id', '=', 'job_skill_pivot.job_skill_id');
 
-        if (isset($filters['country']) && $filters['country']){
-            $jobs = $jobs->where('jobs.country', '=', $filters['country']);
+        if (isset($filters['country']) && $filters['country']) {
+            $jobsQuery->where('jobs.country', $filters['country']);
         }
         if (isset($filters['salary']) && $filters['salary']) {
-            $jobs = $jobs->where('jobs.min_salary', '>=', $filters['salary']);
+            $jobsQuery->where('jobs.min_salary', '>=', $filters['salary']);
         }
 
         if (isset($filters['cat_id']) && $filters['cat_id']) {
-
-            $childrenCategory = JobCategory::where('parent_id', '=', $filters['cat_id'])->get()->pluck('id');
-    
-            if (count($childrenCategory) > 0) {
-                $childrenCategory->prepend($filters['cat_id']);
-
-                $jobs = $jobs->whereIn('job_cat_id', $childrenCategory);
-
+            $childCatIds = JobCategory::where('parent_id', $filters['cat_id'])
+                ->get()->pluck('id');
+            if (count($childCatIds)) {
+                $childCatIds->prepend($filters['cat_id']);
+                $jobsQuery->whereIn('job_cat_id', $childCatIds);
             } else {
-                $jobs = $jobs->whereJobCatId($filters['cat_id']);
+                $jobsQuery->whereJobCatId($filters['cat_id']);
             }
-
         }
         if (isset($filters['keyword']) && $filters['keyword']) {
-            $jobs = $jobs->whereRaw('(jobs.title LIKE ?
+            $jobsQuery = $jobsQuery->whereRaw('(jobs.title LIKE ?
                 OR job_companies.name LIKE ?
                 OR job_skills.title LIKE ?)',
-                ['%'.$filters['keyword'].'%', '%'.$filters['keyword'].'%', '%'.$filters['keyword'].'%']
+                array_fill(0, 3, '%'.$filters['keyword'].'%')
             );
         }
 
-        return $jobs;
+        // Paginate
+        $page = (int) $filters['page'];
+        $offset = ($page - 1) * config('paginate.limit');
+        $total = $jobsQuery->count('jobs.id');
+        $jobs = $jobsQuery->distinct()
+            ->skip($offset)
+            ->orderBy('jobs.updated_at', 'DESC')
+            ->take(config('paginate.limit'))
+            ->get();
+        return [
+            'jobs'     => $jobs,
+            'total'    => $total,
+            'per_page' => config('paginate.limit')
+        ];
     }
 }
