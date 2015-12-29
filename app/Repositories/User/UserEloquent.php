@@ -488,7 +488,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
                     DB::raw('COUNT(id) AS count'))
                 ->groupBy('month')
                 ->orderBy('created_at', 'ASC')
-                ->whereDoesntHave('roles');
+                ->whereDoesntHave('roles', function($q) {
+                    $q->where('roles.slug', 'admin');
+                });
 
         return is_null($year)
             ? $user->get()
