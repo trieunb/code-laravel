@@ -20,7 +20,7 @@ class JobRepository extends AbstractRepository
     public function seachJob(array $filters)
     {
         $sql = [
-                'jobs.*', 'job_companies.name as company_name','job_companies.address',
+                'jobs.*', 'job_companies.name','job_companies.address',
                 'job_companies.website', 'job_companies.logo'
             ];
 
