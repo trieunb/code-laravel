@@ -16,6 +16,11 @@ class Job extends Model
      */
     protected $table = 'jobs';
 
+    protected $visible = [
+        'id', 'title', 'country', 'min_salary', 'experience', 'description',
+        'company', 'category', 'created_at'
+    ];
+
     protected $casts = [
         'id' => 'integer',
         'min_salary' => 'double',
@@ -23,18 +28,19 @@ class Job extends Model
         'company_id' => 'integer'
     ];
 
-    public function job_company()
+    public function company()
     {
         return $this->belongsTo(JobCompany::class, 'company_id');
     }
 
-    public function job_skills()
+    public function skills()
     {
         return $this->belongsToMany(JobSkill::class, 'job_skill_pivot', 'job_id', 'job_skill_id');
     }
 
-    public function job_category()
+    public function category()
     {
         return $this->belongsTo(JobCategory::class, 'job_cat_id');
     }
+
 }

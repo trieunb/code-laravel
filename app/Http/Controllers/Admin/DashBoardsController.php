@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Template;
 use App\Models\TemplateMarket;
+use App\Models\Invoice;
 use App\Models\Job;
 use Auth;
 use Validator;
@@ -38,20 +39,10 @@ class DashBoardsController extends Controller
 
         $last_users = $users->orderBy('created_at', 'DESC')->take(10)->get();
         $count_user = $users->count();
-
         $count_template = TemplateMarket::count();
-<<<<<<< Updated upstream
         $resumes = Template::where('type', '<>', 2);
-        
         $last_resume = $resumes->orderBy('created_at', 'DESC')->take(10)->get();
-        $count_resume = $resumes->count();
-=======
-        $resumes = Template::where('type', '<>', 2)
-            ->orderBy('created_at', 'DESC')
-            ->take(10)
-            ->get();
-        $count_resume = Template::count();
->>>>>>> Stashed changes
+        $count_resume = Invoice::count();
         $count_job = Job::count();
         
 		return view('admin.dashboard.index', 
