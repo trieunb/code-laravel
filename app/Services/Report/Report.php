@@ -14,14 +14,53 @@ class Report
 	private $query;
 	private $reportNotAdmin;
 	
-	public function __construct($model, $sqlClause, $groupBy, $with = null, $orderBy = [], $whereClause = null)
+	public function __construct($model, $sqlClause, $groupBy)
 	{
 		$this->model = $model;
 		$this->sqlClause = $sqlClause;
 		$this->groupBy = $groupBy;
-		$this->orderBy = $orderBy;
-		$this->whereClause = $whereClause;
+	}
+
+	/**
+	 * Sets the value of with.
+	 *
+	 * @param mixed $with the with
+	 *
+	 * @return self
+	 */
+	public function setWith($with)
+	{
 		$this->with = $with;
+
+		return $this;
+    }
+
+    /**
+     * Sets the value of orderBy.
+     *
+     * @param mixed $orderBy the order by
+     *
+     * @return self
+     */
+	public function setOrderBy(array $orderBy)
+	{
+		$this->orderBy = $orderBy;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the value of whereClause.
+	 *
+	 * @param mixed $whereClause the where clause
+	 *
+	 * @return self
+	 */
+	public function setWhereClause(array $whereClause)
+	{
+		$this->whereClause = $whereClause;
+
+		return $this;
 	}
 
 	public function setReportNotdAdmin($report)
@@ -36,7 +75,7 @@ class Report
 		$query = $this->model->select(\DB::raw('COUNT(*) as count'), \DB::raw($this->sqlClause))
 		    ->groupBy($this->groupBy); 
 		
-		if ($this->whereClause != null && ! is_array($this->whereClause)) {
+		if ($this->whereClause != null && ! is_array($this->whereClause[0])) {
 			throw new Exception('Clause query isnt array');
 		}
 
