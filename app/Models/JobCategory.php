@@ -10,7 +10,7 @@ class JobCategory extends Model
 
     protected $table = 'job_categories';
 
-    protected $visible = ['id', 'name'];
+    protected $visible = ['id', 'name', 'parent_id'];
 
     protected $casts = [
         'id' => 'integer'
