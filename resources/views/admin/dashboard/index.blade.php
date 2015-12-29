@@ -106,7 +106,7 @@
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Recent Bought Templates
+                Recent Templates Bought
             </div>
             <div class="panel-body">
                 @if (count($resumes) <= 0)
