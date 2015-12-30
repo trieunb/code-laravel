@@ -50,25 +50,6 @@
                 </div>
             </div>
     </div>
-    <div class="col-md-12" id="buttons">
-        <ul class="dropdown-menu" aria-labelledby="dLabel" id="choose-type">
-            <div class="" aria-labelledby="dLabel">
-                <div class="top">
-                    <span class="close">x</span>
-                    <p>Choose the element you want to edit</p>
-                </div>
-                <ul class="list list-unstyled">
-                    <li id="manual" onClick=""><a>Type Manual</a></li>
-                    <li>
-                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
-                            <select id="set-data" name="" class="">
-                            </select>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </ul>
-    </div>
 </main>
 </body>
 </html>
