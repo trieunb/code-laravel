@@ -1,28 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="charset=utf-8" />
-	<meta charset="UTF-8">
-	<title></title>
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/fonts.css">
-	<link rel="stylesheet" href="css/style.css">
-	<style>
-		body{
-			font-family: 'dejavu sans';
-		}
-	</style>
+    <meta charset="utf-8">
+    <title>Resume</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }} " media="screen" title="no title"
+          charset="utf-8">
+    <link rel="stylesheet" href="{{ asset('css/fonts.css') }} " media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
+    <script src="{{ asset('js/jquery-2.1.4.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    <style>
+        #buttons select {
+            display: block;
+            width: 150px;
+            background-image: none;
+            outline: none;
+            border: none;
+            background: initial;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            text-indent: 1px;
+            text-overflow: '';
+        }
+        #manual {
+            cursor:pointer;
+        }
+         #manual -child a {
+            text-indent: 6px;
+        }
+        .mobile{
+            overflow: hidden;
+        }
+        .container {
+            width: 800px !important;
+        }
+    </style>
 </head>
 <body>
-	<div class="container">
-		{!! $content !!}
-	</div>
-	<script src="js/jquery-2.1.4.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/nicEdit.js"></script>
+    <div id="loading" class="mobile">
+        <img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
+    </div>
+<main class="mobile">
+    <div class="container">
+            <div id="content" class="fw w_bg">
+                <div class="col-xs-12">
+                    {!! $content !!}
+                </div>
+            </div>
+    </div>
+    <div class="col-md-12" id="buttons">
+        <ul class="dropdown-menu" aria-labelledby="dLabel" id="choose-type">
+            <div class="" aria-labelledby="dLabel">
+                <div class="top">
+                    <span class="close">x</span>
+                    <p>Choose the element you want to edit</p>
+                </div>
+                <ul class="list list-unstyled">
+                    <li id="manual" onClick=""><a>Type Manual</a></li>
+                    <li>
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown">
+                            <select id="set-data" name="" class="">
+                            </select>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </ul>
+    </div>
+</main>
 </body>
 </html>
-		
-
-	
