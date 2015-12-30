@@ -13,7 +13,7 @@
             <div class="text-info" >
                 <div class="info-basic" 
                     style="@if($user_info->avatar['origin'])position: absolute; bottom: 0px; @endif 
-                    margin-bottom:10px;
+                    margin-bottom:10px;width:100%;
                     text-align: center;">
                 <div lang="name" >
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
