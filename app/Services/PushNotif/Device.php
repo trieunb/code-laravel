@@ -4,8 +4,8 @@ namespace App\Services\PushNotif;
 
 class Device
 {
-    const ANDROID_PLATFORM = 'android';
-    const IOS_PLATFORM     = 'ios';
+    const ANDROID_PLATFORM = 'Android';
+    const IOS_PLATFORM     = 'IOS';
 
     /**
      * @var string

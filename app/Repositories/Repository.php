@@ -67,9 +67,10 @@ interface Repository
 	 * get data has in array with column
 	 * @param  string $field 
 	 * @param  array  $data  
+	 * @param  array  $fieldSelect  
 	 * @return mixed        
 	 */
-	public function getDataWhereIn($field,array $data);
+	public function getDataWhereIn($field,array $data, $fieldSelect);
 
 	/**
 	 * get data has not in array with column

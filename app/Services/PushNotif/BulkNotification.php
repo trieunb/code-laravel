@@ -42,7 +42,7 @@ class BulkNotification
     {
         $andoidDevices = NotifPusher::DeviceCollection();
         $iosDevices = NotifPusher::DeviceCollection();
-
+        \Log::info('message', ['test' => $this->devices]);
         /* @var App\Services\PushNotif\Device */
         foreach ($this->devices as $device) {
             $pushToDevice = NotifPusher::Device($device->id);
@@ -59,7 +59,7 @@ class BulkNotification
                 ->to($andoidDevices)
                 ->send($message);
         }
-        if (count($iosDevices->getTokens()) > 0) {
+        if (count($iosDevices->getTokens())) {
             NotifPusher::app('IOSApp')
                 ->to($iosDevices)
                 ->send($message);
@@ -69,6 +69,7 @@ class BulkNotification
     public function pushLater()
     {
         Queue::push(function($job) {
+            \Log::info('message', ['test']);
             $this->push();
             $job->delete();
         });

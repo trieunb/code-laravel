@@ -4,7 +4,15 @@
             <a href="{{URL::to('/admin')}}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
         </li>
         <li>
-            <a href="{{ route('admin.user.get.index') }}"><i class="fa fa-user fa-fw"></i> User management</a>
+            <a href="#"><i class="fa fa-file-text fa-fw"></i> User management<span class="fa arrow"></span></a>
+             <ul class="nav nav-second-level">
+                <li>
+                    <a href="{{ route('admin.user.get.index') }}">User List</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.user.get.send-notification') }}">Send Notification</a>
+                </li>
+            </ul>
         </li>
         <li>
             <a href="#"><i class="fa fa-file-text fa-fw"></i> Market Place<span class="fa arrow"></span></a>

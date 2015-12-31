@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\SendNotificationFormRequest;
 use App\Http\Requests\UserAnswersFormRequest;
 use App\Models\Question;
+use App\Repositories\Device\DeviceInterface;
 use App\Repositories\User\UserInterface;
+use App\Services\PushNotif\BulkNotification;
+use App\Services\PushNotif\Notification;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -16,10 +20,12 @@ class UsersController extends Controller
      * @var $user
      */
     private $user;
+    private $device;
 
-    public function __construct(UserInterface $user)
+    public function __construct(UserInterface $user,DeviceInterface $device)
     {
         $this->user = $user;
+        $this->device = $device;
     }
 
     /**
@@ -33,59 +39,15 @@ class UsersController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function detail($id)
     {
     	$user = $this->user->getById($id);
         return view('admin.user.detail', compact('user', $user));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -123,5 +85,51 @@ class UsersController extends Controller
         return $this->user->deleteMultiRecords($request->get('ids'))
             ? response()->json(['status_code' => 200])
             : response()->json(['status_code' => 400]);
+    }
+
+    public function getSendNotification()
+    {
+        return view('admin.user.send-notification');
+    }
+
+    public function postSendNotification(SendNotificationFormRequest $request)
+    {
+        if ($request->has('send_all')) {
+            $devices = $this->device->getAll(['device_id', 'platform']);
+
+            if (count($devices)) {
+                (new BulkNotification(
+                    $devices, $request->get('message'))
+                )->pushLater();
+
+                return redirect()->back()->with('message', 'Send notification successfully!');
+            }
+        } elseif ($request->has('user_id')) {
+            $usersIds = $request->get('user_id');
+            $devices = $this->device->getDataWhereIn('user_id', $usersIds, 
+                ['device_id', 'platform']
+            );
+
+            if (count($usersIds) > 1) {
+                (new BulkNotification(
+                    $devices, $request->get('message'))
+                )->pushLater();
+
+                return redirect()->back()->with('message', 'Send notification successfully!');
+            }
+            if(count($usersIds)) {
+                $device = $this->device->getFirstDataWhereClause('user_id', '=', $request->get('user_id')[0]);
+
+                if ($device) {
+                    (new Notification(
+                        $device, $request->get('message'))
+                    )->pushLater();
+
+                    return redirect()->back()->with('message', 'Send notification successfully!');
+                }
+            }
+        }
+
+        return redirect()->back()->with('error', 'Chooses not select use for send notification!');
     }
 }
