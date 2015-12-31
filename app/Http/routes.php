@@ -73,6 +73,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     post('category/checkname', ['as' => 'admin.category.post.checkname', 'uses' => 'CategoriesController@checkName']);
     post('category/create', ['as' => 'admin.category.post.create', 'uses' => 'CategoriesController@postCreate']);
     post('category/edit', ['as' => 'admin.category.post.edit', 'uses' => 'CategoriesController@postEdit']);
+
+    /**
+     * resume route (buy template from market)
+     */
+    get('resume/detail/{id}', ['as' => 'admin.resume.detail', 'uses' => 'DashBoardsController@getDetailResume']);
 });
 
 
@@ -169,9 +174,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Job Route
      */
-    
     get('job/search', 'JobsController@search');
-    get('shared/job-categories', 'JobsController@getListJobCategory');
-    get('shared/job-skills', 'JobsController@getListJobSkill');
+   
 });
+
+get('shared/job-categories', 'API\JobsController@getListJobCategory');
+get('shared/job-skills', 'API\JobsController@getListJobSkill');
 

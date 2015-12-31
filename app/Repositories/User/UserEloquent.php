@@ -160,7 +160,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'linkedin_id' => $data['id'],
             'firstname' => $data['firstName'],
             'lastname' => $data['lastName'],
-            'email' => $data['emailAddress'],
+            'email' => isset($data['emailAddress']) ? $data['emailAddress'] : $data['id'].'@linkedin.com',
             'avatar' => $avatar,
             'country' => $data['location']['name'],
             'link_profile' => $data['publicProfileUrl'],
@@ -379,6 +379,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
     public function dataTable()
     {
         $users = $this->model
+            ->select('users.id', 'users.firstname', 'users.lastname', 'users.created_at', 'users.email', 'devices.platform')
+            ->leftjoin('devices', 'users.id', '=', 'devices.user_id')
             ->whereDoesntHave('roles' , function($q) {
                 $q->where('roles.slug', '=', 'admin');
             })->get();
@@ -389,13 +391,16 @@ class UserEloquent extends AbstractRepository implements UserInterface
                 </div>';
             })
             ->editColumn('firstname', function($user) {
-                return $user->present()->name();;
+                return $user->present()->name();
             })
             ->addColumn('checkbox', function($user) {
                 return '<input type="checkbox" value="'.$user->id.'" />';
             })
             ->editColumn('created_at', function($user) {
                 return $user->created_at->format('Y-m-d');
+            })
+            ->editColumn('os', function($user) {
+                return $user->platform;
             })
             ->make(true);
     }
@@ -483,7 +488,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
                     DB::raw('COUNT(id) AS count'))
                 ->groupBy('month')
                 ->orderBy('created_at', 'ASC')
-                ->whereDoesntHave('roles');
+                ->whereDoesntHave('roles', function($q) {
+                    $q->where('roles.slug', 'admin');
+                });
 
         return is_null($year)
             ? $user->get()
@@ -520,10 +527,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
         $report = new Report($this->model, $sql, 'group_age');
         $report->setReportNotdAdmin(true);
         $options = [
-             'is3D' => true,
-                'width' => 988,
-                'height' => 350,
-                'sliceVisibilityThreshold' => 0
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
         ];
         return $report->prepareRender('group_age', $groupAge, 'Reasons', 'Percent', $options);
     }
@@ -532,10 +539,29 @@ class UserEloquent extends AbstractRepository implements UserInterface
     {
         $report = new Report($this->model, 'region', 'region');
         $report->setReportNotdAdmin(true);
-        $options = [ 'is3D' => true,
-                        'width' => 988,
-                        'height' => 350,
-                        'sliceVisibilityThreshold' => 0];
+        $options = [ 
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
+        ];
+
         return $report->prepareRender('region', [], 'Reasons', 'Percent', $options);
+    }
+
+    public function reportUserOs()
+    {
+        $os = ['IOS' => 0, 'Android' => 0];
+        $report = new Report($this->model, 'platform', 'platform');
+        $report->setWith('devices');
+        $report->setReportNotdAdmin(true);
+        $options = [
+            'is3D' => true,
+            'width' => 988,
+            'height' => 350,
+            'sliceVisibilityThreshold' => 0
+        ];
+
+        return $report->prepareRender('platform', $os, 'Reasons', 'Percent', $options);
     }
 }

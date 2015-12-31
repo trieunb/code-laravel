@@ -56,7 +56,7 @@ class Template extends Model
         $this->saveMany($user_templates);
     }
 
-    public static function makeSlug($template, $generatePDF = true)
+    /*public static function makeSlug($template, $generatePDF = true)
     {
         $template->slug = str_slug($template->title);
 
@@ -72,5 +72,5 @@ class Template extends Model
         
         if ($generatePDF)
             $template->source_file_pdf = asset('pdf/'.$template->slug.'.pdf');
-    }
+    }*/
 }

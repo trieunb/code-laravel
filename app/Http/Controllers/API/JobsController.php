@@ -18,19 +18,22 @@ class JobsController extends Controller
      */
     public function search(Request $request, JobRepository $job)
     {
-        try {
-            return response()->json([
-                'status_code' => 200, 
-                'data' => $job->seachJob($request->get('keyword'), $request->get('country'), $request->get('salary'), $request->get('cat_id'), $request->get('page'))
-            ]);
-        } catch (Exception $e) {
-            return response()->json(['status_code' => 400, 'message' => 'Data not found!']);
-        }
+        $filters = $request->only([
+            'keyword',
+            'country',
+            'salary',
+            'cat_id',
+            'page'
+        ]);
+        return response()->json([
+            'status_code' => 200,
+            'data' => $job->search($filters)
+        ]);
     }
 
     public function getListJobCategory(JobCategoryRepository $job_category)
     {
-        return $job_category->getAll() != null
+        return count($job_category->getAll())
             ? response()->json(['status_code' => 200, 'data' => $job_category->getAll()], 200, [], JSON_NUMERIC_CHECK)
             : response()->json(['status_code' => 400, 'message' => 'Data not found!']);
     }

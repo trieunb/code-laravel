@@ -7,8 +7,15 @@ use App\Models\Job;
 
 class JobCategory extends Model
 {
-    
+
     protected $table = 'job_categories';
+
+    protected $visible = ['id', 'name', 'parent_id'];
+
+    protected $casts = [
+        'id' => 'integer',
+        'parent_id' => 'integer'
+    ];
 
     public function jobs()
     {

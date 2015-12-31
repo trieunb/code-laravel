@@ -74,7 +74,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->image = $dataPrepareSave['image'];
         $template->type = $dataPrepareSave['type'];
         $template->source_file_pdf = $dataPrepareSave['source_file_pdf'];
-        Template::makeSlug($template, false);
+        // Template::makeSlug($template, false);
 
         return $template->save();
     }
@@ -107,7 +107,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             ? preg_replace('/\t|\n+/', '', $request->get('content'))
             : '<div contenteditable="true></div>';
         $template->type = $request->get('type');
-        Template::makeSlug($template, false);
+        // Template::makeSlug($template, false);
         
         return $template->save() ? $template : null;
     }
@@ -200,7 +200,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
             $template->user_id = $user_id;
             $template->title = "Basic Template";
             $template->type = 2;
-            Template::makeSlug($template);
+            // Template::makeSlug($template);
         }
 
         $template->content = $data['content'];
@@ -229,7 +229,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
      * @param  array $data 
      * @return bool       
      */
-    public function createTemplateFromMarket(array $data)
+    public function createTemplateFromMarket(array $data, $buyTemplate = false)
     {
         $template = new Template;
         $template->user_id = $data['user_id'];
@@ -241,7 +241,7 @@ class TemplateEloquent extends AbstractDefineMethodRepository implements Templat
         $template->version = $data['version'];
         $template->clone = $data['clone'];
         $template->section = $data['section'];
-        Template::makeSlug($template, false);
+        // Template::makeSlug($template, false);
 
         return $template->save();
     }

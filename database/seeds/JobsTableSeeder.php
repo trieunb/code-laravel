@@ -5,14 +5,19 @@ use App\Models\Job;
 
 class JobsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         Job::truncate();
-        factory(Job::class, 50)->create();
+        $jobs = factory(Job::class, 50)->create();
+        $skillIds = \DB::table('job_skills')->lists('id');
+        \DB::table('job_skill_pivot')->truncate();
+        if (count($skillIds)) {
+            // Tag some skills
+            foreach ($jobs as $job) {
+                $job->skills()->sync([
+                    $skillIds[array_rand($skillIds)]
+                ]);
+            }
+        }
     }
 }

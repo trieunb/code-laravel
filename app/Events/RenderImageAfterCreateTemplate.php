@@ -35,7 +35,7 @@ class RenderImageAfterCreateTemplate extends Event
      *
      * @return void
      */
-    public function __construct($template_id, $content, $slug)
+    public function __construct($template_id, $content)
     { 
         $this->template_id = $template_id;
         $this->content = $content;
@@ -45,21 +45,13 @@ class RenderImageAfterCreateTemplate extends Event
 
     public function render(TemplateInterface $template)
     {
-        // $this->content = replace_url_img($this->content);
         try {
-
-            //  \PDF::loadView('api.template.index', ['content' => $this->content])
-            // ->save(public_path('pdf/'.$this->filename.'.pdf'));
-           //  \App::make('dompdf.wrapper')->loadView('api.template.index', ['content' => $this->content])
-           // ->save(public_path('pdf/'.$this->filename.'.pdf'));
-      
-            $snappy = \App::make('snappy.pdf');
-            $snappy->generateFromHtml($this->content, 
-                public_path('pdf/'.$this->filename.'.pdf')
+            $snappy = \App::make('snappy.pdf.wrapper');
+            $snappy->loadView('api.template.index', ['content' => $this->content])
+                ->save(public_path('pdf/'.$this->filename.'.pdf')
             );
-       
             $this->createImage();
-            // convertPDFToIMG($this->filename);
+
             return $this->saveImage($template);
         } catch (\Exception $e) {
             \Log::info('null', [$e->getMessage()]);
@@ -73,7 +65,6 @@ class RenderImageAfterCreateTemplate extends Event
      */
     private function createImage()
     {
-
         $img = new \Imagick(public_path('pdf/'.$this->filename.'.pdf'));
         $this->pageNumb = $img->getNumberImages();
 
@@ -115,7 +106,7 @@ class RenderImageAfterCreateTemplate extends Event
         $template->image = $images;
         $template->source_file_pdf = 'pdf/'.$this->filename.'.pdf';
         
-        return $template->save();
+        return $template->save() ? $template : null;
     }
 
     /**

@@ -40,6 +40,37 @@ if ( ! function_exists('create_lists')) {
     }
 }
 
+if ( ! function_exists('sort_lists')) {
+    /**
+     * Sort Job list Category
+     * @param  array  $lists 
+     * @return array        
+     */
+    function sort_lists(array $lists) {
+        if (count($lists) == 0) return [];
+
+        $result = [];
+        $data = \Illuminate\Database\Eloquent\Collection::make($lists)
+            ->sortBy('name')
+            ->toArray();
+
+        foreach (array_values($data) as $key => $value) {
+   
+            if (isset($value['childs'])) {
+                
+                $childs = sort_lists($value['childs']);
+                $result[$key] = $value;
+             
+                if ($childs) {
+                    $result[$key]['childs'] = $childs;
+                }
+            } else $result[] = $value;
+        }
+
+        return $result;
+    }
+}
+
 if ( !function_exists('show_selected_option')) {
     function show_selected_option($categories, $selected_id = 0, $class = 'form-control', $dataAtrribute = null) {
         $html = '';
