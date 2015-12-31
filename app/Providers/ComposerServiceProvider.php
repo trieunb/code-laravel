@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\ViewComposers\CategoryComposer;
 use App\Http\ViewComposers\QuestionComposer;
+use App\Http\ViewComposers\UserComposer;
 use Illuminate\Support\ServiceProvider;
 
 class ComposerServiceProvider extends ServiceProvider
@@ -18,6 +19,7 @@ class ComposerServiceProvider extends ServiceProvider
 			'admin.template.create',
 			'admin.template.edit'
 		], CategoryComposer::class);
+		\View::composer('admin.user.send-notification', UserComposer::class);
 	}
 
 	public function register()

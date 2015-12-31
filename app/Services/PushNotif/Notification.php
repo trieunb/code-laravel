@@ -35,6 +35,8 @@ class Notification
 
     public function push()
     {
+        $pushAdapter = null;
+
         if ($this->device->isIOSPlatform()) {
             $pushAdapter = NotifPusher::app('IOSApp');
         } elseif ($this->device->isAndroidPlatform()) {

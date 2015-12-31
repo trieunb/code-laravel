@@ -24,9 +24,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('user', ['as' => 'admin.user.get.index', 'uses' => 'UsersController@index']);
     get('user/datatable', ['as' => 'api.admin.user.get.dataTable', 'uses' => 'UsersController@dataTable']);
     get('user/delete/{id}', ['as' => 'admin.user.delete', 'uses' => 'UsersController@destroy']);
-    get('user/detail/{id}', ['as' => 'admin.user.get.detail', 'uses' => 'UsersController@show']);
+    get('user/detail/{id}', ['as' => 'admin.user.get.detail', 'uses' => 'UsersController@detail']);
+    get('user/send-notification', ['as' => 'admin.user.get.send-notification', 'uses' => 'UsersController@getSendNotification']);
     
     post('user/delete', ['as' => 'admin.user.post.delete', 'uses' => 'UsersController@postDelete']);
+    post('user/send-notification', ['as' => 'admin.user.post.send-notification', 'uses' => 'UsersController@postSendNotification']);
     /**
      * Template Route
      */
