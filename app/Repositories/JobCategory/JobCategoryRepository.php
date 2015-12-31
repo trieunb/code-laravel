@@ -13,7 +13,7 @@ class JobCategoryRepository extends AbstractRepository
         $this->model = $model;
     }
 
-    public function getAll()
+    public function getAll($fileds = ['*'])
     {
         $job_categories = create_lists($this->model->select(['id', 'name', 'parent_id'])->get()->toArray());
 

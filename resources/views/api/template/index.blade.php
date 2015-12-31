@@ -39,9 +39,7 @@
     </style>
 </head>
 <body>
-    <div id="loading" class="mobile">
-        <img class="img-responsive" src="{{ asset('images/loading.gif') }}" alt="">
-    </div>
+  
 <main class="mobile">
     <div class="container">
             <div id="content" class="fw w_bg">

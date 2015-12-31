@@ -184,7 +184,13 @@
                     $('div[contenteditable="true"]').removeClass('highlight');
 
                     selection.toString() !== '';
-                    var clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
+                    var clonedSlection = '';
+                    try {
+                        clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
+                    } catch(err) {
+                        return;
+                    }
+                    
                     var span = document.createElement('span');
                     span.appendChild(clonedSlection);
 
