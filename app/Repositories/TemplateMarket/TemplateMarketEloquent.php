@@ -36,9 +36,14 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
             ? $query->orderBy($sortby, $order)
             : $query->orderBy('price');
             
-        return $query->skip($offset)
-            ->take(config('paginate.limit'))
-            ->get();
+        $templates = $query->skip($offset)
+                ->take(config('paginate.limit'))
+                ->get();
+        return [
+            'templates' => $templates,
+            'total' => $query->count(),
+            'per_page' => config('paginate.limit')
+        ]; 
     }
 
     public function getDetailTemplateMarket($template_id)
