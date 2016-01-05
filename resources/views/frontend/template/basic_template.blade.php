@@ -22,7 +22,7 @@
                     <span>{{$user_info->link_profile}}</span>
                 </div>
                 <div lang="email">
-                    email: <span>{{$user_info->email}}</span>
+                    Email: <span>{{$user_info->email}}</span>
                 </div>
                 </div>
             </div>
