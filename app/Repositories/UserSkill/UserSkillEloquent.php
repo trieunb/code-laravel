@@ -2,11 +2,14 @@
 namespace App\Repositories\UserSkill;
 
 use App\Models\UserSkill;
+use App\Models\JobSkill;
+use App\Models\User;
 use App\Repositories\SaveFromApiTrait;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\UserSkill\UserSkillInterface;
+use App\Repositories\AbstractRepository;
 
-class UserSkillEloquent extends AbstractDefineMethodRepository implements UserSkillInterface
+class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 {
 	use SaveFromApiTrait;
 	
@@ -28,6 +31,12 @@ class UserSkillEloquent extends AbstractDefineMethodRepository implements UserSk
 	public function __construct(UserSkill $user_skill)
 	{
 		$this->model = $user_skill;
+	}
+
+	public function saveAndUpdateSkill($data, $user_id)
+	{
+		$user = User::find($user_id);
+		$user->skills()->sync(array_flatten($data));
 	}
 
 	/**
