@@ -96,8 +96,9 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }, 'user_work_histories' => function($q) {
                 $q->orderBy('position');
             }, 'questions' => function($q) {
-            }, 'user_skills' => function($q) {
-                $q->orderBy('id');
+            }, 'skills' => function($q) {
+                $q->select('job_skills.id', 'job_skills.title')
+                    ->orderBy('id');
             }, 'references' => function($q) {
                 $q->orderBy('position');
             }, 'objectives' => function($q) {
@@ -117,6 +118,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
 				$status = $v;
 		}
 
+        // foreach ($data->skills as $key => $value) {
+        //     $data->skills = [
+        //         'id' => $value['id'],
+        //         'title' => $value['title']
+        //     ];
+        // }
 
 		$data->status = $data->status != 0 && $data->status != null ? $status : null;
 
