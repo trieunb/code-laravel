@@ -118,13 +118,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
 				$status = $v;
 		}
 
-        // foreach ($data->skills as $key => $value) {
-        //     $data->skills = [
-        //         'id' => $value['id'],
-        //         'title' => $value['title']
-        //     ];
-        // }
-
 		$data->status = $data->status != 0 && $data->status != null ? $status : null;
 
 		return $data;
