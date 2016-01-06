@@ -181,8 +181,8 @@ class UsersController extends Controller
 					}else {
 						$user_skill_rule->validate($request->get('user_skills')[0]);
 					}		
-
-					$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
+					
+					$this->user_skill->saveAndUpdateSkill($request->get('user_skills'),  $user->id);
 				} catch (ValidatorAPiException $e) {
 					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 				}
