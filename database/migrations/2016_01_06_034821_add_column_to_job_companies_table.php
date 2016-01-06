@@ -15,9 +15,9 @@ class AddColumnToJobCompaniesTable extends Migration
         Schema::table('job_companies', function($table) {
             $table->text('overview')->after('description')->nullable();
             $table->text('benefits')->after('overview')->nullable();
-            $table->integer('registration_no')->after('benefits')->nullable();
+            $table->string('registration_no')->after('benefits')->nullable();
             $table->string('industry')->after('registration_no')->nullable();
-            $table->integer('company_size')->after('industry')->nullable();
+            $table->string('company_size')->after('industry')->nullable();
             $table->text('why_join_us')->after('company_size')->nullable();
         });
     }
