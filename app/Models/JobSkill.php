@@ -10,6 +10,10 @@ class JobSkill extends Model
 {
     protected $table = 'job_skills';
 
+    protected $casts = [
+        'id' => 'integer'
+    ];
+
     public function jobs()
     {
         return $this->belongsToMany(Job::class, 'job_skill_pivot', 'job_id', 'job_skill_id');
