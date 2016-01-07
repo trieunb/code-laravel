@@ -109,7 +109,13 @@ $factory->define(App\Models\JobCompany::class, function(Faker\Generator $faker) 
         'address' => $faker->address,
         'logo' => $faker->imageUrl(100, 100),
         'website' => $faker->url,
-        'description' => $faker->text
+        'description' => $faker->text,
+        'overview' => $faker->text,
+        'benefits' => $faker->text,
+        'registration_no' => $faker->sentence($nbWords = 6),
+        'industry' => $faker->text,
+        'company_size' => $faker->sentence($nbWords = 6),
+        'why_join_us' => $faker->text
     ];
 });
 
@@ -137,6 +143,8 @@ $factory->define(App\Models\Job::class, function(Faker\Generator $faker) {
         'location' => $faker->address,
         'experience' => $expExpectations[array_rand($expExpectations)],
         'description' => $faker->text,
-        'min_salary' => $faker->numberBetween($min = 100, $max = 9000)
+        'min_salary' => $faker->numberBetween($min = 100, $max = 9000),
+        'responsibilities' => $faker->text,
+        'requirements' => $faker->text
     ];
 });
