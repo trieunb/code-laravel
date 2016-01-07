@@ -179,5 +179,5 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('job/search', 'JobsController@search');
    
 });
-get('shared/job-skills', 'JobsController@getListJobSkill');
-get('shared/job-categories', 'JobsController@getListJobCategory');
+get('shared/job-skills', 'API\JobsController@getListJobSkill');
+get('shared/job-categories', 'API\JobsController@getListJobCategory');
