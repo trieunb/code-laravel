@@ -13,7 +13,9 @@ class JobCompany extends Model
      */
     protected $table = 'job_companies';
 
-    protected $visible = ['name', 'address', 'website', 'logo'];
+    protected $visible = ['name', 'address', 'website', 'logo', 
+                        'overview', 'benefits', 'registration_no', 
+                        'industry', 'company_size', 'why_join_us'];
 
     protected $casts = [
         'id' => 'integer'
