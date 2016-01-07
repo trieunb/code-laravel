@@ -17,7 +17,7 @@ post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsControlle
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
-    
+
     /**
      * User Route
      */
@@ -26,7 +26,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('user/delete/{id}', ['as' => 'admin.user.delete', 'uses' => 'UsersController@destroy']);
     get('user/detail/{id}', ['as' => 'admin.user.get.detail', 'uses' => 'UsersController@detail']);
     get('user/send-notification', ['as' => 'admin.user.get.send-notification', 'uses' => 'UsersController@getSendNotification']);
-    
+
     post('user/delete', ['as' => 'admin.user.post.delete', 'uses' => 'UsersController@postDelete']);
     post('user/send-notification', ['as' => 'admin.user.post.send-notification', 'uses' => 'UsersController@postSendNotification']);
     /**
@@ -54,7 +54,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('question/create', ['as' => 'admin.question.get.create', 'uses' => 'QuestionsController@create']);
     get('question/edit/{id}', ['as' => 'admin.question.get.edit', 'uses' => 'QuestionsController@edit']);
     get('question/answer/{id}', ['as' => 'admin.question.get.answer', 'uses' => 'QuestionsController@answer']);
-    
+
     post('question/create', ['as' => 'admin.question.post.create', 'uses' => 'QuestionsController@store']);
 
     /**
@@ -135,7 +135,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('template/{id}/section', 'TemplatesController@getSections');
     get('template/menu/{id}', ['as' => 'api.template.get.menu', 'uses' => 'TemplatesController@menu']);
     get('template/apply/{id}/{section}', ['as' => 'api.template.get.profile.section', 'uses' => 'TemplatesController@apply']);
-    
+
     post('template/basic', 'TemplatesController@postBasicTemplate');
     post('template/edit/{id}/{section}', ['as' => 'api.template.post.edit', 'uses' => 'TemplatesController@postEdit']);
     post('template/create', 'TemplatesController@postCreate');
@@ -149,7 +149,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      */
     get('market/', ['uses' => 'MarketPlacesController@getAllTemplateMarket']);
     get('market/view/{id}', 'MarketPlacesController@view');
-    
+
     /**
      * Cart Route
      */
@@ -160,9 +160,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     /**
      * Section Route
      */
-    
+
     get('section/names', ['as' => 'api.section.get.names', 'uses' => 'SectionsController@getNames']);
-    
+
     /**
      * Question Route
      */
@@ -177,7 +177,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Job Route
      */
     get('job/search', 'JobsController@search');
-   
+
 });
-get('shared/job-skills', 'JobsController@getListJobSkill');
-get('shared/job-categories', 'JobsController@getListJobCategory');
+get('shared/job-skills', 'API\JobsController@getListJobSkill');
+get('shared/job-categories', 'API\JobsController@getListJobCategory');
