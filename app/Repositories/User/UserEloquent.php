@@ -22,76 +22,76 @@ use Lava;
 
 class UserEloquent extends AbstractRepository implements UserInterface
 {
-	protected $model;
+    protected $model;
 
-	public function __construct(User $user)
-	{
-		$this->model = $user;
-	}
+    public function __construct(User $user)
+    {
+        $this->model = $user;
+    }
 
-	/**
-	 * Create or Update data
-	 * @param  mixed $data
-	 * @param  int $user_id
-	 * @return mixed
-	 */
-	public function saveFromApi($data, $user_id = null)
-	{
-		$user =  $this->getById($user_id);
-		if (isset($data['firstname']))
-			$user->firstname = $data['firstname'];
-		if (isset($data['lastname']))
-			$user->lastname = $data['lastname'];
-		if (isset($data['email']))
-			$user->email = $data['email'];
+    /**
+     * Create or Update data
+     * @param  mixed $data
+     * @param  int $user_id
+     * @return mixed
+     */
+    public function saveFromApi($data, $user_id = null)
+    {
+        $user =  $this->getById($user_id);
+        if (isset($data['firstname']))
+            $user->firstname = $data['firstname'];
+        if (isset($data['lastname']))
+            $user->lastname = $data['lastname'];
+        if (isset($data['email']))
+            $user->email = $data['email'];
         if (isset($data['status']))
             $user->status = $data['status'];
-		if (isset($data['link_profile']))
-			$user->link_profile = $data['link_profile'];
-		if (isset($data['infomation']))
-			$user->infomation = $data['infomation'];
-		if (isset($data['dob']))
-			$user->dob = $data['dob'];
-		if (isset($data['gender']))
-			$user->gender = $data['gender'];
-		if (isset($data['address']))
-			$user->address = $data['address'];
-		if (isset($data['soft_skill']))
-			$user->soft_skill = $data['soft_skill'];
-		if (isset($data['mobile_phone']))
-			$user->mobile_phone = $data['mobile_phone'];
-		if (isset($data['home_phone']))
-			$user->home_phone = $data['home_phone'];
-		if (isset($data['city']))
-			$user->city = $data['city'];
-		if (isset($data['location']) && $data['location']['longitude'] != null)
-			$user->location = $data['location'];
-		if (isset($data['state']))
-			$user->state = $data['state'];
-		if (isset($data['country']))
-			$user->country = $data['country'];
+        if (isset($data['link_profile']))
+            $user->link_profile = $data['link_profile'];
+        if (isset($data['infomation']))
+            $user->infomation = $data['infomation'];
+        if (isset($data['dob']))
+            $user->dob = $data['dob'];
+        if (isset($data['gender']))
+            $user->gender = $data['gender'];
+        if (isset($data['address']))
+            $user->address = $data['address'];
+        if (isset($data['soft_skill']))
+            $user->soft_skill = $data['soft_skill'];
+        if (isset($data['mobile_phone']))
+            $user->mobile_phone = $data['mobile_phone'];
+        if (isset($data['home_phone']))
+            $user->home_phone = $data['home_phone'];
+        if (isset($data['city']))
+            $user->city = $data['city'];
+        if (isset($data['location']) && $data['location']['longitude'] != null)
+            $user->location = $data['location'];
+        if (isset($data['state']))
+            $user->state = $data['state'];
+        if (isset($data['country']))
+            $user->country = $data['country'];
 
-		if (array_key_exists('password', $data)) {
-			$user->password = bcrypt($data['password']);
-		}
+        if (array_key_exists('password', $data)) {
+            $user->password = bcrypt($data['password']);
+        }
 
         $result = $user->save();
         
-		if ($result && $user->location != null) 
+        if ($result && $user->location != null) 
             event(new GetCountryAndRegionFromLocationUser($user));
         
         return $result;
-	}
+    }
 
-	/**
-	 * Get profile
-	 * @param  int $user_id
-	 * @return mixed
-	 */
-	public function getProfile($user_id)
-	{
-		$data = $this->model
-			->with(['user_educations' => function($q) {
+    /**
+     * Get profile
+     * @param  int $user_id
+     * @return mixed
+     */
+    public function getProfile($user_id)
+    {
+        $data = $this->model
+            ->with(['user_educations' => function($q) {
                 $q->orderBy('position');
             }, 'user_work_histories' => function($q) {
                 $q->orderBy('position');
@@ -106,32 +106,32 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }, 'qualifications' => function($q) {
                 $q->orderBy('position');
             }
-		 	])->findOrFail($user_id);
+            ])->findOrFail($user_id);
 
-		$data->avatar = [
-			'origin' => $data['avatar']['origin'] == null ? null: asset($data['avatar']['origin']),
-			'thumb' => $data['avatar']['thumb'] == null ? null: asset($data['avatar']['thumb'])
-		];
-		$status = null;
-		foreach (\Setting::get('user_status') as $k => $v) {
-			if ($v['id'] == $data->status)
-				$status = $v;
-		}
+        $data->avatar = [
+            'origin' => $data['avatar']['origin'] == null ? null: asset($data['avatar']['origin']),
+            'thumb' => $data['avatar']['thumb'] == null ? null: asset($data['avatar']['thumb'])
+        ];
+        $status = null;
+        foreach (\Setting::get('user_status') as $k => $v) {
+            if ($v['id'] == $data->status)
+                $status = $v;
+        }
 
-		$data->status = $data->status != 0 && $data->status != null ? $status : null;
+        $data->status = $data->status != 0 && $data->status != null ? $status : null;
 
-		return $data;
-	}
+        return $data;
+    }
 
-	/**
-	 * save data Register user
-	 * @param  mixed $request
-	 * @param  string $token
-	 * @return void
-	 */
-	public function registerUser($request, $token)
-	{
-		$data = [
+    /**
+     * save data Register user
+     * @param  mixed $request
+     * @param  string $token
+     * @return void
+     */
+    public function registerUser($request, $token)
+    {
+        $data = [
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
             'email' => $request->input('email'),
@@ -142,21 +142,21 @@ class UserEloquent extends AbstractRepository implements UserInterface
         ];
 
         $this->model->create($data);
-	}
+    }
 
-	/**
-	 * Create User get inforation to Oauth2
-	 * @param  array $data
-	 * @param  string $token
-	 * @return mixed
-	 */
-	public function createUserFromOAuth($data, $token)
-	{
+    /**
+     * Create User get inforation to Oauth2
+     * @param  array $data
+     * @param  string $token
+     * @return mixed
+     */
+    public function createUserFromOAuth($data, $token)
+    {
         $avatar = isset($data['pictureUrls']['values']) ? [
             'origin' => $data['pictureUrls']['values'][0],
             'thumb' => $data['pictureUrls']['values'][0]]
         : null;
-		return $this->model->create([
+        return $this->model->create([
             'linkedin_id' => $data['id'],
             'firstname' => $data['firstName'],
             'lastname' => $data['lastName'],
@@ -168,7 +168,7 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'location' => null,
             'token' => $token
         ]);
-	}
+    }
 
     public function updateUserFromOauth($data, $token, $id)
     {
@@ -219,13 +219,13 @@ class UserEloquent extends AbstractRepository implements UserInterface
     }
 
     /**
-	 * Get template for user id
-	 * @param  int $id
-	 * @return mixed
-	 */
-	public function getTemplateFromUser($id) {
-		return $this->model->with(['templates'])->findOrFail($id);
-	}
+     * Get template for user id
+     * @param  int $id
+     * @return mixed
+     */
+    public function getTemplateFromUser($id) {
+        return $this->model->with(['templates'])->findOrFail($id);
+    }
 
     /**
      * get all template from market place
@@ -237,56 +237,56 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ->findOrFail($user_id);
     }
 
-	/**
-	 * Upload avatar
-	 * @param  mixed $file
-	 * @param  int $user_id
-	 * @return mixed
-	 */
-	public function uploadImage($file, $user_id)
-	{
-		$user = $this->getById($user_id);
-		$user->avatar = $file->getClientOriginalName() == '' || $file->getClientOriginalName() == null
+    /**
+     * Upload avatar
+     * @param  mixed $file
+     * @param  int $user_id
+     * @return mixed
+     */
+    public function uploadImage($file, $user_id)
+    {
+        $user = $this->getById($user_id);
+        $user->avatar = $file->getClientOriginalName() == '' || $file->getClientOriginalName() == null
             ? null 
             : User::uploadAvatar($file);
 
-		$image = [
-			'origin' => asset($user->avatar['origin']),
-			'thumb' => asset($user->avatar['thumb'])
-		];
+        $image = [
+            'origin' => asset($user->avatar['origin']),
+            'thumb' => asset($user->avatar['thumb'])
+        ];
 
         if ( ! $user->save()) {
             return null;
         }
 
         return $user->avatar != null ? $image : null;
-	}
+    }
 
-	/**
-	 * Edit Status
-	 * @param  int $id
-	 * @param  int $status
-	 * @return bool
-	 */
-	public function editStatus($id, $status)
-	{
-		if ( !in_array((int)$status, [1, 2, 3]))
-			return null;
+    /**
+     * Edit Status
+     * @param  int $id
+     * @param  int $status
+     * @return bool
+     */
+    public function editStatus($id, $status)
+    {
+        if ( !in_array((int)$status, [1, 2, 3]))
+            return null;
 
-		$user = $this->getById($id);
-		$user->status = $status;
-		$result = $user->save();
+        $user = $this->getById($id);
+        $user->status = $status;
+        $result = $user->save();
 
-		if ($result) {
-			$status = null;
-			foreach (\Setting::get('user_status') as $k => $v) {
-				if ($v['id'] == $user->status)
-					$status = $v;
-			}
-		}
+        if ($result) {
+            $status = null;
+            foreach (\Setting::get('user_status') as $k => $v) {
+                if ($v['id'] == $user->status)
+                    $status = $v;
+            }
+        }
 
-		return $user->save() ? $status : null;
-	}
+        return $user->save() ? $status : null;
+    }
     /**
      * Remove photo
      * @param  int $id
@@ -314,16 +314,20 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'thumb' => $data['picture']['data']['url']
         ] : null;
 
-        $birthday = isset($data['birthday'])
-            ? Carbon::parse($data['birthday'])->format('Y-m-d')
-            : false;
-        $gender = '';
-        if ($data['gender'] == "male")
-            $gender = 0;
-        elseif ($data['gender'] == "female")
-            $gender = 1;
-        else
-            $gender = 2;
+        $gender = null;
+        if ( isset($data['gender'])) {
+            switch ($data['gender']) {
+                case "male":
+                    $gender = 0;
+                    break;
+                case "female":
+                    $gender = 1;
+                    break;
+                default:
+                    $gender = 2;
+                    break;
+            }
+        }
 
         return $this->model->create([
             'facebook_id' => $data['id'],
@@ -335,9 +339,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'avatar' => $avatar,
             'soft_skill' => \Setting::get('questions'),
             'location' => null,
-            'dob' => $birthday,
+            'dob' => isset($data['birthday']) 
+                ? Carbon::parse($data['birthday'])->format('Y-m-d')
+                : null,
             'token' => $token
         ]);
+
     }
 
     public function updateUserFacebook($data, $token, $id)
