@@ -314,16 +314,20 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'thumb' => $data['picture']['data']['url']
         ] : null;
 
-        $birthday = isset($data['birthday'])
-            ? Carbon::parse($data['birthday'])->format('Y-m-d')
-            : false;
-        $gender = '';
-        if ($data['gender'] == "male")
-            $gender = 0;
-        elseif ($data['gender'] == "female")
-            $gender = 1;
-        else
-            $gender = 2;
+        $gender = null;
+        if ( isset($data['gender'])) {
+            switch ($data['gender']) {
+                case "male":
+                    $gender = 0;
+                    break;
+                case "female":
+                    $gender = 1;
+                    break;
+                default:
+                    $gender = 2;
+                    break;
+            }
+        }
 
         return $this->model->create([
             'facebook_id' => $data['id'],
@@ -335,9 +339,12 @@ class UserEloquent extends AbstractRepository implements UserInterface
             'avatar' => $avatar,
             'soft_skill' => \Setting::get('questions'),
             'location' => null,
-            'dob' => $birthday,
+            'dob' => isset($data['birthday']) 
+                ? Carbon::parse($data['birthday'])->format('Y-m-d')
+                : null,
             'token' => $token
         ]);
+
     }
 
     public function updateUserFacebook($data, $token, $id)
