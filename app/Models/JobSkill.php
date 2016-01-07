@@ -14,6 +14,8 @@ class JobSkill extends Model
         'id' => 'integer'
     ];
 
+    protected $hidden = ['pivot'];
+
     public function jobs()
     {
         return $this->belongsToMany(Job::class, 'job_skill_pivot', 'job_id', 'job_skill_id');
