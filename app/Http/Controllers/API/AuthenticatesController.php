@@ -145,10 +145,9 @@ class AuthenticatesController extends Controller
                 $this->user->createOrUpdateUserLinkedin($response, $token, $id = null);
                 $firstlogin = true;
             }
-            
+            $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
         }
 
-        $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
         $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
         $token = \JWTAuth::fromUser($user);
         $this->user->updateUserLogin($user, $token);
@@ -184,9 +183,9 @@ class AuthenticatesController extends Controller
                 $this->user->createOrUpdateUserFacebook($response, $token, $id = null);
                 $firstlogin = true;
             }
+            $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         }
         
-        $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
         $token = \JWTAuth::fromUser($user);
         $this->user->updateUserLogin($user, $token);
