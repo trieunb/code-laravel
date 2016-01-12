@@ -162,7 +162,7 @@ class AuthenticatesController extends Controller
     public function loginWithFacebook(Request $request)
     {
         $token = $request->get('token');
-        $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,birthday,last_name,link&access_token=".$token;
+        $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
         $response = json_decode(file_get_contents($url), true);
         \Log::info('test Login Face', ['response' => $response, 'token' => $token, 'url' => $url]);
         $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
