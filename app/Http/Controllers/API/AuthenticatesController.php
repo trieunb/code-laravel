@@ -162,7 +162,7 @@ class AuthenticatesController extends Controller
     public function loginWithFacebook(Request $request)
     {
         $token = $request->get('token');
-        $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,email,birthday,last_name,link&access_token=".$token;
+        $url = "https://graph.facebook.com/me?fields=picture.width(720).height(720),id,gender,first_name,birthday,last_name,link&access_token=".$token;
         $response = json_decode(file_get_contents($url), true);
         \Log::info('test Login Face', ['response' => $response, 'token' => $token, 'url' => $url]);
         $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
@@ -172,17 +172,19 @@ class AuthenticatesController extends Controller
             if ( isset($response['email'] )) {
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
                 if ( ! $user) {
-                    $user = $this->user->createUserFacebook($response, $token);
+                    $this->user->createOrUpdateUserFacebook($response, $token, $id = null);
                     $firstlogin = true;
                 } else {
-                    $this->user->updateUserFacebook($response, $token, $user->id);
+                    $this->user->createOrUpdateUserFacebook($response, $token, $user->id);
                     $firstlogin = false;
                 }
             } else {
-                $user = $this->user->createUserFacebook($response, $token);
+                $this->user->createOrUpdateUserFacebook($response, $token, $id = null);
                 $firstlogin = true;
             }
         }
+        
+        $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
         $token = \JWTAuth::fromUser($user);
         $this->user->updateUserLogin($user, $token);

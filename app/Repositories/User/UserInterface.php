@@ -72,20 +72,12 @@ interface UserInterface extends Repository
 	public function removePhoto($id);
 
 	/**
-	 * Create User get inforation to facebook
-	 * @param  array $data  
-	 * @param  string $token 
-	 * @return mixed        
-	 */
-	public function createUserFacebook($data, $token);
-
-	/**
 	 * update User get inforation to facebook
 	 * @param  array $data  
 	 * @param  string $token 
 	 * @return mixed        
 	 */
-	public function updateUserFacebook($data, $token, $id);
+	public function createOrUpdateUserFacebook($data, $token, $id);
 
 	/**
 	 * Get datatable of user

@@ -307,12 +307,15 @@ class UserEloquent extends AbstractRepository implements UserInterface
         }
     }
 
-    public function createUserFacebook($data, $token)
+    public function createOrUpdateUserFacebook($data, $token, $id)
     {
-        $avatar = isset($data['picture']) ? [
+
+        $user = is_null($id) ? new User : $this->getById($id);
+
+        $avatar = [
             'origin' => $data['picture']['data']['url'],
             'thumb' => $data['picture']['data']['url']
-        ] : null;
+        ];
 
         $gender = null;
         if ( isset($data['gender'])) {
@@ -329,34 +332,6 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }
         }
 
-        return $this->model->create([
-            'facebook_id' => $data['id'],
-            'firstname' => $data['first_name'],
-            'lastname' => $data['last_name'],
-            'email' => isset($data['email']) ? $data['email'] : $data['id']."@facebook.com",
-            'link_profile' => $data['link'],
-            'gender' => $gender,
-            'avatar' => $avatar,
-            'soft_skill' => \Setting::get('questions'),
-            'location' => null,
-            'dob' => isset($data['birthday']) 
-                ? Carbon::parse($data['birthday'])->format('Y-m-d')
-                : null,
-            'token' => $token
-        ]);
-
-    }
-
-    public function updateUserFacebook($data, $token, $id)
-    {
-
-        $user = $this->getById($id);
-
-        $avatar = [
-            'origin' => $data['picture']['data']['url'],
-            'thumb' => $data['picture']['data']['url']
-        ];
-
         if (isset($data['id']))
             $user->facebook_id = $data['id'];
         if (isset($data['first_name']))
@@ -365,17 +340,18 @@ class UserEloquent extends AbstractRepository implements UserInterface
             $user->lastname = $data['last_name'];
         if (isset($data['email']))
             $user->email = $data['email'];
+        else 
+            $user->email = $data['id']."@facebook.com";
         if (isset($data['link']))
             $user->link_profile = $data['link'];
         if (isset($data['gender']))
-            $user->gender = $data['gender'];
+            $user->gender = $gender;
         if (isset($data['picture']))
             $user->avatar = $avatar;
-        $user->location = !$id ? null : !isset($data['location']) ? null: $data['location'];
+        $user->location = null;
         $user->soft_skill = \Setting::get('questions');
         if (isset($data['birthday']))
             $user->dob = Carbon::parse($data['birthday'])->format('Y-m-d');
-
         return $user->save();
     }
 
