@@ -328,19 +328,19 @@ class TemplatesController extends Controller
 
     public function renameResume(Request $request, $id, RenameResume_rule $rename_rule)
     {
+
         try {
         $user = \JWTAuth::toUser($request->get('token'));
 
         $rename_rule->validate($request->all());
 
-        $template = $this->template->getById($id);
+        $template = $this->template->forUser($id, $user->id);
         $template->title = $request->get('title');
-        $template->save();
 
-        return response()->json([
-                'status_code' => 200,
-                'status' => true
-            ]);
+        return $template->save() 
+            ? response()->json(['status_code' => 200, 'status' => true])
+            : response()->json(['status_code' => 404, 'status' => false]);
+
         } catch(ValidatorAPiException $e) {
             return response()->json([
                 'status_code' => 401,
