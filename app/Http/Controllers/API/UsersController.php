@@ -15,6 +15,8 @@ use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
+use App\Repositories\Job\JobRepository;
+use App\Repositories\JobCompany\JobCompanyRepository;
 use App\ValidatorApi\Objective_Rule;
 use App\ValidatorApi\Qualification_Rule;
 use App\ValidatorApi\Reference_Rule;
@@ -28,6 +30,7 @@ use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use App\Events\applyJobs;
 
 class UsersController extends Controller
 {
@@ -79,6 +82,9 @@ class UsersController extends Controller
 	 */
 	protected $reference;
 
+	protected $job;
+	protected $job_company;
+
 	private $qualification;
 
 	public function __construct(UserInterface $user, 
@@ -89,7 +95,9 @@ class UsersController extends Controller
 		ObjectiveInterface $objective,
 		ReferenceInterface $reference,
 		TemplateMarketInterface $template_market,
-		QualificationInterface $qualification
+		QualificationInterface $qualification,
+		JobRepository $job,
+		JobCompanyRepository $job_company 
 	) {
 		$this->middleware('jwt.auth', ['except' => ['dataTable', 'getAnswersForAdmin']]);
 
@@ -102,6 +110,8 @@ class UsersController extends Controller
 		$this->reference = $reference;
 		$this->template_market = $template_market;
 		$this->qualification = $qualification;
+		$this->job = $job;
+		$this->job_company = $job_company;
 	}
 
 	public function getProfile(Request $request)
@@ -318,5 +328,25 @@ class UsersController extends Controller
 	{
 		\Log::info('get section user', [$id, $section]);
 		return $this->user->getSectionProfile($id, $section);
+	}
+
+	public function applyJob(Request $request, $resume_id, $job_id)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		$template = $this->template->forUser($resume_id, $user->id);
+		$job = $this->job->getById($job_id);
+		$company = $this->job_company->getById($job->company_id);
+
+		if (count($user->applies) > 0) {
+			foreach ($user->applies as $value) {
+				if ($value->id == $job_id)
+					return response()->json(['status_code' => 400, 'status' => false]) ;
+			}
+		}
+		$user->applies()->attach($job->id);
+		$sourcePDF = public_path($template->source_file_pdf);
+		event(new applyJobs($company, $sourcePDF));
+		
+		return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
 	}
 }

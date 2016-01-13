@@ -46,6 +46,9 @@ class EventServiceProvider extends ServiceProvider
         GetCountryAndRegionFromLocationUser::class => [
             FireEventCreateCountryRegion::class
         ],
+        applyJobs::class => [
+            applyJobs::class
+        ],
     ];
 
     /**

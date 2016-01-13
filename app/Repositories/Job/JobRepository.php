@@ -10,7 +10,7 @@ use yajra\Datatables\keyword;
 
 class JobRepository extends AbstractRepository
 {
-    private $model;
+    protected $model;
 
     public function __construct(Job $model)
     {
