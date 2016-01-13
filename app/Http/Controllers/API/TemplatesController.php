@@ -12,6 +12,9 @@ use App\Repositories\Template\TemplateInterface;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\ValidatorApi\RenameResume_rule;
+use Illuminate\Contracts\Validation\ValidationException;
+use App\ValidatorApi\ValidatorAPiException;
 
 class TemplatesController extends Controller
 {
@@ -321,6 +324,31 @@ class TemplatesController extends Controller
         return $this->template->applyForInfo($template, $section, $data)
             ? response()->json(['status_code' => 200])
             : response()->json(['status_code' => 400]);
+    }
+
+    public function renameResume(Request $request, $id, RenameResume_rule $rename_rule)
+    {
+
+        try {
+        $user = \JWTAuth::toUser($request->get('token'));
+
+        $rename_rule->validate($request->all());
+
+        $template = $this->template->forUser($id, $user->id);
+        $template->title = $request->get('title');
+
+        return $template->save() 
+            ? response()->json(['status_code' => 200, 'status' => true])
+            : response()->json(['status_code' => 404, 'status' => false]);
+
+        } catch(ValidatorAPiException $e) {
+            return response()->json([
+                'status_code' => 401,
+                'status' => false,
+                'message' => $e->getErrors()
+            ], 401);
+        }
+        
     }
 
 }
