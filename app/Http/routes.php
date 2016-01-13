@@ -144,6 +144,8 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('template/{id}/edit/photo', ['as' => 'api.template.post.edit.photo', 'uses' => 'TemplatesController@editPhoto']);
     post('template/view/{id}', ['as'=> 'edit.template','uses' => 'TemplatesController@editFullTemplate']);
     post('template/getfromprofile/{id}/{section}', ['as' => 'api.template.get.fromprofile', 'uses' => 'TemplatesController@getFromProfile']);
+    post('template/rename/{id}', 'TemplatesController@renameResume');
+
     /**
      * Market Route
      */
