@@ -109,6 +109,7 @@ $factory->define(App\Models\JobCompany::class, function(Faker\Generator $faker) 
         'address' => $faker->address,
         'logo' => $faker->imageUrl(100, 100),
         'website' => $faker->url,
+        'email' => $faker->email,
         'description' => $faker->text,
         'overview' => $faker->text,
         'benefits' => $faker->text,
