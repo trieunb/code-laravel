@@ -30,7 +30,7 @@ use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
-use App\Events\applyJobs;
+use App\Events\applyJobsEvent;
 
 class UsersController extends Controller
 {
@@ -336,7 +336,7 @@ class UsersController extends Controller
 		$template = $this->template->forUser($resume_id, $user->id);
 		$job = $this->job->getById($job_id);
 		$company = $this->job_company->getById($job->company_id);
-
+		
 		if (count($user->applies) > 0) {
 			foreach ($user->applies as $value) {
 				if ($value->id == $job_id)
@@ -345,7 +345,7 @@ class UsersController extends Controller
 		}
 		$user->applies()->attach($job->id);
 		$sourcePDF = public_path($template->source_file_pdf);
-		event(new applyJobs($company, $sourcePDF));
+		event(new applyJobsEvent($company, $sourcePDF));
 		
 		return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
 	}
