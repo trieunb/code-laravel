@@ -336,16 +336,16 @@ class UsersController extends Controller
 		$template = $this->template->forUser($resume_id, $user->id);
 		$job = $this->job->getById($job_id);
 		$company = $this->job_company->getById($job->company_id);
-		
+
 		if (count($user->applies) > 0) {
 			foreach ($user->applies as $value) {
 				if ($value->id == $job_id)
-					return response()->json(['status_code' => 400, 'status' => false]) ;
+					return response()->json(['status_code' => 400, 'status' => false, 'message' => 'You Applied This Job']) ;
 			}
 		}
 		$user->applies()->attach($job->id);
 		$sourcePDF = public_path($template->source_file_pdf);
-		event(new applyJobsEvent($company, $sourcePDF));
+		event(new applyJobsEvent($company, $job, $sourcePDF));
 		
 		return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
 	}

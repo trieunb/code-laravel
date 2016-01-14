@@ -9,6 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 class applyJobsEvent extends Event
 {
 
+    private $job;
     private $company;
     private $pathFilePDF;
     use SerializesModels;
@@ -18,20 +19,22 @@ class applyJobsEvent extends Event
      *
      * @return void
      */
-    public function __construct($company, $pathFilePDF)
+    public function __construct($company, $job, $pathFilePDF)
     {
         $this->company = $company;
+        $this->job = $job;
         $this->pathFilePDF = $pathFilePDF;
     }
 
     public function send()
     {
         $company = $this->company;
+        $job = $this->job;
         $pathFilePDF = $this->pathFilePDF;
-        \Mail::queue('emails.send_attach_file', compact('company'), function($message) use($company, $pathFilePDF){
+        \Mail::queue('emails.apply_job', compact('company', 'job'), function($message) use($company, $job, $pathFilePDF){
             $message->from(env('MAIL_USERNAME'));
             $message->to($company->email, $company->name);
-            $message->subject('Apply Jobs');
+            $message->subject('Apply Job' . ' - ' . $job->title);
             $message->attach($pathFilePDF);
         });
     }
