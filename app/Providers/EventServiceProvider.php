@@ -8,7 +8,7 @@ use App\Events\GetCountryAndRegionFromLocationUser;
 use App\Events\RenderFileWhenCreateTemplateMarket;
 use App\Events\RenderImageAfterCreateTemplate;
 use App\Events\sendMailAttachFile;
-use App\Events\applyJobsEvent;
+use App\Events\ApplyJobsEvent;
 use App\Handlers\Events\ConvertListener;
 use App\Listeners\AttachMail;
 use App\Listeners\ApplyJobsListener;
@@ -48,7 +48,7 @@ class EventServiceProvider extends ServiceProvider
         GetCountryAndRegionFromLocationUser::class => [
             FireEventCreateCountryRegion::class
         ],
-        applyJobsEvent::class => [
+        ApplyJobsEvent::class => [
             ApplyJobsListener::class
         ],
     ];

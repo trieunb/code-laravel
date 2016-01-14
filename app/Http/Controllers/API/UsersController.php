@@ -30,7 +30,8 @@ use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
-use App\Events\applyJobsEvent;
+use App\Events\ApplyJobsEvent;
+use App\Models\User;
 
 class UsersController extends Controller
 {
@@ -337,16 +338,26 @@ class UsersController extends Controller
 		$job = $this->job->getById($job_id);
 		$company = $this->job_company->getById($job->company_id);
 
-		if (count($user->applies) > 0) {
-			foreach ($user->applies as $value) {
-				if ($value->id == $job_id)
-					return response()->json(['status_code' => 400, 'status' => false, 'message' => 'You Applied This Job']) ;
+		$apply_job = $this->user->applyJob($user->id, $job_id);
+		if (count($apply_job) > 0) {
+			return response()->json([
+					'status_code' => 400, 
+					'status' => false, 
+					'message' => 'You already applied to this job']) ;
+		} else {
+			$user->applies()->attach($job->id);
+			$sourcePDF = public_path($template->source_file_pdf);
+			if (\File::exists($sourcePDF)) {
+				event(new ApplyJobsEvent($user, $company, $job, $template));
+				return response()->json([
+					'status_code' => 200, 
+					'status' => true, 
+					'message' => 'Your resume has been sent']);
+			} else {
+				return response()->json([
+					'status_code' => 400, 
+					'status' => true]);
 			}
 		}
-		$user->applies()->attach($job->id);
-		$sourcePDF = public_path($template->source_file_pdf);
-		event(new applyJobsEvent($company, $job, $sourcePDF));
-		
-		return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
 	}
 }
