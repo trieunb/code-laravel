@@ -28,11 +28,9 @@ class sendMailAttachFile extends Event
     {
         $user = $this->user;
         $pathFilePDF = $this->pathFilePDF;
-       \Log::info('send mail', [$pathFilePDF]);
         \Mail::queue('emails.send_attach_file', compact('user'), function($message) use($user, $pathFilePDF){
-            $message->from(env('MAIL_USERNAME'));
             $message->to($user->email, $user->first_name.' '.$user->lastname);
-            $message->subject('Send Attach File');
+            $message->subject('ResumeBuilder - Your resume');
             $message->attach($pathFilePDF);
         });
     }

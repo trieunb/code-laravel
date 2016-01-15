@@ -33,18 +33,18 @@ class TemplatesController extends Controller
     public function index(Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        
+
         return response()->json([
             'status_code' => 200,
             'status' => true,
             'data' => $this->template->getMyTemplates($user->id, $request->get('page'), $request->get('search'))
-        ]); 
+        ]);
     }
 
     public function show($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-      
+
         return response()->json([
             'status_code' => 200,
             'status' => true,
@@ -89,17 +89,17 @@ class TemplatesController extends Controller
                     $status = $v;
                 $setting[$v['id']] = $v['value'];
             }
-            
-          
+
+
             $template->user->status = $template->user->status != 0 && $template->user->status != null ? $status : null;
 
-            return view()->make('api.template.edit', compact('content', 'section', 
+            return view()->make('api.template.edit', compact('content', 'section',
                 'user_id', 'template', 'setting')
             );
         } catch (\Exception $e) {
            return response()->json(['status_code' => 400, 'message' => $e->getMessage()]);
         }
-       
+
     }
 
     public function postEdit($id, $section, Request $request)
@@ -108,11 +108,11 @@ class TemplatesController extends Controller
 
         $result = $this->template->editTemplate($id, $user->id, $section, $request);
 
-        if (!$result) 
+        if (!$result)
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
-        
+
         $render = event(new RenderImageAfterCreateTemplate($result->id, $result->content));
-        
+
         return $render
             ? response()->json(['status_code' => 200, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'message' => 'Error when render file']);
@@ -121,9 +121,9 @@ class TemplatesController extends Controller
     public function editPhoto($id, Request $request)
     {
         $user = \JWTAuth::toUser($request->get('token'));
-        if ( !$request->hasFile('photo')) 
+        if ( !$request->hasFile('photo'))
             return response()->json(['status_code' => '400']);
-        
+
         $validator = \Validator::make($request->all(), ['avatar' => 'image']);
 
         if ($validator->fails()) {
@@ -131,14 +131,14 @@ class TemplatesController extends Controller
         }
 
         $response = $this->template->editPhoto($id, $user->id, $request->file('photo'));
-        
-        if ( !$response) 
+
+        if ( !$response)
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when save file.']);
         if (\File::delete(public_path($response['template']->source_file_pdf)))
             event(new RenderImageAfterCreateTemplate($response['template']->id, $response['template']->content));
         \Log::info('response edit photo', ['img' => $response['template']->image, 'pdf' => $response['template']->source_file_pdf]);
-        
-        
+
+
         return $response
             // ? response()->json(['status_code' => 200, 'data' => asset($response['avatar'])])
             ? redirect()->back()
@@ -156,11 +156,11 @@ class TemplatesController extends Controller
         $sections = createClassSection();
         $data = createSection($content, $sections);
         $template = $this->template->createTemplateBasic($user_info->id, $data);
-        
+
         if ( !$template) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when create template']);
         }
-        
+
         $render = event(new RenderImageAfterCreateTemplate($template->id, $template->content));
         if ( !$render) {
             return response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when render pdf']);
@@ -176,7 +176,7 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
-        
+
         if ( !$template) {
             return response()->json([
                 'status_code' => 404,
@@ -184,7 +184,7 @@ class TemplatesController extends Controller
                 'message' => 'page not found'
             ]);
         }
-        
+
         return $this->template->deleteTemplate($id, $user->id)
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Delete template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when delete Template']);
@@ -210,16 +210,7 @@ class TemplatesController extends Controller
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->getById($id);
         $sourcePDF = public_path($template->source_file_pdf);
-        \Log::info('test sendmail', [$id, $user->id, \File::exists($sourcePDF), $sourcePDF]);
-        /*if ( ! \File::exists($sourcePDF)) {
-            $filename = md5(str_random(40).uniqid());
-            $snappy = \App::make('snappy.pdf');
-            $snappy->generateFromHtml($template->content, 
-                public_path('pdf/'.$filename.'.pdf')
-            );
-            $sourcePDF = public_path('pdf/'.$filename.'.pdf');
-        }*/
-      
+        \Log::info('Send resume to user mail', [$id, $user->id, \File::exists($sourcePDF), $sourcePDF]);
         event(new sendMailAttachFile($user, $sourcePDF));
 
         return response()->json(['status_code' => 200, 'status' => true, 'message' => 'success']);
@@ -241,7 +232,7 @@ class TemplatesController extends Controller
         try {
             $section = createSectionData($template);
 
-            return view('api.template.section', compact('section', 'token', 'template', 'user'));   
+            return view('api.template.section', compact('section', 'token', 'template', 'user'));
         } catch (\Exception $e) {
             return response()->json(['status' => 400, 'message' => $e->getMessage()]);
         }
@@ -249,7 +240,7 @@ class TemplatesController extends Controller
 
     public function editFullTemplate(Request $request, $id)
     {
-        return $this->template->editFullScreenTempalte($id, \Auth::user()->id, $request) 
+        return $this->template->editFullScreenTempalte($id, \Auth::user()->id, $request)
             ? response()->json(['status_code' => 200, 'status' => true, 'message' => 'Edit template successfully'])
             : response()->json(['status_code' => 400, 'status' => false, 'message' => 'Error when edit Template']);
     }
@@ -277,14 +268,14 @@ class TemplatesController extends Controller
                 $data = $this->user->getById($user_id)->avatar['origin'];
             } else if ($section == 'availability') {
                 foreach (\Setting::get('user_status') as $status) {
-                    if ($status['id'] == $this->user->getById($user_id)->status) {    
-                        $data =  $template->type == 2 
+                    if ($status['id'] == $this->user->getById($user_id)->status) {
+                        $data =  $template->type == 2
                             ? '<div lang="availability" class="availability content-box" contenteditable="true">'
                                 .'<div class="header-title" style="color: red;font-weight:600;padding:15px;">'
                                 .'<span>Availability</span></div>'
                                 .'<div class="box" style="background: #f3f3f3;padding: 15px;border-top: 3px solid #D8D8D8;border-bottom: 3px solid #D8D8D8;">'
                                 .'<p>'.$status['value'].'</p></div></div>'
-                            : '<div lang="availability" class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';        
+                            : '<div lang="availability" class="availability" contenteditable="true"><h3 style="font-weight:600">Availability</h3><p style="font-weight:600">'.$status['value'].'</p></div>';
                     }
                 }
             }
@@ -292,15 +283,15 @@ class TemplatesController extends Controller
             $result = is_string($data)
                 ? apply_data_for_section_infomation($section, $data, $template->content)
                 :apply_data_for_other($section, $template->content, $user_id);
-            
+
            /* $response = $this->template->applyForInfo($template, $section, $result);
-            
+
             event(new RenderImageAfterCreateTemplate(
                 $response['template']->id,
-                $response['template']->content, 
+                $response['template']->content,
                 $response['template']->slug)
             );*/
-            
+
             return $result
                 ? response()->json(['status_code' => 200, 'data' => $result['section']])
                 : response()->json(['status_code' => 400]);
@@ -337,7 +328,7 @@ class TemplatesController extends Controller
         $template = $this->template->forUser($id, $user->id);
         $template->title = $request->get('title');
 
-        return $template->save() 
+        return $template->save()
             ? response()->json(['status_code' => 200, 'status' => true])
             : response()->json(['status_code' => 404, 'status' => false]);
 
@@ -348,7 +339,7 @@ class TemplatesController extends Controller
                 'message' => $e->getErrors()
             ], 401);
         }
-        
+
     }
 
 }
