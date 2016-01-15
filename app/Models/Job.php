@@ -46,7 +46,7 @@ class Job extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'job_applies', 'user_id', 'job_id');
+        return $this->belongsToMany(User::class, 'job_applies', 'user_id', 'job_id')->withPivot('created_at');
     }
 
 }
