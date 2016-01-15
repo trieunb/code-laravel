@@ -525,9 +525,10 @@ class UserEloquent extends AbstractRepository implements UserInterface
     /**
      * List job matching for user
      */
-    public function listJobMatching($user_id, $job_ids)
+    public function createListJobMatching($user_id, $job_ids)
     {
-
+        $user = $this->getById($user_id);
+        $user->jobs_matching()->attach($job_ids);
     }
 
     /**
@@ -535,14 +536,17 @@ class UserEloquent extends AbstractRepository implements UserInterface
      */
     public function isReadJobMatching($user_id, $job_ids)
     {
-
+        $user = $this->getById($user_id);
+        $user->jobs_matching()->detach($job_ids);
+        $user->jobs_matching()->attach($job_ids, ['read' => 1]);
     }
 
     /**
      * delete job matching
      */
-    public function deleteJobMatching($job_id)
+    public function deleteJobMatching($user_id, $job_id)
     {
-        
+        $user = $this->getById($user_id);
+        $user->jobs_matching()->detach($job_id);
     }
 }

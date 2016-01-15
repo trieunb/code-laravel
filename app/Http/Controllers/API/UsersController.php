@@ -352,4 +352,37 @@ class UsersController extends Controller
 				'message' => 'Your resume has been sent']);
 		}
 	}
+
+	public function createJobMatching(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		$job_ids = $request->get('job_ids');
+		$this->user->createListJobMatching($user->id, $job_ids);
+		return response()->json([
+				'status_code' => 200,
+				'status' => true
+			]);
+	}
+
+	public function readJobMatching(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		$job_ids = $request->get('job_ids');
+		$this->user->isReadJobMatching($user->id, $job_ids);
+		return response()->json([
+				'status_code' => 200,
+				'status' => true
+			]);
+	}
+
+	public function deleteJobMatching(Request $request)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		$job_ids = $request->get('job_id');
+		$this->user->deleteJobMatching($user->id, $job_ids);
+		return response()->json([
+				'status_code' => 200,
+				'status' => true
+			]);
+	}
 }

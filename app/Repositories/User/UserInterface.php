@@ -104,7 +104,7 @@ interface UserInterface extends Repository
 
 	public function isAppliedToJob($user_id, $job_id);
 
-	public function listJobMatching($user_id, $job_ids);
+	public function createListJobMatching($user_id, $job_ids);
 
 	public function isReadJobMatching($user_id, $job_ids);
 

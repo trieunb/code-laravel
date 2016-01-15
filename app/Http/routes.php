@@ -121,6 +121,9 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('user/upload', ['uses' => 'UsersController@uploadImage']);
     post('user/status', 'UsersController@postStatus');
     post('user/{resume_id}/apply-job/{job_id}', 'UsersController@applyJob');
+    post('user/create-job-matching', 'UsersController@createJobMatching');
+    post('user/read-job-matching', 'UsersController@readJobMatching');
+    post('user/delete-job-matching', 'UsersController@deleteJobMatching');
 
     /**
      * Template Route
