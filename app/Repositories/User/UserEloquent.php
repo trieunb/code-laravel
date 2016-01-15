@@ -521,4 +521,28 @@ class UserEloquent extends AbstractRepository implements UserInterface
             ? true
             : false;
     }
+
+    /**
+     * List job matching for user
+     */
+    public function listJobMatching($user_id, $job_ids)
+    {
+
+    }
+
+    /**
+     * read job matching
+     */
+    public function isReadJobMatching($user_id, $job_ids)
+    {
+
+    }
+
+    /**
+     * delete job matching
+     */
+    public function deleteJobMatching($job_id)
+    {
+        
+    }
 }

@@ -49,4 +49,10 @@ class Job extends Model
         return $this->belongsToMany(User::class, 'job_applies', 'user_id', 'job_id')->withPivot('created_at');
     }
 
+    public function user_jobs_matching()
+    {
+        return $this->belongsToMany(User::class, 'job_matching', 'user_id', 'job_id')->withPivot('read', 'created_at');
+    }
+
+
 }
