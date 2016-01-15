@@ -336,28 +336,20 @@ class UsersController extends Controller
 		$user = \JWTAuth::toUser($request->get('token'));
 		$template = $this->template->forUser($resume_id, $user->id);
 		$job = $this->job->getById($job_id);
-		$company = $this->job_company->getById($job->company_id);
 
-		$apply_job = $this->user->applyJob($user->id, $job_id);
-		if (count($apply_job) > 0) {
+		$applied_job = $this->user->isAppliedToJob($user->id, $job_id);
+		if ( $applied_job ) {
 			return response()->json([
 					'status_code' => 400, 
 					'status' => false, 
 					'message' => 'You already applied to this job']) ;
 		} else {
-			$user->applies()->attach($job->id);
-			$sourcePDF = public_path($template->source_file_pdf);
-			if (\File::exists($sourcePDF)) {
-				event(new ApplyJobsEvent($user, $company, $job, $template));
-				return response()->json([
-					'status_code' => 200, 
-					'status' => true, 
-					'message' => 'Your resume has been sent']);
-			} else {
-				return response()->json([
-					'status_code' => 400, 
-					'status' => true]);
-			}
+			$user->appliedJobs()->attach($job->id);
+			event(new ApplyJobsEvent($user, $job, $template));
+			return response()->json([
+				'status_code' => 200, 
+				'status' => true, 
+				'message' => 'Your resume has been sent']);
 		}
 	}
 }

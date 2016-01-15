@@ -170,7 +170,7 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany(JobSkill::class, 'user_skills', 'user_id', 'job_skill_id');
     }
 
-    public function applies()
+    public function appliedJobs()
     {
         return $this->belongsToMany(Job::class, 'job_applies', 'user_id', 'job_id');
     }
