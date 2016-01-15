@@ -34,9 +34,8 @@ class ApplyJobsEvent extends Event
         $template = $this->template;
         $company = JobCompany::FindOrfail($job->company_id);
         $pathFilePDF = public_path($template->source_file_pdf);
-        \Mail::queue('emails.apply_job', ['user' => $user, 'job' => $job], 
+        \Mail::queue('emails.apply_job', ['user' => $user, 'job' => $job],
             function($message) use($company, $job, $pathFilePDF, $template){
-                $message->from(env('MAIL_USERNAME'));
                 $message->to($company->email, $company->name);
                 $message->subject('Resume Builder' . ' - ' . $job->title);
                 $message->attach($pathFilePDF, ['as' => $template->title]);
