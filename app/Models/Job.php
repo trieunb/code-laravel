@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\JobCompany;
 use App\Models\JobCategory;
 use App\Models\JobSkill;
+use App\Models\User;
 
 class Job extends Model
 {
@@ -17,7 +18,7 @@ class Job extends Model
     protected $table = 'jobs';
 
     protected $visible = [
-        'id', 'title', 'country', 'min_salary', 'experience', 'description',
+        'id', 'company_id', 'title', 'country', 'min_salary', 'experience', 'description',
         'location', 'company', 'category', 'responsibilities', 'requirements', 'created_at'
     ];
 
@@ -41,6 +42,11 @@ class Job extends Model
     public function category()
     {
         return $this->belongsTo(JobCategory::class, 'job_cat_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'job_applies', 'user_id', 'job_id')->withPivot('created_at');
     }
 
 }

@@ -120,6 +120,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     post('user/{id}/profile', ['uses' => 'UsersController@postProfile']);
     post('user/upload', ['uses' => 'UsersController@uploadImage']);
     post('user/status', 'UsersController@postStatus');
+    post('user/{resume_id}/apply-job/{job_id}', 'UsersController@applyJob');
 
     /**
      * Template Route

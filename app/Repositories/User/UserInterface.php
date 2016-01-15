@@ -102,4 +102,6 @@ interface UserInterface extends Repository
 	 */
 	public function reportUserRegion();
 
+	public function isAppliedToJob($user_id, $job_id);
+
 }

@@ -16,6 +16,7 @@ use App\Models\UserQuestion;
 use App\Models\UserWorkHistory;
 use App\Models\Device;
 use App\Models\JobSkill;
+use App\Models\Job;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 use Bican\Roles\Traits\HasRoleAndPermission;
 use Illuminate\Auth\Authenticatable;
@@ -167,6 +168,11 @@ class User extends Model implements AuthenticatableContract,
     public function skills()
     {
         return $this->belongsToMany(JobSkill::class, 'user_skills', 'user_id', 'job_skill_id');
+    }
+
+    public function appliedJobs()
+    {
+        return $this->belongsToMany(Job::class, 'job_applies', 'user_id', 'job_id')->withPivot('created_at');;
     }
 
     /**

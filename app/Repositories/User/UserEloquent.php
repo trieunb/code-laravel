@@ -510,4 +510,15 @@ class UserEloquent extends AbstractRepository implements UserInterface
 
         return $report->prepareRender('platform', $os, 'Reasons', 'Percent', $options);
     }
+
+    public function isAppliedToJob($user_id, $job_id)
+    {
+        $appliedJob = $this->model->where('id', $user_id)
+                    ->with(['appliedJobs' => function($q) use ($job_id) {
+                        $q->where('id', '=', $job_id);
+                    }])->first()->appliedJobs;
+        return ( count($appliedJob) > 0)
+            ? true
+            : false;
+    }
 }
