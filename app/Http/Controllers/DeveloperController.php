@@ -17,6 +17,11 @@ class DeveloperController extends Controller
             $message = "User device not found!";
         } else {
             $notifOptions = [
+                'custom' => [ // For IOS
+                    'data' => [
+                        'type' => 'jobs_match'
+                    ]
+                ], // For Android
                 'data' => [
                     'type' => 'jobs_match'
                 ]
