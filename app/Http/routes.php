@@ -180,10 +180,10 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
      * Job Route
      */
     get('job/search', 'JobsController@search');
-    post('job/create-job-matching', 'JobsController@createJobMatching');
-    post('job/read-job-matching', 'JobsController@readJobMatching');
-    post('job/delete-job-matching', 'JobsController@deleteJobMatching');
 
 });
 get('shared/job-skills', 'API\JobsController@getListJobSkill');
 get('shared/job-categories', 'API\JobsController@getListJobCategory');
+post('job/create-job-matching', 'API\JobsController@createJobMatching');
+post('job/read-job-matching', 'API\JobsController@readJobMatching');
+post('job/delete-job-matching', 'API\JobsController@deleteJobMatching');
