@@ -2,8 +2,10 @@
 namespace App\Repositories\Job;
 
 use App\Models\Job;
+use App\Models\User;
 use App\Models\JobCategory;
 use App\Repositories\AbstractRepository;
+use App\Repositories\UserInterface;
 use Baum\Extensions\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use yajra\Datatables\keyword;
@@ -11,10 +13,12 @@ use yajra\Datatables\keyword;
 class JobRepository extends AbstractRepository
 {
     protected $model;
+    protected $user;
 
-    public function __construct(Job $model)
+    public function __construct(Job $model, User $user)
     {
         $this->model = $model;
+        $this->user = $user;
     }
 
     public function search(array $filters)
@@ -69,5 +73,37 @@ class JobRepository extends AbstractRepository
             'total'    => $total,
             'per_page' => config('paginate.limit')
         ];
+    }
+
+    /**
+     * List job matching for user
+     */
+    public function createListJobMatching($user_id, $job_ids)
+    {
+        $user = $this->user->FindOrFail($user_id);
+        $user->jobs_matching()->detach($job_ids);
+        return $user->jobs_matching()->attach($job_ids);
+    }
+
+    /**
+     * read job matching
+     */
+    public function isReadJobMatching($user_id, $job_ids)
+    {
+        $user = $this->user->FindOrFail($user_id);
+        $user->jobs_matching()->detach($job_ids);
+        return $user->jobs_matching()->attach($job_ids, ['read' => 1]);
+    }
+
+    /**
+     * delete job matching
+     */
+    public function deleteJobMatching($job_id)
+    {
+        $job = $this->getById($job_id);
+        foreach ($job->user_jobs_matching as $user) {
+            $ids[] = $user['id'];
+        }
+        return $job->user_jobs_matching()->detach($ids);
     }
 }

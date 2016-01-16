@@ -175,6 +175,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany(Job::class, 'job_applies', 'user_id', 'job_id')->withPivot('created_at');;
     }
 
+    public function jobs_matching()
+    {
+        return $this->belongsToMany(Job::class, 'job_matching', 'user_id', 'job_id')->withPivot('read', 'created_at');
+    }
+
     /**
      * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
