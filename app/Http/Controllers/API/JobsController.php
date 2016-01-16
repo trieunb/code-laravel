@@ -44,4 +44,19 @@ class JobsController extends Controller
             ? response()->json(['status_code' => 200, 'data' => $job_skill->getAll()])
             : response()->jon(['status_code' => 400, 'message' => 'Data not found!']);
     }
+
+    public function match(Request $request, JobRepository $job)
+    {
+        $filters = $request->only([
+            'keyword',
+            'country',
+            'salary',
+            'cat_id',
+            'page'
+        ]);
+        return response()->json([
+            'status_code' => 200,
+            'data' => $job->search($filters)
+        ]);
+    }
 }
