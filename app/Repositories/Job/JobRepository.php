@@ -88,7 +88,7 @@ class JobRepository extends AbstractRepository
     /**
      * read job matching
      */
-    public function isReadJobMatching($user_id, $job_ids)
+    public function markJobMatchAsRead($user_id, $job_ids)
     {
         $user = $this->user->FindOrFail($user_id);
         $user->jobs_matching()->detach($job_ids);
