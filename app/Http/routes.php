@@ -187,3 +187,24 @@ get('shared/job-skills', 'API\JobsController@getListJobSkill');
 get('shared/job-categories', 'API\JobsController@getListJobCategory');
 get('developer', 'DeveloperController@index');
 post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchNotification');
+
+get('get-pivot', function() {
+
+    $start = (new \Carbon\Carbon('now'))->hour(0)->minute(0)->second(0);
+    $end = (new \Carbon\Carbon('now'))->hour(23)->minute(59)->second(59);
+    $users = \App\Models\Job::with('user_jobs_matching')->get();
+    foreach ($users as $vl) {
+        if ( count($vl->user_jobs_matching) > 0) {
+            foreach ($vl->user_jobs_matching as $value) {
+                if ($value->pivot->created_at >= $start && $value->created_at <= $end)
+                    $ids[] = $value->id;
+            }
+        }
+    }
+    // return array_unique($ids);
+    foreach (array_unique($ids) as $key => $value) {
+        $userss[] = \App\Models\User::FindOrFail($value)->email;
+    }
+    dd($userss);
+
+});
