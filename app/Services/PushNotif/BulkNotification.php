@@ -23,7 +23,13 @@ class BulkNotification
      */
     protected $devices;
 
-    public function __construct(Arrayable $devices, $text, array $options = [])
+    /**
+     * @param array          $devices      array of DeviceContract instances
+     * @param string         $text         title of notification
+     * @param array          $notifOptions notification option, such as: alert, sound ...
+     * @param array          $customData   notification custom data, will be wrapped by 'custom' key
+     */
+    public function __construct(Arrayable $devices, $text, array $notifOptions = [], array $customData = [])
     {
         $this->devices = [];
 
@@ -35,14 +41,16 @@ class BulkNotification
             );
         }
         $this->text = $text;
-        $this->options = $options;
+        if ($customData) {
+            $notifOptions['custom'] = $customData;
+        }
+        $this->options = $notifOptions;
     }
 
     public function push()
     {
         $andoidDevices = NotifPusher::DeviceCollection();
         $iosDevices = NotifPusher::DeviceCollection();
-        \Log::info('message', ['test' => $this->devices]);
         /* @var App\Services\PushNotif\Device */
         foreach ($this->devices as $device) {
             $pushToDevice = NotifPusher::Device($device->id);
