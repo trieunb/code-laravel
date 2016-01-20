@@ -49,54 +49,48 @@ class SendJobMatching extends Command
     public function handle()
     {
 
-        $users = $this->user->make(['jobs_matching' => function($q) {
-            $q->whereBetween('job_matching.created_at', [
-                (new \Carbon\Carbon('now'))->startOfDay(), 
-                (new \Carbon\Carbon('now'))->endOfDay()]);
-        }])->has('jobs_matching')->get();
+        $devices = \DB::table('devices')
+            ->whereExists(function ($query) {
+                $query->select(\DB::raw(1))
+                      ->from('job_matching')
+                      ->whereBetween('job_matching.created_at', [
+                            (new \Carbon\Carbon('now'))->startOfDay(),
+                            (new \Carbon\Carbon('now'))->endOfDay()])
+                      ->whereRaw('job_matching.user_id = devices.user_id');
+            })
+            ->get();
 
-        foreach ($users as $user) {
-            if ( count($user->jobs_matching) > 0) {
-                foreach ($user->jobs_matching as $job_match) {
-                    $notifi_jobs_match[] = $job_match->pivot->user_id;
-                }
-            }
-        }
-
-        if ( !isset($notifi_jobs_match)){ 
-            $message = "User not found";
+        if ( count($devices) <= 0){ 
+            $message = "User device not found!";
         } else {
-            foreach (array_unique($notifi_jobs_match) as $key => $value) {
-                $notifi_user = $this->user->getById($value);
-                if ( !$notifi_user->device) {
-                    $message = "User device not found!";
-                } else {
-                    $this->notifJobMatch($notifi_user);
-                    $message = "Notification send";
-                }
+            foreach ($devices as $device) {
+                $this->notifJobMatch($device);
+                $message = "Notification send";
             }
         }
-        return response()->json([
-            'status_code' => 200,
-            'status' => true, 
-            'message' => $message]);
-        
+        dd($message);
+          
     }
 
-    public function notifJobMatch($notifi_user)
+    public function notifJobMatch($device)
     {
         $notifOptions = [
+            'custom' => [ // For IOS
+                'data' => [
+                    'type' => 'jobs_match'
+                ]
+            ], // For Android
             'data' => [
                 'type' => 'jobs_match'
             ]
         ];
 
         $notif = new \App\Services\PushNotif\Notification(
-            $notifi_user->device,
+            $device,
             "We found jobs suitable for you",
             $notifOptions
         );
-        return $notif->push();
+        $notif->push();
 
     }
 }

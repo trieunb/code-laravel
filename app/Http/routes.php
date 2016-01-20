@@ -188,26 +188,25 @@ get('shared/job-categories', 'API\JobsController@getListJobCategory');
 get('developer', 'DeveloperController@index');
 post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchNotification');
 
-
 get('get-pivot', function() {
 
-    $users = \App\Models\User::with(['jobs_matching' => function($q) {
-        $q->whereBetween('job_matching.created_at', [
-            (new \Carbon\Carbon('now'))->startOfDay(), 
-            (new \Carbon\Carbon('now'))->endOfDay()]);
-    }])->has('jobs_matching')->get();
+    $users = \DB::table('devices')
+        ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                      ->from('job_matching')
+                      ->whereBetween('job_matching.created_at', [
+                            (new \Carbon\Carbon('now'))->startOfDay(),
+                            (new \Carbon\Carbon('now'))->endOfDay()])
+                      ->whereRaw('job_matching.user_id = devices.user_id');
+            })
+        ->get();
 
-    foreach ($users as $vl) {
-        if ( count($vl->jobs_matching) > 0) {
-            foreach ($vl->jobs_matching as $value) {
-                $ids[] = $value->pivot->user_id;
-            }
-        }
-    }
+    return $users;
 
-    foreach (array_unique($ids) as $key => $value) {
-        $userss[] = \App\Models\User::FindOrFail($value)->id;
+    foreach ($users as $key => $value) {
+        $userss[] = \App\Models\User::with('device')->FindOrFail($value->user_id)->device;
     }
     dd($userss);
+
 
 });
