@@ -190,8 +190,7 @@ post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchN
 
 get('get-pivot', function() {
 
-    $devices = \DB::table('devices')
-                ->join('job_matching', 'job_matching.user_id', '=', 'devices.user_id')
+    $devices = \App\Models\Device::join('job_matching', 'job_matching.user_id', '=', 'devices.user_id')
                 ->whereBetween('job_matching.created_at', [
                     (new \Carbon\Carbon('now'))->startOfDay(),
                     (new \Carbon\Carbon('now'))->endOfDay()])
@@ -202,8 +201,6 @@ get('get-pivot', function() {
                     \DB::raw('devices.created_at'),
                     \DB::raw('devices.updated_at'))
                 ->get();
-
-    return $devices;
 
     if ( count($devices) <= 0){ 
             $message = "User device not found!";

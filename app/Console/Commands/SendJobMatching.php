@@ -50,8 +50,7 @@ class SendJobMatching extends Command
     public function handle()
     {
 
-        $devices = \DB::table('devices')
-                ->join('job_matching', 'job_matching.user_id', '=', 'devices.user_id')
+        $devices = \App\Models\Device::join('job_matching', 'job_matching.user_id', '=', 'devices.user_id')
                 ->whereBetween('job_matching.created_at', [
                     (new \Carbon\Carbon('now'))->startOfDay(),
                     (new \Carbon\Carbon('now'))->endOfDay()])
