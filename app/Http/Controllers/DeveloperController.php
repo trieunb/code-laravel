@@ -16,21 +16,15 @@ class DeveloperController extends Controller
         } elseif(!$user->device) {
             $message = "User device not found!";
         } else {
-            $notifOptions = [
-                'custom' => [ // For IOS
-                    'data' => [
-                        'type' => 'jobs_match'
-                    ]
-                ], // For Android
-                'data' => [
-                    'type' => 'jobs_match'
-                ]
+            $notifCustomData = [
+                'type' => 'jobs_match'
             ];
 
             $notif = new \App\Services\PushNotif\Notification(
                 $user->device,
-                "We found " . rand(5, 10) . " jobs suitable for you",
-                $notifOptions
+                "We found new jobs suitable for you",
+                [],
+                $notifCustomData
             );
             $notif->push();
             $message = "Notification send";
