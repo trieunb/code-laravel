@@ -190,23 +190,36 @@ post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchN
 
 get('get-pivot', function() {
 
-    $users = \DB::table('devices')
-        ->whereExists(function ($query) {
-                $query->select(DB::raw(1))
-                      ->from('job_matching')
-                      ->whereBetween('job_matching.created_at', [
-                            (new \Carbon\Carbon('now'))->startOfDay(),
-                            (new \Carbon\Carbon('now'))->endOfDay()])
-                      ->whereRaw('job_matching.user_id = devices.user_id');
-            })
-        ->get();
+    $devices = \DB::table('devices')
+                ->join('job_matching', 'job_matching.user_id', '=', 'devices.user_id')
+                ->whereBetween('job_matching.created_at', [
+                    (new \Carbon\Carbon('now'))->startOfDay(),
+                    (new \Carbon\Carbon('now'))->endOfDay()])
+                ->select(\DB::raw('DISTINCT(devices.id)'),
+                    \DB::raw('devices.user_id'),
+                    \DB::raw('devices.device_id'),
+                    \DB::raw('devices.platform'),
+                    \DB::raw('devices.created_at'),
+                    \DB::raw('devices.updated_at'))
+                ->get();
 
-    return $users;
+    return $devices;
 
-    foreach ($users as $key => $value) {
-        $userss[] = \App\Models\User::with('device')->FindOrFail($value->user_id)->device;
-    }
-    dd($userss);
+    if ( count($devices) <= 0){ 
+            $message = "User device not found!";
+        } else {
+            $notifCustomData = [
+                'type' => 'jobs_match'
+            ];
 
-
+            $notif = new \App\Services\PushNotif\BulkNotification(
+                $devices,
+                "We found new jobs suitable for you",
+                [],
+                $notifCustomData
+            );
+            $notif->push();
+            $message = "Notification send";   
+        }
+        dd($message); 
 });
