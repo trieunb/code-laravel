@@ -17,14 +17,14 @@ class SendJobMatching extends Command
      *
      * @var string
      */
-    protected $signature = 'send:job_matching';
+    protected $signature = 'notification:job_matching';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'send mail job matching to user';
+    protected $description = 'push notification job matching to user';
 
     /**
      * Create a new command instance.
@@ -62,37 +62,36 @@ class SendJobMatching extends Command
         }
         if ( !isset($notifi_jobs_match)){ 
             $message = "User not found";
-            // dd($message);
         } else {
-            $this->notifJobMatch($notifi_jobs_match);
+            foreach (array_unique($notifi_jobs_match) as $key => $value) {
+                $notifi_user = $this->user->getById($value);
+                if ( !$notifi_user->device) {
+                    $message = "User device not found!";
+                } else {
+                    $this->notifJobMatch($notifi_user);
+                    $message = "Notification send";
+                }
+            }
         }
-
+        dd($message);
         return redirect()->back()->with('message', $message);
         
     }
 
-    public function notifJobMatch(array $data)
+    public function notifJobMatch($notifi_user)
     {
-        foreach (array_unique($data) as $key => $value) {
-            $notifi_user = $this->user->getById($value);
-            if ( !$notifi_user->device) {
-                $message = "User device not found!";
-            } else {
-                $notifOptions = [
-                    'data' => [
-                        'type' => 'jobs_match'
-                    ]
-                ];
+        $notifOptions = [
+            'data' => [
+                'type' => 'jobs_match'
+            ]
+        ];
 
-                $notif = new \App\Services\PushNotif\Notification(
-                    $notifi_user->device,
-                    "We found jobs suitable for you",
-                    $notifOptions
-                );
-                $notif->push();
-                $message = "Notification send";
-            }
-            // dd($message);
-        }
+        $notif = new \App\Services\PushNotif\Notification(
+            $notifi_user->device,
+            "We found jobs suitable for you",
+            $notifOptions
+        );
+        return $notif->push();
+
     }
 }

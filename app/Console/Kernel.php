@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('inspire')
                  ->hourly();
 
-        $schedule->command('send:job_matching')
+        $schedule->command('notification:job_matching')
                  ->dailyAt('00:00');
     }
 }
