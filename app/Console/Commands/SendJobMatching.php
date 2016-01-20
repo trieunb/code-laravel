@@ -48,18 +48,21 @@ class SendJobMatching extends Command
      */
     public function handle()
     {
-        $start = (new Carbon('now'))->hour(0)->minute(0)->second(0);
-        $end = (new Carbon('now'))->hour(23)->minute(59)->second(59);
-        $users = $this->job_matching->make(['user_jobs_matching'])->get();
+
+        $users = $this->user->make(['jobs_matching' => function($q) {
+            $q->whereBetween('job_matching.created_at', [
+                (new \Carbon\Carbon('now'))->startOfDay(), 
+                (new \Carbon\Carbon('now'))->endOfDay()]);
+        }])->has('jobs_matching')->get();
 
         foreach ($users as $user) {
-            if ( count($user->user_jobs_matching) > 0) {
-                foreach ($user->user_jobs_matching as $job_match) {
-                    if ($job_match->pivot->created_at >= $start && $job_match->created_at <= $end)
-                        $notifi_jobs_match[] = $job_match->id;
+            if ( count($user->jobs_matching) > 0) {
+                foreach ($user->jobs_matching as $job_match) {
+                    $notifi_jobs_match[] = $job_match->pivot->user_id;
                 }
             }
         }
+
         if ( !isset($notifi_jobs_match)){ 
             $message = "User not found";
         } else {
@@ -73,8 +76,10 @@ class SendJobMatching extends Command
                 }
             }
         }
-        dd($message);
-        return redirect()->back()->with('message', $message);
+        return response()->json([
+            'status_code' => 200,
+            'status' => true, 
+            'message' => $message]);
         
     }
 
