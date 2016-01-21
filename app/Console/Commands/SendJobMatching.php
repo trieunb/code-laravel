@@ -46,14 +46,9 @@ class SendJobMatching extends Command
                 ->select(\DB::raw('DISTINCT(devices.device_id)'), 
                     \DB::raw('devices.platform'))
                 ->get();
-                
-        if ( count($devices) <= 0){ 
-            $message = "User device not found!";
-        } else {
+        if ( count($devices) > 0){ 
             $this->notifJobMatch($devices);
-            $message = "Notification send";
         }
-        dd($message);  
     }
 
     public function notifJobMatch($devices)
