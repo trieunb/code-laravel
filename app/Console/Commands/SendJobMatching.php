@@ -54,12 +54,7 @@ class SendJobMatching extends Command
                 ->whereBetween('job_matching.created_at', [
                     (new \Carbon\Carbon('now'))->startOfDay(),
                     (new \Carbon\Carbon('now'))->endOfDay()])
-                ->select(\DB::raw('DISTINCT(devices.id)'),
-                    \DB::raw('devices.user_id'),
-                    \DB::raw('devices.device_id'),
-                    \DB::raw('devices.platform'),
-                    \DB::raw('devices.created_at'),
-                    \DB::raw('devices.updated_at'))
+                ->select(\DB::raw('DISTINCT(devices.id)'), \DB::raw('devices.*'))
                 ->get();
 
         if ( count($devices) <= 0){ 

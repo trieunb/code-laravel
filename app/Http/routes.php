@@ -187,36 +187,3 @@ get('shared/job-skills', 'API\JobsController@getListJobSkill');
 get('shared/job-categories', 'API\JobsController@getListJobCategory');
 get('developer', 'DeveloperController@index');
 post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchNotification');
-
-get('get-pivot', function() {
-
-    $devices = \App\Models\Device::join('job_matching', 'job_matching.user_id', '=', 'devices.user_id')
-                ->whereBetween('job_matching.created_at', [
-                    (new \Carbon\Carbon('now'))->startOfDay(),
-                    (new \Carbon\Carbon('now'))->endOfDay()])
-                ->select(\DB::raw('DISTINCT(devices.id)'),
-                    \DB::raw('devices.user_id'),
-                    \DB::raw('devices.device_id'),
-                    \DB::raw('devices.platform'),
-                    \DB::raw('devices.created_at'),
-                    \DB::raw('devices.updated_at'))
-                ->get();
-
-    if ( count($devices) <= 0){ 
-            $message = "User device not found!";
-        } else {
-            $notifCustomData = [
-                'type' => 'jobs_match'
-            ];
-
-            $notif = new \App\Services\PushNotif\BulkNotification(
-                $devices,
-                "We found new jobs suitable for you",
-                [],
-                $notifCustomData
-            );
-            $notif->push();
-            $message = "Notification send";   
-        }
-        dd($message); 
-});
