@@ -255,7 +255,7 @@
                 style="color: red;
                 font-weight:600;
                 padding:15px;">
-                <span>Qualifications</span>
+                <span>Key Qualifications/ Certifications</span>
             </div>
             <div class="box"
                 style="background: #f3f3f3;
