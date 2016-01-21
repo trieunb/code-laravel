@@ -29,6 +29,6 @@ class Kernel extends ConsoleKernel
                  ->hourly();
 
         $schedule->command('notification:job_matching')
-                 ->dailyAt('23:59');
+                 ->dailyAt('23:55');
     }
 }

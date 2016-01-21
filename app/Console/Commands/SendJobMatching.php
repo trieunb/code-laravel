@@ -3,13 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Repositories\AbstractRepository;
-use App\Repositories\Job\JobRepository;
-use App\Repositories\User\UserInterface;
-use App\Models\Job;
-use App\Models\User;
-use \Carbon\Carbon;
-use App\Services\PushNotif\BulkNotification;
 
 class SendJobMatching extends Command
 {
@@ -33,13 +26,9 @@ class SendJobMatching extends Command
      * @return void
      */
 
-    protected $job_matching;
-    protected $user;
-    public function __construct(JobRepository $job_matching, UserInterface $user)
+    public function __construct()
     {
         parent::__construct();
-        $this->job_matching = $job_matching;
-        $this->user = $user;
     }
 
     /**
@@ -54,9 +43,10 @@ class SendJobMatching extends Command
                 ->whereBetween('job_matching.created_at', [
                     (new \Carbon\Carbon('now'))->startOfDay(),
                     (new \Carbon\Carbon('now'))->endOfDay()])
-                ->select(\DB::raw('DISTINCT(devices.id)'), \DB::raw('devices.*'))
+                ->select(\DB::raw('DISTINCT(devices.device_id)'), 
+                    \DB::raw('devices.platform'))
                 ->get();
-
+                
         if ( count($devices) <= 0){ 
             $message = "User device not found!";
         } else {
