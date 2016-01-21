@@ -28,8 +28,6 @@ class InvoiceEloquent extends AbstractRepository implements InvoiceInterface
 	public function checkout(array $data)
 	{
 		try {
-			//$cart = \Session::get('cart');
-
 			$invoice = new Invoice;
 			$invoice->user_id = \Auth::user()->id;
 			$invoice->status = 'pending';

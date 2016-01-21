@@ -3,19 +3,18 @@
     margin: 0 auto;
     font-family: Arial, Helvetica, sans-serif;">
     <div class="row">
-        <div class='image-avatar' style="position: relative; overflow:hidden;">
+        <div class='image-avatar text-center' style="position: relative; overflow:hidden;">
             @if ( ($user_info->avatar['origin']))
             <div lang="photo" onclick="eventChangeClick()">
-                <img style="width:100%;height: auto;" 
+                <img style="height: auto;" 
                 src="{!! asset($user_info->avatar['origin']) !!}" >
             </div>
             @endif
             <div class="text-info" >
                 <div class="info-basic" 
                     style="@if($user_info->avatar['origin'])position: absolute; bottom: 0px; @endif 
-                    margin-bottom:10px;
-                    text-align: center;
-                    width: 100%;">
+                    margin-bottom:10px;width:100%;
+                    text-align: center;">
                 <div lang="name" >
                     <p style="font-size:30px;">{{$user_info->firstname . ' ' . $user_info->lastname}}</p>
                 </div>
@@ -23,7 +22,7 @@
                     <span>{{$user_info->link_profile}}</span>
                 </div>
                 <div lang="email">
-                    email: <span>{{$user_info->email}}</span>
+                    Email: <span>{{$user_info->email}}</span>
                 </div>
                 </div>
             </div>
@@ -256,7 +255,7 @@
                 style="color: red;
                 font-weight:600;
                 padding:15px;">
-                <span>Qualifications</span>
+                <span>Key Qualifications/ Certifications</span>
             </div>
             <div class="box"
                 style="background: #f3f3f3;
@@ -279,7 +278,7 @@
                 style="color: red;
                 font-weight:600;
                 padding:15px;">
-                <span>Availability</span>
+                <span>Job Availability</span>
             </div>
             <div class="box" 
                 style="background: #f3f3f3;

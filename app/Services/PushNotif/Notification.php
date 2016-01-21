@@ -23,18 +23,29 @@ class Notification
      */
     protected $device;
 
-    public function __construct(DeviceContract $device, $text, array $options = [])
+    /**
+     * @param DeviceContract $device
+     * @param string         $text         title of notification
+     * @param array          $notifOptions notification option, such as: alert, sound ...
+     * @param array          $customData   notification custom data, will be wrapped by 'custom' key
+     */
+    public function __construct(DeviceContract $device, $text, array $notifOptions = [], array $customData = [])
     {
         $this->device = new Device(
             $device->getDeviceId(),
             $device->getDevicePlatform()
         );
         $this->text = $text;
-        $this->options = $options;
+        if ($customData) {
+            $notifOptions['custom'] = $customData;
+        }
+        $this->options = $notifOptions;
     }
 
     public function push()
     {
+        $pushAdapter = null;
+
         if ($this->device->isIOSPlatform()) {
             $pushAdapter = NotifPusher::app('IOSApp');
         } elseif ($this->device->isAndroidPlatform()) {

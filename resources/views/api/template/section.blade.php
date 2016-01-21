@@ -9,7 +9,6 @@
           charset="utf-8">
     <link rel="stylesheet" href="{{ asset('css/fonts.css') }} " media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="{{ asset('css/style.css') }} " media="screen" title="no title" charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script src="{{ asset('js/jquery-2.1.4.js') }}"></script>
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <style>
@@ -31,12 +30,11 @@
          #manual -child a {
             text-indent: 6px;
         }
-        #content img{
-            width: 100% !important;
-            height: 200px !important;
-        }
         .mobile{
             overflow: hidden;
+        }
+        .container {
+            width: 1100px !important;
         }
     </style>
 </head>
@@ -49,14 +47,6 @@
     <div class="fw box-title">
         <div class="container">
             <div class="row">
-                <!-- <div class="col-md-6">
-                    <h4>Click and Create Your Amazing Resume</h4>
-                </div>
-                <div class="col-md-6 text-right edit">
-                    <span>Price: Free</span>
-                    <button class="btn-trans semi-bold">Read more</button>
-                
-                </div> -->
                 <div class="fw" id="collapseExample">
                     <div class="content">
                         <div class="title">
@@ -194,7 +184,13 @@
                     $('div[contenteditable="true"]').removeClass('highlight');
 
                     selection.toString() !== '';
-                    var clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
+                    var clonedSlection = '';
+                    try {
+                        clonedSlection = selection.getRangeAt(0).cloneRange().cloneContents();
+                    } catch(err) {
+                        return;
+                    }
+                    
                     var span = document.createElement('span');
                     span.appendChild(clonedSlection);
 

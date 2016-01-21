@@ -15,6 +15,8 @@ use App\Repositories\UserEducation\UserEducationInterface;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\UserWorkHistory\UserWorkHistoryInterface;
 use App\Repositories\User\UserInterface;
+use App\Repositories\Job\JobRepository;
+use App\Repositories\JobCompany\JobCompanyRepository;
 use App\ValidatorApi\Objective_Rule;
 use App\ValidatorApi\Qualification_Rule;
 use App\ValidatorApi\Reference_Rule;
@@ -28,6 +30,8 @@ use Illuminate\Contracts\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use App\Events\ApplyJobsEvent;
+use App\Models\User;
 
 class UsersController extends Controller
 {
@@ -79,6 +83,9 @@ class UsersController extends Controller
 	 */
 	protected $reference;
 
+	protected $job;
+	protected $job_company;
+
 	private $qualification;
 
 	public function __construct(UserInterface $user, 
@@ -89,7 +96,9 @@ class UsersController extends Controller
 		ObjectiveInterface $objective,
 		ReferenceInterface $reference,
 		TemplateMarketInterface $template_market,
-		QualificationInterface $qualification
+		QualificationInterface $qualification,
+		JobRepository $job,
+		JobCompanyRepository $job_company 
 	) {
 		$this->middleware('jwt.auth', ['except' => ['dataTable', 'getAnswersForAdmin']]);
 
@@ -102,6 +111,8 @@ class UsersController extends Controller
 		$this->reference = $reference;
 		$this->template_market = $template_market;
 		$this->qualification = $qualification;
+		$this->job = $job;
+		$this->job_company = $job_company;
 	}
 
 	public function getProfile(Request $request)
@@ -181,8 +192,8 @@ class UsersController extends Controller
 					}else {
 						$user_skill_rule->validate($request->get('user_skills')[0]);
 					}		
-
-					$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
+					
+					$this->user_skill->saveAndUpdateSkill($request->get('user_skills'),  $user->id);
 				} catch (ValidatorAPiException $e) {
 					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 				}
@@ -318,5 +329,27 @@ class UsersController extends Controller
 	{
 		\Log::info('get section user', [$id, $section]);
 		return $this->user->getSectionProfile($id, $section);
+	}
+
+	public function applyJob(Request $request, $resume_id, $job_id)
+	{
+		$user = \JWTAuth::toUser($request->get('token'));
+		$template = $this->template->forUser($resume_id, $user->id);
+		$job = $this->job->getById($job_id);
+
+		$applied_job = $this->user->isAppliedToJob($user->id, $job_id);
+		if ( $applied_job ) {
+			return response()->json([
+					'status_code' => 400, 
+					'status' => false, 
+					'message' => 'You already applied to this job']) ;
+		} else {
+			$user->appliedJobs()->attach($job->id);
+			event(new ApplyJobsEvent($user, $job, $template));
+			return response()->json([
+				'status_code' => 200, 
+				'status' => true, 
+				'message' => 'Your resume has been sent']);
+		}
 	}
 }

@@ -58,6 +58,7 @@ Report User
     <li id="age"><a data-toggle="pill" href="#chart_age">Age Groups</a></li>
     <li><a data-toggle="pill" href="#chart_region">Region</a></li>
     <li @unless (is_null($question_id)) class="active" @endunless id="skill"><a data-toggle="pill" href="#chart_skill">Skill tests</a></li>
+    <li><a data-toggle="pill" href="#chart_device">OS</a></li>
     <li id="option" class="pull-right">
         {!! Form::select('question', $list_questions, $question_id, ['class' => 'form-control', 'id' => 'questions', 'placeholder' => 'Choose Question']) !!}
     </li>
@@ -92,6 +93,10 @@ Report User
     </div>
     <div id="chart_skill" class="tab-pane fade <?php if( ! is_null($question_id)) echo 'in active'; ?>">
         {!! $chart_skill != null ? $chart_skill->render('PieChart', 'Chart', 'chart_skill', true) : '<h3 class="text-center">Data not available</h3>' !!}
+    </div>
+
+    <div id="chart_device" class="tab-pane fade">
+        {!! $chart_device != null ? $chart_device->render('PieChart', 'Chart', 'chart_device', true) : '<h3 class="text-center">Data not available</h3>' !!}
     </div>
 
 </div>
@@ -136,7 +141,9 @@ Report User
     });
 
     var options = {responsive: true};
-    var ctx = document.getElementById('report-month').getContext('2d');
+    if ($('#report-month').length > 0) {
+        var ctx = document.getElementById('report-month').getContext('2d');
+    } 
     var chart = {
         labels: {!! json_encode($lables) !!},
         datasets: [
@@ -158,11 +165,13 @@ Report User
         $('#chart_month').removeClass('active');
         $('#option').show();
     } else {
-        register_report = new Chart(ctx).Line(chart, {
-        bezierCurve : false,
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        responsive: true
-    });
+        if ($('#report-month').length > 0) {
+            register_report = new Chart(ctx).Line(chart, {
+                bezierCurve : false,
+                scaleGridLineColor : "rgba(0,0,0,.05)",
+                responsive: true
+            });
+        }
     }
     $('#myTab li').click(function() {
         if ($(this).attr('id') == 'option') return;
@@ -173,11 +182,13 @@ Report User
     });
 
     $('#register').on('shown.bs.tab', function (e) {
-        register_report = new Chart(ctx).Line(chart, {
-            bezierCurve : false,
-            scaleGridLineColor : "rgba(0,0,0,.05)",
-            responsive: true
-        });
+        if ($('#report-month').length > 0) {
+            register_report = new Chart(ctx).Line(chart, {
+                bezierCurve : false,
+                scaleGridLineColor : "rgba(0,0,0,.05)",
+                responsive: true
+            });
+        }
     });
 });
 </script>

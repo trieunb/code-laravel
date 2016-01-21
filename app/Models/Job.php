@@ -6,27 +6,53 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\JobCompany;
 use App\Models\JobCategory;
 use App\Models\JobSkill;
+use App\Models\User;
 
 class Job extends Model
 {
+
     /**
      * Table name
      * @var $table
      */
     protected $table = 'jobs';
 
-    public function job_company()
+    protected $visible = [
+        'id', 'company_id', 'title', 'country', 'min_salary', 'experience', 'description',
+        'location', 'company', 'category', 'responsibilities', 'requirements', 'created_at'
+    ];
+
+    protected $casts = [
+        'id' => 'integer',
+        'min_salary' => 'double',
+        'job_cat_id' => 'integer',
+        'company_id' => 'integer'
+    ];
+
+    public function company()
     {
         return $this->belongsTo(JobCompany::class, 'company_id');
     }
 
-    public function job_skills()
+    public function skills()
     {
         return $this->belongsToMany(JobSkill::class, 'job_skill_pivot', 'job_id', 'job_skill_id');
     }
 
-    public function job_category()
+    public function category()
     {
         return $this->belongsTo(JobCategory::class, 'job_cat_id');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'job_applies', 'user_id', 'job_id')->withPivot('created_at');
+    }
+
+    public function user_jobs_matching()
+    {
+        return $this->belongsToMany(User::class, 'job_matching', 'job_id', 'user_id')->withPivot('read', 'created_at');
+    }
+
+
 }

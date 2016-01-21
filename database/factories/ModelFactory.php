@@ -109,7 +109,14 @@ $factory->define(App\Models\JobCompany::class, function(Faker\Generator $faker) 
         'address' => $faker->address,
         'logo' => $faker->imageUrl(100, 100),
         'website' => $faker->url,
-        'description' => $faker->text
+        'email' => $faker->email,
+        'description' => $faker->text,
+        'overview' => $faker->text,
+        'benefits' => $faker->text,
+        'registration_no' => $faker->sentence($nbWords = 6),
+        'industry' => $faker->text,
+        'company_size' => $faker->sentence($nbWords = 6),
+        'why_join_us' => $faker->text
     ];
 });
 
@@ -122,15 +129,23 @@ $factory->define(App\Models\Job::class, function(Faker\Generator $faker) {
         'Senior Software Testing Engineer', 'Team Leader of Software Engineer (Java, .NET)'
     ];
     $k = array_rand($job_titles);
- 
+    $expExpectations = [
+        'Min 3 Years',
+        '1 Year',
+        'Min 5 Years',
+        '2 Years',
+        '3 Years'
+    ];
     return [
         'job_cat_id' => rand(1, 21),
         'company_id' => rand(1, 20),
         'title' => $job_titles[$k],
         'country' => $faker->countryCode,
         'location' => $faker->address,
-        'experience' => join("\n\n", $faker->paragraphs(mt_rand(3, 6))),
+        'experience' => $expExpectations[array_rand($expExpectations)],
         'description' => $faker->text,
-        'min_salary' => $faker->numberBetween($min = 100, $max = 9000)
+        'min_salary' => $faker->numberBetween($min = 100, $max = 9000),
+        'responsibilities' => $faker->text,
+        'requirements' => $faker->text
     ];
 });

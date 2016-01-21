@@ -135,18 +135,19 @@ class AuthenticatesController extends Controller
             if (isset($response['emailAddress'])) {
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['emailAddress']);
                 if ( ! $user) {
-                    $user = $this->user->createUserFromOAuth($response, $token);
+                    $this->user->createOrUpdateUserLinkedin($response, $token, $id = null);
                     $firstlogin = true;
                 } else {
-                    $this->user->updateUserFromOauth($response, $token, $user->id);
+                    $this->user->createOrUpdateUserLinkedin($response, $token, $user->id);
                     $firstlogin = false;
                 }
             } else {
-                $user = $this->user->createUserFromOAuth($response, $token);
+                $this->user->createOrUpdateUserLinkedin($response, $token, $id = null);
                 $firstlogin = true;
             }
-            
+            $user = $this->user->getFirstDataWhereClause('linkedin_id', '=', $response['id']);
         }
+
         $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
         $token = \JWTAuth::fromUser($user);
         $this->user->updateUserLogin($user, $token);
@@ -172,17 +173,19 @@ class AuthenticatesController extends Controller
             if ( isset($response['email'] )) {
                 $user = $this->user->getFirstDataWhereClause('email', '=', $response['email']);
                 if ( ! $user) {
-                    $user = $this->user->createUserFacebook($response, $token);
+                    $this->user->createOrUpdateUserFacebook($response, $token, $id = null);
                     $firstlogin = true;
                 } else {
-                    $this->user->updateUserFacebook($response, $token, $user->id);
+                    $this->user->createOrUpdateUserFacebook($response, $token, $user->id);
                     $firstlogin = false;
                 }
             } else {
-                $user = $this->user->createUserFacebook($response, $token);
+                $this->user->createOrUpdateUserFacebook($response, $token, $id = null);
                 $firstlogin = true;
             }
+            $user = $this->user->getFirstDataWhereClause('facebook_id', '=', $response['id']);
         }
+        
         $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
         $token = \JWTAuth::fromUser($user);
         $this->user->updateUserLogin($user, $token);

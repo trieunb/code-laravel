@@ -8,9 +8,9 @@ abstract class AbstractRepository
 	 * Get all data
 	 * @return mixed
 	 */
-	public function getAll()
+	public function getAll($fileds = ['*'])
 	{
-		return $this->model->orderBy('created_at', 'desc')->get();
+		return $this->model->orderBy('created_at', 'desc')->get($fileds);
 	}
 
 	/**
@@ -98,11 +98,12 @@ abstract class AbstractRepository
 	 * get data has in array with column
 	 * @param  string $field 
 	 * @param  array  $data  
+	 * @param  array  $fieldSelect  
 	 * @return mixed        
 	 */
-	public function getDataWhereIn($field,array $data)
+	public function getDataWhereIn($field,array $data, $fieldSelect = ['*'])
 	{
-		return $this->model->whereIn($field, $data)->get();
+		return $this->model->whereIn($field, $data)->get($fieldSelect);
 	}
 
 	/**

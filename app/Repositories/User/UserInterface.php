@@ -34,7 +34,7 @@ interface UserInterface extends Repository
 	 * @param  string $token 
 	 * @return mixed        
 	 */
-	public function createUserFromOAuth($data, $token);
+	public function createOrUpdateUserLinkedin($data, $token, $id);
 
 	/**
 	 * Get template for user id
@@ -72,20 +72,12 @@ interface UserInterface extends Repository
 	public function removePhoto($id);
 
 	/**
-	 * Create User get inforation to facebook
-	 * @param  array $data  
-	 * @param  string $token 
-	 * @return mixed        
-	 */
-	public function createUserFacebook($data, $token);
-
-	/**
 	 * update User get inforation to facebook
 	 * @param  array $data  
 	 * @param  string $token 
 	 * @return mixed        
 	 */
-	public function updateUserFacebook($data, $token, $id);
+	public function createOrUpdateUserFacebook($data, $token, $id);
 
 	/**
 	 * Get datatable of user
@@ -110,4 +102,5 @@ interface UserInterface extends Repository
 	 */
 	public function reportUserRegion();
 
+	public function isAppliedToJob($user_id, $job_id);
 }
