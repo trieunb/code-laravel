@@ -36,7 +36,10 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	public function saveAndUpdateSkill($data, $user_id)
 	{
 		$user = User::find($user_id);
-		$user->skills()->sync(array_flatten($data));
+		foreach ($data as $value) {
+			$dts[$value['id']] =  ['level' => $value['level']];
+		}
+		$user->skills()->sync($dts);
 	}
 
 	/**
