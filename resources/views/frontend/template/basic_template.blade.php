@@ -58,15 +58,13 @@
                 border-bottom: 3px solid #D8D8D8;">
                 <ul style="list-style:none">
                     <li>
-                        <label style="font-weight:600">Age:</label> {{ $age == '0' || $age == '' ? 'N/A' : $age}}
+                        <label style="font-weight:600">Age:</label> {{ ($user_info->dob) ? \Carbon\Carbon::createFromFormat("Y-m-d", $user_info->dob)->age : ''}}
                     </li>
                     <li></h1>
                         <?php
                             $gender = '';
                             
-                            if (is_null($user_info->gender)) {
-                                $gender = 'N/A';
-                            } else {
+                            if ( !is_null($user_info->gender)) {
                                 switch ($user_info->gender) {
                                     case 0:
                                         $gender = 'Male';
@@ -79,10 +77,10 @@
                                         break;
                                     
                                     default:
-                                        $gender = 'N/A';
+                                        $gender = '';
                                         break;
-                                }
                             }
+                        }
                         ?>
                         <label style="font-weight:600">Gender:</label> {{ $gender }}
                     </li>
