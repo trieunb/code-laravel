@@ -149,10 +149,7 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $user_info = $this->user->getProfile($user->id);
-        $age = (!is_null($user_info->dob))
-            ? Carbon::createFromFormat("Y-m-d", $user_info->dob)->age
-            : null;
-        $content = view('frontend.template.basic_template', ['user_info' => $user_info, 'age' => $age])->render();
+        $content = view('frontend.template.basic_template', ['user_info' => $user_info])->render();
         $sections = createClassSection();
         $data = createSection($content, $sections);
         $template = $this->template->createTemplateBasic($user_info->id, $data);
