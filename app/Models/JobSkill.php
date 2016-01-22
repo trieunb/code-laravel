@@ -31,7 +31,7 @@ class JobSkill extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_skills', 'user_id', 'job_skill_id');
+        return $this->belongsToMany(User::class, 'user_skills', 'user_id', 'job_skill_id')->withPivot('level');
     }
     
 }
