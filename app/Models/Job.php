@@ -19,7 +19,7 @@ class Job extends Model
 
     protected $visible = [
         'id', 'company_id', 'title', 'country', 'min_salary', 'experience', 'description',
-        'location', 'company', 'category', 'responsibilities', 'requirements', 'created_at'
+        'location', 'company', 'category', 'responsibilities', 'requirements', 'created_at', 'skills'
     ];
 
     protected $casts = [
