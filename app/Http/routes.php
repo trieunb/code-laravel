@@ -189,13 +189,8 @@ get('developer', 'DeveloperController@index');
 post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchNotification');
 
 get('get-job-matching', function() {
-    // $job_matching = \App\Models\Job::with(['skills'])->FindOrfail(18);
-    $job_matching = new \App\Services\JobMatching\JobMatching(18);
-    // return $job_matching->Matcher();
-    $matcher = [
-        'country' => $job_matching->Matcher()->country,
-        'skills' => $job_matching->Matcher()->skills,
-        'location' => $job_matching->Matcher()->location
-    ];
-    return $matcher;
+
+    $job_matching = new \App\Services\JobMatching\JobMatching(17);
+    
+    return $job_matching->matcher();
 });
