@@ -8,6 +8,7 @@ use App\Repositories\SaveFromApiTrait;
 use App\Repositories\AbstractDefineMethodRepository;
 use App\Repositories\UserSkill\UserSkillInterface;
 use App\Repositories\AbstractRepository;
+use App\Repositories\JobSkill\JobSkillRepository;
 
 class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 {
@@ -18,7 +19,6 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	 * @var $model
 	 */
 	protected $model;
-
 	/**
 	 * Fields for update data
 	 * @var $field_work_save
@@ -36,10 +36,7 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	public function saveAndUpdateSkill($data, $user_id)
 	{
 		$user = User::find($user_id);
-		foreach ($data as $value) {
-			$dts[$value['id']] =  ['level' => $value['level']];
-		}
-		$user->skills()->sync($dts);
+		$user->skills()->sync($data);
 	}
 
 	/**
