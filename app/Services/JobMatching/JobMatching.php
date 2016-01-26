@@ -19,11 +19,6 @@ class JobMatching
             'skills' => $job_matching->skills,
             'location' => $job_matching->location
         ];
-        
-        $param = ["address" => $matcher['location']];
-        $response = \Geocoder::geocode('json', $param);
-        // return $matcher['location'];
-        return json_decode($response, true);
 
         foreach ($matcher['skills'] as $skill) {
             $skill_name[] = $skill['title'];
