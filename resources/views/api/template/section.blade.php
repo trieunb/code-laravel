@@ -58,7 +58,7 @@
                                 <li id="fix-iphone" class="control-bg">
                                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                        class="circle dropdown">
-                                        <i class="fa fa-list-alt fa-4x"></i>
+                                        <i class="fa fa-list-alt fa-5x"></i>
                                     </a>
 
                                     <div class="dropdown-menu" aria-labelledby="dLabel">
@@ -76,19 +76,19 @@
                                 <li class="control-bg">
                                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                        class="circle dropdown">
-                                        <i class="fa fa-paint-brush fa-4x"></i>
+                                        <i class="fa fa-paint-brush fa-5x"></i>
                                     </a>
                                 </li>
                                 <li class="control-bg">
                                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                        class="circle dropdown">
-                                        <i class="fa fa-plus fa-4x"></i>
+                                        <i class="fa fa-plus fa-5x"></i>
                                     </a>
                                 </li>
                                 <li class="control-bg">
                                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                        class="circle dropdown">
-                                        <i class="fa fa-cog fa-4x"></i>
+                                        <i class="fa fa-cog fa-5x"></i>
                                     </a>
                                 </li>
                                 <li class="control-bg">
@@ -104,18 +104,22 @@
             </div>
         </div>
     </div>
-    <div class="container">
-            <div id="content" class="fw w_bg">
-                <div class="col-xs-12">
-                    {!! $template->content !!}
+    <div class="main">
+        <div class="container">
+                <div id="content" class="fw w_bg">
+                    <div class="row">
+                    <div class="col-xs-12">
+                        {!! $template->content !!}
+                    </div>
+                    </div>
                 </div>
+            <br>
+            <br>
+            <div class="fw text-center">
+                <button class="btn-trans fill edit" id="edit-template" onclick="clickEditTemplate()">
+                    END EDIT MODE
+                </button>
             </div>
-        <br>
-        <br>
-        <div class="fw text-center">
-            <button class="btn-trans fill edit" id="edit-template" onclick="clickEditTemplate()">
-                END EDIT MODE
-            </button>
         </div>
     </div>
 
