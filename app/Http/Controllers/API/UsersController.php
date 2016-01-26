@@ -191,39 +191,13 @@ class UsersController extends Controller
 				try {
 					if (count($request->get('user_skills')) > 1) {
 						foreach ($request->get('user_skills') as $user_skill_data) {
-							if ( $user_skill_data['id'] != null && $user_skill_data['id'] != '') {
-								$data_user_skills[$user_skill_data['id']] =  ['level' => $user_skill_data['level']];
-							} else {
-								$data_job_skills[] = [
-									'user_id' => $user->id,
-									'title' => $user_skill_data['title'],
-									'level' => $user_skill_data['level'],
-									'created_at' => \Carbon\Carbon::now(),
-									'updated_at' => \Carbon\Carbon::now()
-								];
-								$user_skill_rule->validate($user_skill_data);
-							} 
+							$user_skill_rule->validate($user_skill_data);
 						}	
 					}else {
 						$user_skill_rule->validate($request->get('user_skills')[0]);
-					}		
-
-					if ( isset($data_job_skills)) {
-						$this->job_skill->insertJobSkills($data_job_skills);
-						$job_skills_user = $this->job_skill->getSkillOfUser($user->id);
-						foreach ($job_skills_user as $value) {
-							$data[$value['id']] =  ['level' => $value['level']];
-						}
-						if ( isset($data_user_skills)) {
-							$data_insert = $data + $data_user_skills;
-						} else {
-							$data_insert = $data;
-						}
-						$this->user_skill->saveAndUpdateSkill($data_insert,  $user->id);
-					} elseif ( isset($data_user_skills)) {
-						$this->user_skill->saveAndUpdateSkill($data_user_skills,  $user->id);
-					}
-
+					}	
+						
+					$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
 				} catch (ValidatorAPiException $e) {
 					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 				}

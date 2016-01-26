@@ -24,19 +24,12 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	 * @var $field_work_save
 	 */
 	protected $field_work_save = [
-		'skill_name', 'skill_test', 'skill_test_point', 
-		'experience', 'position'
+		'name', 'level'
 	];
 
 	public function __construct(UserSkill $user_skill)
 	{
 		$this->model = $user_skill;
-	}
-
-	public function saveAndUpdateSkill($data, $user_id)
-	{
-		$user = User::find($user_id);
-		$user->skills()->sync($data);
 	}
 
 	/**
@@ -52,11 +45,8 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 
 		if ( $dataPrepareSave['id'] == null) $user_skill->user_id = $user_id;
 
-		$user_skill->skill_name = $dataPrepareSave['skill_name'];
-		$user_skill->skill_test = $dataPrepareSave['skill_test'];
-		$user_skill->skill_test_point = $dataPrepareSave['skill_test_point'];
-		$user_skill->experience = $dataPrepareSave['experience'];
-		$user_skill->position = $dataPrepareSave['position'];
+		$user_skill->name = $dataPrepareSave['name'];
+		$user_skill->level = $dataPrepareSave['level'];
 
 		return $user_skill->save();
 	}

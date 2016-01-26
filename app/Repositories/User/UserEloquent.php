@@ -96,9 +96,8 @@ class UserEloquent extends AbstractRepository implements UserInterface
             }, 'user_work_histories' => function($q) {
                 $q->orderBy('position');
             }, 'questions' => function($q) {
-            }, 'skills' => function($q) {
-                $q->select('job_skills.id', 'job_skills.title', 'user_skills.level')
-                    ->orderBy('job_skills.id', 'DESC');
+            }, 'user_skills' => function($q) {
+                $q->orderBy('created_at', 'DESC');
             }, 'references' => function($q) {
                 $q->orderBy('position');
             }, 'objectives' => function($q) {
