@@ -63,7 +63,7 @@ class TemplatesController extends Controller
     {
         $user = \JWTAuth::toUser($request->get('token'));
         $template = $this->template->forUser($id, $user->id);
-
+        return $template->content;
         return response()->json([
             'status_code' => 200,
             'status' => true,
