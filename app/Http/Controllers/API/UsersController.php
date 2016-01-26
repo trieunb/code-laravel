@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use App\Events\ApplyJobsEvent;
 use App\Models\User;
+use App\Repositories\JobSkill\JobSkillRepository;
 
 class UsersController extends Controller
 {
@@ -85,6 +86,7 @@ class UsersController extends Controller
 
 	protected $job;
 	protected $job_company;
+	protected $job_skill;
 
 	private $qualification;
 
@@ -98,7 +100,8 @@ class UsersController extends Controller
 		TemplateMarketInterface $template_market,
 		QualificationInterface $qualification,
 		JobRepository $job,
-		JobCompanyRepository $job_company 
+		JobCompanyRepository $job_company,
+		JobSkillRepository $job_skill
 	) {
 		$this->middleware('jwt.auth', ['except' => ['dataTable', 'getAnswersForAdmin']]);
 
@@ -113,6 +116,7 @@ class UsersController extends Controller
 		$this->qualification = $qualification;
 		$this->job = $job;
 		$this->job_company = $job_company;
+		$this->job_skill = $job_skill;
 	}
 
 	public function getProfile(Request $request)
@@ -191,9 +195,9 @@ class UsersController extends Controller
 						}	
 					}else {
 						$user_skill_rule->validate($request->get('user_skills')[0]);
-					}		
-					
-					$this->user_skill->saveAndUpdateSkill($request->get('user_skills'),  $user->id);
+					}	
+						
+					$this->user_skill->saveFromApi($request->get('user_skills'),  $user->id);
 				} catch (ValidatorAPiException $e) {
 					return response()->json(['status_code', 422, 'status' => false, 'message' => $e->getErrors()], 422);
 				}

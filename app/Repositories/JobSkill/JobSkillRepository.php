@@ -19,4 +19,5 @@ class JobSkillRepository extends AbstractRepository
 			'skills' => $this->model->select($fields)->get()
 		];
 	}
+
 }
