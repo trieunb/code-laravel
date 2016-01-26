@@ -34,7 +34,7 @@ class JobSkillSeeder extends Seeder
 
         foreach ($data as $key => $value) {
             $job_skill = new JobSkill;
-            $job_skill->title = $value;
+            $job_skill->name = $value;
             $job_skill->save();
         }
     }

@@ -23,7 +23,7 @@ class JobSkill extends Model
 
     public function setTitleAttribute($value)
     {
-        $this->attributes['title'] = $value;
+        $this->attributes['name'] = $value;
         if (! $this->exists) {
             $this->attributes['slug'] = str_slug($value);
         }
