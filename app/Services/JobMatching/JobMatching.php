@@ -33,7 +33,6 @@ class JobMatching
             })->get();
         if ( count($users) > 0)
             $this->saveJobsMatching($users, $job_matching);
-        return $users;
     }
 
     public function saveJobsMatching($users, $job_matching)
