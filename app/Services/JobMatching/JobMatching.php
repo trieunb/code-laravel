@@ -19,7 +19,7 @@ class JobMatching
             'skills' => $job_matching->skills,
             'location' => $job_matching->location
         ];
-        
+
         foreach ($matcher['skills'] as $skill) {
             $skill_name[] = $skill['name'];
         }
@@ -32,11 +32,11 @@ class JobMatching
                 $q->where('country', $matcher['country']);
             })->get();
         if ( count($users) > 0)
-            $this->jobsMatching($users, $job_matching);
+            $this->saveJobsMatching($users, $job_matching);
         return $users;
     }
 
-    public function jobsMatching($users, $job_matching)
+    public function saveJobsMatching($users, $job_matching)
     {
         foreach ($users as $value) {
             $data[$value['id']] = ['read' => 1];
