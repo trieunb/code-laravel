@@ -19,7 +19,7 @@ class JobMatching
             'skills' => $job_matching->skills,
             'location' => $job_matching->location
         ];
-
+        
         foreach ($matcher['skills'] as $skill) {
             $skill_name[] = $skill['name'];
         }
