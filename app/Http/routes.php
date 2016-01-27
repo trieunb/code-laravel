@@ -190,10 +190,6 @@ post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchN
 
 get('get-job-matching', function() {
 
-    $job_matching = new \App\Services\JobMatching\JobMatching(17);
-    $models = [
-        'job' => new \App\Models\Job, 
-        'user' => new \App\Models\User
-    ];
-    return $job_matching->matcher($models);
+    $job_matching = new \App\Services\JobMatching\JobMatching(7);
+    return $job_matching->matcher();
 });

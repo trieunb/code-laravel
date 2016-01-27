@@ -10,28 +10,29 @@ class JobMatching
         $this->job_id = $job_id;
     }
 
-    public function Matcher(array $models)
+    public function Matcher()
     {
-        $job_matching = $models['job']::with('skills')->FindOrfail($this->job_id);
+        $job_matching = \App\Models\Job::with('skills')->FindOrFail($this->job_id);
 
         $matcher = [
             'country' => $job_matching->country,
             'skills' => $job_matching->skills,
             'location' => $job_matching->location
         ];
-
+        
         foreach ($matcher['skills'] as $skill) {
-            $skill_name[] = $skill['title'];
+            $skill_name[] = $skill['name'];
         }
 
-        $users = $models['user']::with('skills')
-            ->whereHas('skills' , function($q) use ($skill_name) {
-                $q->whereIn('title', $skill_name);
+        $users = \App\Models\User::with('user_skills')
+            ->whereHas('user_skills' , function($q) use ($skill_name) {
+                $q->whereIn('name', $skill_name);
             })
             ->where(function($q) use ($matcher) {
                 $q->where('country', $matcher['country']);
             })->get();
-        $this->jobsMatching($users, $job_matching);
+        if ( count($users) > 0)
+            $this->jobsMatching($users, $job_matching);
         return $users;
     }
 
