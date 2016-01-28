@@ -110,8 +110,9 @@ class JobRepository extends AbstractRepository
     public function getListJobMatch()
     {
         $jobs_match = $this->model
-                ->with('user_jobs_matching')
-                ->has('user_jobs_matching')
+                ->whereHas('user_jobs_matching', function($q){
+                    $q->orderBy('job_matching.created_at', 'DESC');
+                })
                 ->get();
         return [
             'jobs_matching'     => $jobs_match,
