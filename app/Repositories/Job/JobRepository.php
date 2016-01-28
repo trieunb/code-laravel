@@ -106,4 +106,15 @@ class JobRepository extends AbstractRepository
         }
         return $job->user_jobs_matching()->detach($ids);
     }
+
+    public function getListJob()
+    {
+        return $this->user
+            ->with('device')
+            ->whereHas('jobs_matching', function($q) {
+                $q->whereBetween('job_matching.created_at', [
+                (new \Carbon\Carbon('now'))->startOfDay(),
+                (new \Carbon\Carbon('now'))->endOfDay()]);
+            })->get();
+    }
 }

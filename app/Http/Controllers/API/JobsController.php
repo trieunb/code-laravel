@@ -59,4 +59,9 @@ class JobsController extends Controller
             'data' => $job->search($filters)
         ]);
     }
+
+    public function getListJobMatching(Request $request, JobRepository $job)
+    {
+        return $job->getListJob();
+    }
 }
