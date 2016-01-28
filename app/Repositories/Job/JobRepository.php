@@ -107,14 +107,17 @@ class JobRepository extends AbstractRepository
         return $job->user_jobs_matching()->detach($ids);
     }
 
-    public function getListJobMatch($user_id)
+    public function getListJobMatch()
     {
-        return $this->model
-            ->whereHas('user_jobs_matching', function($q) use ($user_id){
-                $q->where('job_matching.user_id', $user_id)
-                    ->whereBetween('job_matching.created_at', [
-                    (new \Carbon\Carbon('now'))->startOfDay(),
-                    (new \Carbon\Carbon('now'))->endOfDay()]);
-            })->get();
+        $jobs_match = $this->model
+                ->with('user_jobs_matching')
+                ->has('user_jobs_matching')
+                ->get();
+        return [
+            'jobs_matching'     => $jobs_match,
+            'total'    => count($jobs_match),
+            'per_page' => config('paginate.limit')
+        ];
+
     }
 }
