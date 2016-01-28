@@ -62,6 +62,7 @@ class JobsController extends Controller
 
     public function getListJobMatching(Request $request, JobRepository $job)
     {
-        return $job->getListJob();
+        $user = \JWTAuth::toUser($request->get('token'));
+        return $job->getListJobMatch($user->id);
     }
 }
