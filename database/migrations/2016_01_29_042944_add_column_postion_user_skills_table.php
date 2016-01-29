@@ -13,7 +13,7 @@ class AddColumnPostionUserSkillsTable extends Migration
     public function up()
     {
         Schema::table('user_skills', function($table) {
-            $table->integer('postion')->after('level');
+            $table->integer('position')->after('level');
         });
     }
 

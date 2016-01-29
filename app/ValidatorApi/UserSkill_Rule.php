@@ -7,7 +7,8 @@ class UserSkill_Rule extends AbstractValidator
 	{
 		return [
             'name' => 'required',
-            'level' => 'required'
+            'level' => 'required',
+            'position' => 'required'
 		];
 	}
 }

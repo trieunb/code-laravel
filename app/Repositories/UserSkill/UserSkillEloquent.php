@@ -24,7 +24,7 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 	 * @var $field_work_save
 	 */
 	protected $field_work_save = [
-		'name', 'level', 'postion'
+		'name', 'level', 'position'
 	];
 
 	public function __construct(UserSkill $user_skill)
@@ -47,7 +47,7 @@ class UserSkillEloquent extends AbstractRepository implements UserSkillInterface
 
 		$user_skill->name = $dataPrepareSave['name'];
 		$user_skill->level = $dataPrepareSave['level'];
-		$user_skill->postion = $dataPrepareSave['postion'];
+		$user_skill->position = $dataPrepareSave['position'];
 
 		return $user_skill->save();
 	}

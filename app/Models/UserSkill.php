@@ -17,7 +17,7 @@ class UserSkill extends Model
         'postion' => 'int'
     ];
 
-    protected $visible = ['id', 'name', 'level', 'postion'];
+    protected $visible = ['id', 'name', 'level', 'position'];
 
 	/**
 	 * Table name
@@ -42,7 +42,7 @@ class UserSkill extends Model
                 'user_id' => $user_id,
                 'name' => $value['name'],
                 'level' => $value['level'],
-                'postion' => $value['postion'],
+                'position' => $value['position'],
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ];
