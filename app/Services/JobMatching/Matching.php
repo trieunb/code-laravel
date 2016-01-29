@@ -33,10 +33,11 @@ class Matching
         $count_user = $users->count();
         if ( $count_user > 0) {
             $total = 0;
+            $limit = 100;
             while ($total <= $count_user) {
-                $users = $users->select('id')->skip($total)->take(100)->get();
+                $users = $users->select('id')->skip($total)->take($limit)->get();
                 $this->saveJobsMatching($users, $job);
-                $total += 100;
+                $total += $limit;
             }
         }          
     }
@@ -44,8 +45,8 @@ class Matching
     public function saveJobsMatching($users, $job)
     {
         foreach ($users as $value) {
-            $data[$value['id']] = ['read' => 1];
+            $ids[] = $value['id'];
         }
-        $job->user_jobs_matching()->sync($data);
+        $job->user_jobs_matching()->sync($ids);
     }
 }
