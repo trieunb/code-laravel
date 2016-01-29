@@ -32,6 +32,7 @@ class Matching
             });
         $count_user = $users->count();
         if ( $count_user > 0) {
+            $this->deleteJobMatching($job);
             $total = 0;
             $limit = 100;
             while ($total <= $count_user) {
@@ -40,6 +41,11 @@ class Matching
                 $total += $limit;
             }
         }          
+    }
+
+    public function deleteJobMatching($job)
+    {
+        $job->user_jobs_matching()->detach();
     }
 
     public function saveJobsMatching($users, $job)
