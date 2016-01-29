@@ -555,6 +555,7 @@ body button:hover {
 }
 .mobile .box-title .fw .content .control li {
   padding: 0px;
+  /* text-align: center; */
 }
 .mobile .box-title .fw .content .control li .arrow {
   display: none;
@@ -562,15 +563,16 @@ body button:hover {
 }
 .mobile .box-title .fw .content .control li > a.circle {
   background: #f4f4f4;
-  width: 50px;
-  height: 50px;
+  /* width: 100%; */
+  /* height: 50px; */
   display: inline-block;
   border-radius: 50%;
-  line-height: 50px;
-  margin: 0px 5px;
-  text-align: center;
+  /* line-height: 136px; */
+  /* margin: 0px 5px; */
+  /* text-align: center; */
   color: #bfbfbf;
-  font-size: 151%;
+  /* font-size: 151%; */
+  padding: 20%;
 }
 .mobile .box-title .fw .content .control li .dropdown-menu, #buttons .dropdown-menu{
   border-radius: 0px;
@@ -744,11 +746,6 @@ p.full-name {
   }
 #note-report{
     list-style: none;
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 54aaed0c880b9e39218fefa057662877a5512ddd
 }
 #note-report li span {
     height: 15px;
@@ -778,3 +775,12 @@ p.full-name {
     background: #ffc870 !important;
 }
 
+.control i.fa {
+    vertical-align: middle;
+}
+li.control-bg {
+  width: 19%!important;
+}
+h4.text-center.text-red {
+    font-size: 25px;
+}

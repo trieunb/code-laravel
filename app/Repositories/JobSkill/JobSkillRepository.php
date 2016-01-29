@@ -13,10 +13,11 @@ class JobSkillRepository extends AbstractRepository
 		$this->model = $model;
 	}
 
-	public function getAll($fields = ['id', 'title'])
+	public function getAll($fields = ['id', 'name'])
 	{
 		return [
 			'skills' => $this->model->select($fields)->get()
 		];
 	}
+
 }

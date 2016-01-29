@@ -13,11 +13,11 @@ class UserSkill extends Model
 
     protected $casts = [
         'id' => 'int',
-        'user_id' => 'int',
-        'skill_test' => 'int',
-        'skill_test_point' => 'int',
-        'position' => 'int'
+        'user_id' => 'int'
     ];
+
+    protected $visible = ['id', 'name', 'level'];
+
 	/**
 	 * Table name
 	 * @var string
@@ -39,13 +39,10 @@ class UserSkill extends Model
         foreach ($dataPrepareForCreate as $value) {
             $user_skills[] = [
                 'user_id' => $user_id,
-                'skill_name' => $value['skill_name'],
-                'skill_test' => $value['skill_test'],
-                'skill_test_point' => $value['skill_test_point'],
-                'experience' => $value['experience'],
-                'position' => $value['position'],
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'name' => $value['name'],
+                'level' => $value['level'],
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
             ];
         }
 
