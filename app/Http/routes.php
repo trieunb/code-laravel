@@ -187,3 +187,9 @@ get('shared/job-skills', 'API\JobsController@getListJobSkill');
 get('shared/job-categories', 'API\JobsController@getListJobCategory');
 get('developer', 'DeveloperController@index');
 post('developer/send_job_match_notification', 'DeveloperController@sendJobMatchNotification');
+
+get('get-job-matching', function() {
+
+    $job_matching = new \App\Services\JobMatching\Matching(7);
+    return $job_matching->match();
+});

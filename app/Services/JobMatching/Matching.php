@@ -30,17 +30,13 @@ class Matching
             ->where(function($q) use ($matcher) {
                 $q->where('country', $matcher['country']);
             });
-            
-        if ( $users->count() > 0) {
+        $count_user = $users->count();
+        if ( $count_user > 0) {
             $total = 0;
-            $i = 0;
-            $limit = 0;
-            while ($total <= $users->count()) {
-                $limit = $i*100;
-                $user = $users->select('id')->skip($limit)->take(100)->get();
-                $this->saveJobsMatching($user, $job);
+            while ($total <= $count_user) {
+                $users = $users->select('id')->skip($total)->take(100)->get();
+                $this->saveJobsMatching($users, $job);
                 $total += 100;
-                $i ++;
             }
         }          
     }
