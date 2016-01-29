@@ -14,7 +14,7 @@ class UserSkill extends Model
     protected $casts = [
         'id' => 'int',
         'user_id' => 'int',
-        'postion' => 'int'
+        'position' => 'int'
     ];
 
     protected $visible = ['id', 'name', 'level', 'position'];
