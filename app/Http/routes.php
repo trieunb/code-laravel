@@ -183,6 +183,7 @@ Route::group(['prefix' => 'api', 'namespace' => 'API'], function() {
     get('job/match', 'JobsController@match');
 
 });
+get('shared/template-category', 'API\MarketPlacesController@getListTemplateCategory');
 get('shared/job-skills', 'API\JobsController@getListJobSkill');
 get('shared/job-categories', 'API\JobsController@getListJobCategory');
 get('developer', 'DeveloperController@index');
