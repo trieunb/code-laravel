@@ -62,6 +62,7 @@ class JobsController extends Controller
 
     public function getListJobMatching(Request $request, JobRepository $job)
     {
-        return $job->getListJobMatch();
+        $page = $request->get('page');
+        return $job->getListJobMatch($page);
     }
 }
