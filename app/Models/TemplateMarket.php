@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class TemplateMarket extends Model
 {
     use SoftDeletes, PresentableTrait;
+
+    protected $table = 'template_markets';
     
     protected $presenter = 'App\Presenter\TemplateMarketPresenter';
 
@@ -19,6 +21,7 @@ class TemplateMarket extends Model
         'section' => 'json',
         'id' => 'int',
         'cat_id' => 'int',
+        'user_id' => 'int',
         'price' => 'double',
         'status' => 'int',
     ];
@@ -26,14 +29,14 @@ class TemplateMarket extends Model
     /**
      * Fillable 
      */
-    protected $fillable = ['status'];
+    // protected $fillable = ['status'];
 	/**
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
     public function category()
     {
-    	return $this->belongsTo(Category::class);
+    	return $this->belongsTo(Category::class, 'cat_id');
     }
 
     /**

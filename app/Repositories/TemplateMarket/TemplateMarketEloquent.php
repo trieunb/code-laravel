@@ -23,13 +23,19 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
      * Get all template in market place
      * @return mixed 
      */
-    public function getAllTemplateMarket($sortby, $order, $page,$search)
+    public function getAllTemplateMarket($sortby, $order, $page, $cat_id, $search)
     {
         $offset = ($page -1 ) * config('paginate.limit');
         $query = $this->model->whereStatus(2);
 
         if ($search != null && $search != '') {
             $query->where('title', 'LIKE', "%{$search}%");
+        }
+
+        if ( $cat_id ) {
+            $query->with('category')->whereHas('category', function($q) use ($cat_id){
+                $q->where('categories.id', $cat_id);
+            });
         }
 
         $query = $sortby != null

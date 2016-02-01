@@ -22,6 +22,10 @@ class Category extends Node
      */
     protected $casts = ['meta' => 'json'];
 
+    protected $visible = [
+        'id', 'name'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
