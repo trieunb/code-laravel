@@ -42,11 +42,6 @@ class Category extends Node
         return $this->hasMany(TemplateMarket::class);
     }
 
-    public function parent()
-    {
-       return $this->belongsTo(TemplateMarket::class,'parent');
-    }
-
     /**
      * get path parent id
      * @param  int $cat_id 
