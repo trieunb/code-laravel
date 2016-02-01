@@ -33,7 +33,9 @@ class TemplateMarketEloquent extends AbstractRepository implements TemplateMarke
         }
 
         if ( $cat_id ) {
-            $query->where('cat_id', $cat_id);
+            $query->with('category')->whereHas('category', function($q) use ($cat_id){
+                $q->where('categories.id', $cat_id);
+            });
         }
 
         $query = $sortby != null

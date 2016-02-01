@@ -22,6 +22,10 @@ class Category extends Node
      */
     protected $casts = ['meta' => 'json'];
 
+    protected $visible = [
+        'id', 'name'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -36,6 +40,11 @@ class Category extends Node
     public function template_markets()
     {
         return $this->hasMany(TemplateMarket::class);
+    }
+
+    public function parent()
+    {
+       return $this->belongsTo(TemplateMarket::class,'parent');
     }
 
     /**
