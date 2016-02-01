@@ -101,9 +101,29 @@ class JobRepository extends AbstractRepository
     public function deleteJobMatching($job_id)
     {
         $job = $this->getById($job_id);
-        foreach ($job->user_jobs_matching as $user) {
-            $ids[] = $user['id'];
-        }
+        $ids = $job->user_jobs_matching->lists('id');
         return $job->user_jobs_matching()->detach($ids);
+    }
+
+    public function getListJobMatch($page)
+    {
+        $offset = ($page -1 ) * config('paginate.limit');
+
+        $jobs_match = $this->model
+                ->whereHas('user_jobs_matching', function($q){
+                    $q->orderBy('job_matching.created_at', 'DESC');
+                });
+
+        $total = $jobs_match->count();
+        $jobs_match = $jobs_match->skip($offset)
+                ->take(config('paginate.limit'))
+                ->get();
+
+        return [
+            'jobs_matching' => $jobs_match,
+            'total'    => $total,
+            'per_page' => config('paginate.limit')
+        ];
+
     }
 }
