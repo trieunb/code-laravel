@@ -20,6 +20,9 @@ class ComposerServiceProvider extends ServiceProvider
 			'admin.template.edit'
 		], CategoryComposer::class);
 		\View::composer('admin.user.send-notification', UserComposer::class);
+		\View::composer('user.*', function($view) {
+	        $view->with('current_user', \Auth::user());
+	    });
 	}
 
 	public function register()

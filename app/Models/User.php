@@ -263,11 +263,8 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasOne(Device::class);
     }
 
-    public function getAgeAttribute() {
-    // do an age calculation on $this->dateOfBirth here
-        $age = ($this->dob != "0000-00-00")
-            ? Carbon::createFromFormat("Y-m-d", $this->dob)->age
-            : null;
-        return $age;
+    public function getFullNameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 }
