@@ -80,8 +80,6 @@ class AuthenticatesController extends Controller
 
             $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
             $this->user->update(['token' => $token], $user->id);
-            // $this->role->saveRole($this->user);
-            return $this->user;
 
             $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
 
