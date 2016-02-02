@@ -36,7 +36,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('template/check', ['as' => 'admin.template.check', 'uses' => 'TemplateMarketsController@checkTitle']);
     get('template', ['as' => 'admin.template.get.index', 'uses' => 'TemplateMarketsController@index']);
     get('template/edit/{id}', ['as' => 'admin.template.get.edit', 'uses' => 'TemplateMarketsController@edit']);
-    get('template/detail/{id}', ['as' => 'admin.template.get.detail', 'uses' => 'TemplateMarketsController@detail']);
     get('template/delete/{id}', ['as' => 'admin.template.delete', 'uses' => 'TemplateMarketsController@delete']);
     get('template/datatable', ['as' => 'api.template.get.dataTable', 'uses' => 'TemplateMarketsController@showDatatableTemplate']);
     get('template/view/{id}', ['as' => 'admin.template.get.view', 'uses' => 'TemplateMarketsController@getView']);
@@ -88,7 +87,16 @@ post('user/login', ['as' => 'user.login', 'uses' => 'Admin\UsersController@postL
 Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role.user:user' ], function() {
     get('/', ['as' => 'user.dashboard', 'uses' => 'UsersController@dashBoard']);
     get('/logout', ['as' => 'user.logout', 'uses' => 'UsersController@getLogout']);
+    get('tempplate', ['as' => 'user.template.get.index', 'uses' => 'TemplateMarketsController@getTemplateForUser']);
+    get('tempplate/datatable', ['as' => 'user.tempalate.get.dataTable', 'uses' => 'TemplateMarketsController@getDtatabableTemplateForUser']);
+    get('template/create', ['as' => 'user.template.create', 'uses' => 'TemplateMarketsController@createForUser']);
+    get('template/delete/{id}', ['as' => 'user.template.delete', 'uses' => 'TemplateMarketsController@delete']);
+    get('template/edit/{id}', ['as' => 'user.template.get.edit', 'uses' => 'TemplateMarketsController@editTemplate']);
+    get('template/view/{id}', ['as' => 'user.template.get.view', 'uses' => 'TemplateMarketsController@getViewTemplate']);
+    get('template/status/{id}', ['as' => 'user.template.status', 'uses' => 'TemplateMarketsController@changeStatus']);
 
+    post('template/create', ['as' => 'user.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
+    post('template/edit/{id}', ['as' => 'user.template.post.edit', 'uses' => 'TemplateMarketsController@postEditTemplate']);
 });
 
 Route::group(['namespace' => 'Frontend'], function() {
