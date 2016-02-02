@@ -81,15 +81,19 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('resume/detail/{id}', ['as' => 'admin.resume.detail', 'uses' => 'DashBoardsController@getDetailResume']);
 });
 
+/**
+ * for user manager their resume
+ */
 get('user/login', 'Admin\UsersController@getLogin');
 post('user/login', ['as' => 'user.login', 'uses' => 'Admin\UsersController@postLogin']);
 
 Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role.user:user' ], function() {
     get('/', ['as' => 'user.dashboard', 'uses' => 'UsersController@dashBoard']);
     get('/logout', ['as' => 'user.logout', 'uses' => 'UsersController@getLogout']);
-    get('tempplate', ['as' => 'user.template.get.index', 'uses' => 'TemplateMarketsController@getTemplateForUser']);
-    get('tempplate/datatable', ['as' => 'user.tempalate.get.dataTable', 'uses' => 'TemplateMarketsController@getDtatabableTemplateForUser']);
-    get('template/create', ['as' => 'user.template.create', 'uses' => 'TemplateMarketsController@createForUser']);
+    
+    get('template', ['as' => 'user.template.get.index', 'uses' => 'TemplateMarketsController@getTemplateForUser']);
+    get('template/datatable', ['as' => 'user.tempalate.get.dataTable', 'uses' => 'TemplateMarketsController@getDtatabableTemplateForUser']);
+    get('template/create', ['as' => 'user.template.create', 'uses' => 'TemplateMarketsController@createTemplate']);
     get('template/delete/{id}', ['as' => 'user.template.delete', 'uses' => 'TemplateMarketsController@delete']);
     get('template/edit/{id}', ['as' => 'user.template.get.edit', 'uses' => 'TemplateMarketsController@editTemplate']);
     get('template/view/{id}', ['as' => 'user.template.get.view', 'uses' => 'TemplateMarketsController@getViewTemplate']);
@@ -97,6 +101,8 @@ Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role.
 
     post('template/create', ['as' => 'user.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit/{id}', ['as' => 'user.template.post.edit', 'uses' => 'TemplateMarketsController@postEditTemplate']);
+
+    get('profile', ['as' => 'user.profile.get', 'uses' => 'UsersController@getProfile']);
 });
 
 Route::group(['namespace' => 'Frontend'], function() {

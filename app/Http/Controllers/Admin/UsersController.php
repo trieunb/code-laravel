@@ -169,4 +169,10 @@ class UsersController extends Controller
 
         return redirect('user/login');
     }
+
+    public function getProfile()
+    {
+        $user = \Auth::user();
+        return view('user.profile.detail', compact('user', $user));
+    }
 }

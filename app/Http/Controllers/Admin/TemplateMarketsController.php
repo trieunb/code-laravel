@@ -140,7 +140,7 @@ class TemplateMarketsController extends Controller
     /**
      * For User
      */
-    public function createForUser()
+    public function createTemplate()
     {
         return view('user.template.create');
     }
