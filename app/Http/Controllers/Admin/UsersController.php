@@ -175,4 +175,9 @@ class UsersController extends Controller
         $user = \Auth::user();
         return view('user.profile.detail', compact('user', $user));
     }
+
+    public function getSettingPayment()
+    {
+        return view('user.setting.payment');
+    }
 }

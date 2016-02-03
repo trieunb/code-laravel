@@ -104,6 +104,8 @@ Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role.
     post('template/action', ['as' => 'user.template.post.action', 'uses' => 'TemplateMarketsController@postAction']);
 
     get('profile', ['as' => 'user.profile.get', 'uses' => 'UsersController@getProfile']);
+
+    get('setting', ['as' => 'user.setting.payment', 'uses' => 'UsersController@getSettingPayment']);
 });
 
 Route::group(['namespace' => 'Frontend'], function() {
