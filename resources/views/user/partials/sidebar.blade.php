@@ -15,8 +15,5 @@
             </ul>
             <!-- /.nav-second-level -->
         </li>
-        <li>
-            <a href=""><i class="fa fa-file-text fa-fw"></i> Resume</a>
-        </li>
     </ul>
 </div>

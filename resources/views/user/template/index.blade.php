@@ -61,7 +61,7 @@ Template List
                 if (isBusy) return;
                 isBusy = true;
                 $.ajax({
-                    url: "{{ route('admin.template.post.action') }}",
+                    url: "{{ route('user.template.post.action') }}",
                     type: 'POST',
                     data: {
                         token: "{{ csrf_token() }}",
@@ -71,6 +71,7 @@ Template List
                     success: function(result) {
                         if (result.status_code == 200) {
                             TemplateDatatable.ajax.reload();
+                            $('#check_all').prop('checked', false);
                         }
                     }
                 }).always(function() {

@@ -31,7 +31,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{{URL::to('admin/')}}">Resume Builder</a>
+                    <a class="navbar-brand" href="{{URL::to('user/')}}">Resume Builder</a>
                 </div>
                 <!-- /.navbar-header -->
 
