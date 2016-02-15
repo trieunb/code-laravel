@@ -72,11 +72,13 @@ class DashBoardsController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password')
         ];
-        
         $remember = $request->input('remember');
+        $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
 
-        if (Auth::attempt($credentials, $remember)) {
-            return redirect()->route('admin.dashboard');
+        if ($user && $user->is('admin')) {
+            if (Auth::attempt($credentials, $remember)) {
+                return redirect()->route('admin.dashboard');
+            }
         }
 
         return redirect('admin/login')

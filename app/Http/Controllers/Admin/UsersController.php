@@ -150,11 +150,13 @@ class UsersController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password')
         ];
-        
         $remember = $request->input('remember');
-
-        if (Auth::attempt($credentials, $remember)) {
-            return redirect()->route('user.dashboard');
+        $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
+        
+        if ($user && $user->is('user')) {
+            if (Auth::attempt($credentials, $remember)) {
+                return redirect()->route('user.dashboard');
+            }
         }
 
         return redirect('user/login')
