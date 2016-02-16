@@ -37,7 +37,10 @@ class AdminRole
         if ($this->auth->check() && $this->auth->user()->is($role)) {
             return $next($request);
         }
-        
-        return redirect()->guest('admin/login');
+
+        if ($role == 'admin') 
+            return redirect()->guest('admin/login'); 
+        if ($role == 'user') 
+            return redirect()->guest('user/login');
     }
 }

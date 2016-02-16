@@ -14,7 +14,7 @@
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role.admin:admin' ], function() {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
 
@@ -36,16 +36,15 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('template/check', ['as' => 'admin.template.check', 'uses' => 'TemplateMarketsController@checkTitle']);
     get('template', ['as' => 'admin.template.get.index', 'uses' => 'TemplateMarketsController@index']);
     get('template/edit/{id}', ['as' => 'admin.template.get.edit', 'uses' => 'TemplateMarketsController@edit']);
-    get('template/detail/{id}', ['as' => 'admin.template.get.detail', 'uses' => 'TemplateMarketsController@detail']);
     get('template/delete/{id}', ['as' => 'admin.template.delete', 'uses' => 'TemplateMarketsController@delete']);
     get('template/datatable', ['as' => 'api.template.get.dataTable', 'uses' => 'TemplateMarketsController@showDatatableTemplate']);
     get('template/view/{id}', ['as' => 'admin.template.get.view', 'uses' => 'TemplateMarketsController@getView']);
-    get('template/{id}/define', ['as' => 'admin.template.get.define', 'uses' => 'TemplateMarketsController@getDefine']);
+    // get('template/{id}/define', ['as' => 'admin.template.get.define', 'uses' => 'TemplateMarketsController@getDefine']);
     get('template/status/{id}', ['as' => 'admin.template.status', 'uses' => 'TemplateMarketsController@changeStatus']);
 
     post('template/create', ['as' => 'admin.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
     post('template/edit/{id}', ['as' => 'admin.template.post.edit', 'uses' => 'TemplateMarketsController@postEdit']);
-    post('template/define', ['as' => 'admin.template.post.define', 'uses' => 'TemplateMarketsController@postDefine']);
+    // post('template/define', ['as' => 'admin.template.post.define', 'uses' => 'TemplateMarketsController@postDefine']);
     post('template/action', ['as' => 'admin.template.post.action', 'uses' => 'TemplateMarketsController@postAction']);
     /**
      * Question Route
@@ -82,13 +81,29 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('resume/detail/{id}', ['as' => 'admin.resume.detail', 'uses' => 'DashBoardsController@getDetailResume']);
 });
 
+/**
+ * for user manager their resume
+ */
 get('user/login', 'Admin\UsersController@getLogin');
 post('user/login', ['as' => 'user.login', 'uses' => 'Admin\UsersController@postLogin']);
 
-Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role.user:user' ], function() {
+Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role:user' ], function() {
     get('/', ['as' => 'user.dashboard', 'uses' => 'UsersController@dashBoard']);
     get('/logout', ['as' => 'user.logout', 'uses' => 'UsersController@getLogout']);
+    
+    get('template', ['as' => 'user.template.get.index', 'uses' => 'TemplateMarketsController@getTemplateForUser']);
+    get('template/datatable', ['as' => 'user.tempalate.get.dataTable', 'uses' => 'TemplateMarketsController@getDtatabableTemplateForUser']);
+    get('template/create', ['as' => 'user.template.create', 'uses' => 'TemplateMarketsController@createTemplate']);
+    get('template/delete/{id}', ['as' => 'user.template.delete', 'uses' => 'TemplateMarketsController@delete']);
+    get('template/edit/{id}', ['as' => 'user.template.get.edit', 'uses' => 'TemplateMarketsController@editTemplate']);
+    get('template/view/{id}', ['as' => 'user.template.get.view', 'uses' => 'TemplateMarketsController@getViewTemplate']);
+    get('template/status/{id}', ['as' => 'user.template.status', 'uses' => 'TemplateMarketsController@changeStatus']);
 
+    post('template/create', ['as' => 'user.template.post.create', 'uses' => 'TemplateMarketsController@postCreate']);
+    post('template/edit/{id}', ['as' => 'user.template.post.edit', 'uses' => 'TemplateMarketsController@postEditTemplate']);
+    post('template/action', ['as' => 'user.template.post.action', 'uses' => 'TemplateMarketsController@postAction']);
+
+    get('profile', ['as' => 'user.profile.get', 'uses' => 'UsersController@getProfile']);
 });
 
 Route::group(['namespace' => 'Frontend'], function() {

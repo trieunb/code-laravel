@@ -59,13 +59,6 @@ class TemplateMarketsController extends Controller
     	return $this->template_market->checkExistsTitle($request->get('title'), $request->get('id')) ? 'false' : 'true';
     }
 
-    public function detail($id)
-    {
-        $template = $this->template_market->getById($id);
-        
-        return view('admin.template.detail', compact('template'));
-    }
-
     public function index(Request $request)
     {
         $templates_market = $this->template_market->getAll();
@@ -142,5 +135,47 @@ class TemplateMarketsController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status_code' => 400]);
         }    
+    }
+
+    /**
+     * For User
+     */
+    public function createTemplate()
+    {
+        return view('user.template.create');
+    }
+
+    public function editTemplate($id)
+    {
+        $template = $this->template_market->getById($id);
+
+        return view('user.template.edit', compact('template'));
+    }
+
+    public function postEditTemplate(TemplateFormRequest $request, $id)
+    {
+        $sections = createClassSection();
+        $data = createSection($request->get('content'), $sections);
+
+        return $this->template_market->createOrUpdateTemplateByManage($request, $data, \Auth::user()->id)
+            ? redirect()->route('admin.template.get.index')->with('message', 'Edit Template successfully!')
+            : redirect()->back()->with('message', 'Error when create template!');
+    }
+
+    public function getViewTemplate($id)
+    {
+        $template = $this->template_market->getById($id);
+
+        return view('user.template.view', ['title' => $template->title, 'content' => $template->content]);
+    }
+
+    public function getTemplateForUser()
+    {
+        return view('user.template.index');
+    }
+
+    public function getDtatabableTemplateForUser()
+    {
+        return $this->template_market->DatatableTemplateForUser();
     }
 }

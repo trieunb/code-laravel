@@ -14,13 +14,11 @@ class ComposerServiceProvider extends ServiceProvider
 	{
 		\View::composer('admin.report.report_user', QuestionComposer::class);
 		\View::composer([
-			'admin.category.create',
-			'admin.category.edit',
-			'admin.template.create',
-			'admin.template.edit'
+			'admin.*',
+			'user.*'
 		], CategoryComposer::class);
 		\View::composer('admin.user.send-notification', UserComposer::class);
-		\View::composer('user.*', function($view) {
+		\View::composer(['user.*', 'admin.*'], function($view) {
 	        $view->with('current_user', \Auth::user());
 	    });
 	}
