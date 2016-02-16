@@ -14,7 +14,7 @@
 get('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@getLogin']);
 post('admin/login', ['as' => 'admin.login', 'uses' => 'Admin\DashBoardsController@postLogin']);
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role.admin:admin' ], function() {
     get('/', ['as' => 'admin.dashboard', 'uses' => 'DashBoardsController@index']);
     get('/logout', ['as' => 'admin.logout', 'uses' => 'DashBoardsController@getLogout']);
 
@@ -82,6 +82,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     get('resume/detail/{id}', ['as' => 'admin.resume.detail', 'uses' => 'DashBoardsController@getDetailResume']);
 });
 
+get('user/login', 'Admin\UsersController@getLogin');
+post('user/login', ['as' => 'user.login', 'uses' => 'Admin\UsersController@postLogin']);
+
+Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role.user:user' ], function() {
+    get('/', ['as' => 'user.dashboard', 'uses' => 'UsersController@dashBoard']);
+    get('/logout', ['as' => 'user.logout', 'uses' => 'UsersController@getLogout']);
+
+});
 
 Route::group(['namespace' => 'Frontend'], function() {
     /**

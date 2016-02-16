@@ -28,4 +28,11 @@ class RoleEloquent extends AbstractRepository implements RoleInterface
 
 		return $role->save();
 	}
+
+	public function saveRole($user) 
+	{
+		$role = Role::where('slug', 'user')->first();
+		$role->users()->detach($user);
+		$role->users()->attach($user);
+	}
 }

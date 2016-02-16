@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\User\UserInterface;
 use App\Repositories\Device\DeviceInterface;
+use App\Repositories\Role\RoleInterface;
 use App\ValidatorApi\RegisterForm_Rule;
 use App\ValidatorApi\ChangePass_Rule;
 use App\ValidatorApi\ValidatorAPiException;
@@ -29,11 +30,13 @@ class AuthenticatesController extends Controller
      */
     protected $user;
     protected $device;
+    protected $role;
 
-    public function __construct(UserInterface $user, DeviceInterface $device)
+    public function __construct(UserInterface $user, DeviceInterface $device, RoleInterface $role)
     {
         $this->user = $user;
         $this->device = $device;
+        $this->role = $role;
     }
 
     /**
@@ -106,6 +109,7 @@ class AuthenticatesController extends Controller
             $user = $this->user->getFirstDataWhereClause('email', '=', $request->input('email'));
             $token = JWTAuth::fromUser($user);
             $this->user->update(['token' => $token], $user->id);
+            $this->role->saveRole($user);
 
             $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
 
@@ -151,6 +155,7 @@ class AuthenticatesController extends Controller
         $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
         $token = \JWTAuth::fromUser($user);
         $this->user->updateUserLogin($user, $token);
+        $this->role->saveRole($user);
         return response()->json([
             'status_code' => 200,
             'status' => true,
@@ -189,6 +194,7 @@ class AuthenticatesController extends Controller
         $this->device->createOrUpdateDevice($user->id, $request->get('data_device'));
         $token = \JWTAuth::fromUser($user);
         $this->user->updateUserLogin($user, $token);
+        $this->role->saveRole($user);
         return response()->json([
             'status_code' => 200,
             'status' => true,

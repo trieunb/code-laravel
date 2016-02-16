@@ -12,6 +12,7 @@ use App\Repositories\User\UserInterface;
 use App\Services\PushNotif\BulkNotification;
 use App\Services\PushNotif\Notification;
 use Illuminate\Http\Request;
+use Auth;
 
 class UsersController extends Controller
 {
@@ -131,5 +132,41 @@ class UsersController extends Controller
         }
 
         return redirect()->back()->with('error', 'Chooses not select use for send notification!');
+    }
+
+    public function getLogin()
+    {
+        return view('user.login');
+    }
+
+    public function dashBoard(Request $reques)
+    {
+        return view('user.index');
+    }
+
+    public function postLogin(Request $request)
+    {
+        $credentials = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password')
+        ];
+        
+        $remember = $request->input('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            return redirect()->route('user.dashboard');
+        }
+
+        return redirect('user/login')
+            ->withErrors(['message' => 'Wrong email or password.'])
+            ->withInput();
+        
+    }
+
+    public function getLogout()
+    {
+        Auth::logout();
+
+        return redirect('user/login');
     }
 }
