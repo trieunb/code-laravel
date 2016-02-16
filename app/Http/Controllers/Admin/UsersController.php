@@ -165,6 +165,63 @@ class UsersController extends Controller
         
     }
 
+    public function loginWithFacebook(Request $request)
+    {
+        $code = $request->get('code');
+        $fb = \OAuth::consumer('Facebook');
+
+        if ( ! is_null($code))
+        {
+            $token = $fb->requestAccessToken($code);
+            $result = json_decode($fb->request('/me'), true);
+
+            if ( @$result['email']) {
+                $user = $this->user->getFirstDataWhereClause('email', '=', $result['email']);
+                if ( $user) {
+                    Auth::login($user);
+                    return redirect()->route('user.dashboard');
+                } else {
+                    return redirect('user/login')
+                        ->withErrors(['message' => 'Wrong, please register app account with facebook.']);
+                }
+            }
+        }
+        else
+        {
+            $url = $fb->getAuthorizationUri();
+            return redirect((string)$url);
+        }
+    }
+
+    public function loginWithLinkedin(Request $request)
+    {
+        $code = $request->get('code');
+        $linkedinService = \OAuth::consumer('Linkedin');
+
+        if ( ! is_null($code))
+        {
+            $token = $linkedinService->requestAccessToken($code);
+            $result = json_decode($linkedinService->request('/people/~:(id,first-name,last-name,headline,picture-urls::(original),location:(name),public-profile-url,email-address,date-of-birth)?format=json'), true);
+
+            if ( @$result['emailAddress']) {
+                $user = $this->user->getFirstDataWhereClause('email', '=', $result['emailAddress']);
+                if ( $user) {
+                    Auth::login($user);
+                    return redirect()->route('user.dashboard');
+                } else {
+                    return redirect('user/login')
+                        ->withErrors(['message' => 'Wrong, please register app account with linkedin.']);
+                }
+            }
+
+        }
+        else
+        {
+            $url = $linkedinService->getAuthorizationUri(['state'=>'DCEEFWF45453sdffef424']);
+            return redirect((string)$url);
+        }
+    }
+
     public function getLogout()
     {
         Auth::logout();
