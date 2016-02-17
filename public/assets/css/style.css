@@ -38,3 +38,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 table td.break-lines {
     word-break: break-word;
 }
+a.fb {
+    border-radius: 0;
+}

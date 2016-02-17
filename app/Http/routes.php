@@ -86,6 +86,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
  */
 get('user/login', 'Admin\UsersController@getLogin');
 post('user/login', ['as' => 'user.login', 'uses' => 'Admin\UsersController@postLogin']);
+get('user/loginfb', ['as' => 'user.login.with.facebook', 'uses' => 'Admin\UsersController@loginWithFacebook']);
+get('user/loginlink', ['as' => 'user.login.with.linkedin', 'uses' => 'Admin\UsersController@loginWithLinkedin']);
 
 Route::group(['prefix' => 'user', 'namespace' => 'Admin', 'middleware' => 'role:user' ], function() {
     get('/', ['as' => 'user.dashboard', 'uses' => 'UsersController@dashBoard']);

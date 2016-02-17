@@ -21,7 +21,7 @@ return [
 		'Facebook' => [
 			'client_id'     => '1671697466387668',
 			'client_secret' => '16338b2038ccf218bcd9dfcbec95e6d0',
-			'scope'         => [],
+			'scope'         => ['email','user_friends','public_profile'],
 		],
 		'Linkedin' => [
 		    'client_id'     => '75hhxk8f2nv2qr',

@@ -47,6 +47,12 @@
                                             <div class="form-group">
                                                 <input type="submit" class="btn btn-lg btn-primary btn-block" value="Login">
                                             </div>
+                                            <div class="form-group">
+                                                <a href="{{ Route('user.login.with.facebook') }}" class="btn btn-lg btn-primary btn-block fb">Login By Facebook</a>
+                                            </div>
+                                            <div class="form-group">
+                                                <a href="{{ Route('user.login.with.linkedin') }}" class="btn btn-lg btn-primary btn-block fb">Login By Linkedin</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </fieldset>
